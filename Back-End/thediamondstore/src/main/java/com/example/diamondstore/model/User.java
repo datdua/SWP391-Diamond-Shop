@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 @Entity
 @Table(name = "diamond_user")
 public class User {
@@ -22,13 +24,21 @@ public class User {
      @Column(name = "password")
      private String password;
 
-    public User(Long id, String username, String password) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-    }
+     @Column(name = "role")
+     private String role;
 
     public User() {
+    }
+
+    public User(Long id, String username, String password, String role) {
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(password);
+
+        this.id = id;
+        this.username = username;
+        this.password = hashedPassword;
+        this.role = role;
     }
 
     public Long getId() {
@@ -53,6 +63,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     

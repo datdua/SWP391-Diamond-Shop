@@ -61,7 +61,7 @@ public class UserController {
         if (existingUser != null) {
             return ResponseEntity.badRequest().body("User already exists");
         }
-        User user = new User(null, username, password);
+        User user = new User(null, username, password, "ROLE_USER");
         userRepository.save(user);
         return ResponseEntity.ok("Registered successfully");
     }
