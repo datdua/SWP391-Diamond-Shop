@@ -1,6 +1,6 @@
 package com.example.diamondstore.filter;
 
-import com.example.diamondstore.service.MyUserDetailsService;
+import com.example.diamondstore.service.UserService;
 import com.example.diamondstore.utils.JwtUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import java.io.IOException;
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
-    private MyUserDetailsService userDetailsService;
+    private UserService userDetailsService;
 
     @Autowired
     private JwtUtil jwtUtil;

@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.request.AuthenticationRequest;
 import com.example.diamondstore.response.AuthenticationResponse;
-import com.example.diamondstore.service.MyUserDetailsService;
+import com.example.diamondstore.service.UserService;
 import com.example.diamondstore.utils.JwtUtil;
 
 @RestController
 public class AuthenticationController {
 
     private AuthenticationManager authenticationManager;
-    private MyUserDetailsService userDetailsService;
+    private UserService userDetailsService;
     private JwtUtil jwtTokenUtil;
 
-    public AuthenticationController(AuthenticationManager authenticationManager, MyUserDetailsService userDetailsService, JwtUtil jwtTokenUtil) {
+    public AuthenticationController(AuthenticationManager authenticationManager, UserService userDetailsService, JwtUtil jwtTokenUtil) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtTokenUtil = jwtTokenUtil;
