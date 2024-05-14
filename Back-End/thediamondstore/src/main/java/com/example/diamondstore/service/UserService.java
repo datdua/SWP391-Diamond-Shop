@@ -1,33 +1,41 @@
-// package com.example.diamondstore.service;
 
-// import com.example.diamondstore.model.User;
-// import com.example.diamondstore.repository.UserRepository;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.stereotype.Service;
+package com.example.diamondstore.service;
+import java.util.ArrayList;
+import java.util.List;
 
-// @Service
-// public class UserService {
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
-//     private final UserRepository userRepository;
+import com.example.diamondstore.model.Account;
+import com.example.diamondstore.repository.UserRepository;
 
-//     @Autowired
-//     public UserService(UserRepository userRepository) {
-//         this.userRepository = userRepository;
-//     }
+@Service
+public class UserService implements UserDetailsService {
 
-//     public User updateUser(User user) {
-//         // Check if user exists in the database
-//         User existingUser = userRepository.findById(user.getId()).orElse(null);
-//         if (existingUser == null) {
-//             throw new RuntimeException("User not found");
-//         }
+    private UserRepository userRepository;
 
-//         // Update the user details
-//         existingUser.setUsername(user.getUsername());
-//         existingUser.setPassword(user.getPassword());
-//         // Add other fields as necessary
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-//         // Save the updated user to the database
-//         return userRepository.save(existingUser);
-//     }
-// }
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Account account = userRepository.findByUsername(username);
+        if (account == null) {
+            throw new UsernameNotFoundException("User not found with username: " + username);
+        }
+
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(account.getRole()));
+
+        UserDetails userDetails = new org.springframework.security.core.userdetails.User(account.getUsername(), account.getPassword(), authorities);
+
+
+        
+        return userDetails;
+    }
+}

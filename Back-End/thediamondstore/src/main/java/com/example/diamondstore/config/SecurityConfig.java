@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.diamondstore.filter.JwtRequestFilter;
-import com.example.diamondstore.service.MyUserDetailsService;
+import com.example.diamondstore.service.UserService;
 
 @Configuration
 @EnableWebSecurity
@@ -28,17 +28,18 @@ public class SecurityConfig {
 			"/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html", "/api/auth/**",
 			"/api/test/**", "/authenticate", "/login", "/register" };
 
+    private static final String[] ADMIN_URL = { "/accounts", "/update/**" };
 
     @Autowired
-    private MyUserDetailsService myUserDetailsService;
+    private UserService UserService;
 
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
     
 
-    public SecurityConfig(MyUserDetailsService myUserDetailsService, JwtRequestFilter jwtRequestFilter) {
-        this.myUserDetailsService = myUserDetailsService;
+    public SecurityConfig(UserService UserService, JwtRequestFilter jwtRequestFilter) {
+        this.UserService = UserService;
         this.jwtRequestFilter = jwtRequestFilter;
     }
 
@@ -48,6 +49,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeRequests(authz -> authz
                 .antMatchers(WHITE_LIST_URL).permitAll()
+                .antMatchers(ADMIN_URL).hasRole("ADMIN")
                 .anyRequest().authenticated())
             .exceptionHandling(e -> e
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
