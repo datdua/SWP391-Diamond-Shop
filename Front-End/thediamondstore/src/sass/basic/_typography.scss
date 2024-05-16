@@ -30,7 +30,8 @@ body {
     font-weight: 400;
 }
 
-@include placeholder-color($color-body);
+@include placeholder-color('.some-selector', #999999);
+
 
 h1,
 h2,
@@ -219,7 +220,7 @@ textarea {
     border: 1px solid $color-border;
     transition: all 0.4s ease-out 0s;
     color: $color-body;
-    @include placeholder-color($color-body);
+    @include placeholder-color('.some-selector', #999999);
     font-family: $ff-body;
 
     &:focus,

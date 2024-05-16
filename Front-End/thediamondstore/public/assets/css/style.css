@@ -66,6 +66,8 @@ html {
   color: #222;
   font-size: 1em;
   line-height: 1.4;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 ::-moz-selection {
@@ -7026,7 +7028,68 @@ button.tm-videobutton img {
   border-radius: 3px;
   margin-top: 5px;
 }
+.tm-product-actions .sr-only{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+  }
+  .tm-header-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
+.tm-dropdown {
+    position: relative;
+}
+
+.tm-dropdown button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.tm-dropdown ul {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ccc;
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+    display: none;
+    z-index: 1000;
+}
+
+.tm-dropdown ul li {
+    padding: 5px 10px;
+}
+
+.tm-dropdown ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.tm-dropdown ul li a:hover {
+    background: #f0f0f0;
+}
+.tm-dropdown ul {
+    display: block;
+}
+
+.tm-dropdown img {
+    vertical-align: middle;
+    margin-right: 5px;
+}
 @media only screen and (max-width: 575px) {
   .tm-myaccount-dashboard, .tm-myaccount-address {
     padding: 20px;

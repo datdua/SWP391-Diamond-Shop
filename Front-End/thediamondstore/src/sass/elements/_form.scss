@@ -42,7 +42,7 @@
     select {
         border: 1px solid darken($color-border, 10);
         background: transparent;
-        @include placeholder-color($color-body);
+        @include placeholder-color('.some-selector', #999999);
         color: $color-body;
         border-radius: 4px;
 
