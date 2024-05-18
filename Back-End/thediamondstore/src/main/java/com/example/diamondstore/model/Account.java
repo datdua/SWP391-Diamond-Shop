@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
-@Table(name = "`Account`")
+@Table(name = "Account")
 public class Account {
     
     @Id
