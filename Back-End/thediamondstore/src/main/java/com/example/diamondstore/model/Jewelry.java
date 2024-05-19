@@ -120,19 +120,5 @@ public class Jewelry {
         this.image = image;
     }
 
-    @Override
-    public String toString() {
-        return "Jewelry{" +
-                "jewelryID=" + jewelryID +
-                ",diamondID=" + diamondID +
-                ",type='" + type + '\'' +
-                ",material='" + material + '\'' +
-                ",sex='" + sex + '\'' +
-                ",size='" + size + '\'' +
-                ", description='" + description + '\'' +
-                ", image='" + image + '\'' +
-                '}';
-
     
-}
 }
