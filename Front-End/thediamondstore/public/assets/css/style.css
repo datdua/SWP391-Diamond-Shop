@@ -173,6 +173,7 @@ textarea {
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
     text-shadow: none !important;
+    box-sizing: border-box;
   }
   a,
   a:visited {
@@ -3222,7 +3223,7 @@ button.tm-videobutton img {
  * Heroslider
  */
 .tm-heroslider {
-  position: relative;
+  position: absolute;
   background-position: right center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -3462,8 +3463,12 @@ button.tm-videobutton img {
 
 .tm-heroslider-slider .tm-heroslider-contentwrapper {
   overflow: hidden;
+  transition: all 1s ease-in-out 0.5s;
+  transform: translateX(-100%)
 }
-
+.tm-heroslider-contentwrapper.active {
+  transform: translateX(0);
+}
 .tm-heroslider-slider .tm-heroslider-content {
   -webkit-transition: all 1s ease-in-out 0.5s;
   -o-transition: all 1s ease-in-out 0.5s;
@@ -7038,7 +7043,7 @@ button.tm-videobutton img {
     clip: rect(0,0,0,0);
     border: 0;
   }
-  .tm-header-options {
+.tm-header-options {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -7046,6 +7051,7 @@ button.tm-videobutton img {
 
 .tm-dropdown {
     position: relative;
+    display: inline-block;
 }
 
 .tm-dropdown button {
@@ -7082,14 +7088,19 @@ button.tm-videobutton img {
 .tm-dropdown ul li a:hover {
     background: #f0f0f0;
 }
-.tm-dropdown ul {
+.tm-dropdown img {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+/* Display the dropdown when it's open */
+.tm-header-links ul,
+.tm-header-currency ul,
+.tm-header-language ul {
     display: block;
 }
 
-.tm-dropdown img {
-    vertical-align: middle;
-    margin-right: 5px;
-}
+
 @media only screen and (max-width: 575px) {
   .tm-myaccount-dashboard, .tm-myaccount-address {
     padding: 20px;

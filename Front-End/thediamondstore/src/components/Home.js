@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import "../sass/style.scss"
-
+import "fancybox/dist/css/jquery.fancybox.css"
+import "../sass/style.scss";
+import HeroSlider from "./HeroSlider";
 function Home() {
     const [value, setValue] = useState('Default value');
 
@@ -14,15 +15,23 @@ function Home() {
 
     const toggleAccountDropdown = () => {
         setAccountDropdownOpen(!isAccountDropdownOpen);
+        setCurrencyDropdownOpen(false);
+        setLanguageDropdownOpen(false);
     };
 
     const toggleCurrencyDropdown = () => {
         setCurrencyDropdownOpen(!isCurrencyDropdownOpen);
+        setAccountDropdownOpen(false);
+        setLanguageDropdownOpen(false);
     };
 
     const toggleLanguageDropdown = () => {
         setLanguageDropdownOpen(!isLanguageDropdownOpen);
+        setAccountDropdownOpen(false);
+        setCurrencyDropdownOpen(false);
     };
+   
+    
     return (
         <div>
 
@@ -73,7 +82,7 @@ function Home() {
                                             )}
                                         </div>
                                         <div className="tm-dropdown tm-header-currency">
-                                            <button type="button" aria-label="Currency Selection">USD</button>
+                                            <button type="button" aria-label="Currency Selection" onClick={toggleCurrencyDropdown}>USD</button>
                                             {isCurrencyDropdownOpen && (
                                                 <ul>
                                                     <li><a href="#">USD</a></li>
@@ -84,7 +93,7 @@ function Home() {
                                             )}
                                         </div>
                                         <div className="tm-dropdown tm-header-language">
-                                            <button aria-label="Language Selection"><img src="assets/images/flag-english.png" alt="language" />English</button>
+                                            <button aria-label="Language Selection"><img src="assets/images/flag-english.png" alt="language" onClick={toggleLanguageDropdown} />English</button>
                                             {isLanguageDropdownOpen && (
                                                 <ul>
                                                     <li><a href="#"><img src="assets/images/flag-english.png"
@@ -112,7 +121,7 @@ function Home() {
                             <div className="row align-items-center">
                                 <div className="col-lg-3 col-6 order-1 order-lg-1">
                                     <Link to="/" className="tm-header-logo">
-                                        <img src="assets/images/logo.png" alt="surose" />
+                                        <img src="assets/images/logo1.png" alt="surose" />
                                     </Link>
                                 </div>
                                 <div className="col-lg-6 col-12 order-3 order-lg-2">
@@ -151,50 +160,10 @@ function Home() {
                 {/* <!--// Header --> */}
 
                 {/* <!-- Heroslider Area --> */}
-                <div className="tm-heroslider-area bg-grey">
-                    <div className="tm-heroslider-slider">
-                        {/* <!-- Heroslider Item --> */}
-                        <div className="tm-heroslider" style={{ backgroundImage: `url(assets/images/heoslider-image-1.jpg)` }}>
-                            <div className="container">
-                                <div className="row align-items-center">
-                                    <div className="col-lg-7 col-md-8 col-12">
-                                        <div className="tm-heroslider-contentwrapper">
-                                            <div className="tm-heroslider-content">
-                                                <h1>Woman’s Jewellery Collection</h1>
-                                                <p>Jewellery may be made from a wide range of materials. Jewellery has been
-                                                    made to adorn nearly every body part from hairpins to toe.</p>
-                                                <a href="products.html" className="tm-button">Shop Now</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {/* <!--// Heroslider Item -->
-
-                <!-- Heroslider Item --> */}
-                        <div className="tm-heroslider" style={{ backgroundImage: `url(assets/images/heoslider-image-2.jpg)` }}>
-                            <div className="container">
-                                <div className="row align-items-center">
-                                    <div className="col-lg-7 col-md-8 col-12">
-                                        <div className="tm-heroslider-contentwrapper">
-                                            <div className="tm-heroslider-content">
-                                                <h1>Woman’s Jewellery Collection</h1>
-                                                <p>Jewellery may be made from a wide range of materials. Jewellery has been
-                                                    made to adorn nearly every body part from hairpins to toe.</p>
-                                                <a href="products.html" className="tm-button">Shop Now</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {/* <!--// Heroslider Item --> */}
-
-                    </div>
-                </div>
-                {/* <!--// Heroslider Area -->
-
+                
+                        <HeroSlider/>
+                
+                {/* <!--// Heroslider Area --> 
         <!-- Page Content --> */}
                 <main className="page-content">
 

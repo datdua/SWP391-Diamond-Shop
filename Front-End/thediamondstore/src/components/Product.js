@@ -150,11 +150,11 @@ function Product() {
                                     <form action="#" className="tm-shop-header">
                                         <div className="tm-shop-productview">
                                             <span>View:</span>
-                                            <button data-view="grid" class="active" aria-label="Grid View"><i class="ion-android-apps"></i></button>
+                                            <button data-view="grid" class="active" aria-label="Grid View"><i className="ion-android-apps"></i></button>
                                             <button data-view="list"><i className="ion-android-menu" aria-label="List View"></i></button>
                                         </div>
                                         <p className="tm-shop-countview">Showing 1 to 9 of 16 </p>
-                                        <label for="mySelect">My Select:</label>
+                                        <label htmlFor="mySelect">My Select:</label>
                                         <select id="mySelect">
                                             <option value="value">Default Sorting</option>
                                             <option value="value">Name A-Z</option>
@@ -926,8 +926,8 @@ function Product() {
                                                 <div className="tm-rangeslider" data-range_min="0" data-range_max="800"
                                                     data-cur_min="200" data-cur_max="550">
                                                     <div className="tm-rangeslider-bar nst-animating"></div>
-                                                    <span className="tm-rangeslider-leftgrip nst-animating" tabindex="0"></span>
-                                                    <span className="tm-rangeslider-rightgrip nst-animating" tabindex="0"></span>
+                                                    <span className="tm-rangeslider-leftgrip nst-animating" tabIndex="0"></span>
+                                                    <span className="tm-rangeslider-rightgrip nst-animating" tabIndex="0"></span>
                                                 </div>
                                                 <div className="widget-pricefilter-actions">
                                                     <p className="widget-pricefilter-price">Price: $<span
@@ -1226,7 +1226,7 @@ function Product() {
                                                     <div className="tm-prodetails-quantitycart">
                                                         <h6>Quantity :</h6>
                                                         <div className="tm-quantitybox">
-                                                            <label for="myInput">My Input:</label>
+                                                            <label htmlFor="myInput">My Input:</label>
                                                             <input id="myInput" type="text" value="1" />
 
                                                         </div>

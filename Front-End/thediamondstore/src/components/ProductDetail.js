@@ -1109,9 +1109,9 @@ function ProductDetail() {
                                                         orciluctus curae.</p>
                                                     <div className="tm-prodetails-quantitycart">
                                                         <h6>Quantity :</h6>
-                                                        <div className="tm-quantitybox">
-                                                            <input type="text" value="1" />
-                                                        </div>
+                                                        <div className="tm-quantitybox">                                                          
+                                                        <input type="text" defaultValue="Default text" />
+                                                    </div>
                                                         <a href="#" className="tm-button tm-button-dark">Add To Cart</a>
                                                     </div>
                                                 </div>
