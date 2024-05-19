@@ -152,21 +152,6 @@ public class Diamond {
         this.image = image;
     }
 
-    @Override
-    public String toString() {
-        return "Diamond{" +
-                "diamondID=" + diamondID +
-                ", warrantityID=" + warrantityID +
-                ", certificationID=" + certificationID +
-                ", description='" + description + '\'' +
-                ", price=" + price +
-                ", origin='" + origin + '\'' +
-                ", color='" + color + '\'' +
-                ", cut='" + cut + '\'' +
-                ", caratWeight=" + caratWeight +
-                ", clarity='" + clarity + '\'' +
-                ", image='" + image + '\'' +
-                '}';
-    }
+    
 
 }

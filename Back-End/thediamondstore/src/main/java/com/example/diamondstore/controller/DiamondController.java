@@ -46,10 +46,14 @@ public class DiamondController {
         return ResponseEntity.ok(diamond);
     }
 
-    @PostMapping
-    public ResponseEntity<Diamond> createDiamond(@RequestBody Diamond diamond) {
-        diamond.setDiamondID(null);
-        return ResponseEntity.ok(diamondRepository.save(diamond));
+    @PostMapping("/create")
+    public ResponseEntity<String> createDiamond(@RequestBody Diamond diamond) {
+        Diamond existingDiamond = diamondRepository.findByDiamondID(diamond.getDiamondID());
+        if (existingDiamond != null) {
+            return ResponseEntity.badRequest().body("Diamond already exists");
+        }
+        diamondRepository.save(diamond);
+        return ResponseEntity.ok("Diamond created successfully");
     }
 
     @PutMapping("/{diamondID}")
