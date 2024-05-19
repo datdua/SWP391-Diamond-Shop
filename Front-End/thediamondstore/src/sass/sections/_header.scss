@@ -152,7 +152,7 @@
             border-radius: 100px;
             padding-left: 20px;
             padding-right: 75px;
-            @include placeholder-color(#959595);
+            @include placeholder-color('some-selector',#959595);
         }
 
         button,
