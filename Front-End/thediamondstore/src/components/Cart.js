@@ -5,7 +5,7 @@ function Cart() {
     return (
         <div>
 
-            {/* <!-- Preloader --> */}
+            {/* <!-- Preloader --> 
             <div className="tm-preloader">
                 <div className="container">
                     <div className="row justify-content-center">
@@ -19,7 +19,7 @@ function Cart() {
                 </div>
                 <button className="tm-button tm-button-small">Cancel Preloader</button>
             </div>
-            {/* <!--// Preloader -->
+            /* <!--// Preloader -->
 
     <!-- Wrapper --> */}
             <div id="wrapper" className="wrapper">
