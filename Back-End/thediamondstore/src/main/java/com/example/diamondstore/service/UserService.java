@@ -11,14 +11,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.diamondstore.model.Account;
-import com.example.diamondstore.repository.UserRepository;
+import com.example.diamondstore.repository.AccountRepository;
 
 @Service
 public class UserService implements UserDetailsService {
 
-    private UserRepository userRepository;
+    private AccountRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(AccountRepository userRepository) {
         this.userRepository = userRepository;
     }
 
