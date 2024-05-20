@@ -169,7 +169,7 @@ function Product() {
 
                                             {/* <!-- Single Product --> */}
                                             <div className="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12 mt-50">
-                                                <div className="tm-product tm-scrollanim">
+                                                <div className="tm-product">
                                                     <div className="tm-product-topside">
                                                         <div className="tm-product-images">
                                                             <img src="assets/images/products/product-image-1.jpg"
@@ -190,7 +190,7 @@ function Product() {
                                                         </div>
                                                     </div>
                                                     <div className="tm-product-bottomside">
-                                                        <h6 className="tm-product-title"><a href="product-details.html">Stylist
+                                                        <h6 className="tm-product-title"><a href="/product-detail">Stylist
                                                             daimond
                                                             earring</a></h6>
                                                         <div className="tm-ratingbox">
@@ -230,7 +230,7 @@ function Product() {
 
                                                 <!-- Single Product --> */}
                                             <div className="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12 mt-50">
-                                                <div className="tm-product tm-scrollanim">
+                                                <div className="tm-product">
                                                     <div className="tm-product-topside">
                                                         <div className="tm-product-images">
                                                             <img src="assets/images/products/product-image-3.jpg"
@@ -248,7 +248,7 @@ function Product() {
                                                         </div>
                                                     </div>
                                                     <div className="tm-product-bottomside">
-                                                        <h6 className="tm-product-title"><a href="product-details.html">Stylist
+                                                        <h6 className="tm-product-title"><a href="/product-detail">Stylist
                                                             daimond
                                                             earring</a></h6>
                                                         <div className="tm-ratingbox">
@@ -288,7 +288,7 @@ function Product() {
 
                                                 <!-- Single Product --> */}
                                             <div className="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12 mt-50">
-                                                <div className="tm-product tm-scrollanim">
+                                                <div className="tm-product">
                                                     <div className="tm-product-topside">
                                                         <div className="tm-product-images">
                                                             <img src="assets/images/products/product-image-4.jpg"
@@ -309,7 +309,7 @@ function Product() {
                                                         </div>
                                                     </div>
                                                     <div className="tm-product-bottomside">
-                                                        <h6 className="tm-product-title"><a href="product-details.html">Stylist
+                                                        <h6 className="tm-product-title"><a href="/product-detail">Stylist
                                                             daimond
                                                             earring</a></h6>
                                                         <div className="tm-ratingbox">
@@ -349,7 +349,7 @@ function Product() {
 
                                                     <!-- Single Product --> */}
                                             <div className="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12 mt-50">
-                                                <div className="tm-product tm-scrollanim">
+                                                <div className="tm-product">
                                                     <div className="tm-product-topside">
                                                         <div className="tm-product-images">
                                                             <img src="assets/images/products/product-image-6.jpg"
@@ -370,7 +370,7 @@ function Product() {
                                                         </div>
                                                     </div>
                                                     <div className="tm-product-bottomside">
-                                                        <h6 className="tm-product-title"><a href="product-details.html">Stylist
+                                                        <h6 className="tm-product-title"><a href="/product-detail">Stylist
                                                             daimond
                                                             earring</a></h6>
                                                         <div className="tm-ratingbox">
@@ -410,7 +410,7 @@ function Product() {
 
                                                         <!-- Single Product --> */}
                                             <div className="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12 mt-50">
-                                                <div className="tm-product tm-scrollanim">
+                                                <div className="tm-product">
                                                     <div className="tm-product-topside">
                                                         <div className="tm-product-images">
                                                             <img src="assets/images/products/product-image-8.jpg"
@@ -428,7 +428,7 @@ function Product() {
                                                         </div>
                                                     </div>
                                                     <div className="tm-product-bottomside">
-                                                        <h6 className="tm-product-title"><a href="product-details.html">Stylist
+                                                        <h6 className="tm-product-title"><a href="/product-detail">Stylist
                                                             daimond
                                                             earring</a></h6>
                                                         <div className="tm-ratingbox">
@@ -468,7 +468,7 @@ function Product() {
 
                                                         <!-- Single Product --> */}
                                             <div className="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12 mt-50">
-                                                <div className="tm-product tm-scrollanim">
+                                                <div className="tm-product">
                                                     <div className="tm-product-topside">
                                                         <div className="tm-product-images">
                                                             <img src="assets/images/products/product-image-9.jpg"
@@ -489,7 +489,7 @@ function Product() {
                                                         </div>
                                                     </div>
                                                     <div className="tm-product-bottomside">
-                                                        <h6 className="tm-product-title"><a href="product-details.html">Stylist
+                                                        <h6 className="tm-product-title"><a href="/product-detail">Stylist
                                                             daimond
                                                             earring</a></h6>
                                                         <div className="tm-ratingbox">
@@ -529,7 +529,7 @@ function Product() {
 
                                                             <!-- Single Product --> */}
                                             <div className="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12 mt-50">
-                                                <div className="tm-product tm-scrollanim">
+                                                <div className="tm-product">
                                                     <div className="tm-product-topside">
                                                         <div className="tm-product-images">
                                                             <img src="assets/images/products/product-image-11.jpg"
@@ -550,7 +550,7 @@ function Product() {
                                                         </div>
                                                     </div>
                                                     <div className="tm-product-bottomside">
-                                                        <h6 className="tm-product-title"><a href="product-details.html">Stylist
+                                                        <h6 className="tm-product-title"><a href="/product-detail">Stylist
                                                             daimond
                                                             earring</a></h6>
                                                         <div className="tm-ratingbox">
@@ -590,7 +590,7 @@ function Product() {
 
                                                                 <!-- Single Product --> */}
                                             <div className="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12 mt-50">
-                                                <div className="tm-product tm-scrollanim">
+                                                <div className="tm-product">
                                                     <div className="tm-product-topside">
                                                         <div className="tm-product-images">
                                                             <img src="assets/images/products/product-image-3.jpg"
@@ -608,7 +608,7 @@ function Product() {
                                                         </div>
                                                     </div>
                                                     <div className="tm-product-bottomside">
-                                                        <h6 className="tm-product-title"><a href="product-details.html">Stylist
+                                                        <h6 className="tm-product-title"><a href="/product-detail">Stylist
                                                             daimond
                                                             earring</a></h6>
                                                         <div className="tm-ratingbox">
@@ -648,7 +648,7 @@ function Product() {
 
                                                                 <!-- Single Product --> */}
                                             <div className="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12 mt-50">
-                                                <div className="tm-product tm-scrollanim">
+                                                <div className="tm-product">
                                                     <div className="tm-product-topside">
                                                         <div className="tm-product-images">
                                                             <img src="assets/images/products/product-image-4.jpg"
@@ -669,7 +669,7 @@ function Product() {
                                                         </div>
                                                     </div>
                                                     <div className="tm-product-bottomside">
-                                                        <h6 className="tm-product-title"><a href="product-details.html">Stylist
+                                                        <h6 className="tm-product-title"><a href="/product-detail">Stylist
                                                             daimond
                                                             earring</a></h6>
                                                         <div className="tm-ratingbox">
@@ -709,7 +709,7 @@ function Product() {
 
                                                                     <!-- Single Product --> */}
                                             <div className="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12 mt-50">
-                                                <div className="tm-product tm-scrollanim">
+                                                <div className="tm-product">
                                                     <div className="tm-product-topside">
                                                         <div className="tm-product-images">
                                                             <img src="assets/images/products/product-image-7.jpg"
@@ -730,7 +730,7 @@ function Product() {
                                                         </div>
                                                     </div>
                                                     <div className="tm-product-bottomside">
-                                                        <h6 className="tm-product-title"><a href="product-details.html">Stylist
+                                                        <h6 className="tm-product-title"><a href="/product-detail">Stylist
                                                             daimond
                                                             earring</a></h6>
                                                         <div className="tm-ratingbox">
@@ -770,7 +770,7 @@ function Product() {
 
                                                                         <!-- Single Product --> */}
                                             <div className="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12 mt-50">
-                                                <div className="tm-product tm-scrollanim">
+                                                <div className="tm-product">
                                                     <div className="tm-product-topside">
                                                         <div className="tm-product-images">
                                                             <img src="assets/images/products/product-image-9.jpg"
@@ -788,7 +788,7 @@ function Product() {
                                                         </div>
                                                     </div>
                                                     <div className="tm-product-bottomside">
-                                                        <h6 className="tm-product-title"><a href="product-details.html">Stylist
+                                                        <h6 className="tm-product-title"><a href="/product-detail">Stylist
                                                             daimond
                                                             earring</a></h6>
                                                         <div className="tm-ratingbox">
@@ -828,7 +828,7 @@ function Product() {
 
                                                                         <!-- Single Product --> */}
                                             <div className="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12 mt-50">
-                                                <div className="tm-product tm-scrollanim">
+                                                <div className="tm-product">
                                                     <div className="tm-product-topside">
                                                         <div className="tm-product-images">
                                                             <img src="assets/images/products/product-image-1.jpg"
@@ -849,7 +849,7 @@ function Product() {
                                                         </div>
                                                     </div>
                                                     <div className="tm-product-bottomside">
-                                                        <h6 className="tm-product-title"><a href="product-details.html">Stylist
+                                                        <h6 className="tm-product-title"><a href="/product-detail">Stylist
                                                             daimond
                                                             earring</a></h6>
                                                         <div className="tm-ratingbox">
@@ -892,11 +892,11 @@ function Product() {
 
                                     <div className="tm-pagination mt-50">
                                         <ul>
-                                            <li className="is-active"><a href="products.html">1</a></li>
-                                            <li><a href="products.html">2</a></li>
-                                            <li><a href="products.html">3</a></li>
-                                            <li><a href="products.html">4</a></li>
-                                            <li><a href="products.html"><i className="ion-chevron-right"></i></a></li>
+                                            <li className="is-active"><Link to="/product">1</Link></li>
+                                            <li><Link to="/product">2</Link></li>
+                                            <li><Link to="/product">3</Link></li>
+                                            <li><Link to="/product">4</Link></li>
+                                            <li><Link to="/product"><i className="ion-chevron-right"></i></Link></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -909,12 +909,12 @@ function Product() {
                                         <div className="single-widget widget-categories">
                                             <h6 className="widget-title">Categories</h6>
                                             <ul>
-                                                <li><a href="products.html">Make up</a></li>
-                                                <li><a href="products.html">Leapstick</a></li>
-                                                <li><a href="products.html">Face Powder</a></li>
-                                                <li><a href="products.html">Eyeliner</a></li>
-                                                <li><a href="products.html">Maskara</a></li>
-                                                <li><a href="products.html">Foundation</a></li>
+                                                <li><a href="/product">Make up</a></li>
+                                                <li><a href="/product">Leapstick</a></li>
+                                                <li><a href="/product">Face Powder</a></li>
+                                                <li><a href="/product">Eyeliner</a></li>
+                                                <li><a href="/product">Maskara</a></li>
+                                                <li><a href="/product">Foundation</a></li>
                                             </ul>
                                         </div>
                                         {/* <!--// Single Widget -->
@@ -944,32 +944,32 @@ function Product() {
                                             <h6 className="widget-title">Popular Product</h6>
                                             <ul>
                                                 <li>
-                                                    <a href="product-details.html" className="widget-popularproduct-image">
+                                                    <a href="/product-detail" className="widget-popularproduct-image">
                                                         <img src="assets/images/products/product-image-1-thumb.jpg"
                                                             alt="product thumbnail" />
                                                     </a>
                                                     <div className="widget-popularproduct-content">
-                                                        <h6><a href="product-details.html">Brown liquid inside</a></h6>
+                                                        <h6><a href="/product-detail">Brown liquid inside</a></h6>
                                                         <span>$20.00</span>
                                                     </div>
                                                 </li>
                                                 <li>
-                                                    <a href="product-details.html" className="widget-popularproduct-image">
+                                                    <a href="/product-detail" className="widget-popularproduct-image">
                                                         <img src="assets/images/products/product-image-2-thumb.jpg"
                                                             alt="product thumbnail" />
                                                     </a>
                                                     <div className="widget-popularproduct-content">
-                                                        <h6><a href="product-details.html">Top of amber bottle</a></h6>
+                                                        <h6><a href="/product-detail">Top of amber bottle</a></h6>
                                                         <span>$35.99</span>
                                                     </div>
                                                 </li>
                                                 <li>
-                                                    <a href="product-details.html" className="widget-popularproduct-image">
+                                                    <a href="/product-detail" className="widget-popularproduct-image">
                                                         <img src="assets/images/products/product-image-3-thumb.jpg"
                                                             alt="product thumbnail" />
                                                     </a>
                                                     <div className="widget-popularproduct-content">
-                                                        <h6><a href="product-details.html">Mario badescu bottle</a></h6>
+                                                        <h6><a href="/product-detail">Mario badescu bottle</a></h6>
                                                         <span>$99.99</span>
                                                     </div>
                                                 </li>
@@ -981,10 +981,10 @@ function Product() {
                                         <div className="single-widget widget-sizes">
                                             <h6 className="widget-title">Sizes</h6>
                                             <ul>
-                                                <li><a href="products.html">Small Size</a></li>
-                                                <li><a href="products.html">Medium Size</a></li>
-                                                <li><a href="products.html">Large Size</a></li>
-                                                <li><a href="products.html">Extra Large Size</a></li>
+                                                <li><a href="/product">Small Size</a></li>
+                                                <li><a href="/product">Medium Size</a></li>
+                                                <li><a href="/product">Large Size</a></li>
+                                                <li><a href="/product">Extra Large Size</a></li>
                                             </ul>
                                         </div>
                                         {/* <!--// Single Widget --> */}

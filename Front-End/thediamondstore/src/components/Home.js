@@ -235,7 +235,7 @@ function Home() {
 
                                 {/* <!-- Single Product --> */}
                                 <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-1.jpg" alt="product image" />
@@ -284,7 +284,7 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-3.jpg" alt="product image" />
@@ -331,7 +331,7 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-4.jpg" alt="product image" />
@@ -379,7 +379,7 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-6.jpg" alt="product image" />
@@ -426,7 +426,7 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-7.jpg" alt="product image" />
@@ -475,7 +475,7 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-9.jpg" alt="product image" />
@@ -522,7 +522,7 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-10.jpg" alt="product image" />
@@ -570,7 +570,7 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-12.jpg" alt="product image" />
@@ -627,7 +627,7 @@ function Home() {
 
                                 {/* <!-- Single Banner --> */}
                                 <div className="col-lg-4 col-md-6 col-sm-6 col-12 mt-30">
-                                    <a href="#" className="tm-banner tm-scrollanim">
+                                    <a href="#" className="tm-banner ">
                                         <img src="assets/images/banner-image-1.jpg" alt="banner image" />
                                     </a>
                                 </div>
@@ -635,7 +635,7 @@ function Home() {
 
                         <!-- Single Banner --> */}
                                 <div className="col-lg-4 col-md-6 col-sm-6 col-12 mt-30">
-                                    <a href="#" className="tm-banner tm-scrollanim">
+                                    <a href="#" className="tm-banner ">
                                         <img src="assets/images/banner-image-2.jpg" alt="banner image" />
                                     </a>
                                 </div>
@@ -643,7 +643,7 @@ function Home() {
 
                         <!-- Single Banner --> */}
                                 <div className="col-lg-4 col-md-6 col-sm-6 col-12 mt-30">
-                                    <a href="#" className="tm-banner tm-scrollanim">
+                                    <a href="#" className="tm-banner ">
                                         <img src="assets/images/banner-image-3.jpg" alt="banner image" />
                                     </a>
                                 </div>
@@ -670,7 +670,7 @@ function Home() {
 
                                 {/* <!-- Single Product --> */}
                                 <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mt-50">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-4.jpg" alt="product image" />
@@ -719,7 +719,7 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mt-50">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-6.jpg" alt="product image" />
@@ -766,7 +766,7 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mt-50">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-7.jpg" alt="product image" />
@@ -815,7 +815,7 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mt-50">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-9.jpg" alt="product image" />
@@ -862,7 +862,7 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mt-50">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-10.jpg" alt="product image" />
@@ -910,7 +910,7 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mt-50">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-11.jpg" alt="product image" />
@@ -957,7 +957,7 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mt-50">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-12.jpg" alt="product image" />
@@ -1002,7 +1002,7 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mt-50">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-2.jpg" alt="product image" />
@@ -1077,7 +1077,7 @@ function Home() {
                     </div>
                     {/* <!--// Offer Area -->
 
-            <!-- Latest Blogs Area --> */}
+            <!-- Latest Blogs Area --> 
                     <div id="tm-news-area" className="tm-section tm-blog-area tm-padding-section bg-pattern-transparent">
                         <div className="container">
                             <div className="row justify-content-center">
@@ -1091,9 +1091,9 @@ function Home() {
                             </div>
                             <div className="row tm-blog-slider">
 
-                                {/* <!-- Blog Single Item --> */}
+                                {/* <!-- Blog Single Item --> 
                                 <div className="col-lg-4 col-md-6">
-                                    <div className="tm-blog tm-scrollanim">
+                                    <div className="tm-blog ">
                                         <div className="tm-blog-topside">
                                             <div className="tm-blog-thumb">
                                                 <img src="assets/images/blog/blog-image-1.jpg" alt="blog image" />
@@ -1116,9 +1116,9 @@ function Home() {
                                 </div>
                                 {/* <!--// Blog Single Item -->
 
-                        <!-- Blog Single Item --> */}
+                        <!-- Blog Single Item --> 
                                 <div className="col-lg-4 col-md-6">
-                                    <div className="tm-blog tm-scrollanim">
+                                    <div className="tm-blog ">
                                         <div className="tm-blog-topside">
                                             <div className="tm-blog-thumb">
                                                 <img src="assets/images/blog/blog-image-2.jpg" alt="blog image" />
@@ -1141,9 +1141,9 @@ function Home() {
                                 </div>
                                 {/* <!--// Blog Single Item -->
 
-                        <!-- Blog Single Item --> */}
+                        <!-- Blog Single Item --> 
                                 <div className="col-lg-4 col-md-6">
-                                    <div className="tm-blog tm-scrollanim">
+                                    <div className="tm-blog ">
                                         <div className="tm-blog-topside">
                                             <div className="tm-blog-thumb">
                                                 <img src="assets/images/blog/blog-image-3.jpg" alt="blog image" />
@@ -1167,9 +1167,9 @@ function Home() {
                                 </div>
                                 {/* <!--// Blog Single Item -->
 
-                        <!-- Blog Single Item --> */}
+                        <!-- Blog Single Item --> 
                                 <div className="col-lg-4 col-md-6">
-                                    <div className="tm-blog tm-scrollanim">
+                                    <div className="tm-blog ">
                                         <div className="tm-blog-topside">
                                             <div className="tm-blog-thumb">
                                                 <img src="assets/images/blog/blog-image-4.jpg" alt="blog image" />
@@ -1193,9 +1193,9 @@ function Home() {
                                 </div>
                                 {/* <!--// Blog Single Item -->
 
-                        <!-- Blog Single Item --> */}
+                        <!-- Blog Single Item --> 
                                 <div className="col-lg-4 col-md-6">
-                                    <div className="tm-blog tm-scrollanim">
+                                    <div className="tm-blog ">
                                         <div className="tm-blog-topside">
                                             <div className="tm-blog-thumb">
                                                 <img src="assets/images/blog/blog-image-5.jpg" alt="blog image" />
@@ -1217,7 +1217,7 @@ function Home() {
                                         </div>
                                     </div>
                                 </div>
-                                {/* <!--// Blog Single Item --> */}
+                                {/* <!--// Blog Single Item --> 
 
                             </div>
                         </div>
