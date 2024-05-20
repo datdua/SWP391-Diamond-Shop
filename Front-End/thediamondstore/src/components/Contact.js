@@ -122,7 +122,19 @@ function Contact() {
 
                 </div>
                 {/* <!--// Header --> 
-
+                <!-- Breadcrumb Area --> */}
+                <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(assets/images/breadcrumb-bg.jpg)` }}>
+                    <div className="container">
+                        <div className="tm-breadcrumb">
+                            <h2>Contact</h2>
+                            <ul>
+                                <li><Link to="/">Home</Link></li>
+                                <li>Contact</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {/* <!--// Breadcrumb Area -->
                 <!-- Page Content --> */}
                 <main className="page-content">
 

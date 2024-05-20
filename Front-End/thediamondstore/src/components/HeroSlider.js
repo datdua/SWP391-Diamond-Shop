@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-
 const slidesData = [
     {
         backgroundImage: 'url(assets/images/heoslider-image-1.jpg)',
@@ -10,8 +9,8 @@ const slidesData = [
     },
     {
         backgroundImage: 'url(assets/images/heoslider-image-2.jpg)',
-        title: "Woman’s Jewellery Collection",
-        description: "Jewellery may be made from a wide range of materials. Jewellery has been made to adorn nearly every body part from hairpins to toe.",
+        title: "Men’s Jewellery Collection",
+        description: "Discover the unique range of men's jewellery. From rings to bracelets, find the perfect accessory.",
         link: "products.html",
     }
 ];
@@ -28,21 +27,32 @@ const HeroSlider = () => {
     }, []);
 
     return (
-        <div className="tm-heroslider-area bg-grey">
+        <div className="tm-heroslider-area">
             <div className="tm-heroslider-slider">
                 {slidesData.map((slide, index) => (
                     <div
                         key={index}
                         className={`tm-heroslider ${currentSlide === index ? 'active' : ''}`}
-                        style={{ backgroundImage: slide.backgroundImage }}
+                        style={{
+                            backgroundImage: slide.backgroundImage,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center',
+                            position: 'absolute',
+                            top: 0,
+                            left: `${(index - currentSlide) * 100}%`,
+                            width: '100%',
+                            height: '100%',
+                            transition: 'left 1s ease-in-out',
+                            color: 'white'
+                        }}
                     >
                         <div className="container">
                             <div className="row align-items-center">
                                 <div className="col-lg-7 col-md-8 col-12">
                                     <div className="tm-heroslider-contentwrapper">
                                         <div className="tm-heroslider-content">
-                                            <h1>{slide.title}</h1>
-                                            <p>{slide.description}</p>
+                                            <h1 className="tm-heroslider-title">{slide.title}</h1>
+                                            <p className="tm-heroslider-description">{slide.description}</p>
                                             <a href={slide.link} className="tm-button">Shop Now</a>
                                         </div>
                                     </div>

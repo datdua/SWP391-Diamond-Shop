@@ -163,7 +163,7 @@ function ProductDetail() {
                                                                     alt="product image" />
                                                             </a>
                                                         </div>
-                                                        <div className="tm-prodetails-largeimage">
+                                                        {/*<div className="tm-prodetails-largeimage">
                                                             <a data-fancybox="tm-prodetails-imagegallery"
                                                                 href="assets/images/products/product-image-2.jpg"
                                                                 data-caption="Product Zoom Image 2">
@@ -201,10 +201,9 @@ function ProductDetail() {
                                                                 data-caption="Product Zoom Image 6">
                                                                 <img src="assets/images/products/product-image-6.jpg"
                                                                     alt="product im0age" />
-                                                            </a>
-                                                        </div>
+                                                            </a></div>*/}
                                                     </div>
-                                                    <div className="tm-prodetails-thumbnails">
+                                                    <div className="tm-prodetails-thumbnails" style={{display:"flex"}}>
                                                         <div className="tm-prodetails-thumbnail">
                                                             <img src="assets/images/products/product-image-1-thumb.jpg"
                                                                 alt="product image" />
@@ -221,14 +220,14 @@ function ProductDetail() {
                                                             <img src="assets/images/products/product-image-4-thumb.jpg"
                                                                 alt="product image" />
                                                         </div>
-                                                        <div className="tm-prodetails-thumbnail">
+                                                        {/*<div className="tm-prodetails-thumbnail">
                                                             <img src="assets/images/products/product-image-5-thumb.jpg"
                                                                 alt="product image" />
                                                         </div>
                                                         <div className="tm-prodetails-thumbnail">
                                                             <img src="assets/images/products/product-image-6-thumb.jpg"
                                                                 alt="product image" />
-                                                        </div>
+                                                        </div>*/}
                                                     </div>
                                                 </div>
                                             </div>
@@ -411,8 +410,8 @@ function ProductDetail() {
                                         <div className="row tm-products-slider3">
 
                                             {/* <!-- Single Product --> */}
-                                            <div className="col-12">
-                                                <div className="tm-product tm-scrollanim">
+                                            <div className="col-4">
+                                                <div className="tm-product">
                                                     <div className="tm-product-topside">
                                                         <div className="tm-product-images">
                                                             <img src="assets/images/products/product-image-1.jpg"
@@ -474,8 +473,8 @@ function ProductDetail() {
                                             {/* <!--// Single Product -->
 
                                                 <!-- Single Product --> */}
-                                            <div className="col-12">
-                                                <div className="tm-product tm-scrollanim">
+                                            <div className="col-4">
+                                                <div className="tm-product ">
                                                     <div className="tm-product-topside">
                                                         <div className="tm-product-images">
                                                             <img src="assets/images/products/product-image-3.jpg"
@@ -534,8 +533,8 @@ function ProductDetail() {
                                             {/* <!--// Single Product -->
 
                                                 <!-- Single Product --> */}
-                                            <div className="col-12">
-                                                <div className="tm-product tm-scrollanim">
+                                            <div className="col-4">
+                                                <div className="tm-product ">
                                                     <div className="tm-product-topside">
                                                         <div className="tm-product-images">
                                                             <img src="assets/images/products/product-image-4.jpg"
@@ -596,8 +595,8 @@ function ProductDetail() {
                                             {/* <!--// Single Product -->
 
                                                     <!-- Single Product --> */}
-                                            <div className="col-12">
-                                                <div className="tm-product tm-scrollanim">
+                                            <div className="col-4">
+                                                <div className="tm-product ">
                                                     <div className="tm-product-topside">
                                                         <div className="tm-product-images">
                                                             <img src="assets/images/products/product-image-1.jpg"
@@ -659,8 +658,8 @@ function ProductDetail() {
                                             {/* <!--// Single Product -->
 
                                                         <!-- Single Product --> */}
-                                            <div className="col-12">
-                                                <div className="tm-product tm-scrollanim">
+                                            <div className="col-4">
+                                                <div className="tm-product ">
                                                     <div className="tm-product-topside">
                                                         <div className="tm-product-images">
                                                             <img src="assets/images/products/product-image-3.jpg"
@@ -719,8 +718,8 @@ function ProductDetail() {
                                             {/* <!--// Single Product -->
 
                                                         <!-- Single Product --> */}
-                                            <div className="col-12">
-                                                <div className="tm-product tm-scrollanim">
+                                            <div className="col-4">
+                                                <div className="tm-product ">
                                                     <div className="tm-product-topside">
                                                         <div className="tm-product-images">
                                                             <img src="assets/images/products/product-image-4.jpg"
