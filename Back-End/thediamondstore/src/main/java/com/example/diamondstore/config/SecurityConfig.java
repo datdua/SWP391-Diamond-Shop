@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.diamondstore.filter.JwtRequestFilter;
-import com.example.diamondstore.service.MyUserDetailsService;
+import com.example.diamondstore.service.AccountService;
 
 @Configuration
 @EnableWebSecurity
@@ -26,19 +26,20 @@ public class SecurityConfig {
     private static final String[] WHITE_LIST_URL = { "/api/v1/auth/**", "/v2/api-docs", "/v3/api-docs",
 			"/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**", "/configuration/ui",
 			"/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html", "/api/auth/**",
-			"/api/test/**", "/authenticate", "/login", "/register" };
+			"/api/test/**", "/authenticate", "/login", "/register", "api/diamonds/**", "/api/certificates/**", "/api/jewelry/**"};
 
+    private static final String[] ADMIN_URL = { "/api/accounts", "/update/**" };
 
     @Autowired
-    private MyUserDetailsService myUserDetailsService;
+    private AccountService UserService;
 
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
     
 
-    public SecurityConfig(MyUserDetailsService myUserDetailsService, JwtRequestFilter jwtRequestFilter) {
-        this.myUserDetailsService = myUserDetailsService;
+    public SecurityConfig(AccountService UserService, JwtRequestFilter jwtRequestFilter) {
+        this.UserService = UserService;
         this.jwtRequestFilter = jwtRequestFilter;
     }
 
@@ -48,6 +49,7 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeRequests(authz -> authz
                 .antMatchers(WHITE_LIST_URL).permitAll()
+                .antMatchers(ADMIN_URL).hasRole("ADMIN")
                 .anyRequest().authenticated())
             .exceptionHandling(e -> e
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))

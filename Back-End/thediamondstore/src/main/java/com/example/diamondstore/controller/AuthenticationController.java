@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.request.AuthenticationRequest;
 import com.example.diamondstore.response.AuthenticationResponse;
-import com.example.diamondstore.service.MyUserDetailsService;
+import com.example.diamondstore.service.AccountService;
 import com.example.diamondstore.utils.JwtUtil;
 
 @RestController
 public class AuthenticationController {
 
     private AuthenticationManager authenticationManager;
-    private MyUserDetailsService userDetailsService;
+    private AccountService userDetailsService;
     private JwtUtil jwtTokenUtil;
 
-    public AuthenticationController(AuthenticationManager authenticationManager, MyUserDetailsService userDetailsService, JwtUtil jwtTokenUtil) {
+    public AuthenticationController(AuthenticationManager authenticationManager, AccountService userDetailsService, JwtUtil jwtTokenUtil) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtTokenUtil = jwtTokenUtil;
@@ -32,7 +32,7 @@ public class AuthenticationController {
 
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+                    new UsernamePasswordAuthenticationToken(authenticationRequest.getAccountName(), authenticationRequest.getPassword())
             );
         }
         catch (BadCredentialsException e) {
@@ -40,7 +40,7 @@ public class AuthenticationController {
         }
 
         final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(authenticationRequest.getUsername());
+                .loadUserByUsername(authenticationRequest.getAccountName());
 
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 
