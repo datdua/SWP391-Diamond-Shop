@@ -58,7 +58,7 @@ public class AccountController {
         String email = registerRequet.getEmail();
         String phoneNumber = registerRequet.getPhoneNumber();
 
-        Account existingUser = userRepository.findByAccountname(accountName);
+        Account existingUser = userRepository.findByAccountName(accountName);
         if (existingUser != null) {
             return ResponseEntity.badRequest().body("User already exists");
         }
