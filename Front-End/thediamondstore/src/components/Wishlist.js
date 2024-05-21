@@ -1,10 +1,11 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function Wishlist() {
     return (
         <div>
 
-            {/* <!-- Preloader --> */}
+            {/* <!-- Preloader --> 
             <div className="tm-preloader">
                 <div className="container">
                     <div className="row justify-content-center">
@@ -40,17 +41,17 @@ function Wishlist() {
                                 <div className="col-lg-4 col-12">
                                     <div className="tm-header-options">
                                         <div className="tm-dropdown tm-header-links">
-                                            <button>My Account</button>
+                                            <button type="button" aria-label="My Account">My Account</button>
                                             <ul>
-                                                <li><a href="my-account.html">My Account</a></li>
-                                                <li><a href="login-register.html">Login/Register</a></li>
-                                                <li><a href="cart.html">Shopping Cart</a></li>
-                                                <li><a href="wishlist.html">Wishlist</a></li>
-                                                <li><a href="checkout.html">Checkout</a></li>
+                                                <li><Link to="/account">My Account</Link></li>
+                                                <li><Link to="/login">Login/Register</Link></li>
+                                                <li><Link to="/cart">Shopping Cart</Link></li>
+                                                <li><Link to="/wishlist">Wishlist</Link></li>
+                                                <li><Link to="/checkout">Checkout</Link></li>
                                             </ul>
                                         </div>
                                         <div className="tm-dropdown tm-header-currency">
-                                            <button>USD</button>
+                                            <button type="button" aria-label="Currency Selection">USD</button>
                                             <ul>
                                                 <li><a href="#">USD</a></li>
                                                 <li><a href="#">EUR</a></li>
@@ -59,16 +60,16 @@ function Wishlist() {
                                             </ul>
                                         </div>
                                         <div className="tm-dropdown tm-header-language">
-                                            <button><img src="assets/images/flag-english.png" alt="language"/>English</button>
+                                            <button aria-label="Language Selection"><img src="assets/images/flag-english.png" alt="language" />English</button>
                                             <ul>
                                                 <li><a href="#"><img src="assets/images/flag-english.png"
-                                                    alt="language"/>English</a></li>
+                                                    alt="language" />English</a></li>
                                                 <li><a href="#"><img src="assets/images/flag-spain.png"
-                                                    alt="language"/>Spanish</a></li>
+                                                    alt="language" />Spanish</a></li>
                                                 <li><a href="#"><img src="assets/images/flag-russian.png"
-                                                    alt="language"/>Russian</a></li>
+                                                    alt="language" />Russian</a></li>
                                                 <li><a href="#"><img src="assets/images/flag-french.png"
-                                                    alt="language"/>French</a></li>
+                                                    alt="language" />French</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -76,28 +77,28 @@ function Wishlist() {
                             </div>
                         </div>
                     </div>
-                    {/* <!--// Header Top Area -->
+                    {/* <!--// Header Top Area --> */}
 
-                    <!-- Header Middle Area --> */}
+                    {/* <!-- Header Middle Area --> */}
                     <div className="tm-header-middlearea bg-white">
                         <div className="container">
                             <div className="tm-mobilenav"></div>
                             <div className="row align-items-center">
                                 <div className="col-lg-3 col-6 order-1 order-lg-1">
                                     <a href="index.html" className="tm-header-logo">
-                                        <img src="assets/images/logo.png" alt="surose"/>
+                                        <img src="assets/images/logo.png" alt="surose" />
                                     </a>
                                 </div>
                                 <div className="col-lg-6 col-12 order-3 order-lg-2">
                                     <form className="tm-header-search">
-                                        <input type="text" placeholder="Search product..."/>
-                                            <button><i className="ion-android-search"></i></button>
+                                        <input type="text" placeholder="Search product..." />
+                                        <button aria-label="Search"><i className="ion-android-search"></i></button>
                                     </form>
                                 </div>
                                 <div className="col-lg-3 col-6 order-2 order-lg-3">
                                     <ul className="tm-header-icons">
-                                        <li><a href="wishlist.html"><i className="ion-android-favorite-outline"></i><span>0</span></a></li>
-                                        <li><a href="cart.html"><i className="ion-bag"></i><span>0</span></a></li>
+                                        <li><Link to="/wishlist"><i className="ion-android-favorite-outline"></i><span>0</span></Link></li>
+                                        <li><Link to="/cart"><i className="ion-bag"></i><span>0</span></Link></li>
                                     </ul>
                                 </div>
                             </div>
@@ -105,89 +106,15 @@ function Wishlist() {
                     </div>
                     {/* <!--// Header Middle Area -->
 
-                    <!-- Header Bottom Area --> */}
+<!-- Header Bottom Area --> */}
                     <div className="tm-header-bottomarea bg-white">
                         <div className="container">
                             <nav className="tm-header-nav">
                                 <ul>
-                                    <li><a href="index.html">Home</a></li>
-                                    <li><a href="about.html">About</a></li>
-                                    <li className="tm-header-nav-dropdown"><a href="products.html">Shop</a>
-                                        <ul>
-                                            <li><a href="products.html">Products</a></li>
-                                            <li><a href="products-leftsidebar.html">Products Left Sidebar</a></li>
-                                            <li><a href="products-nosidebar.html">Products Without Sidebar</a></li>
-                                            <li><a href="products-4-column.html">Products 4 Column</a></li>
-                                            <li><a href="product-details.html">Product Details</a></li>
-                                            <li><a href="product-details-leftsidebar.html">Product Details Left Sidebar</a></li>
-                                            <li><a href="product-details-nosidebar.html">Product Details Without Sidebar</a>
-                                            </li>
-                                            <li><a href="#">Others</a>
-                                                <ul>
-                                                    <li><a href="cart.html">Shopping Cart</a></li>
-                                                    <li><a href="wishlist.html">Wishlist</a></li>
-                                                    <li><a href="checkout.html">Checkout</a></li>
-                                                    <li><a href="my-account.html">My Account</a></li>
-                                                    <li><a href="login-register.html">Login / Register</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li className="tm-header-nav-megamenu"><a href="index.html">Pages</a>
-
-                                        <ul>
-                                            <li><a href="shop.html">Common Pages</a>
-                                                <ul>
-                                                    <li><a href="index.html">Homepage</a></li>
-                                                    <li><a href="about.html">About</a></li>
-                                                    <li><a href="portfolios.html">Portfolios</a></li>
-                                                    <li><a href="contact.html">Contact</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#">Blog Pages</a>
-                                                <ul>
-                                                    <li><a href="blog.html">Blog</a></li>
-                                                    <li><a href="blog-leftsidebar.html">Blog Left Sidebar</a></li>
-                                                    <li><a href="blog-details.html">Blog Details</a></li>
-                                                    <li><a href="blog-details-leftsidebar.html">Blog Details Left Sidebar</a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#">Shop Pages</a>
-                                                <ul>
-                                                    <li><a href="products.html">Products</a></li>
-                                                    <li><a href="products-leftsidebar.html">Products Left Sidebar</a></li>
-                                                    <li><a href="products-nosidebar.html">Products Without Sidebar</a></li>
-                                                    <li><a href="products-4-column.html">Products 4 Column</a></li>
-                                                    <li><a href="product-details.html">Product Details</a></li>
-                                                    <li><a href="product-details-leftsidebar.html">Product Details Left
-                                                        Sidebar</a></li>
-                                                    <li><a href="product-details-nosidebar.html">Product Details Without
-                                                        Sidebar</a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#">Shop Related Pages</a>
-                                                <ul>
-                                                    <li><a href="cart.html">Shopping Cart</a></li>
-                                                    <li><a href="wishlist.html">Wishlist</a></li>
-                                                    <li><a href="checkout.html">Checkout</a></li>
-                                                    <li><a href="my-account.html">My Account</a></li>
-                                                    <li><a href="login-register.html">Login / Register</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-
-                                    </li>
-                                    <li className="tm-header-nav-dropdown"><a href="blog.html">Blog</a>
-                                        <ul>
-                                            <li><a href="blog.html">Blog</a></li>
-                                            <li><a href="blog-leftsidebar.html">Blog Left Sidebar</a></li>
-                                            <li><a href="blog-details.html">Blog Details</a></li>
-                                            <li><a href="blog-details-leftsidebar.html">Blog Details Left Sidebar</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="contact.html">Contact</a></li>
+                                    <li><Link to="/">Homepage</Link></li>
+                                    <li><Link to="/about">About</Link></li>
+                                    <li><Link to="/product">Shop</Link></li>
+                                    <li><Link to="/contact">Contact</Link></li>
                                 </ul>
                             </nav>
                         </div>
@@ -195,10 +122,10 @@ function Wishlist() {
                     {/* <!--// Header Bottom Area --> */}
 
                 </div>
-                {/* <!--// Header -->
+                {/* <!--// Header --> 
 
                 <!-- Breadcrumb Area --> */}
-                <div className="tm-breadcrumb-area tm-padding-section bg-grey" data-bgimage="assets/images/breadcrumb-bg.jpg">
+                <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{backgroundImage:`url(assets/images/breadcrumb-bg.jpg)`}}>
                     <div className="container">
                         <div className="tm-breadcrumb">
                             <h2>Shopping Cart</h2>

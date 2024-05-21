@@ -1,11 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import "fancybox/dist/css/jquery.fancybox.css"
+import "../sass/style.scss";
+import HeroSlider from "./HeroSlider";
 function Home() {
+    const [value, setValue] = useState('Default value');
+
+    const handleChange = (event) => {
+        setValue(event.target.value);
+    };
+    const [isAccountDropdownOpen, setAccountDropdownOpen] = useState(false);
+    const [isCurrencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
+    const [isLanguageDropdownOpen, setLanguageDropdownOpen] = useState(false);
+
+    const toggleAccountDropdown = () => {
+        setAccountDropdownOpen(!isAccountDropdownOpen);
+        setCurrencyDropdownOpen(false);
+        setLanguageDropdownOpen(false);
+    };
+
+    const toggleCurrencyDropdown = () => {
+        setCurrencyDropdownOpen(!isCurrencyDropdownOpen);
+        setAccountDropdownOpen(false);
+        setLanguageDropdownOpen(false);
+    };
+
+    const toggleLanguageDropdown = () => {
+        setLanguageDropdownOpen(!isLanguageDropdownOpen);
+        setAccountDropdownOpen(false);
+        setCurrencyDropdownOpen(false);
+    };
+   
+    
     return (
         <div>
 
-            {/* <!-- Preloader --> */}
+            {/* <!-- Preloader --> 
             <div className="tm-preloader">
                 <div className="container">
                     <div className="row justify-content-center">
@@ -19,8 +49,7 @@ function Home() {
                 </div>
                 <button className="tm-button tm-button-small">Cancel Preloader</button>
             </div>
-            {/* <!--// Preloader -->
-
+            /* <!--// Preloader -->
     <!-- Wrapper --> */}
             <div id="wrapper" className="wrapper">
 
@@ -41,36 +70,42 @@ function Home() {
                                 <div className="col-lg-4 col-12">
                                     <div className="tm-header-options">
                                         <div className="tm-dropdown tm-header-links">
-                                            <button>My Account</button>
-                                            <ul>
-                                                <li><a href="my-account.html">My Account</a></li>
-                                                <li><a href="login-register.html">Login/Register</a></li>
-                                                <li><a href="cart.html">Shopping Cart</a></li>
-                                                <li><a href="wishlist.html">Wishlist</a></li>
-                                                <li><a href="checkout.html">Checkout</a></li>
-                                            </ul>
+                                            <button type="button" aria-label="My Account" onClick={toggleAccountDropdown}>My Account</button>
+                                            {isAccountDropdownOpen && (
+                                                <ul>
+                                                    <li><Link to="/account">My Account</Link></li>
+                                                    <li><Link to="/login">Login/Register</Link></li>
+                                                    <li><Link to="/cart">Shopping Cart</Link></li>
+                                                    <li><Link to="/wishlist">Wishlist</Link></li>
+                                                    <li><Link to="/checkout">Checkout</Link></li>
+                                                </ul>
+                                            )}
                                         </div>
                                         <div className="tm-dropdown tm-header-currency">
-                                            <button>USD</button>
-                                            <ul>
-                                                <li><a href="#">USD</a></li>
-                                                <li><a href="#">EUR</a></li>
-                                                <li><a href="#">JPY</a></li>
-                                                <li><a href="#">GBP</a></li>
-                                            </ul>
+                                            <button type="button" aria-label="Currency Selection" onClick={toggleCurrencyDropdown}>USD</button>
+                                            {isCurrencyDropdownOpen && (
+                                                <ul>
+                                                    <li><a href="#">USD</a></li>
+                                                    <li><a href="#">EUR</a></li>
+                                                    <li><a href="#">JPY</a></li>
+                                                    <li><a href="#">GBP</a></li>
+                                                </ul>
+                                            )}
                                         </div>
                                         <div className="tm-dropdown tm-header-language">
-                                            <button><img src="assets/images/flag-english.png" alt="language" />English</button>
-                                            <ul>
-                                                <li><a href="#"><img src="assets/images/flag-english.png"
-                                                    alt="language" />English</a></li>
-                                                <li><a href="#"><img src="assets/images/flag-spain.png"
-                                                    alt="language" />Spanish</a></li>
-                                                <li><a href="#"><img src="assets/images/flag-russian.png"
-                                                    alt="language" />Russian</a></li>
-                                                <li><a href="#"><img src="assets/images/flag-french.png"
-                                                    alt="language" />French</a></li>
-                                            </ul>
+                                            <button aria-label="Language Selection"><img src="assets/images/flag-english.png" alt="language" onClick={toggleLanguageDropdown} />English</button>
+                                            {isLanguageDropdownOpen && (
+                                                <ul>
+                                                    <li><a href="#"><img src="assets/images/flag-english.png"
+                                                        alt="language" />English</a></li>
+                                                    <li><a href="#"><img src="assets/images/flag-spain.png"
+                                                        alt="language" />Spanish</a></li>
+                                                    <li><a href="#"><img src="assets/images/flag-russian.png"
+                                                        alt="language" />Russian</a></li>
+                                                    <li><a href="#"><img src="assets/images/flag-french.png"
+                                                        alt="language" />French</a></li>
+                                                </ul>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -85,21 +120,20 @@ function Home() {
                             <div className="tm-mobilenav"></div>
                             <div className="row align-items-center">
                                 <div className="col-lg-3 col-6 order-1 order-lg-1">
-                                    <a href="index.html" className="tm-header-logo">
-                                        <img src="assets/images/logo.png" alt="surose" />
-                                    </a>
+                                    <Link to="/" className="tm-header-logo">
+                                        <img src="assets/images/logo1.png" alt="surose" />
+                                    </Link>
                                 </div>
                                 <div className="col-lg-6 col-12 order-3 order-lg-2">
                                     <form className="tm-header-search">
                                         <input type="text" placeholder="Search product..." />
-                                        <button><i className="ion-android-search"></i></button>
+                                        <button aria-label="Search"><i className="ion-android-search"></i></button>
                                     </form>
                                 </div>
                                 <div className="col-lg-3 col-6 order-2 order-lg-3">
                                     <ul className="tm-header-icons">
-                                        <li><a href="wishlist.html"><i
-                                            className="ion-android-favorite-outline"></i><span>0</span></a></li>
-                                        <li><a href="cart.html"><i className="ion-bag"></i><span>0</span></a></li>
+                                        <li><Link to="/wishlist"><i className="ion-android-favorite-outline"></i><span>0</span></Link></li>
+                                        <li><Link to="/cart"><i className="ion-bag"></i><span>0</span></Link></li>
                                     </ul>
                                 </div>
                             </div>
@@ -114,82 +148,8 @@ function Home() {
                                 <ul>
                                     <li><Link to="/">Homepage</Link></li>
                                     <li><Link to="/about">About</Link></li>
-                                    <li className="tm-header-nav-dropdown"><a href="products.html">Shop</a>
-                                        <ul>
-                                            <li><a href="products.html">Products</a></li>
-                                            <li><a href="products-leftsidebar.html">Products Left Sidebar</a></li>
-                                            <li><a href="products-nosidebar.html">Products Without Sidebar</a></li>
-                                            <li><a href="products-4-column.html">Products 4 Column</a></li>
-                                            <li><a href="product-details.html">Product Details</a></li>
-                                            <li><a href="product-details-leftsidebar.html">Product Details Left Sidebar</a></li>
-                                            <li><a href="product-details-nosidebar.html">Product Details Without Sidebar</a>
-                                            </li>
-                                            <li><a href="#">Others</a>
-                                                <ul>
-                                                    <li><a href="cart.html">Shopping Cart</a></li>
-                                                    <li><a href="wishlist.html">Wishlist</a></li>
-                                                    <li><a href="checkout.html">Checkout</a></li>
-                                                    <li><a href="my-account.html">My Account</a></li>
-                                                    <li><a href="login-register.html">Login / Register</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li className="tm-header-nav-megamenu"><a href="index.html">Pages</a>
-
-                                        <ul>
-                                            <li><a href="shop.html">Common Pages</a>
-                                                <ul>
-                                                    <li><Link to="/">Homepage</Link></li>
-                                                    <li><Link to="/about">About</Link></li>
-                                                    <li><a href="portfolios.html">Portfolios</a></li>
-                                                    <li><a href="contact.html">Contact</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#">Blog Pages</a>
-                                                <ul>
-                                                    <li><a href="blog.html">Blog</a></li>
-                                                    <li><a href="blog-leftsidebar.html">Blog Left Sidebar</a></li>
-                                                    <li><a href="blog-details.html">Blog Details</a></li>
-                                                    <li><a href="blog-details-leftsidebar.html">Blog Details Left Sidebar</a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#">Shop Pages</a>
-                                                <ul>
-                                                    <li><a href="products.html">Products</a></li>
-                                                    <li><a href="products-leftsidebar.html">Products Left Sidebar</a></li>
-                                                    <li><a href="products-nosidebar.html">Products Without Sidebar</a></li>
-                                                    <li><a href="products-4-column.html">Products 4 Column</a></li>
-                                                    <li><a href="product-details.html">Product Details</a></li>
-                                                    <li><a href="product-details-leftsidebar.html">Product Details Left
-                                                        Sidebar</a></li>
-                                                    <li><a href="product-details-nosidebar.html">Product Details Without
-                                                        Sidebar</a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#">Shop Related Pages</a>
-                                                <ul>
-                                                    <li><a href="cart.html">Shopping Cart</a></li>
-                                                    <li><a href="wishlist.html">Wishlist</a></li>
-                                                    <li><a href="checkout.html">Checkout</a></li>
-                                                    <li><a href="my-account.html">My Account</a></li>
-                                                    <li><a href="login-register.html">Login / Register</a></li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-
-                                    </li>
-                                    <li className="tm-header-nav-dropdown"><a href="blog.html">Blog</a>
-                                        <ul>
-                                            <li><a href="blog.html">Blog</a></li>
-                                            <li><a href="blog-leftsidebar.html">Blog Left Sidebar</a></li>
-                                            <li><a href="blog-details.html">Blog Details</a></li>
-                                            <li><a href="blog-details-leftsidebar.html">Blog Details Left Sidebar</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="contact.html">Contact</a></li>
+                                    <li><Link to="/product">Shop</Link></li>
+                                    <li><Link to="/contact">Contact</Link></li>
                                 </ul>
                             </nav>
                         </div>
@@ -200,51 +160,10 @@ function Home() {
                 {/* <!--// Header --> */}
 
                 {/* <!-- Heroslider Area --> */}
-                <div className="tm-heroslider-area bg-grey">
-                    <div className="tm-heroslider-slider">
-
-                        {/* <!-- Heroslider Item --> */}
-                        <div className="tm-heroslider" data-bgimage="assets/images/heoslider-image-1.jpg">
-                            <div className="container">
-                                <div className="row align-items-center">
-                                    <div className="col-lg-7 col-md-8 col-12">
-                                        <div className="tm-heroslider-contentwrapper">
-                                            <div className="tm-heroslider-content">
-                                                <h1>Woman’s Jewellery Collection</h1>
-                                                <p>Jewellery may be made from a wide range of materials. Jewellery has been
-                                                    made to adorn nearly every body part from hairpins to toe.</p>
-                                                <a href="products.html" className="tm-button">Shop Now</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {/* <!--// Heroslider Item -->
-
-                <!-- Heroslider Item --> */}
-                        <div className="tm-heroslider" data-bgimage="assets/images/heoslider-image-2.jpg">
-                            <div className="container">
-                                <div className="row align-items-center">
-                                    <div className="col-lg-7 col-md-8 col-12">
-                                        <div className="tm-heroslider-contentwrapper">
-                                            <div className="tm-heroslider-content">
-                                                <h1>Woman’s Jewellery Collection</h1>
-                                                <p>Jewellery may be made from a wide range of materials. Jewellery has been
-                                                    made to adorn nearly every body part from hairpins to toe.</p>
-                                                <a href="products.html" className="tm-button">Shop Now</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {/* <!--// Heroslider Item --> */}
-
-                    </div>
-                </div>
-                {/* <!--// Heroslider Area -->
-
+                
+                        <HeroSlider/>
+                
+                {/* <!--// Heroslider Area --> 
         <!-- Page Content --> */}
                 <main className="page-content">
 
@@ -316,7 +235,7 @@ function Home() {
 
                                 {/* <!-- Single Product --> */}
                                 <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-1.jpg" alt="product image" />
@@ -324,8 +243,8 @@ function Home() {
                                             </div>
                                             <ul className="tm-product-actions">
                                                 <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                    className="ion-eye"></i></button></li>
+                                                <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                </li>
                                                 <li><a href="#"><i className="ion-heart"></i></a></li>
                                             </ul>
                                             <div className="tm-product-badges">
@@ -334,7 +253,7 @@ function Home() {
                                             </div>
                                         </div>
                                         <div className="tm-product-bottomside">
-                                            <h6 className="tm-product-title"><a href="product-details.html">Stylist daimond
+                                            <h6 className="tm-product-title"><a href="/product">Stylist daimond
                                                 earring</a></h6>
                                             <div className="tm-ratingbox">
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
@@ -353,8 +272,8 @@ function Home() {
                                                     leap into electronic typesetting.</p>
                                                 <ul className="tm-product-actions">
                                                     <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                    <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                        className="ion-eye"></i></button></li>
+                                                    <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                    </li>
                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                 </ul>
                                             </div>
@@ -365,15 +284,15 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-3.jpg" alt="product image" />
                                             </div>
                                             <ul className="tm-product-actions">
                                                 <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                    className="ion-eye"></i></button></li>
+                                                <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                </li>
                                                 <li><a href="#"><i className="ion-heart"></i></a></li>
                                             </ul>
                                             <div className="tm-product-badges">
@@ -381,7 +300,7 @@ function Home() {
                                             </div>
                                         </div>
                                         <div className="tm-product-bottomside">
-                                            <h6 className="tm-product-title"><a href="product-details.html">Stylist daimond
+                                            <h6 className="tm-product-title"><a href="/product">Stylist daimond
                                                 earring</a></h6>
                                             <div className="tm-ratingbox">
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
@@ -400,8 +319,8 @@ function Home() {
                                                     leap into electronic typesetting.</p>
                                                 <ul className="tm-product-actions">
                                                     <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                    <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                        className="ion-eye"></i></button></li>
+                                                    <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                    </li>
                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                 </ul>
                                             </div>
@@ -412,7 +331,7 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-4.jpg" alt="product image" />
@@ -420,8 +339,8 @@ function Home() {
                                             </div>
                                             <ul className="tm-product-actions">
                                                 <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                    className="ion-eye"></i></button></li>
+                                                <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                </li>
                                                 <li><a href="#"><i className="ion-heart"></i></a></li>
                                             </ul>
                                             <div className="tm-product-badges">
@@ -429,8 +348,8 @@ function Home() {
                                             </div>
                                         </div>
                                         <div className="tm-product-bottomside">
-                                            <h6 className="tm-product-title"><a href="product-details.html">Stylist daimond
-                                                earring</a></h6>
+                                            <h6 className="tm-product-title"><Link to="/product">Stylist daimond
+                                                earring</Link></h6>
                                             <div className="tm-ratingbox">
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
@@ -448,8 +367,8 @@ function Home() {
                                                     leap into electronic typesetting.</p>
                                                 <ul className="tm-product-actions">
                                                     <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                    <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                        className="ion-eye"></i></button></li>
+                                                    <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                    </li>
                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                 </ul>
                                             </div>
@@ -460,15 +379,15 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-6.jpg" alt="product image" />
                                             </div>
                                             <ul className="tm-product-actions">
                                                 <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                    className="ion-eye"></i></button></li>
+                                                <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                </li>
                                                 <li><a href="#"><i className="ion-heart"></i></a></li>
                                             </ul>
                                             <div className="tm-product-badges">
@@ -476,8 +395,8 @@ function Home() {
                                             </div>
                                         </div>
                                         <div className="tm-product-bottomside">
-                                            <h6 className="tm-product-title"><a href="product-details.html">Stylist daimond
-                                                earring</a></h6>
+                                            <h6 className="tm-product-title"><Link to="/product">Stylist daimond
+                                                earring</Link></h6>
                                             <div className="tm-ratingbox">
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
@@ -495,8 +414,8 @@ function Home() {
                                                     leap into electronic typesetting.</p>
                                                 <ul className="tm-product-actions">
                                                     <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                    <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                        className="ion-eye"></i></button></li>
+                                                    <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                    </li>
                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                 </ul>
                                             </div>
@@ -507,7 +426,7 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-7.jpg" alt="product image" />
@@ -515,8 +434,8 @@ function Home() {
                                             </div>
                                             <ul className="tm-product-actions">
                                                 <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                    className="ion-eye"></i></button></li>
+                                                <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                </li>
                                                 <li><a href="#"><i className="ion-heart"></i></a></li>
                                             </ul>
                                             <div className="tm-product-badges">
@@ -525,8 +444,8 @@ function Home() {
                                             </div>
                                         </div>
                                         <div className="tm-product-bottomside">
-                                            <h6 className="tm-product-title"><a href="product-details.html">Stylist daimond
-                                                earring</a></h6>
+                                            <h6 className="tm-product-title"><Link to="/product">Stylist daimond
+                                                earring</Link></h6>
                                             <div className="tm-ratingbox">
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
@@ -544,8 +463,8 @@ function Home() {
                                                     leap into electronic typesetting.</p>
                                                 <ul className="tm-product-actions">
                                                     <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                    <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                        className="ion-eye"></i></button></li>
+                                                    <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                    </li>
                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                 </ul>
                                             </div>
@@ -556,15 +475,15 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-9.jpg" alt="product image" />
                                             </div>
                                             <ul className="tm-product-actions">
                                                 <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                    className="ion-eye"></i></button></li>
+                                                <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                </li>
                                                 <li><a href="#"><i className="ion-heart"></i></a></li>
                                             </ul>
                                             <div className="tm-product-badges">
@@ -572,8 +491,8 @@ function Home() {
                                             </div>
                                         </div>
                                         <div className="tm-product-bottomside">
-                                            <h6 className="tm-product-title"><a href="product-details.html">Stylist daimond
-                                                earring</a></h6>
+                                            <h6 className="tm-product-title"><Link to="/product">Stylist daimond
+                                                earring</Link></h6>
                                             <div className="tm-ratingbox">
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
@@ -591,8 +510,8 @@ function Home() {
                                                     leap into electronic typesetting.</p>
                                                 <ul className="tm-product-actions">
                                                     <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                    <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                        className="ion-eye"></i></button></li>
+                                                    <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                    </li>
                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                 </ul>
                                             </div>
@@ -603,7 +522,7 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-10.jpg" alt="product image" />
@@ -611,8 +530,8 @@ function Home() {
                                             </div>
                                             <ul className="tm-product-actions">
                                                 <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                    className="ion-eye"></i></button></li>
+                                                <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                </li>
                                                 <li><a href="#"><i className="ion-heart"></i></a></li>
                                             </ul>
                                             <div className="tm-product-badges">
@@ -620,8 +539,8 @@ function Home() {
                                             </div>
                                         </div>
                                         <div className="tm-product-bottomside">
-                                            <h6 className="tm-product-title"><a href="product-details.html">Stylist daimond
-                                                earring</a></h6>
+                                            <h6 className="tm-product-title"><Link to="/product">Stylist daimond
+                                                earring</Link></h6>
                                             <div className="tm-ratingbox">
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
@@ -639,8 +558,8 @@ function Home() {
                                                     leap into electronic typesetting.</p>
                                                 <ul className="tm-product-actions">
                                                     <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                    <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                        className="ion-eye"></i></button></li>
+                                                    <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                    </li>
                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                 </ul>
                                             </div>
@@ -651,15 +570,15 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-12.jpg" alt="product image" />
                                             </div>
                                             <ul className="tm-product-actions">
                                                 <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                    className="ion-eye"></i></button></li>
+                                                <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                </li>
                                                 <li><a href="#"><i className="ion-heart"></i></a></li>
                                             </ul>
                                             <div className="tm-product-badges">
@@ -667,8 +586,8 @@ function Home() {
                                             </div>
                                         </div>
                                         <div className="tm-product-bottomside">
-                                            <h6 className="tm-product-title"><a href="product-details.html">Stylist daimond
-                                                earring</a></h6>
+                                            <h6 className="tm-product-title"><Link to="/product">Stylist daimond
+                                                earring</Link></h6>
                                             <div className="tm-ratingbox">
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
@@ -686,8 +605,8 @@ function Home() {
                                                     leap into electronic typesetting.</p>
                                                 <ul className="tm-product-actions">
                                                     <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                    <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                        className="ion-eye"></i></button></li>
+                                                    <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                    </li>
                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                 </ul>
                                             </div>
@@ -708,7 +627,7 @@ function Home() {
 
                                 {/* <!-- Single Banner --> */}
                                 <div className="col-lg-4 col-md-6 col-sm-6 col-12 mt-30">
-                                    <a href="#" className="tm-banner tm-scrollanim">
+                                    <a href="#" className="tm-banner ">
                                         <img src="assets/images/banner-image-1.jpg" alt="banner image" />
                                     </a>
                                 </div>
@@ -716,7 +635,7 @@ function Home() {
 
                         <!-- Single Banner --> */}
                                 <div className="col-lg-4 col-md-6 col-sm-6 col-12 mt-30">
-                                    <a href="#" className="tm-banner tm-scrollanim">
+                                    <a href="#" className="tm-banner ">
                                         <img src="assets/images/banner-image-2.jpg" alt="banner image" />
                                     </a>
                                 </div>
@@ -724,7 +643,7 @@ function Home() {
 
                         <!-- Single Banner --> */}
                                 <div className="col-lg-4 col-md-6 col-sm-6 col-12 mt-30">
-                                    <a href="#" className="tm-banner tm-scrollanim">
+                                    <a href="#" className="tm-banner ">
                                         <img src="assets/images/banner-image-3.jpg" alt="banner image" />
                                     </a>
                                 </div>
@@ -751,7 +670,7 @@ function Home() {
 
                                 {/* <!-- Single Product --> */}
                                 <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mt-50">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-4.jpg" alt="product image" />
@@ -759,8 +678,8 @@ function Home() {
                                             </div>
                                             <ul className="tm-product-actions">
                                                 <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                    className="ion-eye"></i></button></li>
+                                                <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                </li>
                                                 <li><a href="#"><i className="ion-heart"></i></a></li>
                                             </ul>
                                             <div className="tm-product-badges">
@@ -769,8 +688,8 @@ function Home() {
                                             </div>
                                         </div>
                                         <div className="tm-product-bottomside">
-                                            <h6 className="tm-product-title"><a href="product-details.html">Stylist daimond
-                                                earring</a></h6>
+                                            <h6 className="tm-product-title"><Link to="/product">Stylist daimond
+                                                earring</Link></h6>
                                             <div className="tm-ratingbox">
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
@@ -788,8 +707,8 @@ function Home() {
                                                     leap into electronic typesetting.</p>
                                                 <ul className="tm-product-actions">
                                                     <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                    <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                        className="ion-eye"></i></button></li>
+                                                    <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                    </li>
                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                 </ul>
                                             </div>
@@ -800,15 +719,15 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mt-50">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-6.jpg" alt="product image" />
                                             </div>
                                             <ul className="tm-product-actions">
                                                 <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                    className="ion-eye"></i></button></li>
+                                                <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                </li>
                                                 <li><a href="#"><i className="ion-heart"></i></a></li>
                                             </ul>
                                             <div className="tm-product-badges">
@@ -816,8 +735,8 @@ function Home() {
                                             </div>
                                         </div>
                                         <div className="tm-product-bottomside">
-                                            <h6 className="tm-product-title"><a href="product-details.html">Stylist daimond
-                                                earring</a></h6>
+                                            <h6 className="tm-product-title"><Link to="/product">Stylist daimond
+                                                earring</Link></h6>
                                             <div className="tm-ratingbox">
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
@@ -835,8 +754,8 @@ function Home() {
                                                     leap into electronic typesetting.</p>
                                                 <ul className="tm-product-actions">
                                                     <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                    <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                        className="ion-eye"></i></button></li>
+                                                    <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                    </li>
                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                 </ul>
                                             </div>
@@ -847,7 +766,7 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mt-50">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-7.jpg" alt="product image" />
@@ -855,8 +774,8 @@ function Home() {
                                             </div>
                                             <ul className="tm-product-actions">
                                                 <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                    className="ion-eye"></i></button></li>
+                                                <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                </li>
                                                 <li><a href="#"><i className="ion-heart"></i></a></li>
                                             </ul>
                                             <div className="tm-product-badges">
@@ -865,8 +784,8 @@ function Home() {
                                             </div>
                                         </div>
                                         <div className="tm-product-bottomside">
-                                            <h6 className="tm-product-title"><a href="product-details.html">Stylist daimond
-                                                earring</a></h6>
+                                            <h6 className="tm-product-title"><Link to="/product">Stylist daimond
+                                                earring</Link></h6>
                                             <div className="tm-ratingbox">
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
@@ -884,8 +803,8 @@ function Home() {
                                                     leap into electronic typesetting.</p>
                                                 <ul className="tm-product-actions">
                                                     <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                    <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                        className="ion-eye"></i></button></li>
+                                                    <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                    </li>
                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                 </ul>
                                             </div>
@@ -896,15 +815,15 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mt-50">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-9.jpg" alt="product image" />
                                             </div>
                                             <ul className="tm-product-actions">
                                                 <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                    className="ion-eye"></i></button></li>
+                                                <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                </li>
                                                 <li><a href="#"><i className="ion-heart"></i></a></li>
                                             </ul>
                                             <div className="tm-product-badges">
@@ -912,8 +831,8 @@ function Home() {
                                             </div>
                                         </div>
                                         <div className="tm-product-bottomside">
-                                            <h6 className="tm-product-title"><a href="product-details.html">Stylist daimond
-                                                earring</a></h6>
+                                            <h6 className="tm-product-title"><Link to="/product">Stylist daimond
+                                                earring</Link></h6>
                                             <div className="tm-ratingbox">
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
@@ -931,8 +850,8 @@ function Home() {
                                                     leap into electronic typesetting.</p>
                                                 <ul className="tm-product-actions">
                                                     <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                    <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                        className="ion-eye"></i></button></li>
+                                                    <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                    </li>
                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                 </ul>
                                             </div>
@@ -943,15 +862,15 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mt-50">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-10.jpg" alt="product image" />
                                             </div>
                                             <ul className="tm-product-actions">
                                                 <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                    className="ion-eye"></i></button></li>
+                                                <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                </li>
                                                 <li><a href="#"><i className="ion-heart"></i></a></li>
                                             </ul>
                                             <div className="tm-product-badges">
@@ -960,8 +879,8 @@ function Home() {
                                             </div>
                                         </div>
                                         <div className="tm-product-bottomside">
-                                            <h6 className="tm-product-title"><a href="product-details.html">Stylist daimond
-                                                earring</a></h6>
+                                            <h6 className="tm-product-title"><Link to="/product">Stylist daimond
+                                                earring</Link></h6>
                                             <div className="tm-ratingbox">
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
@@ -979,8 +898,8 @@ function Home() {
                                                     leap into electronic typesetting.</p>
                                                 <ul className="tm-product-actions">
                                                     <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                    <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                        className="ion-eye"></i></button></li>
+                                                    <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                    </li>
                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                 </ul>
                                             </div>
@@ -991,15 +910,15 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mt-50">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-11.jpg" alt="product image" />
                                             </div>
                                             <ul className="tm-product-actions">
                                                 <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                    className="ion-eye"></i></button></li>
+                                                <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                </li>
                                                 <li><a href="#"><i className="ion-heart"></i></a></li>
                                             </ul>
                                             <div className="tm-product-badges">
@@ -1007,8 +926,8 @@ function Home() {
                                             </div>
                                         </div>
                                         <div className="tm-product-bottomside">
-                                            <h6 className="tm-product-title"><a href="product-details.html">Stylist daimond
-                                                earring</a></h6>
+                                            <h6 className="tm-product-title"><Link to="/product">Stylist daimond
+                                                earring</Link></h6>
                                             <div className="tm-ratingbox">
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
@@ -1026,8 +945,8 @@ function Home() {
                                                     leap into electronic typesetting.</p>
                                                 <ul className="tm-product-actions">
                                                     <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                    <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                        className="ion-eye"></i></button></li>
+                                                    <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                    </li>
                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                 </ul>
                                             </div>
@@ -1038,7 +957,7 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mt-50">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-12.jpg" alt="product image" />
@@ -1046,14 +965,14 @@ function Home() {
                                             </div>
                                             <ul className="tm-product-actions">
                                                 <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                    className="ion-eye"></i></button></li>
+                                                <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                </li>
                                                 <li><a href="#"><i className="ion-heart"></i></a></li>
                                             </ul>
                                         </div>
                                         <div className="tm-product-bottomside">
-                                            <h6 className="tm-product-title"><a href="product-details.html">Stylist daimond
-                                                earring</a></h6>
+                                            <h6 className="tm-product-title"><Link to="/product">Stylist daimond
+                                                earring</Link></h6>
                                             <div className="tm-ratingbox">
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
@@ -1071,8 +990,8 @@ function Home() {
                                                     leap into electronic typesetting.</p>
                                                 <ul className="tm-product-actions">
                                                     <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                    <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                        className="ion-eye"></i></button></li>
+                                                    <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                    </li>
                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                 </ul>
                                             </div>
@@ -1083,15 +1002,15 @@ function Home() {
 
                         <!-- Single Product --> */}
                                 <div className="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mt-50">
-                                    <div className="tm-product tm-scrollanim">
+                                    <div className="tm-product ">
                                         <div className="tm-product-topside">
                                             <div className="tm-product-images">
                                                 <img src="assets/images/products/product-image-2.jpg" alt="product image" />
                                             </div>
                                             <ul className="tm-product-actions">
                                                 <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                    className="ion-eye"></i></button></li>
+                                                <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                </li>
                                                 <li><a href="#"><i className="ion-heart"></i></a></li>
                                             </ul>
                                             <div className="tm-product-badges">
@@ -1099,8 +1018,8 @@ function Home() {
                                             </div>
                                         </div>
                                         <div className="tm-product-bottomside">
-                                            <h6 className="tm-product-title"><a href="product-details.html">Stylist daimond
-                                                earring</a></h6>
+                                            <h6 className="tm-product-title"><Link to="/product">Stylist daimond
+                                                earring</Link></h6>
                                             <div className="tm-ratingbox">
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                 <span className="is-active"><i className="ion-android-star-outline"></i></span>
@@ -1118,8 +1037,8 @@ function Home() {
                                                     leap into electronic typesetting.</p>
                                                 <ul className="tm-product-actions">
                                                     <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
-                                                    <li><button data-fancybox data-src="#tm-product-quickview"><i
-                                                        className="ion-eye"></i></button></li>
+                                                    <li><button data-fancybox="true" data-src="#tm-product-quickview" aria-label="Product Quickview"><i className="ion-eye"></i></button>
+                                                    </li>
                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                 </ul>
                                             </div>
@@ -1145,7 +1064,7 @@ function Home() {
                                         <h6>Super deal of the Month</h6>
                                         <h1>Brand ear ring on <span>$250</span> only</h1>
                                         <div className="tm-countdown" data-countdown="2020/10/12"></div>
-                                        <a href="product-details.html" className="tm-button">Shop now</a>
+                                        <a href="/product" className="tm-button">Shop now</a>
                                     </div>
                                 </div>
                                 <div className="col-lg-6 col-12 order-1 order-lg-2">
@@ -1158,7 +1077,7 @@ function Home() {
                     </div>
                     {/* <!--// Offer Area -->
 
-            <!-- Latest Blogs Area --> */}
+            <!-- Latest Blogs Area --> 
                     <div id="tm-news-area" className="tm-section tm-blog-area tm-padding-section bg-pattern-transparent">
                         <div className="container">
                             <div className="row justify-content-center">
@@ -1172,9 +1091,9 @@ function Home() {
                             </div>
                             <div className="row tm-blog-slider">
 
-                                {/* <!-- Blog Single Item --> */}
+                                {/* <!-- Blog Single Item --> 
                                 <div className="col-lg-4 col-md-6">
-                                    <div className="tm-blog tm-scrollanim">
+                                    <div className="tm-blog ">
                                         <div className="tm-blog-topside">
                                             <div className="tm-blog-thumb">
                                                 <img src="assets/images/blog/blog-image-1.jpg" alt="blog image" />
@@ -1197,9 +1116,9 @@ function Home() {
                                 </div>
                                 {/* <!--// Blog Single Item -->
 
-                        <!-- Blog Single Item --> */}
+                        <!-- Blog Single Item --> 
                                 <div className="col-lg-4 col-md-6">
-                                    <div className="tm-blog tm-scrollanim">
+                                    <div className="tm-blog ">
                                         <div className="tm-blog-topside">
                                             <div className="tm-blog-thumb">
                                                 <img src="assets/images/blog/blog-image-2.jpg" alt="blog image" />
@@ -1222,9 +1141,9 @@ function Home() {
                                 </div>
                                 {/* <!--// Blog Single Item -->
 
-                        <!-- Blog Single Item --> */}
+                        <!-- Blog Single Item --> 
                                 <div className="col-lg-4 col-md-6">
-                                    <div className="tm-blog tm-scrollanim">
+                                    <div className="tm-blog ">
                                         <div className="tm-blog-topside">
                                             <div className="tm-blog-thumb">
                                                 <img src="assets/images/blog/blog-image-3.jpg" alt="blog image" />
@@ -1248,9 +1167,9 @@ function Home() {
                                 </div>
                                 {/* <!--// Blog Single Item -->
 
-                        <!-- Blog Single Item --> */}
+                        <!-- Blog Single Item --> 
                                 <div className="col-lg-4 col-md-6">
-                                    <div className="tm-blog tm-scrollanim">
+                                    <div className="tm-blog ">
                                         <div className="tm-blog-topside">
                                             <div className="tm-blog-thumb">
                                                 <img src="assets/images/blog/blog-image-4.jpg" alt="blog image" />
@@ -1274,9 +1193,9 @@ function Home() {
                                 </div>
                                 {/* <!--// Blog Single Item -->
 
-                        <!-- Blog Single Item --> */}
+                        <!-- Blog Single Item --> 
                                 <div className="col-lg-4 col-md-6">
-                                    <div className="tm-blog tm-scrollanim">
+                                    <div className="tm-blog ">
                                         <div className="tm-blog-topside">
                                             <div className="tm-blog-thumb">
                                                 <img src="assets/images/blog/blog-image-5.jpg" alt="blog image" />
@@ -1298,7 +1217,7 @@ function Home() {
                                         </div>
                                     </div>
                                 </div>
-                                {/* <!--// Blog Single Item --> */}
+                                {/* <!--// Blog Single Item --> 
 
                             </div>
                         </div>
@@ -1306,11 +1225,11 @@ function Home() {
                     {/* <!--// Latest Blogs Area -->
 
             <!-- Brand Logos --> */}
-                    <div className="tm-section tm-brandlogo-area tm-padding-section bg-grey">
-                        <div className="container">
-                            <div className="row tm-brandlogo-slider">
+                   {/* <div className="tm-section tm-brandlogo-area tm-padding-section bg-grey" >
+                        <div className="container" >
+                            <div className="row tm-brandlogo-slider" >
 
-                                {/* <!-- Brang Logo Single --> */}
+                                {/* <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-1.png" alt="brand-logo" />
@@ -1318,7 +1237,7 @@ function Home() {
                                 </div>
                                 {/* <!--// Brang Logo Single -->
 
-                        <!-- Brang Logo Single --> */}
+                        <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-2.png" alt="brand-logo" />
@@ -1326,7 +1245,7 @@ function Home() {
                                 </div>
                                 {/* <!--// Brang Logo Single -->
 
-                        <!-- Brang Logo Single --> */}
+                        <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-3.png" alt="brand-logo" />
@@ -1334,7 +1253,7 @@ function Home() {
                                 </div>
                                 {/* <!--// Brang Logo Single -->
 
-                        <!-- Brang Logo Single --> */}
+                        <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-4.png" alt="brand-logo" />
@@ -1342,7 +1261,7 @@ function Home() {
                                 </div>
                                 {/* <!--// Brang Logo Single -->
 
-                        <!-- Brang Logo Single --> */}
+                        <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-5.png" alt="brand-logo" />
@@ -1350,7 +1269,7 @@ function Home() {
                                 </div>
                                 {/* <!--// Brang Logo Single -->
 
-                        <!-- Brang Logo Single --> */}
+                        <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-1.png" alt="brand-logo" />
@@ -1358,7 +1277,7 @@ function Home() {
                                 </div>
                                 {/* <!--// Brang Logo Single -->
 
-                        <!-- Brang Logo Single --> */}
+                        <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-2.png" alt="brand-logo" />
@@ -1366,7 +1285,7 @@ function Home() {
                                 </div>
                                 {/* <!--// Brang Logo Single -->
 
-                        <!-- Brang Logo Single --> */}
+                        <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-3.png" alt="brand-logo" />
@@ -1374,7 +1293,7 @@ function Home() {
                                 </div>
                                 {/* <!--// Brang Logo Single -->
 
-                        <!-- Brang Logo Single --> */}
+                        <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-4.png" alt="brand-logo" />
@@ -1382,13 +1301,13 @@ function Home() {
                                 </div>
                                 {/* <!--// Brang Logo Single -->
 
-                        <!-- Brang Logo Single --> */}
+                        <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-5.png" alt="brand-logo" />
                                     </a>
                                 </div>
-                                {/* <!--// Brang Logo Single --> */}
+                                {/* <!--// Brang Logo Single --> 
 
                             </div>
                         </div>
@@ -1623,7 +1542,13 @@ function Home() {
                                                     <div className="tm-prodetails-quantitycart">
                                                         <h6>Quantity :</h6>
                                                         <div className="tm-quantitybox">
-                                                            <input type="text" value="1" />
+                                                            <label htmlFor="myInput">My Input:</label>
+                                                            <input
+                                                                type="text"
+                                                                id="myInput"
+                                                                value={value}
+                                                                onChange={handleChange}
+                                                            />
                                                         </div>
                                                         <a href="#" className="tm-button tm-button-dark">Add To Cart</a>
                                                     </div>
@@ -1640,11 +1565,14 @@ function Home() {
                 </div>
                 {/* <!--// Product Quickview --> */}
 
-                <button id="back-top-top"><i className="ion-arrow-up-c"></i></button>
-
+                <button id="back-top-top" aria-label="Back to Top">
+                    <i className="ion-arrow-up-c"></i>
+                </button>
             </div>
             {/* <!--// Wrapper --> */}
         </div>
+
     )
 }
+
 export default Home;
