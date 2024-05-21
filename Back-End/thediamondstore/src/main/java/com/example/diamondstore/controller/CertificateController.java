@@ -29,7 +29,7 @@ public class CertificateController {
     }
 
     @GetMapping("/{certificateID}")
-    public ResponseEntity<Certificate> getCertificate(@PathVariable Integer certificateID) {
+    public ResponseEntity<Certificate> getCertificate(@PathVariable String certificateID) {
         Certificate certificate = certificateRepository.findByCertificateID(certificateID);
         if (certificate == null) {
             return ResponseEntity.notFound().build();
@@ -48,7 +48,7 @@ public class CertificateController {
     }
 
     @PutMapping("/{certificateID}")
-    public ResponseEntity<Certificate> updateCertificate(@PathVariable Integer certificateID, @RequestBody Certificate certificate) {
+    public ResponseEntity<Certificate> updateCertificate(@PathVariable String certificateID, @RequestBody Certificate certificate) {
         Certificate existingCertificate = certificateRepository.findByCertificateID(certificateID);
         if (existingCertificate == null) {
             return ResponseEntity.notFound().build();
@@ -58,12 +58,12 @@ public class CertificateController {
     }
 
     @DeleteMapping("/{certificateID}")
-    public ResponseEntity<Void> deleteCertificate(@PathVariable Integer certificateID) {
+    public ResponseEntity<String> deleteCertificate(@PathVariable String certificateID) {
         Certificate existingCertificate = certificateRepository.findByCertificateID(certificateID);
         if (existingCertificate == null) {
             return ResponseEntity.notFound().build();
         }
         certificateRepository.delete(existingCertificate);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Certificate deleted successfully");
     }
 }

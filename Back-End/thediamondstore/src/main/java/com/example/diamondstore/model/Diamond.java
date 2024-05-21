@@ -1,11 +1,7 @@
 package com.example.diamondstore.model;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -13,103 +9,114 @@ import javax.persistence.Table;
 @Table(name = "Diamond")
 public class Diamond {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "diamondID")
-    private Integer diamondID;
+    private String diamondID;
 
     @Column(name = "warrantityID")
-    private Integer warrantityID;
+    private String warrantityID;
 
     @Column(name = "certificationID")
-    private Integer certificationID;
+    private String certificationID;
 
-    @Column(name = "description")
-    private String description;
 
-    @Column(name = "price")
-    private BigDecimal price;
+    @Column(name = "carat_size")
+    private Float carat_size;
 
-    @Column(name = "origin")
-    private String origin;
-    
+    @Column(name = "diamondPrice")
+    private Float diamondPrice;
+
+    @Column(name = "carat_weight")
+    private Float carat_weight;
+
     @Column(name = "color")
     private String color;
 
     @Column(name = "cut")
     private String cut;
 
-    @Column(name = "carat_weight")
-    private BigDecimal caratWeight;
-    
     @Column(name = "clarity")
     private String clarity;
 
     @Column(name = "image")
     private String image;
 
+    @Column(name = "shape")
+    private String shape;
+
+    @Column(name = "diamondName")
+    private String diamondName;
+
+    @Column(name = "origin")
+    private String origin;
+
+    // Add your getters and setters here
+
     public Diamond() {
     }
 
-    public Diamond(BigDecimal caratWeight, Integer certificationID, String clarity, String color, String cut, String description, Integer diamondID, String image, String origin, BigDecimal price, Integer warrantityID) {
-        this.caratWeight = caratWeight;
+    public Diamond(Float carat_size, Float carat_weight, String certificationID, String clarity, String color, String cut, String diamondID, String diamondName, Float diamondPrice, String image, String origin, String shape, String warrantityID) {
+        this.carat_size = carat_size;
+        this.carat_weight = carat_weight;
         this.certificationID = certificationID;
         this.clarity = clarity;
         this.color = color;
         this.cut = cut;
-        this.description = description;
         this.diamondID = diamondID;
+        this.diamondName = diamondName;
+        this.diamondPrice = diamondPrice;
         this.image = image;
         this.origin = origin;
-        this.price = price;
+        this.shape = shape;
         this.warrantityID = warrantityID;
     }
 
-    public Integer getDiamondID() {
+    public String getDiamondID() {
         return diamondID;
     }
 
-    public void setDiamondID(Integer diamondID) {
+    public void setDiamondID(String diamondID) {
         this.diamondID = diamondID;
     }
 
-    public Integer getWarrantityID() {
+    public String getWarrantityID() {
         return warrantityID;
     }
 
-    public void setWarrantityID(Integer warrantityID) {
+    public void setWarrantityID(String warrantityID) {
         this.warrantityID = warrantityID;
     }
 
-    public Integer getCertificationID() {
+    public String getCertificationID() {
         return certificationID;
     }
 
-    public void setCertificationID(Integer certificationID) {
+    public void setCertificationID(String certificationID) {
         this.certificationID = certificationID;
     }
 
-    public String getDescription() {
-        return description;
+
+    public Float getCarat_size() {
+        return carat_size;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setCarat_size(Float carat_size) {
+        this.carat_size = carat_size;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public Float getDiamondPrice() {
+        return diamondPrice;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    public void setDiamondPrice(Float diamondPrice) {
+        this.diamondPrice = diamondPrice;
     }
 
-    public String getOrigin() {
-        return origin;
+    public Float getCarat_weight() {
+        return carat_weight;
     }
 
-    public void setOrigin(String origin) {
-        this.origin = origin;
+    public void setCarat_weight(Float carat_weight) {
+        this.carat_weight = carat_weight;
     }
 
     public String getColor() {
@@ -128,14 +135,6 @@ public class Diamond {
         this.cut = cut;
     }
 
-    public BigDecimal getCaratWeight() {
-        return caratWeight;
-    }
-
-    public void setCaratWeight(BigDecimal caratWeight) {
-        this.caratWeight = caratWeight;
-    }
-
     public String getClarity() {
         return clarity;
     }
@@ -152,6 +151,30 @@ public class Diamond {
         this.image = image;
     }
 
-    
+    public String getShape() {
+        return shape;
+    }
 
+    public void setShape(String shape) {
+        this.shape = shape;
+    }
+
+    public String getDiamondName() {
+        return diamondName;
+    }
+
+    public void setDiamondName(String diamondName) {
+        this.diamondName = diamondName;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+
+    
 }

@@ -2,7 +2,6 @@ package com.example.diamondstore.controller;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +37,7 @@ public class DiamondController {
     }
 
     @GetMapping("/{diamondID}")
-    public ResponseEntity<Diamond> getDiamond(@PathVariable Integer diamondID) {
+    public ResponseEntity<Diamond> getDiamond(@PathVariable String diamondID) {
         Diamond diamond = diamondRepository.findByDiamondID(diamondID);
         if (diamond == null) {
             return ResponseEntity.notFound().build();
@@ -57,7 +56,7 @@ public class DiamondController {
     }
 
     @PutMapping("/{diamondID}")
-    public ResponseEntity<Diamond> updateDiamond(@PathVariable Integer diamondID, @RequestBody Diamond diamond) {
+    public ResponseEntity<Diamond> updateDiamond(@PathVariable String diamondID, @RequestBody Diamond diamond) {
         Diamond existingDiamond = diamondRepository.findByDiamondID(diamondID);
         if (existingDiamond == null) {
             return ResponseEntity.notFound().build();
@@ -67,13 +66,14 @@ public class DiamondController {
     }
 
     @DeleteMapping("/{diamondID}")
-    public ResponseEntity<Void> deleteDiamond(@PathVariable Integer diamondID) {
+    public ResponseEntity<String> deleteDiamond(@PathVariable String diamondID) {
         Diamond existingDiamond = diamondRepository.findByDiamondID(diamondID);
         if (existingDiamond == null) {
             return ResponseEntity.notFound().build();
         }
         diamondRepository.delete(existingDiamond);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok("Diamond deleted successfully");
+
     }
 
     @GetMapping("/search")
