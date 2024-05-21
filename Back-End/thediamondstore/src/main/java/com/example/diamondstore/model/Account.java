@@ -18,8 +18,8 @@ public class Account {
     @Column(name = "accountID")
     private Integer accountID;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "accountName")
+    private String accountName;
 
     @Column(name = "password")
     private String password;
@@ -27,7 +27,7 @@ public class Account {
     @Column(name = "role")
     private String role;
 
-    @Column(name = "phone_number")
+    @Column(name = "phoneNumber")
     private String phoneNumber;
 
     @Column(name = "email")
@@ -38,78 +38,68 @@ public class Account {
     }
 
 
-    public Account(Integer accountID, String username, String password, String role, String phoneNumber, String email) {
+    public Account(Integer accountID, String accountName, String password, String role, String phoneNumber, String email) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(password);
 
         this.accountID = accountID;
-        this.username = username;
+        this.accountName = accountName;
         this.password = hashedPassword;
         this.role = role;
         this.phoneNumber = phoneNumber;
         this.email = email;
     }
 
-
     public Integer getAccountID() {
         return accountID;
     }
-
 
     public void setAccountID(Integer accountID) {
         this.accountID = accountID;
     }
 
-
-    public String getUsername() {
-        return username;
+    public String getAccountName() {
+        return accountName;
     }
 
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
-
 
     public String getPassword() {
         return password;
     }
 
-
     public void setPassword(String password) {
         this.password = password;
     }
-
 
     public String getRole() {
         return role;
     }
 
-
     public void setRole(String role) {
         this.role = role;
     }
-
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
 
     public String getEmail() {
         return email;
     }
 
-
     public void setEmail(String email) {
         this.email = email;
     }
 
+
+    
     
 
     

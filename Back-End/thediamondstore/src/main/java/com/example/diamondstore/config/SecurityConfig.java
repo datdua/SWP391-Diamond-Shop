@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.diamondstore.filter.JwtRequestFilter;
-import com.example.diamondstore.service.UserService;
+import com.example.diamondstore.service.AccountService;
 
 @Configuration
 @EnableWebSecurity
@@ -31,14 +31,14 @@ public class SecurityConfig {
     private static final String[] ADMIN_URL = { "/api/accounts", "/update/**" };
 
     @Autowired
-    private UserService UserService;
+    private AccountService UserService;
 
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
     
 
-    public SecurityConfig(UserService UserService, JwtRequestFilter jwtRequestFilter) {
+    public SecurityConfig(AccountService UserService, JwtRequestFilter jwtRequestFilter) {
         this.UserService = UserService;
         this.jwtRequestFilter = jwtRequestFilter;
     }

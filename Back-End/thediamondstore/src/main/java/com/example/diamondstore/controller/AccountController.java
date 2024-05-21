@@ -53,16 +53,16 @@ public class AccountController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequet registerRequet) {
-        String username = registerRequet.getUsername();
+        String accountName = registerRequet.getAccountName();
         String password = registerRequet.getPassword();
         String email = registerRequet.getEmail();
         String phoneNumber = registerRequet.getPhoneNumber();
 
-        Account existingUser = userRepository.findByUsername(username);
+        Account existingUser = userRepository.findByAccountname(accountName);
         if (existingUser != null) {
             return ResponseEntity.badRequest().body("User already exists");
         }
-        Account user = new Account( null, username, password,"ROLE_CUSTOMER", phoneNumber, email);
+        Account user = new Account( null, accountName, password,"ROLE_CUSTOMER", phoneNumber, email);
         userRepository.save(user);
         return ResponseEntity.ok("Registered successfully");
     }
@@ -81,7 +81,7 @@ public class AccountController {
         return ResponseEntity.badRequest().body("User not found");
     }
 
-    existingUser.setUsername(user.getUsername());
+    existingUser.setAccountName(user.getAccountName());
 
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     if (!passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
