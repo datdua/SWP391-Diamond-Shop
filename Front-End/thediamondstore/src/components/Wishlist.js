@@ -5,7 +5,7 @@ function Wishlist() {
     return (
         <div>
 
-            {/* <!-- Preloader --> */}
+            {/* <!-- Preloader --> 
             <div className="tm-preloader">
                 <div className="container">
                     <div className="row justify-content-center">

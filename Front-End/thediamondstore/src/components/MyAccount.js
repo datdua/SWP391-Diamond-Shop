@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function MyAccount() {
     return (
         <div>
-            {/* <!-- Preloader --> */}
+            {/* <!-- Preloader --> 
             <div className="tm-preloader">
                 <div className="container">
                     <div className="row justify-content-center">

@@ -35,7 +35,7 @@ function Home() {
     return (
         <div>
 
-            {/* <!-- Preloader --> */}
+            {/* <!-- Preloader --> 
             <div className="tm-preloader">
                 <div className="container">
                     <div className="row justify-content-center">
@@ -49,7 +49,7 @@ function Home() {
                 </div>
                 <button className="tm-button tm-button-small">Cancel Preloader</button>
             </div>
-            {/* <!--// Preloader -->
+            /* <!--// Preloader -->
     <!-- Wrapper --> */}
             <div id="wrapper" className="wrapper">
 
@@ -1225,11 +1225,11 @@ function Home() {
                     {/* <!--// Latest Blogs Area -->
 
             <!-- Brand Logos --> */}
-                    <div className="tm-section tm-brandlogo-area tm-padding-section bg-grey">
-                        <div className="container">
-                            <div className="row tm-brandlogo-slider">
+                   {/* <div className="tm-section tm-brandlogo-area tm-padding-section bg-grey" >
+                        <div className="container" >
+                            <div className="row tm-brandlogo-slider" >
 
-                                {/* <!-- Brang Logo Single --> */}
+                                {/* <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-1.png" alt="brand-logo" />
@@ -1237,7 +1237,7 @@ function Home() {
                                 </div>
                                 {/* <!--// Brang Logo Single -->
 
-                        <!-- Brang Logo Single --> */}
+                        <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-2.png" alt="brand-logo" />
@@ -1245,7 +1245,7 @@ function Home() {
                                 </div>
                                 {/* <!--// Brang Logo Single -->
 
-                        <!-- Brang Logo Single --> */}
+                        <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-3.png" alt="brand-logo" />
@@ -1253,7 +1253,7 @@ function Home() {
                                 </div>
                                 {/* <!--// Brang Logo Single -->
 
-                        <!-- Brang Logo Single --> */}
+                        <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-4.png" alt="brand-logo" />
@@ -1261,7 +1261,7 @@ function Home() {
                                 </div>
                                 {/* <!--// Brang Logo Single -->
 
-                        <!-- Brang Logo Single --> */}
+                        <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-5.png" alt="brand-logo" />
@@ -1269,7 +1269,7 @@ function Home() {
                                 </div>
                                 {/* <!--// Brang Logo Single -->
 
-                        <!-- Brang Logo Single --> */}
+                        <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-1.png" alt="brand-logo" />
@@ -1277,7 +1277,7 @@ function Home() {
                                 </div>
                                 {/* <!--// Brang Logo Single -->
 
-                        <!-- Brang Logo Single --> */}
+                        <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-2.png" alt="brand-logo" />
@@ -1285,7 +1285,7 @@ function Home() {
                                 </div>
                                 {/* <!--// Brang Logo Single -->
 
-                        <!-- Brang Logo Single --> */}
+                        <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-3.png" alt="brand-logo" />
@@ -1293,7 +1293,7 @@ function Home() {
                                 </div>
                                 {/* <!--// Brang Logo Single -->
 
-                        <!-- Brang Logo Single --> */}
+                        <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-4.png" alt="brand-logo" />
@@ -1301,13 +1301,13 @@ function Home() {
                                 </div>
                                 {/* <!--// Brang Logo Single -->
 
-                        <!-- Brang Logo Single --> */}
+                        <!-- Brang Logo Single --> 
                                 <div className="col-12 tm-brandlogo">
                                     <a href="#">
                                         <img src="assets/images/brandlogo-5.png" alt="brand-logo" />
                                     </a>
                                 </div>
-                                {/* <!--// Brang Logo Single --> */}
+                                {/* <!--// Brang Logo Single --> 
 
                             </div>
                         </div>

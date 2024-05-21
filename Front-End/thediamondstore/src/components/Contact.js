@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function Contact() {
     return (
         <div>
-            {/* <!-- Preloader --> */}
+            {/* <!-- Preloader --> 
             <div className="tm-preloader">
                 <div className="container">
                     <div className="row justify-content-center">
@@ -138,7 +138,7 @@ function Contact() {
                 <!-- Page Content --> */}
                 <main className="page-content">
 
-                    {/* <!-- Google Map --> */}
+                    {/* <!-- Google Map --> 
                     <div id="google-map" className="google-map"></div>
                     {/* <!--// Google Map -->
 

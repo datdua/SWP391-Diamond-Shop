@@ -31,6 +31,7 @@
     "scrollmagic": "^2.0.8",
     "slick": "^1.12.2",
     "slick-carousel": "^1.8.1",
+    "vnpay": "^1.3.6",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
