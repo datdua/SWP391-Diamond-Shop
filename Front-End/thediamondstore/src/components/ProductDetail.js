@@ -129,8 +129,8 @@ function ProductDetail() {
                         <div className="tm-breadcrumb">
                             <h2>Product Details</h2>
                             <ul>
-                                <li><a href="index.html">Home</a></li>
-                                <li><a href="products.html">Products</a></li>
+                                <li><Link to="/">Home</Link></li>
+                                <li><Link to="/product">Products</Link></li>
                                 <li>Stylist daimond ring</li>
                             </ul>
                         </div>
