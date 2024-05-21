@@ -1,6 +1,5 @@
 package com.example.diamondstore.controller;
 
-
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,6 @@ public class JewelryController {
         this.jewelryRepository = jewelryRepository;
     }
 
-
     @GetMapping
     public ResponseEntity<List<Jewelry>> getAllJewelry() {
         return ResponseEntity.ok(jewelryRepository.findAll());
@@ -39,7 +37,7 @@ public class JewelryController {
     }
 
     @PutMapping("/{jewelryID}")
-    public ResponseEntity<Jewelry> updateJewelry(@PathVariable Integer jewelryID, @RequestBody Jewelry jewelry) {
+    public ResponseEntity<Jewelry> updateJewelry(@PathVariable String jewelryID, @RequestBody Jewelry jewelry) {
         Jewelry existingJewelry = jewelryRepository.findByJewelryID(jewelryID);
         if (existingJewelry == null) {
             return ResponseEntity.notFound().build();
@@ -48,9 +46,13 @@ public class JewelryController {
         return ResponseEntity.ok(jewelryRepository.save(jewelry));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteJewelry(@PathVariable int id) {
-        jewelryRepository.deleteById(id);
-        return ResponseEntity.noContent().build(); // 204 No Content
+    @DeleteMapping("/{jewelryID}")
+    public ResponseEntity<String> deleteJewelry(@PathVariable String jewelryID) {
+        Jewelry existingJewelry = jewelryRepository.findByJewelryID(jewelryID);
+        if (existingJewelry == null) {
+            return ResponseEntity.notFound().build();
+        }
+        jewelryRepository.delete(existingJewelry);
+        return ResponseEntity.ok("Jewelry deleted successfully");
     }
 }
