@@ -11,28 +11,28 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.diamondstore.model.Account;
-import com.example.diamondstore.repository.UserRepository;
+import com.example.diamondstore.repository.AccountRepository;
 
 @Service
-public class UserService implements UserDetailsService {
+public class AccountService implements UserDetailsService {
 
-    private UserRepository userRepository;
+    private AccountRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    public AccountService(AccountRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Account account = userRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String accountName) throws UsernameNotFoundException {
+        Account account = userRepository.findByAccountName(accountName);
         if (account == null) {
-            throw new UsernameNotFoundException("User not found with username: " + username);
+            throw new UsernameNotFoundException("User not found with username: " + accountName);
         }
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(account.getRole()));
 
-        UserDetails userDetails = new org.springframework.security.core.userdetails.User(account.getUsername(), account.getPassword(), authorities);
+        UserDetails userDetails = new org.springframework.security.core.userdetails.User(account.getAccountName(), account.getPassword(), authorities);
 
 
         

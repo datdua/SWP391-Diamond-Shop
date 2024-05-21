@@ -1,12 +1,5 @@
 package com.example.diamondstore.controller;
 
-import com.example.diamondstore.model.Account;
-import com.example.diamondstore.repository.UserRepository;
-import com.example.diamondstore.request.LoginRequest;
-import com.example.diamondstore.request.RegisterRequet;
-
-
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,16 +8,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-public class UserController {
+import com.example.diamondstore.model.Account;
+import com.example.diamondstore.repository.AccountRepository;
+import com.example.diamondstore.request.RegisterRequet;
 
-    private final UserRepository userRepository;
+@RestController
+@RequestMapping("/api/accounts")
+public class AccountController {
+
+    private final AccountRepository userRepository;
     
 
-    public UserController(UserRepository userRepository) {
+    public AccountController(AccountRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -55,16 +53,16 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequet registerRequet) {
-        String username = registerRequet.getUsername();
+        String accountName = registerRequet.getAccountName();
         String password = registerRequet.getPassword();
         String email = registerRequet.getEmail();
         String phoneNumber = registerRequet.getPhoneNumber();
 
-        Account existingUser = userRepository.findByUsername(username);
+        Account existingUser = userRepository.findByAccountName(accountName);
         if (existingUser != null) {
             return ResponseEntity.badRequest().body("User already exists");
         }
-        Account user = new Account( null, username, password,"ROLE_CUSTOMER", phoneNumber, email);
+        Account user = new Account( null, accountName, password,"ROLE_CUSTOMER", phoneNumber, email);
         userRepository.save(user);
         return ResponseEntity.ok("Registered successfully");
     }
@@ -83,7 +81,7 @@ public class UserController {
         return ResponseEntity.badRequest().body("User not found");
     }
 
-    existingUser.setUsername(user.getUsername());
+    existingUser.setAccountName(user.getAccountName());
 
     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     if (!passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
@@ -95,6 +93,25 @@ public class UserController {
     existingUser.setPhoneNumber(user.getPhoneNumber());
     userRepository.save(existingUser);
     return ResponseEntity.ok("Updated successfully");
-}
+    }
+
+    //forget password
+    @PutMapping("/forgetPassword/{email}")
+    public ResponseEntity<String> forgetPassword(@PathVariable String email, @RequestBody Account user) {
+        Account existingUser = userRepository.findByEmail(email);
+        if (existingUser == null) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (!passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
+            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
+        userRepository.save(existingUser);
+        return ResponseEntity.ok("Updated successfully");
+    }
+
+
     
 }

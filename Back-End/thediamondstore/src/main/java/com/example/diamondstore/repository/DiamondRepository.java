@@ -7,19 +7,13 @@ import org.springframework.stereotype.Repository;
 
 import com.example.diamondstore.model.Diamond;
 
-/**
- *
- * @author DELL
- */
 @Repository
-public interface DiamondRepository extends JpaRepository<Diamond, Integer> {
-    Diamond findByDiamondID(Integer diamondID);
-    //List<Diamond> findByNameContaining(String name);
-     List<Diamond> findByColor(String color);
+public interface DiamondRepository extends JpaRepository<Diamond, String> {
+    Diamond findByDiamondID(String diamondID);
+    List<Diamond> findByColor(String color);
     // List<Diamond> findByCut(String cut);
-    // List<Diamond> findByCaratWeightBetween(Double min, Double max);
-    // List<Diamond> findByPriceBetween(Double min, Double max);
+    // List<Diamond> findByCarat_weightBetween(Float min, Float max);
+    // List<Diamond> findByDiamondPriceBetween(Float min, Float max);
     // List<Diamond> findByClarity(String clarity);
     // List<Diamond> findByOrigin(String origin);
-
 }
