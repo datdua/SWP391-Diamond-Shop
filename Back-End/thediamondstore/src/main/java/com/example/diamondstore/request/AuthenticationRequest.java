@@ -1,22 +1,32 @@
 package com.example.diamondstore.request;
 
+
 public class AuthenticationRequest {
-    private String username;
+    private String accountName;
     private String password;
 
     // Need a default constructor for JSON Parsing
     public AuthenticationRequest() {}
 
-    public AuthenticationRequest(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public AuthenticationRequest(String accountName, String password) {
+        this.setAccountName(accountName);
+        this.setPassword(password);
     }
 
-    public String getUsername() {
-        return this.username;
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
     }
 
     public String getPassword() {
-        return this.password;
+        return password;
     }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
 }
