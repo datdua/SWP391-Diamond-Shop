@@ -1,7 +1,6 @@
 package com.example.diamondstore.controller;
 
-
-
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,29 +25,15 @@ public class JewelryController {
         this.jewelryRepository = jewelryRepository;
     }
 
-
     @GetMapping
-    public ResponseEntity<Iterable<Jewelry>> getJewelry() {
+    public ResponseEntity<List<Jewelry>> getAllJewelry() {
         return ResponseEntity.ok(jewelryRepository.findAll());
     }
 
-    @GetMapping("/{jewelryID}")
-    public ResponseEntity<Jewelry> getDiamond(@PathVariable String jewelryID) {
-        Jewelry jewelry = jewelryRepository.findByJewelryID(jewelryID);
-        if (jewelry == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(jewelry);
-    }
-
-    @PostMapping("/create")
-    public ResponseEntity<String> createJewelry(@RequestBody Jewelry jewelry) {
-        Jewelry existingJerwelry = jewelryRepository.findByJewelryID(jewelry.getJewelryID());
-        if (existingJerwelry != null) {
-            return ResponseEntity.badRequest().body("Jerwelry already exists");
-        }
-        jewelryRepository.save(jewelry);
-        return ResponseEntity.ok("Jerwelry created successfully");
+    @PostMapping
+    public ResponseEntity<Jewelry> createJewelry(@RequestBody Jewelry jewelry) {
+        jewelry.setJewelryID(null);       
+        return ResponseEntity.ok(jewelryRepository.save(jewelry));
     }
 
     @PutMapping("/{jewelryID}")
@@ -69,6 +54,5 @@ public class JewelryController {
         }
         jewelryRepository.delete(existingJewelry);
         return ResponseEntity.ok("Jewelry deleted successfully");
-
     }
 }
