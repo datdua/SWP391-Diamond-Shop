@@ -1,9 +1,9 @@
 package com.example.diamondstore.model;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -12,50 +12,52 @@ import javax.persistence.Table;
 public class Certificate {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "certificateID")
-    private Integer certificateID;
+    private String certificateID;
 
     @Column(name = "diamondID", nullable = false)
-    private Integer diamondID;
+    private String diamondID;
 
     @Column(name = "expirationDate", nullable = false)
     private java.sql.Timestamp expirationDate;
 
-    @Column(name = "image", nullable = false)
+    @Column(name = "image")
     private String image;
+
+    
+    // Add your getters and setters here
 
     public Certificate() {
     }
 
-    public Certificate(Integer certificateID, Integer diamondID, java.sql.Timestamp expirationDate, String image) {
+    public Certificate(String certificateID, String diamondID, Timestamp expirationDate, String image) {
         this.certificateID = certificateID;
         this.diamondID = diamondID;
         this.expirationDate = expirationDate;
         this.image = image;
     }
-    // Getters and setters
-    public Integer getCertificateID() {
+
+    public String getCertificateID() {
         return certificateID;
     }
 
-    public void setCertificateID(Integer certificateID) {
+    public void setCertificateID(String certificateID) {
         this.certificateID = certificateID;
     }
 
-    public Integer getDiamondID() {
+    public String getDiamondID() {
         return diamondID;
     }
 
-    public void setDiamondID(Integer diamondID) {
+    public void setDiamondID(String diamondID) {
         this.diamondID = diamondID;
     }
 
-    public java.sql.Timestamp getExpirationDate() {
+    public Timestamp getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(java.sql.Timestamp expirationDate) {
+    public void setExpirationDate(Timestamp expirationDate) {
         this.expirationDate = expirationDate;
     }
 
@@ -66,4 +68,6 @@ public class Certificate {
     public void setImage(String image) {
         this.image = image;
     }
+
+    
 }
