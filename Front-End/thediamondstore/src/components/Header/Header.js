@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
+import "./Header.css"
 function Header() {
     const [isAccountDropdownOpen, setAccountDropdownOpen] = useState(false);
     const [isCurrencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);

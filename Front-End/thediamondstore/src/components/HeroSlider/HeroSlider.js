@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import "./HeroSlider.css"
 const slidesData = [
     {
         backgroundImage: 'url(assets/images/heoslider-image-1.jpg)',
