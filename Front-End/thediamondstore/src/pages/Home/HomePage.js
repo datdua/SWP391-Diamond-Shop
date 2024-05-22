@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "fancybox/dist/css/jquery.fancybox.css"
-import "../sass/style.scss";
-import HeroSlider from "../components/HeroSlider";
-import Header from "../components/Header/Header";
-import Footer from "../components/Footer";
+import HeroSlider from "../../components/HeroSlider/HeroSlider";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
+import "./HomePage.css"
 function HomePage() {
     const [value, setValue] = useState('Default value');
 

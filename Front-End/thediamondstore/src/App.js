@@ -1,15 +1,15 @@
 import { Routes, Route } from 'react-router-dom';
-import AboutPage from './pages/AboutPage';
-import HomePage from './pages/HomePage';
-import CartPage from './pages/CartPage';
-import LoginRegisterPage from './pages/LoginRegisterPage';
-import ProductPage from './pages/ProductPage';
-import ProductDetailPage from './pages/ProductDetailPage';
-import MyAccountPage from './pages/MyAccountPage';
-import CheckoutPage from './pages/CheckoutPage';
-import WishlistPage from './pages/WishlistPage';
-import PortfolioPage from './pages/PortfolioPage';
-import ContactPage from './pages/ContactPage';
+import AboutPage from './pages/About/AboutPage';
+import HomePage from './pages/Home/HomePage';
+import CartPage from './pages/Cart/CartPage';
+import LoginRegisterPage from './pages/LoginRegister/LoginRegisterPage';
+import ProductPage from './pages/Product/ProductPage';
+import ProductDetailPage from './pages/ProductDetail/ProductDetailPage';
+import MyAccountPage from './pages/MyAccount/MyAccountPage';
+import CheckoutPage from './pages/Checkout/CheckoutPage';
+import WishlistPage from './pages/Wishlist/WishlistPage';
+import PortfolioPage from './pages/Portfolio/PortfolioPage';
+import ContactPage from './pages/Contact/ContactPage';
 
 function App() {
   return (

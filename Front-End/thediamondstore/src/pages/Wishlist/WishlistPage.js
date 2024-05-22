@@ -1,12 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Header from "../components/Header/Header";
-import Footer from "../components/Footer";
-
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
+import "./WishlistPage.css"
 function Wishlist() {
     return (
         <div>
-
             {/* <!-- Preloader --> 
             <div className="tm-preloader">
                 <div className="container">
