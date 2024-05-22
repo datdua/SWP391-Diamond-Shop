@@ -19,11 +19,11 @@ import com.example.diamondstore.request.RegisterRequet;
 @RequestMapping("/api/accounts")
 public class AccountController {
 
-    private final AccountRepository userRepository;
+    private final AccountRepository accountRepository;
     
 
-    public AccountController(AccountRepository userRepository) {
-        this.userRepository = userRepository;
+    public AccountController(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
     }
 
     @GetMapping("/home")
@@ -35,7 +35,7 @@ public class AccountController {
 
     @GetMapping("/accounts")
     public ResponseEntity<Iterable<Account>> getUsers() {
-        return ResponseEntity.ok(userRepository.findAll());
+        return ResponseEntity.ok(accountRepository.findAll());
     }
 
     // @PostMapping("/login")
@@ -43,7 +43,7 @@ public class AccountController {
     //     String username = loginRequest.getUsername();
     //     String password = loginRequest.getPassword();
 
-    //     User existingUser = userRepository.findByUsername(username);
+    //     User existingUser = accountRepository.findByUsername(username);
     //     if (existingUser == null || !existingUser.getPassword().equals(password)) {
     //         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
     //     }
@@ -58,25 +58,25 @@ public class AccountController {
         String email = registerRequet.getEmail();
         String phoneNumber = registerRequet.getPhoneNumber();
 
-        Account existingUser = userRepository.findByAccountName(accountName);
+        Account existingUser = accountRepository.findByAccountName(accountName);
         if (existingUser != null) {
             return ResponseEntity.badRequest().body("User already exists");
         }
         Account user = new Account( null, accountName, password,"ROLE_CUSTOMER", phoneNumber, email);
-        userRepository.save(user);
+        accountRepository.save(user);
         return ResponseEntity.ok("Registered successfully");
     }
 
     @DeleteMapping("/delete/{accountID}")
     public ResponseEntity<String> delete(@PathVariable Integer accountID) {
-        userRepository.deleteById(accountID);
+        accountRepository.deleteById(accountID);
         return ResponseEntity.ok("Deleted successfully");
     }
     
 
     @PutMapping("/update/{accountID}")
     public ResponseEntity<String> update(@PathVariable Integer accountID, @RequestBody Account user) {
-    Account existingUser = userRepository.findById(accountID).orElse(null);
+    Account existingUser = accountRepository.findById(accountID).orElse(null);
     if (existingUser == null) {
         return ResponseEntity.badRequest().body("User not found");
     }
@@ -91,14 +91,14 @@ public class AccountController {
     existingUser.setRole(user.getRole());
     existingUser.setEmail(user.getEmail());
     existingUser.setPhoneNumber(user.getPhoneNumber());
-    userRepository.save(existingUser);
+    accountRepository.save(existingUser);
     return ResponseEntity.ok("Updated successfully");
     }
 
     //forget password
     @PutMapping("/forgetPassword/{email}")
     public ResponseEntity<String> forgetPassword(@PathVariable String email, @RequestBody Account user) {
-        Account existingUser = userRepository.findByEmail(email);
+        Account existingUser = accountRepository.findByEmail(email);
         if (existingUser == null) {
             return ResponseEntity.badRequest().body("User not found");
         }
@@ -108,7 +108,7 @@ public class AccountController {
             existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
-        userRepository.save(existingUser);
+        accountRepository.save(existingUser);
         return ResponseEntity.ok("Updated successfully");
     }
 

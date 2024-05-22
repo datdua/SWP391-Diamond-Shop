@@ -109,13 +109,13 @@ public class Account {
         this.email = email;
     }
 
-    // public Customer getCustomer() {
-    //     return customer;
-    // }
+    public Customer getCustomer() {
+        return customer;
+    }
 
-    // public void setCustomer(Customer customer) {
-    //     this.customer = customer;
-    // }
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 
 
     

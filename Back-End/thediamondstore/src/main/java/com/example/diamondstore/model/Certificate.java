@@ -1,11 +1,13 @@
 package com.example.diamondstore.model;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "Certificate")
@@ -18,8 +20,9 @@ public class Certificate {
     @Column(name = "diamondID", nullable = false)
     private String diamondID;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "expirationDate", nullable = false)
-    private java.sql.Timestamp expirationDate;
+    private LocalDateTime expirationDate;
 
     @Column(name = "image")
     private String image;
@@ -30,7 +33,7 @@ public class Certificate {
     public Certificate() {
     }
 
-    public Certificate(String certificateID, String diamondID, Timestamp expirationDate, String image) {
+    public Certificate(String certificateID, String diamondID, LocalDateTime expirationDate, String image) {
         this.certificateID = certificateID;
         this.diamondID = diamondID;
         this.expirationDate = expirationDate;
@@ -53,11 +56,11 @@ public class Certificate {
         this.diamondID = diamondID;
     }
 
-    public Timestamp getExpirationDate() {
+    public LocalDateTime getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(Timestamp expirationDate) {
+    public void setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
     }
 
