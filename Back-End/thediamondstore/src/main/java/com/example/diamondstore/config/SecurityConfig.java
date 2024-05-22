@@ -26,7 +26,7 @@ public class SecurityConfig {
     private static final String[] WHITE_LIST_URL = { "/api/v1/auth/**", "/v2/api-docs", "/v3/api-docs",
 			"/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**", "/configuration/ui",
 			"/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html", "/api/auth/**",
-			"/api/test/**", "/authenticate", "/login", "/register", "api/diamonds/**", "/api/certificates/**", "/api/jewelry/**"};
+			"/api/test/**", "/authenticate", "/login", "/register", "api/diamonds/**", "/api/certificates/**", "/api/jewelry/**", "/api/customers/**", "/api/accounts/forgetPassword/**"};
 
     private static final String[] ADMIN_URL = { "/api/accounts", "/update/**" };
 
