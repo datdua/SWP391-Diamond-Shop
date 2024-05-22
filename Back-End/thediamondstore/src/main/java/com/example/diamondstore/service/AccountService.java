@@ -23,16 +23,16 @@ public class AccountService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String accountName) throws UsernameNotFoundException {
-        Account account = userRepository.findByAccountName(accountName);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Account account = userRepository.findByEmail(email);
         if (account == null) {
-            throw new UsernameNotFoundException("User not found with username: " + accountName);
+            throw new UsernameNotFoundException("User not found with email: " + email);
         }
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(account.getRole()));
 
-        UserDetails userDetails = new org.springframework.security.core.userdetails.User(account.getAccountName(), account.getPassword(), authorities);
+        UserDetails userDetails = new org.springframework.security.core.userdetails.User(account.getEmail(), account.getPassword(), authorities);
 
 
         

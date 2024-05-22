@@ -5,8 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
-
 @Entity
 @Table(name = "jewelry")
 public class Jewelry {
@@ -102,20 +100,4 @@ public class Jewelry {
     public void setJewelryName(String jewelryName) {
         this.jewelryName = jewelryName;
     }
-
-    
-
-    /*  @Override
-    public String toString() {
-        return "Jewelry{" +
-                "jewelryID=" + jewelryID + '\'' +
-                ",diamondID=" + diamondID + '\'' +
-                ",sex='" + sex + '\'' +
-                ",size='" + size + '\'' +
-                ", image='" + image + '\'' +
-                '}';
-
-    
-}*/
-
 }
