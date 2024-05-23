@@ -1,22 +1,25 @@
 package com.example.diamondstore.model;
 
 import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-@Entity
-@Table(name = "Certificate")
-public class Certificate {
 
+@Entity
+@Table(name = "Warranty")
+public class Warranty {
+    
     @Id
-    @Column(name = "certificateID")
-    private String certificateID;
+    @Column(name = "warrantyID")
+    private String warrantyID;
 
     @Column(name = "diamondID", nullable = false)
     private String diamondID;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "expirationDate", nullable = false)
     private LocalDateTime expirationDate;
@@ -24,25 +27,22 @@ public class Certificate {
     @Column(name = "image")
     private String image;
 
-    
-    // Add your getters and setters here
-
-    public Certificate() {
+    public Warranty() {
     }
 
-    public Certificate(String certificateID, String diamondID, LocalDateTime expirationDate, String image) {
-        this.certificateID = certificateID;
+    public Warranty(String warrantyID, String diamondID, LocalDateTime expirationDate, String image) {
+        this.warrantyID = warrantyID;
         this.diamondID = diamondID;
         this.expirationDate = expirationDate;
         this.image = image;
     }
 
-    public String getCertificateID() {
-        return certificateID;
+    public String getWarrantyID() {
+        return warrantyID;
     }
 
-    public void setCertificateID(String certificateID) {
-        this.certificateID = certificateID;
+    public void setWarrantyID(String warrantyID) {
+        this.warrantyID = warrantyID;
     }
 
     public String getDiamondID() {
@@ -70,4 +70,5 @@ public class Certificate {
     }
 
     
+
 }
