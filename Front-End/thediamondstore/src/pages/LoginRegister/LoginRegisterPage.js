@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import "./LoginRegisterPage.css"
@@ -30,13 +30,13 @@ function LoginRegisterPage() {
                 {/* <!--// Header --> 
 
                 <!-- Breadcrumb Area --> */}
-                <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(assets/images/breadcrumb-bg.jpg)` }}>
+                <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(assets/images/banner-header.png)` }}>
                     <div className="container">
                         <div className="tm-breadcrumb">
-                            <h2>Login & Register</h2>
-                            <ul>
-                                <li><Link tp="/home">Home</Link></li>
-                                <li>Login & Register</li>
+                            <h2>Đăng Nhập & Đăng Ký</h2>
+                            <ul className="add-back">
+                                <li><NavLink to="/home">Trang chủ</NavLink></li>
+                                <li>Đăng Nhập & Đăng Ký</li>
                             </ul>
                         </div>
                     </div>
@@ -53,30 +53,27 @@ function LoginRegisterPage() {
 
                                 <div className="col-lg-6">
                                     <form action="#" className="tm-form tm-login-form">
-                                        <h4>Login</h4>
-                                        <p>Become a part of our community!</p>
+                                        <h4>Đăng Nhập</h4>
+                                        <p>Hãy trở thành một phần của cộng đồng chúng tôi!</p>
                                         <div className="tm-form-inner">
                                             <div className="tm-form-field">
-                                                <label for="login-email">Username or email address*</label>
+                                                <label for="login-email">Email*</label>
                                                 <input type="email" id="login-email" required="required" />
                                             </div>
                                             <div className="tm-form-field">
-                                                <label for="login-password">Password*</label>
+                                                <label for="login-password">Mật khẩu*</label>
                                                 <input type="password" id="login-password" required="required" />
                                             </div>
                                             <div className="tm-form-field">
-                                                <input type="checkbox" name="login-remember" id="login-remember" />
-                                                <label for="login-remember">Remember Me</label>
-                                                <p className="mb-0"><a href="#">Forgot your password?</a></p>
+                                                <p className="mb-0"><a href="#">Quên mật khẩu?</a></p>
                                             </div>
                                             <div className="tm-form-field">
-                                                <button type="submit" className="tm-button">Login</button>
+                                                <button type="submit" className="tm-button">Đăng Nhập</button>
                                             </div>
                                             <div className="tm-form-field">
                                                 <div className="tm-form-sociallogin">
-                                                    <h6>Or, Login with :</h6>
+                                                    <h6>Hoặc, đăng nhập với :</h6>
                                                     <ul>
-                                                        <li><a href="#" className="facebook-btn"><i className="ion-social-facebook"></i></a></li>
                                                         <li><a href="#" className="google-btn"><i className="ion-social-google"></i></a></li>
                                                     </ul>
                                                 </div>
@@ -87,36 +84,31 @@ function LoginRegisterPage() {
 
                                 <div className="col-lg-6">
                                     <form action="#" className="tm-form tm-register-form">
-                                        <h4>Create an account</h4>
-                                        <p>Welcome! Register for an account</p>
+                                        <h4>Tạo tài khoản</h4>
+                                        <p>Chào mừng! Đăng ký tài khoản</p>
                                         <div className="tm-form-inner">
                                             <div className="tm-form-field">
-                                                <label for="register-username">Username</label>
-                                                <input type="text" id="register-username" required="required" />
-                                            </div>
-                                            <div className="tm-form-field">
-                                                <label for="register-email">Email address</label>
+                                                <label for="register-email">Email</label>
                                                 <input type="email" id="register-email" required="required" />
                                             </div>
                                             <div className="tm-form-field">
-                                                <label for="register-password">Password</label>
+                                                <label for="register-password">Mật khẩu</label>
                                                 <input type="password" id="register-password" name="register-pass"
                                                     required="required" />
                                             </div>
                                             <div className="tm-form-field">
                                                 <div>
                                                     <input type="checkbox" id="register-pass-show" name="register-pass-show" />
-                                                    <label for="register-pass-show">Show Password</label>
+                                                    <label for="register-pass-show">Hiện thị mật khẩu</label>
                                                 </div>
                                                 <div>
                                                     <input type="checkbox" id="register-terms" name="register-terms" />
-                                                    <label for="register-terms">I have read and agree to the website <a
-                                                        href="#">terms and
-                                                        conditions</a></label>
+                                                    <label for="register-terms">Tôi đã đọc và đồng ý với các điều khoản và điều kiện của trang web <a
+                                                        href="#"></a></label>
                                                 </div>
                                             </div>
                                             <div className="tm-form-field">
-                                                <button type="submit" className="tm-button">Register</button>
+                                                <button type="submit" className="tm-button">Đăng ký</button>
                                             </div>
                                         </div>
                                     </form>
@@ -131,7 +123,7 @@ function LoginRegisterPage() {
                 {/* <!--// Page Content -->
 
                 <!-- Footer --> */}
-                <Footer/>
+                {/* <Footer/> */}
                 {/* <!--// Footer --> */}
 
                 <button id="back-top-top"><i className="ion-arrow-up-c"></i></button>
