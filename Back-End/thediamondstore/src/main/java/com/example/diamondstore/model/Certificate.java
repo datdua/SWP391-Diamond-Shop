@@ -23,7 +23,6 @@ public class Certificate {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "expirationDate", nullable = false)
     private LocalDateTime expirationDate;
-    private LocalDateTime expirationDate;
 
     @Column(name = "image")
     private String image;
@@ -34,7 +33,7 @@ public class Certificate {
     public Certificate() {
     }
 
-    public Certificate(String certificateID, String diamondID, LocalDateTime expirationDate, String image) {
+    
     public Certificate(String certificateID, String diamondID, LocalDateTime expirationDate, String image) {
         this.certificateID = certificateID;
         this.diamondID = diamondID;
@@ -58,12 +57,12 @@ public class Certificate {
         this.diamondID = diamondID;
     }
 
-    public LocalDateTime getExpirationDate() {
+    
     public LocalDateTime getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(LocalDateTime expirationDate) {
+    
     public void setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
     }

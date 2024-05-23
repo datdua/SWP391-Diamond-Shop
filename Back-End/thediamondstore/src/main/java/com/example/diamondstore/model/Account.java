@@ -1,7 +1,6 @@
 package com.example.diamondstore.model;
 
 import javax.persistence.CascadeType;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,13 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -122,13 +117,6 @@ public class Account {
         this.customer = customer;
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
 
 
     
