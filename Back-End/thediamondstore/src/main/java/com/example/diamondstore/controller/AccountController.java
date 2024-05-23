@@ -20,11 +20,7 @@ import com.example.diamondstore.request.RegisterRequet;
 public class AccountController {
 
     private final AccountRepository accountRepository;
-    private final AccountRepository accountRepository;
     
-
-    public AccountController(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
     public AccountController(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
@@ -82,7 +78,6 @@ public class AccountController {
     @PutMapping("/update/{accountID}")
     public ResponseEntity<String> update(@PathVariable Integer accountID, @RequestBody Account user) {
     Account existingUser = accountRepository.findById(accountID).orElse(null);
-    Account existingUser = accountRepository.findById(accountID).orElse(null);
     if (existingUser == null) {
         return ResponseEntity.badRequest().body("User not found");
     }
@@ -105,7 +100,6 @@ public class AccountController {
     //forget password
     @PutMapping("/forgetPassword/{email}")
     public ResponseEntity<String> forgetPassword(@PathVariable String email, @RequestBody Account user) {
-        Account existingUser = accountRepository.findByEmail(email);
         Account existingUser = accountRepository.findByEmail(email);
         if (existingUser == null) {
             return ResponseEntity.badRequest().body("User not found");
