@@ -23,19 +23,19 @@ public class Account {
     @Column(name = "accountID")
     private Integer accountID;
 
-    @Column(name = "accountName")
+    @Column(name = "accountName", nullable = false)
     private String accountName;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     private String role;
 
     @Column(name = "phoneNumber")
     private String phoneNumber;
 
-    @Column(name = "email")
+    @Column(name = "email",nullable = false)
     private String email;
 
     @JsonBackReference

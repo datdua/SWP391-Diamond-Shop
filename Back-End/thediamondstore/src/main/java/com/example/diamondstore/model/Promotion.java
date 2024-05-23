@@ -21,6 +21,9 @@ public class Promotion {
     @Column(name = "promotionID")
     private Integer promotionID;
 
+    @Column(name = "promotionCode")
+    private String promotionCode;
+
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "startDate")
@@ -40,12 +43,13 @@ public class Promotion {
     public Promotion() {
     }
 
-    public Promotion(String description, BigDecimal discountAmount, LocalDateTime endDate, Integer promotionID, LocalDateTime startDate) {
-        this.description = description;
-        this.discountAmount = discountAmount;
-        this.endDate = endDate;
+    public Promotion(Integer promotionID, String promotionCode, LocalDateTime startDate, LocalDateTime endDate, BigDecimal discountAmount, String description) {
         this.promotionID = promotionID;
+        this.promotionCode = promotionCode;
         this.startDate = startDate;
+        this.endDate = endDate;
+        this.discountAmount = discountAmount;
+        this.description = description;
     }
 
     public Integer getPromotionID() {
@@ -54,6 +58,14 @@ public class Promotion {
 
     public void setPromotionID(Integer promotionID) {
         this.promotionID = promotionID;
+    }
+
+    public String getPromotionCode() {
+        return promotionCode;
+    }
+
+    public void setPromotionCode(String promotionCode) {
+        this.promotionCode = promotionCode;
     }
 
     public LocalDateTime getStartDate() {
@@ -87,6 +99,7 @@ public class Promotion {
     public void setDescription(String description) {
         this.description = description;
     }
+
 
 
     
