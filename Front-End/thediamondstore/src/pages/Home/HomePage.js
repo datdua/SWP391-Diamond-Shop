@@ -1218,7 +1218,7 @@ function HomePage() {
                 {/* <!--// Page Content -->
 
         <!-- Footer --> */}
-                <Footer/>
+                {/* <Footer/> */}
                 {/* <!--// Footer -->
 
         <!-- Product Quickview --> */}

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Footer.css"
+
 function Footer(){
     return(
         /* Footer */
@@ -19,17 +20,17 @@ function Footer(){
             <div className="container">
                 <div className="widgets widgets-footer row">
 
-                    {/* Single Widget */}
+                    {/* Single Widget */}   
 
                     <div className="col-lg-3 col-md-6 col-12">
                         <div className="single-widget widget-info">
-                            <a className="widget-info-logo" href="index.html"><img src="assets/images/logo.png"
+                            <a className="widget-info-logo" href="/trangchu"><img src="assets/images/logo-minisize.png"
                                 alt="logo" /></a>
-                            <p>Lorem ipsum dolor sit amet, consect etur adipiscing elit.</p>
+                            <p>Cửa hàng bán kim cương và trang sức</p>
                             <ul>
-                                <li><b>Address :</b>2726 Avenue Papineau Montreal, QC, Canada</li>
-                                <li><b>Phone :</b><a href="tel:+18009156270">1-800-915-6270</a></li>
-                                <li><b>Email :</b><a href="mailto:info@example.com">info@example.com</a></li>
+                                <li><b>Địa chỉ :</b>Lô E2a-7, Đường D1, Long Thạnh Mỹ, Thành Phố Thủ Đức, Thành phố Hồ Chí Minh</li>
+                                <li><b>SĐT :</b><a href="tel:02873005588">02873005588</a></li>
+                                <li><b>Email :</b><a href="mailto:thediamondstore.info@gmail.com">thediamondstore.info@gmail.com</a></li>
                             </ul>
                         </div>
                     </div>
@@ -38,7 +39,7 @@ function Footer(){
 
                     <div className="col-lg-3 col-md-6 col-12">
                         <div className="single-widget widget-quicklinks">
-                            <h6 className="widget-title">Useful Link</h6>
+                            <h6 className="widget-title">Lối Tắt</h6>
                             <ul>
                                 <li><Link to="/about">About Us</Link></li>
                                 <li><Link to="#">Delivery Info</Link></li>
