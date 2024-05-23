@@ -24,8 +24,10 @@ import com.example.diamondstore.service.AccountService;
 public class SecurityConfig {
 
     private static final String[] SWAGGER_URL = { "/api/v1/auth/**", "/v2/api-docs", "/v3/api-docs",
+    private static final String[] SWAGGER_URL = { "/api/v1/auth/**", "/v2/api-docs", "/v3/api-docs",
 			"/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**", "/configuration/ui",
 			"/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html", "/api/auth/**",
+			"/api/test/**", "/authenticate"};
 			"/api/test/**", "/authenticate"};
 
     private static final String[] ADMIN_URL = { "/api/accounts", "/update/**" };
@@ -49,6 +51,8 @@ public class SecurityConfig {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeRequests(authz -> authz
+                .antMatchers(SWAGGER_URL).permitAll()
+                .antMatchers(COMMON_URL).permitAll()
                 .antMatchers(SWAGGER_URL).permitAll()
                 .antMatchers(COMMON_URL).permitAll()
                 .antMatchers(ADMIN_URL).hasRole("ADMIN")

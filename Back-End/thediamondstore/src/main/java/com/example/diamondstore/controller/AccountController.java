@@ -20,8 +20,11 @@ import com.example.diamondstore.request.RegisterRequet;
 public class AccountController {
 
     private final AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
     
 
+    public AccountController(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
     public AccountController(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
@@ -64,11 +67,13 @@ public class AccountController {
         }
         Account user = new Account( null, accountName, password,"ROLE_CUSTOMER", phoneNumber, email);
         accountRepository.save(user);
+        accountRepository.save(user);
         return ResponseEntity.ok("Registered successfully");
     }
 
     @DeleteMapping("/delete/{accountID}")
     public ResponseEntity<String> delete(@PathVariable Integer accountID) {
+        accountRepository.deleteById(accountID);
         accountRepository.deleteById(accountID);
         return ResponseEntity.ok("Deleted successfully");
     }
@@ -76,6 +81,7 @@ public class AccountController {
 
     @PutMapping("/update/{accountID}")
     public ResponseEntity<String> update(@PathVariable Integer accountID, @RequestBody Account user) {
+    Account existingUser = accountRepository.findById(accountID).orElse(null);
     Account existingUser = accountRepository.findById(accountID).orElse(null);
     if (existingUser == null) {
         return ResponseEntity.badRequest().body("User not found");
@@ -92,12 +98,14 @@ public class AccountController {
     existingUser.setEmail(user.getEmail());
     existingUser.setPhoneNumber(user.getPhoneNumber());
     accountRepository.save(existingUser);
+    accountRepository.save(existingUser);
     return ResponseEntity.ok("Updated successfully");
     }
 
     //forget password
     @PutMapping("/forgetPassword/{email}")
     public ResponseEntity<String> forgetPassword(@PathVariable String email, @RequestBody Account user) {
+        Account existingUser = accountRepository.findByEmail(email);
         Account existingUser = accountRepository.findByEmail(email);
         if (existingUser == null) {
             return ResponseEntity.badRequest().body("User not found");
@@ -108,6 +116,7 @@ public class AccountController {
             existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
+        accountRepository.save(existingUser);
         accountRepository.save(existingUser);
         return ResponseEntity.ok("Updated successfully");
     }
