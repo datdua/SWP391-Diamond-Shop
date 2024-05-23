@@ -30,7 +30,7 @@ public class SecurityConfig {
 			"/api/test/**", "/authenticate"};
 
     private static final String[] ADMIN_URL = { "/api/accounts", "/update/**" };
-    private static final String[] COMMON_URL = {"/login", "/register", "api/diamonds/**", "/api/certificates/**", "/api/jewelry/**", "/api/customers/**", "/api/accounts/forgetPassword/**","/api/promotion/**"};
+    private static final String[] COMMON_URL = {"/login", "/api/accounts/register", "api/diamonds/**", "/api/certificates/**", "/api/jewelry/**", "/api/customers/**", "/api/accounts/forgetPassword/**","/api/promotion/**"};
 
     @Autowired
     private AccountService UserService;
@@ -50,8 +50,6 @@ public class SecurityConfig {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeRequests(authz -> authz
-                .antMatchers(SWAGGER_URL).permitAll()
-                .antMatchers(COMMON_URL).permitAll()
                 .antMatchers(SWAGGER_URL).permitAll()
                 .antMatchers(COMMON_URL).permitAll()
                 .antMatchers(ADMIN_URL).hasRole("ADMIN")

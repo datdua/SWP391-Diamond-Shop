@@ -2,7 +2,11 @@ package com.example.diamondstore.controller;
 
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,6 +44,28 @@ public class PromotionController {
         if (promotion == null) {
             return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok(promotion);
+    }
+
+    @PutMapping("/update/{promotionID}")
+    public ResponseEntity<Promotion> updatePromotion(@PathVariable Integer promotionID, @RequestBody Promotion promotion) {
+        Promotion existingPromotion = promotionRepository.findByPromotionID(promotionID);
+        if (existingPromotion == null) {
+            return ResponseEntity.notFound().build();
+        }
+        existingPromotion.setPromotionCode(promotion.getPromotionCode());
+        
+        promotionRepository.save(existingPromotion);
+        return ResponseEntity.ok(existingPromotion);
+    }
+
+    @DeleteMapping("/delete/{promotionID}")
+    public ResponseEntity<Promotion> deletePromotion(Integer promotionID) {
+        Promotion promotion = promotionRepository.findByPromotionID(promotionID);
+        if (promotion == null) {
+            return ResponseEntity.notFound().build();
+        }
+        promotionRepository.delete(promotion);
         return ResponseEntity.ok(promotion);
     }
 
