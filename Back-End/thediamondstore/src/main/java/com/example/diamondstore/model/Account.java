@@ -43,8 +43,6 @@ public class Account {
     @PrimaryKeyJoinColumn
     private Customer customer;
 
-    
-
     public Account() {
     }
 

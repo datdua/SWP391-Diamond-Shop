@@ -1,14 +1,12 @@
 package com.example.diamondstore.model;
 
 import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 @Entity
 @Table(name = "Certificate")
 public class Certificate {
@@ -19,7 +17,6 @@ public class Certificate {
 
     @Column(name = "diamondID", nullable = false)
     private String diamondID;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "expirationDate", nullable = false)
     private LocalDateTime expirationDate;

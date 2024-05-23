@@ -36,6 +36,7 @@ public class AccountController {
     @GetMapping("/accounts")
     public ResponseEntity<Iterable<Account>> getUsers() {
         return ResponseEntity.ok(accountRepository.findAll());
+
     }
 
     // @PostMapping("/login")
@@ -43,7 +44,11 @@ public class AccountController {
     //     String username = loginRequest.getUsername();
     //     String password = loginRequest.getPassword();
 
+
     //     User existingUser = accountRepository.findByUsername(username);
+
+    //     User existingUser = userRepository.findByUsername(username);
+
     //     if (existingUser == null || !existingUser.getPassword().equals(password)) {
     //         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
     //     }
@@ -59,6 +64,7 @@ public class AccountController {
         String phoneNumber = registerRequet.getPhoneNumber();
 
         Account existingUser = accountRepository.findByAccountName(accountName);
+
         if (existingUser != null) {
             return ResponseEntity.badRequest().body("User already exists");
         }
