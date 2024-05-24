@@ -22,11 +22,11 @@ public class Jewelry {
     @Column(name = "size")
     private String size;
 
-    @Column(name = "sex")
-    private String sex;
+    @Column(name = "gender")
+    private String gender;
 
-    @Column(name = "image")
-    private String image;
+    @Column(name = "jewelryImage")
+    private String jewelryImage;
 
     @Column(name = "jewelryPrice")
     private float jewelryPrice;
@@ -34,13 +34,13 @@ public class Jewelry {
     public Jewelry() {
     }
 
-    public Jewelry(String jewelryID, String diamondID, String sex, String size, float jewelryPrice,
-            String image, String jewelryName) {
+    public Jewelry(String jewelryID, String diamondID, String gender, String size, float jewelryPrice,
+            String jewelryImage, String jewelryName) {
         this.jewelryID = jewelryID;
         this.diamondID = diamondID;
         this.size = size;
-        this.sex = sex;
-        this.image = image;
+        this.gender = gender;
+        this.jewelryImage = jewelryImage;
         this.jewelryPrice = jewelryPrice;
         this.jewelryName = jewelryName;
     }
@@ -61,12 +61,12 @@ public class Jewelry {
         this.diamondID = diamondID;
     }
 
-    public String getSex() {
-        return sex;
+    public String getGender() {
+        return gender;
     }
 
-    public void setSex(String sex) {
-        this.sex = sex;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getSize() {
@@ -85,12 +85,12 @@ public class Jewelry {
         this.jewelryPrice = jewelryPrice;
     }
 
-    public String getImage() {
-        return image;
+    public String getjewelryImage() {
+        return jewelryImage;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setjewelryImage(String jewelryImage) {
+        this.jewelryImage = jewelryImage;
     }
 
     public String getJewelryName() {
