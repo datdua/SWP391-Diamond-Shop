@@ -37,8 +37,8 @@ public class Diamond {
     @Column(name = "clarity")
     private String clarity;
 
-    @Column(name = "image")
-    private String image;
+    @Column(name = "diamondImage")
+    private String diamondImage;
 
     @Column(name = "shape")
     private String shape;
@@ -53,7 +53,7 @@ public class Diamond {
     public Diamond() {
     }
 
-    public Diamond(Float carat_size, Float carat_weight, String certificationID, String clarity, String color, String cut, String diamondID, String diamondName, Float diamondPrice, String image, String origin, String shape, String warrantityID) {
+    public Diamond(Float carat_size, Float carat_weight, String certificationID, String clarity, String color, String cut, String diamondID, String diamondName, Float diamondPrice, String diamondImage, String origin, String shape, String warrantityID) {
         this.carat_size = carat_size;
         this.carat_weight = carat_weight;
         this.certificationID = certificationID;
@@ -63,7 +63,7 @@ public class Diamond {
         this.diamondID = diamondID;
         this.diamondName = diamondName;
         this.diamondPrice = diamondPrice;
-        this.image = image;
+        this.diamondImage = diamondImage;
         this.origin = origin;
         this.shape = shape;
         this.warrantityID = warrantityID;
@@ -141,12 +141,12 @@ public class Diamond {
         this.clarity = clarity;
     }
 
-    public String getImage() {
-        return image;
+    public String getDiamondImage() {
+        return diamondImage;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImage(String diamondImage) {
+        this.diamondImage = diamondImage;
     }
 
     public String getShape() {
