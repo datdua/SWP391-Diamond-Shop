@@ -1,5 +1,7 @@
 package com.example.diamondstore.controller;
 
+import java.util.Collections;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -27,20 +29,20 @@ public class AuthenticationController {
         this.jwtTokenUtil = jwtTokenUtil;
     }
 
-    @PostMapping("/login")
+    @PostMapping(value="/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
 
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authenticationRequest.getAccountName(), authenticationRequest.getPassword())
+                    new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword())
             );
         }
         catch (BadCredentialsException e) {
-            throw new Exception("Incorrect username or password", e);
+            return ResponseEntity.status(401).body(Collections.singletonMap("message", "Sai email hoặc mật khẩu"));
         }
 
         final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(authenticationRequest.getAccountName());
+                .loadUserByUsername(authenticationRequest.getEmail());
 
         final String jwt = jwtTokenUtil.generateToken(userDetails);
 

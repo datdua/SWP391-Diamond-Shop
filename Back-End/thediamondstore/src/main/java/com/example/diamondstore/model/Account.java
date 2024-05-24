@@ -1,13 +1,18 @@
 package com.example.diamondstore.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "Account")
@@ -18,21 +23,27 @@ public class Account {
     @Column(name = "accountID")
     private Integer accountID;
 
-    @Column(name = "accountName")
+    @Column(name = "accountName", nullable = false)
     private String accountName;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     private String role;
 
     @Column(name = "phoneNumber")
     private String phoneNumber;
 
-    @Column(name = "email")
+    @Column(name = "email",nullable = false)
     private String email;
 
+    @JsonBackReference
+    @OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private Customer customer;
+
+    
 
     public Account() {
     }
@@ -97,6 +108,15 @@ public class Account {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
 
 
     
