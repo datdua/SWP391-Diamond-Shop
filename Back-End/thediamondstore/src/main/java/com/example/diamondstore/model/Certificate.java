@@ -24,8 +24,8 @@ public class Certificate {
     @Column(name = "expirationDate", nullable = false)
     private LocalDateTime expirationDate;
 
-    @Column(name = "image")
-    private String image;
+    @Column(name = "certificateImage")
+    private String certificateImage;
 
     
     // Add your getters and setters here
@@ -34,11 +34,11 @@ public class Certificate {
     }
 
     
-    public Certificate(String certificateID, String diamondID, LocalDateTime expirationDate, String image) {
+    public Certificate(String certificateID, String diamondID, LocalDateTime expirationDate, String certificateImage) {
         this.certificateID = certificateID;
         this.diamondID = diamondID;
         this.expirationDate = expirationDate;
-        this.image = image;
+        this.certificateImage = certificateImage;
     }
 
     public String getCertificateID() {
@@ -67,12 +67,12 @@ public class Certificate {
         this.expirationDate = expirationDate;
     }
 
-    public String getImage() {
-        return image;
+    public String getcertificateImage() {
+        return certificateImage;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setcertificateImage(String certificateImage) {
+        this.certificateImage = certificateImage;
     }
 
     
