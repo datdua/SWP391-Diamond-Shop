@@ -1,6 +1,7 @@
 package com.example.diamondstore.request;
 
 public class ApplyPromotionRequest {
+
     private String promotionCode;
 
     public ApplyPromotionRequest() {

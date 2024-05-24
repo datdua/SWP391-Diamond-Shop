@@ -27,13 +27,10 @@ public class Certificate {
     @Column(name = "certificateImage")
     private String certificateImage;
 
-    
     // Add your getters and setters here
-
     public Certificate() {
     }
 
-    
     public Certificate(String certificateID, String diamondID, LocalDateTime expirationDate, String certificateImage) {
         this.certificateID = certificateID;
         this.diamondID = diamondID;
@@ -57,12 +54,10 @@ public class Certificate {
         this.diamondID = diamondID;
     }
 
-    
     public LocalDateTime getExpirationDate() {
         return expirationDate;
     }
 
-    
     public void setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
     }
@@ -75,5 +70,4 @@ public class Certificate {
         this.certificateImage = certificateImage;
     }
 
-    
 }

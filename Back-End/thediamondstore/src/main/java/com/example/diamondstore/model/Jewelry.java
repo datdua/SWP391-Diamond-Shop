@@ -8,7 +8,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "jewelry")
 public class Jewelry {
-    
+
     @Id
     @Column(name = "jewelryID")
     private String jewelryID;
@@ -41,7 +41,7 @@ public class Jewelry {
         this.size = size;
         this.sex = sex;
         this.image = image;
-        this.jewelryPrice =  jewelryPrice;
+        this.jewelryPrice = jewelryPrice;
         this.jewelryName = jewelryName;
     }
 

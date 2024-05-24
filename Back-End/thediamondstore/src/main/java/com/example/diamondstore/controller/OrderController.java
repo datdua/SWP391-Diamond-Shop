@@ -18,17 +18,12 @@ import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.repository.PromotionRepository;
 import com.example.diamondstore.request.ApplyPromotionRequest;
 
-
-
-
-
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
-    
+
     private final OrderRepository orderRepository;
     private final PromotionRepository promotionRepository;
-
 
     public OrderController(OrderRepository orderRepository, PromotionRepository promotionRepository) {
         this.orderRepository = orderRepository;
@@ -39,7 +34,7 @@ public class OrderController {
     public ResponseEntity<Iterable<Order>> getOrders() {
         return ResponseEntity.ok(orderRepository.findAll());
     }
-    
+
     @GetMapping("/{orderID}")
     public ResponseEntity<Order> getOrder(@PathVariable int orderID) {
         Order order = orderRepository.findByOrderID(orderID);
@@ -79,7 +74,7 @@ public class OrderController {
         return ResponseEntity.ok("Order deleted successfully");
     }
 
-    @PostMapping(value="/{orderID}/applyPromotion", produces = "application/json;charset=UTF-8")
+    @PostMapping(value = "/{orderID}/applyPromotion", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> applyPromotion(@PathVariable int orderID, @RequestBody ApplyPromotionRequest applyPromotionRequest) {
         Order order = orderRepository.findByOrderID(orderID);
         if (order == null) {
@@ -93,5 +88,4 @@ public class OrderController {
         return ResponseEntity.ok(orderRepository.save(order));
     }
 
-    
 }

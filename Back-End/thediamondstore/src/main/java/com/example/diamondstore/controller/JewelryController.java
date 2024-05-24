@@ -18,7 +18,7 @@ import com.example.diamondstore.repository.JewelryRepository;
 @RestController
 @RequestMapping("/api/jewelry")
 public class JewelryController {
-    
+
     private final JewelryRepository jewelryRepository;
 
     public JewelryController(JewelryRepository jewelryRepository) {
@@ -32,7 +32,7 @@ public class JewelryController {
 
     @PostMapping
     public ResponseEntity<Jewelry> createJewelry(@RequestBody Jewelry jewelry) {
-        jewelry.setJewelryID(null);       
+        jewelry.setJewelryID(null);
         return ResponseEntity.ok(jewelryRepository.save(jewelry));
     }
 

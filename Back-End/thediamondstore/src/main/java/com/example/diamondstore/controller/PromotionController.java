@@ -1,6 +1,5 @@
 package com.example.diamondstore.controller;
 
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,11 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.diamondstore.model.Promotion;
 import com.example.diamondstore.repository.PromotionRepository;
 
-
 @RestController
 @RequestMapping("/api/promotion")
 public class PromotionController {
-    
+
     private final PromotionRepository promotionRepository;
 
     public PromotionController(PromotionRepository promotionRepository) {
@@ -26,7 +24,7 @@ public class PromotionController {
 
     @GetMapping
     public ResponseEntity<Iterable<Promotion>> getAllPromotion() {
-    return ResponseEntity.ok(promotionRepository.findAll());
+        return ResponseEntity.ok(promotionRepository.findAll());
     }
 
     @GetMapping("/{promotionID}")
@@ -54,7 +52,7 @@ public class PromotionController {
             return ResponseEntity.notFound().build();
         }
         existingPromotion.setPromotionCode(promotion.getPromotionCode());
-        
+
         promotionRepository.save(existingPromotion);
         return ResponseEntity.ok(existingPromotion);
     }

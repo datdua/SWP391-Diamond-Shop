@@ -1,28 +1,20 @@
 package com.example.diamondstore.request;
 
-public class CustomerRequest {
+public class RegisterRequet {
 
-    private Integer point;
     private String accountName;
     private String password;
+    private String email;
     private String phoneNumber;
 
-    public CustomerRequest() {
+    public RegisterRequet() {
     }
 
-    public CustomerRequest(Integer point, String accountName, String password, String phoneNumber) {
-        this.point = point;
+    public RegisterRequet(String accountName, String password, String email, String phoneNumber) {
         this.accountName = accountName;
         this.password = password;
+        this.email = email;
         this.phoneNumber = phoneNumber;
-    }
-
-    public Integer getPoint() {
-        return point;
-    }
-
-    public void setPoint(Integer point) {
-        this.point = point;
     }
 
     public String getAccountName() {
@@ -39,6 +31,14 @@ public class CustomerRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhoneNumber() {

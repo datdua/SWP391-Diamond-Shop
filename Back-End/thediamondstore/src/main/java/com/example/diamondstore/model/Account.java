@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 @Table(name = "Account")
 public class Account {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "accountID")
@@ -35,7 +35,7 @@ public class Account {
     @Column(name = "phoneNumber")
     private String phoneNumber;
 
-    @Column(name = "email",nullable = false)
+    @Column(name = "email", nullable = false)
     private String email;
 
     @JsonBackReference
@@ -43,11 +43,8 @@ public class Account {
     @PrimaryKeyJoinColumn
     private Customer customer;
 
-    
-
     public Account() {
     }
-
 
     public Account(Integer accountID, String accountName, String password, String role, String phoneNumber, String email) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -116,7 +113,6 @@ public class Account {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-
 
 
 }
