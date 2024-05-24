@@ -18,7 +18,6 @@ import com.example.diamondstore.model.Jewelry;
 import com.example.diamondstore.repository.JewelryRepository;
 import com.example.diamondstore.specification.JewelrySpecification;
 
-
 @RestController
 @RequestMapping("/api/jewelry")
 public class JewelryController {
@@ -60,27 +59,34 @@ public class JewelryController {
         return ResponseEntity.ok("Jewelry deleted successfully");
     }
 
-    @GetMapping("/search")
+    @GetMapping("/search/filter")
     public ResponseEntity<List<Jewelry>> searchJewelry(
-        @RequestParam (required = false) String jewelryName, 
-        @RequestParam (required = false) float jewelryPrice,
-        @RequestParam (required = false) String gender){
+            @RequestParam(required = false) String jewelryName,
+            @RequestParam(required = false) float minjewelryPrice,
+            @RequestParam(required = false) float maxjewelryPrice,
+            @RequestParam(required = false) String gender) {
 
-            Specification<Jewelry> spec = Specification.where(null);
+        Specification<Jewelry> spec = Specification.where(null);
 
-            if(jewelryName != null){
-                spec = spec.and(JewelrySpecification.hasName(jewelryName));
-            }
-            if(jewelryPrice != 0){
-                spec = spec.and(JewelrySpecification.hasPrice(jewelryPrice));
-            }
-            if(gender != null){
-                spec = spec.and(JewelrySpecification.hasGender(gender));
-            }
+        if (jewelryName != null) {
+            spec = spec.and(JewelrySpecification.hasNameLike(jewelryName));
+        }
+        if (minjewelryPrice != 0 || maxjewelryPrice != 0) {
+            spec = spec.and(JewelrySpecification.hasPriceBetween(minjewelryPrice, maxjewelryPrice));
+        }
+        if (gender != null) {
+            spec = spec.and(JewelrySpecification.hasGender(gender));
+        }
 
-            List<Jewelry> jewelrys = jewelryRepository.findAll(spec);
-            
+        List<Jewelry> jewelrys = jewelryRepository.findAll(spec);
+
         return ResponseEntity.ok(jewelrys);
     }
-    
+
+    @GetMapping("/searchName")
+    public ResponseEntity<List<Jewelry>> searchJewelryByName(@RequestParam String name) {
+        Specification<Jewelry> spec = JewelrySpecification.hasNameLike(name);
+        List<Jewelry> jewelrys = jewelryRepository.findAll(spec);
+        return ResponseEntity.ok(jewelrys);
+    }
 }
