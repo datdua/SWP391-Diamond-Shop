@@ -10,7 +10,7 @@ public class JewelrySpecification {
         return (root, query, cb) -> cb.equal(root.get("jewelryName"), jewelryName);
     }
 
-    public static Specification<Jewelry> hasPrice(float jewelryPrice) {
+    public static Specification<Jewelry> hasPrice(Float jewelryPrice) {
         return (root, query, cb) -> cb.equal(root.get("jewelryPrice"), jewelryPrice);
     }
 

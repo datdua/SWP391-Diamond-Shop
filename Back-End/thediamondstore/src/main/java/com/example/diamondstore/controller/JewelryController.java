@@ -62,8 +62,8 @@ public class JewelryController {
     @GetMapping("/search/filter")
     public ResponseEntity<List<Jewelry>> searchJewelry(
             @RequestParam(required = false) String jewelryName,
-            @RequestParam(required = false) float minjewelryPrice,
-            @RequestParam(required = false) float maxjewelryPrice,
+            @RequestParam(required = false) Float minjewelryPrice,
+            @RequestParam(required = false) Float maxjewelryPrice,
             @RequestParam(required = false) String gender) {
 
         Specification<Jewelry> spec = Specification.where(null);
@@ -71,7 +71,7 @@ public class JewelryController {
         if (jewelryName != null) {
             spec = spec.and(JewelrySpecification.hasNameLike(jewelryName));
         }
-        if (minjewelryPrice != 0 || maxjewelryPrice != 0) {
+        if (minjewelryPrice != null || maxjewelryPrice != null) {
             spec = spec.and(JewelrySpecification.hasPriceBetween(minjewelryPrice, maxjewelryPrice));
         }
         if (gender != null) {
