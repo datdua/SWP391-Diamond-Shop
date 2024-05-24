@@ -149,7 +149,6 @@ function ContactPage() {
                 {/* <!--// Page Content -->
 
                 <!-- Footer --> */}
-                <Footer/>
                 {/* <!--// Footer --> */}
 
                 <button id="back-top-top"><i className="ion-arrow-up-c"></i></button>

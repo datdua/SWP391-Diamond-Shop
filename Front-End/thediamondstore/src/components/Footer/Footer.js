@@ -16,13 +16,13 @@ function Footer(){
 
         {/* Footer Top Area */}
 
-        <div className="tm-footer-toparea tm-padding-section">
+        <div className="tm-footer-toparea tm-padding-section tm-footer-bottomarea">
             <div className="container">
                 <div className="widgets widgets-footer row">
 
                     {/* Single Widget */}   
 
-                    <div className="col-lg-3 col-md-6 col-12">
+                    <div className="col-lg-4 col-md-7 col-12">
                         <div className="single-widget widget-info">
                             <a className="widget-info-logo" href="/trangchu"><img src="assets/images/logo-minisize.png"
                                 alt="logo" /></a>
@@ -37,16 +37,15 @@ function Footer(){
 
                     {/* //Single Widget */}
 
-                    <div className="col-lg-3 col-md-6 col-12">
+                    <div className="col-lg-4 col-md-7 col-12">
                         <div className="single-widget widget-quicklinks">
                             <h6 className="widget-title">Lối Tắt</h6>
                             <ul>
-                                <li><Link to="/about">About Us</Link></li>
-                                <li><Link to="#">Delivery Info</Link></li>
-                                <li><Link to="#">Privacy & Policy</Link></li>
-                                <li><Link to="#">Returns & Refunds</Link></li>
-                                <li><Link to="#">Terms & Conditions</Link></li>
-                                <li><Link to="/contact">Contact Us</Link></li>
+                                <li><Link to="/gioithieu">Giới Thiệu</Link></li>
+                                <li><Link to="/sanpham">Sản Phẩm</Link></li>
+                                <li><Link to="/banggia">Bảng Giá</Link></li>
+                                <li><Link to="/kienthuc">Kiến Thức Kim Cương</Link></li>
+                                <li><Link to="/lienhe">Liên Hệ</Link></li>
                             </ul>
                         </div>
                     </div>
@@ -55,42 +54,19 @@ function Footer(){
 
                     {/* Single Widget */}
 
-                    <div className="col-lg-3 col-md-6 col-12">
+                    <div className="col-lg-4 col-md-7 col-12">
                         <div className="single-widget widget-quicklinks">
-                            <h6 className="widget-title">My Account</h6>
+                            <h6 className="widget-title">Tài Khoản Của Tôi</h6>
                             <ul>
-                                <li><Link to="/account">My account</Link></li>
-                                <li><Link to="/cart">Cart</Link></li>
-                                <li><Link to="/wishlist">Wishlist</Link></li>
-                                <li><Link to="#">Newsletter</Link></li>
-                                <li><Link to="#">Check out</Link></li>
-                                <li><Link to="#">Frequently Questions</Link></li>
+                                <li><Link to="/giohang">Giỏ Hàng</Link></li>
+                                <li><Link to="/thanhtoan">Thanh Toán</Link></li>
+                                <li><Link to="/dangxuat">Đăng Xuất</Link></li>
+
                             </ul>
                         </div>
                     </div>
 
                     {/* Single Widget */}
-
-                    <div className="col-lg-3 col-md-6 col-12">
-                        <div className="single-widget widget-newsletter">
-                            <h6 className="widget-title">Join Our Newsletter</h6>
-                            <p>Get Business news, tip and solutions to
-                                your problems from our experts.</p>
-                            <form id="tm-mailchimp-form" className="widget-newsletter-form">
-                                <input id="mc-email" type="text" placeholder="Enter email address" />
-                                <button id="mc-submit" type="submit" className="tm-button">Subscribe Now
-                                    <b></b></button>
-                            </form>
-                            {/* Mailchimp Alerts */}
-                            <div className="tm-mailchimp-alerts">
-                                <div className="tm-mailchimp-submitting"></div>
-                                <div className="mailchimp-success"></div>
-                                <div className="tm-mailchimp-error"></div>
-                            </div>
-                            {/*// Mailchimp Alerts */}
-                        </div>
-                    </div>
-
                     {/* Single Widget */}
 
                 </div>
@@ -98,26 +74,6 @@ function Footer(){
         </div>
 
         {/* //Footer Top Area */}
-
-        {/* Footer Bottom Area */}
-
-        <div className="tm-footer-bottomarea">
-            <div className="container">
-                <div className="row align-items-center">
-                    <div className="col-md-7">
-                        <p className="tm-footer-copyright">©
-                            2019. Designed by <a href="https://thememarch.com">ThemeMarch</a></p>
-                    </div>
-                    <div className="col-md-5">
-                        <div className="tm-footer-payment">
-                            <img src="assets/images/payment-methods.png" alt="payment methods" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {/* //Footer Bottom Area */}
 
     </div>
 

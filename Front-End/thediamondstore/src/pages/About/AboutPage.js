@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Header";
 import "./AboutPage.css"
 
@@ -345,11 +344,6 @@ function AboutPage() {
                 </main>
 
                 {/* //Page Content */}
-
-                {/* Footer */}
-                  <Footer/>
-                {/* Footer */}
-
             </div >
         </div >
     );

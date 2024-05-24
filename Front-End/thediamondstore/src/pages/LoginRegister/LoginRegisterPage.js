@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import {NavLink } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import "./LoginRegisterPage.css"
@@ -84,8 +84,8 @@ function LoginRegisterPage() {
 
                                 <div className="col-lg-6">
                                     <form action="#" className="tm-form tm-register-form">
-                                        <h4>Tạo tài khoản</h4>
-                                        <p>Chào mừng! Đăng ký tài khoản</p>
+                                        <h4>Đăng Ký</h4>
+                                        <p>Chào mừng! Hãy nhập thông tin bên dưới để tạo tài khoản</p>
                                         <div className="tm-form-inner">
                                             <div className="tm-form-field">
                                                 <label for="register-email">Email</label>
@@ -100,11 +100,6 @@ function LoginRegisterPage() {
                                                 <div>
                                                     <input type="checkbox" id="register-pass-show" name="register-pass-show" />
                                                     <label for="register-pass-show">Hiện thị mật khẩu</label>
-                                                </div>
-                                                <div>
-                                                    <input type="checkbox" id="register-terms" name="register-terms" />
-                                                    <label for="register-terms">Tôi đã đọc và đồng ý với các điều khoản và điều kiện của trang web <a
-                                                        href="#"></a></label>
                                                 </div>
                                             </div>
                                             <div className="tm-form-field">

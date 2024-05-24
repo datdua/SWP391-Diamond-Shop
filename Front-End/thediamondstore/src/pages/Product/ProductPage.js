@@ -908,7 +908,6 @@ function ProductPage() {
                 {/* <!--// Page Content -->
 
                                                 <!-- Footer --> */}
-                <Footer/>
                 {/* <!--// Footer -->
 
                                                 <!-- Product Quickview --> */}

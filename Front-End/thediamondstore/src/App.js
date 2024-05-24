@@ -16,17 +16,18 @@ function App() {
   return (
       <Routes>
       <Route path="/" element={<Navigate to="/trangchu" replace />} />
-      <Route path='/trangchu' element={<><HomePage/> <Footer/></>}/>
-      <Route path='/about' element={<AboutPage/>}/>
-      <Route path='/cart' element={<CartPage/>}/>
       <Route path='/dangnhap' element={<><LoginRegisterPage/> <Footer/></>}/>
-      <Route path='/product' element={<ProductPage/>}/>
+      <Route path='/trangchu' element={<><HomePage/> <Footer/></>}/>
+      <Route path='/gioithieu' element={<><AboutPage/> <Footer/></>}/>
+      <Route path='/lienhe' element={<><ContactPage/> <Footer/></>}/>
+      <Route path='/sanpham' element={<><ProductPage/> <Footer/></>}/>
+
+      <Route path='/cart' element={<CartPage/>}/>
       <Route path='/product-detail' element={<ProductDetailPage/>}/>
       <Route path='/account' element={<MyAccountPage/>}/>
       <Route path='/checkout' element={<CheckoutPage/>}/>
       <Route path='/wishlist' element={<WishlistPage/>}/>
       <Route path='/portfolio' element={<PortfolioPage/>}/>
-      <Route path='/contact' element={<ContactPage/>}/>
       </Routes>
   );
 }
