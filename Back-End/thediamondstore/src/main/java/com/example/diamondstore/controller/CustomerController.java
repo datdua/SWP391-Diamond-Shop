@@ -16,13 +16,10 @@ import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.CustomerRepository;
 import com.example.diamondstore.request.CustomerRequest;
 
-
-
-
 @RestController
 @RequestMapping("/api/customers")
 public class CustomerController {
-    
+
     private final CustomerRepository customerRepository;
     private final AccountRepository accountRepository;
 
@@ -31,8 +28,6 @@ public class CustomerController {
         this.customerRepository = customerRepository;
     }
 
-    
-
     @GetMapping
     public ResponseEntity<Iterable<Customer>> getCustomers() {
         return ResponseEntity.ok(customerRepository.findAll());
@@ -40,37 +35,34 @@ public class CustomerController {
 
     @GetMapping("/{accountID}")
     public ResponseEntity<Customer> getCustomerById(@PathVariable Integer accountID) {
-    Optional<Customer> customer = customerRepository.findById(accountID);
-    if (customer.isPresent()) {
-        return ResponseEntity.ok(customer.get());
-    } else {
-        return ResponseEntity.notFound().build();
-    }
+        Optional<Customer> customer = customerRepository.findById(accountID);
+        if (customer.isPresent()) {
+            return ResponseEntity.ok(customer.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/update/{accountID}")
-public ResponseEntity<Customer> updateCustomer(@PathVariable Integer accountID, @RequestBody CustomerRequest updatedCustomerRequest) {
-    Optional<Account> optionalAccount = accountRepository.findById(accountID);
-    if (optionalAccount.isPresent()) {
-        Account account = optionalAccount.get();
-        account.setAccountName(updatedCustomerRequest.getAccountName());
-        account.setPassword(updatedCustomerRequest.getPassword());
-        account.setPhoneNumber(updatedCustomerRequest.getPhoneNumber());
-        accountRepository.save(account);
+    public ResponseEntity<Customer> updateCustomer(@PathVariable Integer accountID, @RequestBody CustomerRequest updatedCustomerRequest) {
+        Optional<Account> optionalAccount = accountRepository.findById(accountID);
+        if (optionalAccount.isPresent()) {
+            Account account = optionalAccount.get();
+            account.setAccountName(updatedCustomerRequest.getAccountName());
+            account.setPassword(updatedCustomerRequest.getPassword());
+            account.setPhoneNumber(updatedCustomerRequest.getPhoneNumber());
+            accountRepository.save(account);
 
-        Customer customer = account.getCustomer();
-        if (customer != null) {
-            customer.setPoint(updatedCustomerRequest.getPoint());
-            customerRepository.save(customer);
+            Customer customer = account.getCustomer();
+            if (customer != null) {
+                customer.setPoint(updatedCustomerRequest.getPoint());
+                customerRepository.save(customer);
+            }
+
+            return ResponseEntity.ok(customer);
+        } else {
+            return ResponseEntity.notFound().build();
         }
-
-        return ResponseEntity.ok(customer);
-    } else {
-        return ResponseEntity.notFound().build();
     }
-}
-
-
-    
 
 }

@@ -1,6 +1,7 @@
 package com.example.diamondstore.response;
 
 public class AuthenticationResponse {
+
     private final String jwt;
 
     public AuthenticationResponse(String jwt) {

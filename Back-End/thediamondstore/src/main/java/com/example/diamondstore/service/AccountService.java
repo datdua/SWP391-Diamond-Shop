@@ -1,5 +1,5 @@
-
 package com.example.diamondstore.service;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +34,6 @@ public class AccountService implements UserDetailsService {
 
         UserDetails userDetails = new org.springframework.security.core.userdetails.User(account.getEmail(), account.getPassword(), authorities);
 
-
-        
         return userDetails;
     }
 }

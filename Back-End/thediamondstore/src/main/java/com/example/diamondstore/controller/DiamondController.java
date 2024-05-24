@@ -16,20 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.diamondstore.model.Diamond;
 import com.example.diamondstore.repository.DiamondRepository;
 
-/**
- *
- * @author DELL
- */
 @RestController
 @RequestMapping("/api/diamonds")
 public class DiamondController {
-    
+
     private final DiamondRepository diamondRepository;
 
     public DiamondController(DiamondRepository diamondRepository) {
         this.diamondRepository = diamondRepository;
     }
-
 
     @GetMapping
     public ResponseEntity<Iterable<Diamond>> getDiamonds() {
@@ -78,8 +73,8 @@ public class DiamondController {
 
     @GetMapping("/search")
     public ResponseEntity<List<Diamond>> searchDiamonds(@RequestParam String color) {
-    List<Diamond> diamonds = diamondRepository.findByColor(color);
-    return ResponseEntity.ok(diamonds);
+        List<Diamond> diamonds = diamondRepository.findByColor(color);
+        return ResponseEntity.ok(diamonds);
     }
-    
+
 }

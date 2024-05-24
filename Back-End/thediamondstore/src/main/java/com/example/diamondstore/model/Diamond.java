@@ -8,6 +8,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Diamond")
 public class Diamond {
+
     @Id
     @Column(name = "diamondID")
     private String diamondID;
@@ -17,7 +18,6 @@ public class Diamond {
 
     @Column(name = "certificationID")
     private String certificationID;
-
 
     @Column(name = "carat_size")
     private Float carat_size;
@@ -50,7 +50,6 @@ public class Diamond {
     private String origin;
 
     // Add your getters and setters here
-
     public Diamond() {
     }
 
@@ -93,7 +92,6 @@ public class Diamond {
     public void setCertificationID(String certificationID) {
         this.certificationID = certificationID;
     }
-
 
     public Float getCarat_size() {
         return carat_size;
@@ -175,6 +173,4 @@ public class Diamond {
         this.origin = origin;
     }
 
-
-    
 }

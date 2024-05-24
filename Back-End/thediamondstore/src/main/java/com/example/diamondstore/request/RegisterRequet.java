@@ -49,7 +49,4 @@ public class RegisterRequet {
         this.phoneNumber = phoneNumber;
     }
 
-
-    
-    
 }

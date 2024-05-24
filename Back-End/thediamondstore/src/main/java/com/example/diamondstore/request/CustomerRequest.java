@@ -17,7 +17,6 @@ public class CustomerRequest {
         this.phoneNumber = phoneNumber;
     }
 
-
     public Integer getPoint() {
         return point;
     }
@@ -50,6 +49,4 @@ public class CustomerRequest {
         this.phoneNumber = phoneNumber;
     }
 
-
-    
 }

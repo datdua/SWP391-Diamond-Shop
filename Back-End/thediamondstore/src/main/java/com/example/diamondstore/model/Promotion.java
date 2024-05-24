@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity
 @Table(name = "Promotion")
 public class Promotion {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "promotionID")
@@ -23,7 +23,6 @@ public class Promotion {
 
     @Column(name = "promotionCode")
     private String promotionCode;
-
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "startDate")
@@ -38,7 +37,6 @@ public class Promotion {
 
     @Column(length = 80)
     private String description;
-
 
     public Promotion() {
     }
@@ -100,7 +98,4 @@ public class Promotion {
         this.description = description;
     }
 
-
-
-    
 }

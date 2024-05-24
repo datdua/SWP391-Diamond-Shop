@@ -14,14 +14,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity
 @Table(name = "Orders")
 public class Order {
-    
+
     @Id
     @Column(name = "orderID")
     private int orderID;
 
-    @Column(name = "accountID" , nullable = false)
+    @Column(name = "accountID", nullable = false)
     private int accountID;
-    
+
     @Column(name = "paymentID", nullable = false)
     private int paymentID;
 
@@ -46,8 +46,6 @@ public class Order {
     @JoinColumn(name = "promotionID", referencedColumnName = "promotionID", nullable = true)
     private Promotion promotion;
 
-    
-
     public Order() {
     }
 
@@ -62,9 +60,6 @@ public class Order {
         this.promotion = promotion;
         this.startorderDate = startorderDate;
     }
-
-
-
 
     public int getOrderID() {
         return orderID;
@@ -138,8 +133,4 @@ public class Order {
         this.promotion = promotion;
     }
 
-    
-    
-
 }
-

@@ -7,6 +7,7 @@ import com.example.diamondstore.model.Promotion;
 
 @Repository
 public interface PromotionRepository extends CrudRepository<Promotion, Integer> {
+
     Promotion findByPromotionID(Integer promotionID);
 
     Promotion findByPromotionCode(String promotionCode);

@@ -7,5 +7,6 @@ import com.example.diamondstore.model.Jewelry;
 
 @Repository
 public interface JewelryRepository extends JpaRepository<Jewelry, String> {
+
     Jewelry findByJewelryID(String jewelryID);
 }
