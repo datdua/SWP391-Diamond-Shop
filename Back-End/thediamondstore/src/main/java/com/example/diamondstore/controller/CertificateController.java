@@ -1,5 +1,9 @@
 package com.example.diamondstore.controller;
 
+import java.util.Collections;
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,42 +32,42 @@ public class CertificateController {
         return ResponseEntity.ok(certificateRepository.findAll());
     }
 
-    @GetMapping("/{certificateID}")
-    public ResponseEntity<Certificate> getCertificate(@PathVariable String certificateID) {
+    @GetMapping(value = "/{certificateID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getCertificate(@PathVariable String certificateID) {
         Certificate certificate = certificateRepository.findByCertificateID(certificateID);
         if (certificate == null) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity<>(Collections.singletonMap("message", "ID không tồn tại"), HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(certificate);
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Certificate> createCertificate(@RequestBody Certificate certificate) {
+    @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> createCertificate(@RequestBody Certificate certificate) {
         Certificate existingCertificate = certificateRepository.findByCertificateID(certificate.getCertificateID());
         if (existingCertificate != null) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Chứng chỉ đã tồn tại"));
         }
         certificateRepository.save(certificate);
-        return ResponseEntity.ok(certificate);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công"));
     }
 
-    @PutMapping("/{certificateID}")
-    public ResponseEntity<Certificate> updateCertificate(@PathVariable String certificateID, @RequestBody Certificate certificate) {
+    @PutMapping(value = "/{certificateID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> updateCertificate(@PathVariable String certificateID, @RequestBody Certificate certificate) {
         Certificate existingCertificate = certificateRepository.findByCertificateID(certificateID);
         if (existingCertificate == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy chứng chỉ"));
         }
         certificate.setCertificateID(certificateID);
-        return ResponseEntity.ok(certificateRepository.save(certificate));
+        return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }
 
-    @DeleteMapping("/{certificateID}")
-    public ResponseEntity<String> deleteCertificate(@PathVariable String certificateID) {
+    @DeleteMapping(value = "/{certificateID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> deleteCertificate(@PathVariable String certificateID) {
         Certificate existingCertificate = certificateRepository.findByCertificateID(certificateID);
         if (existingCertificate == null) {
             return ResponseEntity.notFound().build();
         }
         certificateRepository.delete(existingCertificate);
-        return ResponseEntity.ok("Certificate deleted successfully");
+        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa thành công"));
     }
 }

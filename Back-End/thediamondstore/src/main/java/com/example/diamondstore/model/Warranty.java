@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity
 @Table(name = "Warranty")
 public class Warranty {
-    
+
     @Id
     @Column(name = "warrantyID")
     private String warrantyID;
@@ -68,7 +68,5 @@ public class Warranty {
     public void setImage(String image) {
         this.image = image;
     }
-
-    
 
 }

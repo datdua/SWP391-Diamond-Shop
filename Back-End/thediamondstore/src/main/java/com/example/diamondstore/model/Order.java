@@ -5,21 +5,23 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-@Table(name = "Order")
+@Table(name = "Orders")
 public class Order {
-    
+
     @Id
     @Column(name = "orderID")
     private int orderID;
 
-    @Column(name = "accountID" , nullable = false)
+    @Column(name = "accountID", nullable = false)
     private int accountID;
-    
+
     @Column(name = "paymentID", nullable = false)
     private int paymentID;
 
@@ -40,19 +42,23 @@ public class Order {
     @Column(name = "jewelryID", nullable = false)
     private String jewelryID;
 
+    @ManyToOne
+    @JoinColumn(name = "promotionID", referencedColumnName = "promotionID", nullable = true)
+    private Promotion promotion;
+
     public Order() {
     }
 
-    public Order(int orderID, int accountID, int paymentID, LocalDateTime startorderDate, String orderStatus,
-    LocalDateTime deliveryDate, String diamondID, String jewelryID) {
-        this.orderID = orderID;
+    public Order(int accountID, LocalDateTime deliveryDate, String diamondID, String jewelryID, int orderID, String orderStatus, int paymentID, Promotion promotion, LocalDateTime startorderDate) {
         this.accountID = accountID;
-        this.paymentID = paymentID;
-        this.startorderDate = startorderDate;
-        this.orderStatus = orderStatus;
         this.deliveryDate = deliveryDate;
         this.diamondID = diamondID;
         this.jewelryID = jewelryID;
+        this.orderID = orderID;
+        this.orderStatus = orderStatus;
+        this.paymentID = paymentID;
+        this.promotion = promotion;
+        this.startorderDate = startorderDate;
     }
 
     public int getOrderID() {
@@ -118,8 +124,13 @@ public class Order {
     public void setJewelryID(String jewelryID) {
         this.jewelryID = jewelryID;
     }
-    
-    
+
+    public Promotion getPromotion() {
+        return promotion;
+    }
+
+    public void setPromotion(Promotion promotion) {
+        this.promotion = promotion;
+    }
 
 }
-

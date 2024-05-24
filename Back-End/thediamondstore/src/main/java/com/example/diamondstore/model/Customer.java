@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @Table(name = "Customer")
 public class Customer {
-    
+
     @Id
     @Column(name = "accountID")
     private Integer accountID;
@@ -28,7 +28,6 @@ public class Customer {
     private Account account;
 
     // getters and setters
-
     public Customer() {
     }
 
@@ -53,8 +52,4 @@ public class Customer {
         this.point = point;
     }
 
-    
-    
-    
-    
 }
