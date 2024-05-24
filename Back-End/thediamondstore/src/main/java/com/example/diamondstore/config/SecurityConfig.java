@@ -5,23 +5,25 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import static org.springframework.security.config.Customizer.withDefaults;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.example.diamondstore.filter.JwtRequestFilter;
 import com.example.diamondstore.service.AccountService;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
 
 
     private static final String[] SWAGGER_URL = { "/api/v1/auth/**", "/v2/api-docs", "/v3/api-docs",
@@ -33,10 +35,19 @@ public class SecurityConfig {
     private static final String[] COMMON_URL = {"/login", "/api/accounts/register", "api/diamonds/**", "/api/certificates/**", "/api/jewelry/**", "/api/customers/**", "/api/accounts/forgetPassword/**","/api/promotion/**", "/api/warranties/**"};
 
     @Autowired
-    private AccountService UserService;
+    private final AccountService UserService;
 
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
+    }
 
     
 
@@ -48,7 +59,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(AbstractHttpConfigurer::disable)
+            .cors(withDefaults())
+            .csrf(csrf -> csrf.disable())
             .authorizeRequests(authz -> authz
                 .antMatchers(SWAGGER_URL).permitAll()
                 .antMatchers(COMMON_URL).permitAll()
@@ -71,6 +83,8 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
+
+    
 
 
 }
