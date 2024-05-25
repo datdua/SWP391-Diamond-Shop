@@ -22,6 +22,10 @@ public class JewelrySpecification {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("jewelryName"), "%" + name + "%");
     }
 
+    public static Specification<Jewelry> hasSize(String size) {
+        return (root, query, cb) -> cb.equal(root.get("size"), size);
+    }
+
     public static Specification<Jewelry> hasPriceBetween(Float minjewelryPrice, Float maxjewelryPrice) {
         return (root, query, criteriaBuilder) -> {
             if (minjewelryPrice != null && maxjewelryPrice != null) {
