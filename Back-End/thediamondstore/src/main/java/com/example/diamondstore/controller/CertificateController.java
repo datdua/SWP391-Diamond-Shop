@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.model.Certificate;
 import com.example.diamondstore.repository.CertificateRepository;
+import com.example.diamondstore.request.putRequest.CertificatePutRequest;
 
 @RestController
 @RequestMapping("/api/certificates")
@@ -52,12 +53,15 @@ public class CertificateController {
     }
 
     @PutMapping(value = "/{certificateID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> updateCertificate(@PathVariable String certificateID, @RequestBody Certificate certificate) {
+    public ResponseEntity<Map<String, String>> updateCertificate(@PathVariable String certificateID, @RequestBody CertificatePutRequest certificatePutRequest) {
         Certificate existingCertificate = certificateRepository.findByCertificateID(certificateID);
         if (existingCertificate == null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy chứng chỉ"));
+            return ResponseEntity.notFound().build();
         }
-        certificate.setCertificateID(certificateID);
+        existingCertificate.setDiamondID(certificatePutRequest.getDiamondID());
+        existingCertificate.setExpirationDate(certificatePutRequest.getExpirationDate());
+        existingCertificate.setcertificateImage(certificatePutRequest.getCertificateImage());
+        certificateRepository.save(existingCertificate);
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }
 

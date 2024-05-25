@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.model.Jewelry;
 import com.example.diamondstore.repository.JewelryRepository;
+import com.example.diamondstore.request.putRequest.JewelryPutRequest;
 import com.example.diamondstore.specification.JewelrySpecification;
 
 @RestController
@@ -40,13 +41,18 @@ public class JewelryController {
     }
 
     @PutMapping("/{jewelryID}")
-    public ResponseEntity<Jewelry> updateJewelry(@PathVariable String jewelryID, @RequestBody Jewelry jewelry) {
+    public ResponseEntity<Jewelry> updateJewelry(@PathVariable String jewelryID, @RequestBody JewelryPutRequest jewelryPutRequest) {
         Jewelry existingJewelry = jewelryRepository.findByJewelryID(jewelryID);
         if (existingJewelry == null) {
             return ResponseEntity.notFound().build();
         }
-        jewelry.setJewelryID(jewelryID);
-        return ResponseEntity.ok(jewelryRepository.save(jewelry));
+        existingJewelry.setDiamondID(jewelryPutRequest.getDiamondID());
+        existingJewelry.setJewelryName(jewelryPutRequest.getJewelryName());
+        existingJewelry.setGender(jewelryPutRequest.getGender());
+        existingJewelry.setSize(jewelryPutRequest.getSize());
+        existingJewelry.setjewelryImage(jewelryPutRequest.getJewelryImage());
+        return ResponseEntity.ok(jewelryRepository.save(existingJewelry));
+
     }
 
     @DeleteMapping("/{jewelryID}")

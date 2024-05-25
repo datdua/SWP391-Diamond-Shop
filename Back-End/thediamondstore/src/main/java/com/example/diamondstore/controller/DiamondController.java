@@ -1,6 +1,8 @@
 package com.example.diamondstore.controller;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.model.Diamond;
 import com.example.diamondstore.repository.DiamondRepository;
+import com.example.diamondstore.request.putRequest.DiamondPutRequest;
 import com.example.diamondstore.specification.DiamondSpecification;
 
 @RestController
@@ -42,34 +45,43 @@ public class DiamondController {
         return ResponseEntity.ok(diamond);
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<String> createDiamond(@RequestBody Diamond diamond) {
+    @PostMapping(value="/create", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> createDiamond(@RequestBody Diamond diamond) {
         Diamond existingDiamond = diamondRepository.findByDiamondID(diamond.getDiamondID());
         if (existingDiamond != null) {
-            return ResponseEntity.badRequest().body("Diamond already exists");
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Kim cương đã tồn tại"));
         }
         diamondRepository.save(diamond);
-        return ResponseEntity.ok("Diamond created successfully");
+        return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công"));
     }
 
-    @PutMapping("/{diamondID}")
-    public ResponseEntity<Diamond> updateDiamond(@PathVariable String diamondID, @RequestBody Diamond diamond) {
+    @PutMapping(value="/{diamondID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> updateDiamond(@PathVariable String diamondID, @RequestBody DiamondPutRequest diamondPutRequest) {
         Diamond existingDiamond = diamondRepository.findByDiamondID(diamondID);
         if (existingDiamond == null) {
             return ResponseEntity.notFound().build();
         }
-        diamond.setDiamondID(diamondID);
-        return ResponseEntity.ok(diamondRepository.save(diamond));
+        existingDiamond.setDiamondName(diamondPutRequest.getDiamondName());
+        existingDiamond.setDiamondPrice(diamondPutRequest.getDiamondPrice());
+        existingDiamond.setOrigin(diamondPutRequest.getOrigin());
+        existingDiamond.setCut(diamondPutRequest.getCut());
+        existingDiamond.setShape(diamondPutRequest.getShape());
+        existingDiamond.setColor(diamondPutRequest.getColor());
+        existingDiamond.setCarat_size(diamondPutRequest.getCarat_size());
+        existingDiamond.setCarat_weight(diamondPutRequest.getCarat_weight());
+        existingDiamond.setClarity(diamondPutRequest.getClarity());
+        diamondRepository.save(existingDiamond);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }
 
     @DeleteMapping("/{diamondID}")
-    public ResponseEntity<String> deleteDiamond(@PathVariable String diamondID) {
+    public ResponseEntity<?> deleteDiamond(@PathVariable String diamondID) {
         Diamond existingDiamond = diamondRepository.findByDiamondID(diamondID);
         if (existingDiamond == null) {
             return ResponseEntity.notFound().build();
         }
         diamondRepository.delete(existingDiamond);
-        return ResponseEntity.ok("Diamond deleted successfully");
+        return ResponseEntity.ok("Kim cương đã xóa thành công");
 
     }
 
