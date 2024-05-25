@@ -3,6 +3,9 @@ package com.example.diamondstore.controller;
 import java.util.Collections;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.model.Certificate;
@@ -40,6 +44,13 @@ public class CertificateController {
             return new ResponseEntity<>(Collections.singletonMap("message", "ID không tồn tại"), HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(certificate);
+    }
+
+    @GetMapping("/paged")
+        public ResponseEntity<Page<Certificate>> getAllDiamondsPaged(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Certificate> pageCertificates = certificateRepository.findAll(pageable);
+        return ResponseEntity.ok(pageCertificates);
     }
 
     @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
