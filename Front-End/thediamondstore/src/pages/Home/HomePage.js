@@ -949,7 +949,7 @@ function HomePage() {
 
                             </div>
                             <div className="tm-product-loadmore text-center mt-50">
-                                <a href="products.html" className="tm-button">All Products</a>
+                                <a href="/sanpham" className="tm-button">All Products</a>
                             </div>
                         </div>
                     </div>
