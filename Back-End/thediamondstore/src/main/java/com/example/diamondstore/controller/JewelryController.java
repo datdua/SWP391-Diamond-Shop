@@ -34,6 +34,15 @@ public class JewelryController {
         return ResponseEntity.ok(jewelryRepository.findAll());
     }
 
+    @GetMapping("/{jewelryID}")
+    public ResponseEntity<Jewelry> getJewelry(@PathVariable String jewelryID) {
+        Jewelry jewelry = jewelryRepository.findByJewelryID(jewelryID);
+        if (jewelry == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(jewelry);
+    }
+
     @PostMapping
     public ResponseEntity<Jewelry> createJewelry(@RequestBody Jewelry jewelry) {
         jewelry.setJewelryID(null);
