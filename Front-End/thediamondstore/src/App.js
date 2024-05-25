@@ -28,7 +28,7 @@ function App() {
         <Route path='/sanpham' element={<><ProductPage/> <Footer/></>}/>
 
         <Route path='/cart' element={<CartPage/>}/>
-        <Route path='/product-detail' element={<ProductDetailPage/>}/>
+        <Route path="/product-detail/:jewelryId" element={<ProductDetailPage />} />
         <Route path='/account' element={<MyAccountPage/>}/>
         <Route path='/checkout' element={<CheckoutPage/>}/>
         <Route path='/wishlist' element={<WishlistPage/>}/>

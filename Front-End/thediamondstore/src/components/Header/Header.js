@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Header.css"
+import { searchJewelryByName } from "../../api/JewelryAPI";
 function Header() {
     const [isAccountDropdownOpen, setAccountDropdownOpen] = useState(false);
     const [isCurrencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
     const [isLanguageDropdownOpen, setLanguageDropdownOpen] = useState(false);
-
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
     const toggleDropdown = (dropdown) => {
         if (dropdown === "account") {
             setAccountDropdownOpen(!isAccountDropdownOpen);
@@ -20,6 +22,12 @@ function Header() {
             setCurrencyDropdownOpen(false);
             setLanguageDropdownOpen(!isLanguageDropdownOpen);
         }
+    };
+    const handleSearch = () => {
+        searchJewelryByName(searchTerm)
+            .then(data => setSearchResults(data))
+            .catch(error => console.error('Error searching for jewelry:', error));
+            window.location.href = `/sanpham?search=${encodeURIComponent(searchTerm)}`;
     };
 
     return (
@@ -82,8 +90,8 @@ function Header() {
                 </div>
             </div>
             {/* // Header Top Area */}
-           {/* Header Middle Area */}
-           <div className="tm-header-middlearea bg-white">
+            {/* Header Middle Area */}
+            <div className="tm-header-middlearea bg-white">
                 <div className="container">
                     <div className="tm-mobilenav"></div>
                     <div className="row align-items-center">
@@ -93,9 +101,14 @@ function Header() {
                             </a>
                         </div>
                         <div className="col-lg-6 col-12 order-3 order-lg-2">
-                            <form className="tm-header-search">
-                                <input type="text" placeholder="Search product..." />
-                                <button aria-label="Search"><i className="ion-android-search"></i></button>
+                        <form className="tm-header-search" onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
+                                <input 
+                                    type="text" 
+                                    placeholder="Search product..." 
+                                    value={searchTerm} 
+                                    onChange={(e) => setSearchTerm(e.target.value)} 
+                                />
+                                <button aria-label="Search" type="submit"><i className="ion-android-search"></i></button>
                             </form>
                         </div>
                         <div className="col-lg-3 col-6 order-2 order-lg-3">
