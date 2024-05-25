@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -89,6 +92,13 @@ public class DiamondController {
     public ResponseEntity<List<Diamond>> searchDiamonds(@RequestParam String color) {
         List<Diamond> diamonds = diamondRepository.findByColor(color);
         return ResponseEntity.ok(diamonds);
+    }
+
+    @GetMapping("/paged")
+    public ResponseEntity<Page<Diamond>> getAllDiamondsPaged(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Diamond> pageDiamonds = diamondRepository.findAll(pageable);
+        return ResponseEntity.ok(pageDiamonds);
     }
 
     @GetMapping("/search/filter")
