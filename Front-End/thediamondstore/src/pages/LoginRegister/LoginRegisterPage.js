@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./LoginRegisterPage.css";
 
 function LoginRegisterPage() {
@@ -31,12 +33,15 @@ function LoginRegisterPage() {
                 const data = response.data;
                 console.log("Đăng nhập thành công:", data.jwt);
                 localStorage.setItem("jwt", data.jwt);
+                toast.success("Đăng nhập thành công!");
                 navigate("/trangchu");
             } else {
                 console.error("Đăng nhập thất bại:", response);
+                toast.error("Đăng nhập thất bại!");
             }
         } catch (error) {
             console.error("Lỗi khi đăng nhập:", error);
+            toast.error("Lỗi khi đăng nhập!");
         }
     };
 
@@ -57,19 +62,22 @@ function LoginRegisterPage() {
             if (response.status === 200 || response.status === 201) {
                 const data = response.data;
                 console.log("Đăng ký thành công:", data.message);
+                toast.success("Đăng ký thành công!");
                 navigate("/trangchu");
             } else {
                 console.error("Đăng ký thất bại:", response);
+                toast.error("Đăng ký thất bại!");
             }
         } catch (error) {
             console.error("Lỗi khi đăng ký:", error);
+            toast.error("Lỗi khi đăng ký!");
         }
     };
 
     return (
         <div>
             <div id="wrapper" className="wrapper">
-                <Header/>
+                <Header />
                 <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(assets/images/banner-header.png)` }}>
                     <div className="container">
                         <div className="tm-breadcrumb">
@@ -184,7 +192,8 @@ function LoginRegisterPage() {
                         </div>
                     </div>
                 </main>
-                <Footer/>
+                {/*<Footer />*/}
+                
                 <button id="back-top-top"><i className="ion-arrow-up-c"></i></button>
             </div>
         </div>

@@ -1,4 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import AboutPage from './pages/About/AboutPage';
 import HomePage from './pages/Home/HomePage';
 import CartPage from './pages/Cart/CartPage';
@@ -14,20 +17,24 @@ import Footer from './components/Footer/Footer';
 
 function App() {
   return (
+    <>
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
       <Routes>
-      <Route path="/" element={<Navigate to="/trangchu" replace />} />
-      <Route path='/trangchu' element={<><HomePage/> <Footer/></>}/>
-      <Route path='/about' element={<AboutPage/>}/>
-      <Route path='/cart' element={<CartPage/>}/>
-      <Route path='/dangnhap' element={<><LoginRegisterPage/> <Footer/></>}/>
-      <Route path='/product' element={<ProductPage/>}/>
-      <Route path='/product-detail' element={<ProductDetailPage/>}/>
-      <Route path='/account' element={<MyAccountPage/>}/>
-      <Route path='/checkout' element={<CheckoutPage/>}/>
-      <Route path='/wishlist' element={<WishlistPage/>}/>
-      <Route path='/portfolio' element={<PortfolioPage/>}/>
-      <Route path='/contact' element={<ContactPage/>}/>
+        <Route path="/" element={<Navigate to="/trangchu" replace />} />
+        <Route path='/dangnhap' element={<><LoginRegisterPage/> <Footer/></>}/>
+        <Route path='/trangchu' element={<><HomePage/> <Footer/></>}/>
+        <Route path='/gioithieu' element={<><AboutPage/> <Footer/></>}/>
+        <Route path='/lienhe' element={<><ContactPage/> <Footer/></>}/>
+        <Route path='/sanpham' element={<><ProductPage/> <Footer/></>}/>
+
+        <Route path='/cart' element={<CartPage/>}/>
+        <Route path='/product-detail' element={<ProductDetailPage/>}/>
+        <Route path='/account' element={<MyAccountPage/>}/>
+        <Route path='/checkout' element={<CheckoutPage/>}/>
+        <Route path='/wishlist' element={<WishlistPage/>}/>
+        <Route path='/portfolio' element={<PortfolioPage/>}/>
       </Routes>
+    </>
   );
 }
 

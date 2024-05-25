@@ -114,10 +114,10 @@ function Header() {
                 <div className="container">
                     <nav className="tm-header-nav">
                         <ul>
-                            <li><Link to="/home">Home</Link></li>
-                            <li><Link to="/about">About</Link></li>
-                            <li><Link to="/product">Shop</Link></li>
-                            <li><Link to="/contact">Contact</Link></li>
+                            <li><Link to="/trangchu">Home</Link></li>
+                            <li><Link to="/gioithieu">About</Link></li>
+                            <li><Link to="/sanpham">Shop</Link></li>
+                            <li><Link to="/lienhe">Contact</Link></li>
                         </ul>
                     </nav>
                 </div>
