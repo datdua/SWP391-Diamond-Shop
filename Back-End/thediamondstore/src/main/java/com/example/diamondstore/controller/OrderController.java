@@ -17,6 +17,7 @@ import com.example.diamondstore.model.Promotion;
 import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.repository.PromotionRepository;
 import com.example.diamondstore.request.ApplyPromotionRequest;
+import com.example.diamondstore.request.putRequest.OrderPutRequest;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -55,13 +56,20 @@ public class OrderController {
     }
 
     @PutMapping("/{orderID}")
-    public ResponseEntity<Order> updateCertificate(@PathVariable int orderID, @RequestBody Order order) {
+    public ResponseEntity<Order> updateCertificate(@PathVariable int orderID, @RequestBody OrderPutRequest orderPutRequest) {
         Order existingOrder = orderRepository.findByOrderID(orderID);
         if (existingOrder == null) {
             return ResponseEntity.notFound().build();
         }
-        order.setOrderID(orderID);
-        return ResponseEntity.ok(orderRepository.save(order));
+        existingOrder.setAccountID(orderPutRequest.getAccountID());
+        existingOrder.setDiamondID(orderPutRequest.getDiamondID());
+        existingOrder.setJewelryID(orderPutRequest.getJewelryID());
+        existingOrder.setDeliveryDate(orderPutRequest.getDeliveryDate());
+        existingOrder.setStartorderDate(orderPutRequest.getStartorderDate());
+        existingOrder.setOrderStatus(orderPutRequest.getOrderStatus());
+        existingOrder.setPaymentID(orderPutRequest.getPaymentID());
+
+        return ResponseEntity.ok(orderRepository.save(existingOrder));
     }
 
     @DeleteMapping("/{orderID}")
