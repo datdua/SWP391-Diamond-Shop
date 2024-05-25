@@ -82,19 +82,44 @@ function Header() {
                 </div>
             </div>
             {/* // Header Top Area */}
-            
-            {/* Header Middle Area */}
-            <div className="tm-header-middlearea bg-white">
+           {/* Header Middle Area */}
+           <div className="tm-header-middlearea bg-white">
                 <div className="container">
-                    {/* Header Middle Content */}
+                    <div className="tm-mobilenav"></div>
+                    <div className="row align-items-center">
+                        <div className="col-lg-3 col-6 order-1 order-lg-1">
+                            <a href="index.html" className="tm-header-logo">
+                                <img src="assets/images/logo.png" alt="surose" />
+                            </a>
+                        </div>
+                        <div className="col-lg-6 col-12 order-3 order-lg-2">
+                            <form className="tm-header-search">
+                                <input type="text" placeholder="Search product..." />
+                                <button aria-label="Search"><i className="ion-android-search"></i></button>
+                            </form>
+                        </div>
+                        <div className="col-lg-3 col-6 order-2 order-lg-3">
+                            <ul className="tm-header-icons">
+                                <li><Link to="/wishlist"><i className="ion-android-favorite-outline"></i><span>0</span></Link></li>
+                                <li><Link to="/cart"><i className="ion-bag"></i><span>0</span></Link></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
             {/* // Header Middle Area */}
-            
+
             {/* Header Bottom Area */}
             <div className="tm-header-bottomarea bg-white">
                 <div className="container">
-                    {/* Header Bottom Content */}
+                    <nav className="tm-header-nav">
+                        <ul>
+                            <li><Link to="/trangchu">Home</Link></li>
+                            <li><Link to="/gioithieu">About</Link></li>
+                            <li><Link to="/sanpham">Shop</Link></li>
+                            <li><Link to="/lienhe">Contact</Link></li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
             {/* // Header Bottom Area */}
