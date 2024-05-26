@@ -89,8 +89,7 @@ public class JewelryController {
             @RequestParam(required = false) String jewelryName,
             @RequestParam(required = false) Float minjewelryPrice,
             @RequestParam(required = false) Float maxjewelryPrice,
-            @RequestParam(required = false) String gender, 
-            @RequestParam(required = false) String size){
+            @RequestParam(required = false) String gender){
 
         Specification<Jewelry> spec = Specification.where(null);
 
@@ -102,9 +101,6 @@ public class JewelryController {
         }
         if (gender != null) {
             spec = spec.and(JewelrySpecification.hasGender(gender));
-        }
-        if (size != null) {
-            spec = spec.and(JewelrySpecification.hasSize(size));
         }
 
         List<Jewelry> jewelrys = jewelryRepository.findAll(spec);
