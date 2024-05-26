@@ -43,8 +43,8 @@ function ProductDetailPage() {
                         <div className="tm-breadcrumb">
                             <h2>Product Details</h2>
                             <ul>
-                                <li><Link to="/home">Home</Link></li>
-                                <li><Link to="/product">Products</Link></li>
+                                <li><Link to="/trangchu">Home</Link></li>
+                                <li><Link to="/sanpham">Products</Link></li>
                                 <li>{jewelry ? jewelry.jewelryName : "Loading..."}</li>
                             </ul>
                         </div>
