@@ -46,10 +46,10 @@ public class DiamondController {
     public ResponseEntity<String> createDiamond(@RequestBody Diamond diamond) {
         Diamond existingDiamond = diamondRepository.findByDiamondID(diamond.getDiamondID());
         if (existingDiamond != null) {
-            return ResponseEntity.badRequest().body("Diamond already exists");
+            return ResponseEntity.badRequest().body("Kim cương đã tồn tại trong hệ thống.");
         }
         diamondRepository.save(diamond);
-        return ResponseEntity.ok("Diamond created successfully");
+        return ResponseEntity.ok("Kim cương đã được tạo thành công.");
     }
 
     @PutMapping("/{diamondID}")
@@ -69,7 +69,7 @@ public class DiamondController {
             return ResponseEntity.notFound().build();
         }
         diamondRepository.delete(existingDiamond);
-        return ResponseEntity.ok("Diamond deleted successfully");
+        return ResponseEntity.ok("Kim cương đã được xóa thành công.");
 
     }
 

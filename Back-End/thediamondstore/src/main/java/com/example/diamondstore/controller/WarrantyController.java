@@ -65,7 +65,7 @@ public class WarrantyController {
             return ResponseEntity.notFound().build();
         }
         warrantyRepository.delete(existingWarranty);
-        return ResponseEntity.ok("Warranty deleted successfully");
+        return ResponseEntity.ok("Giấy bảo hành đã được xóa thành công.");
     }
 
 }
