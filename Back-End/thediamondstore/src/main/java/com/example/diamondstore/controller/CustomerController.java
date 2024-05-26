@@ -2,12 +2,15 @@ package com.example.diamondstore.controller;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.model.Account;
@@ -15,6 +18,7 @@ import com.example.diamondstore.model.Customer;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.CustomerRepository;
 import com.example.diamondstore.request.CustomerRequest;
+import com.example.diamondstore.service.CustomerService;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -62,6 +66,19 @@ public class CustomerController {
             return ResponseEntity.ok(customer);
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @Autowired
+    private CustomerService customerService;
+
+    @PostMapping("/{accountID}/deduct-points")
+    public ResponseEntity<String> deductPoints(@PathVariable int accountID, @RequestParam int points) {
+        boolean success = customerService.deductPoints(accountID, points);
+        if (success) {
+            return ResponseEntity.ok("Trừ điểm thành công.");
+        } else {
+            return ResponseEntity.badRequest().body("Trừ điểm thất bại.");
         }
     }
 
