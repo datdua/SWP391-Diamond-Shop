@@ -68,9 +68,6 @@ public class CartService {
                 totalPrice += jewelry.getJewelryPrice();
             }
         }
-        if (cart.getDiamondID() != null && cart.getJewelryID() != null) {
-            totalPrice *= 0.2; // Apply 20% discount if both diamond and jewelry are in the cart
-        }
         totalPrice *= cart.getQuantity(); // Multiply by quantity
         cart.setTotalPrice(totalPrice);
     }
