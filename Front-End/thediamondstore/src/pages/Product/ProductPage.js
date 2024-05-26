@@ -322,7 +322,7 @@ function ProductPage() {
                 <div id="tm-product-quickview"> {/* Ensure this div is outside the main content */}
                     {/* Modal content goes here */}
                 </div>
-                <Footer />
+                {/*<Footer />*/}
                 <button id="back-top-top" aria-label="Back to Top">
                     <i className="ion-arrow-up-c"></i>
                 </button>
