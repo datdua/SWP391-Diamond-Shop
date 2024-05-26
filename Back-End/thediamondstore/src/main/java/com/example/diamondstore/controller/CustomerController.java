@@ -1,5 +1,6 @@
 package com.example.diamondstore.controller;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +48,8 @@ public class CustomerController {
         }
     }
 
-    @PutMapping("/update/{accountID}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Integer accountID, @RequestBody CustomerRequest updatedCustomerRequest) {
+    @PutMapping(value="/update/{accountID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> updateCustomer(@PathVariable Integer accountID, @RequestBody CustomerRequest updatedCustomerRequest) {
         Optional<Account> optionalAccount = accountRepository.findById(accountID);
         if (optionalAccount.isPresent()) {
             Account account = optionalAccount.get();
@@ -63,7 +64,7 @@ public class CustomerController {
                 customerRepository.save(customer);
             }
 
-            return ResponseEntity.ok(customer);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
         } else {
             return ResponseEntity.notFound().build();
         }

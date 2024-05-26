@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.diamondstore.model.Account;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.request.RegisterRequest;
+import com.example.diamondstore.request.putRequest.AccountPutRequest;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -66,24 +67,19 @@ public class AccountController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Xóa thành công"));
     }
 
+
     @PutMapping(value = "/update/{accountID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> update(@PathVariable Integer accountID, @RequestBody Account user) {
+    public ResponseEntity<?> update(@PathVariable Integer accountID, @RequestBody AccountPutRequest accountPutRequest) {
         Account existingUser = accountRepository.findById(accountID).orElse(null);
         if (existingUser == null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Sai ID"));
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
         }
-
-        existingUser.setAccountName(user.getAccountName());
-
+        existingUser.setAccountName(accountPutRequest.getAccountName());
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if (!passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
-            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (!passwordEncoder.matches(accountPutRequest.getPassword(), existingUser.getPassword())) {
+            existingUser.setPassword(passwordEncoder.encode(accountPutRequest.getPassword()));
         }
-
-        existingUser.setRole(user.getRole());
-        existingUser.setEmail(user.getEmail());
-        existingUser.setPhoneNumber(user.getPhoneNumber());
-        accountRepository.save(existingUser);
+        existingUser.setRole(accountPutRequest.getRole());
         accountRepository.save(existingUser);
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }
