@@ -48,4 +48,8 @@ export async function searchJewelryBySize(size) {
         throw new Error('Failed to filter jewelry by size');
     }
 }
+export const addToCart = async (accountId, jewelryId, quantity) => {
+    const response = await axios.post(`http://localhost:8080/api/cart/add?accountID=${accountId}&jewelryID=${jewelryId}&quantity=${quantity}`);
+    return response.data;
+};
 

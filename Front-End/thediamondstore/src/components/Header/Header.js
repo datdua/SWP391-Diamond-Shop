@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Header.css"
 import { searchJewelryByName } from "../../api/JewelryAPI";
@@ -7,6 +7,7 @@ function Header() {
     const [isCurrencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
     const [isLanguageDropdownOpen, setLanguageDropdownOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const [username, setUsername] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const toggleDropdown = (dropdown) => {
         if (dropdown === "account") {
@@ -29,6 +30,10 @@ function Header() {
             .catch(error => console.error('Error searching for jewelry:', error));
             window.location.href = `/sanpham?search=${encodeURIComponent(searchTerm)}`;
     };
+    useEffect(() => {
+        const loggedInUsername = localStorage.getItem('accountName');
+        setUsername(loggedInUsername);
+    }, []);
 
     return (
         <div className="tm-header tm-header-sticky">
@@ -40,6 +45,7 @@ function Header() {
                             <ul className="tm-header-info">
                                 <li><a href="tel:18883456789"><i className="ion-ios-telephone"></i>1-888-345-6789</a></li>
                                 <li><a href="mailto:contact@example.com"><i className="ion-android-mail"></i>contact@example.com</a></li>
+                                {username && <li>Welcome, {username}!</li>}
                             </ul>
                         </div>
                         <div className="col-lg-4 col-12">
