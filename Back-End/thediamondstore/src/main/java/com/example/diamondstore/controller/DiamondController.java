@@ -77,11 +77,11 @@ public class DiamondController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }
 
-    @DeleteMapping("/{diamondID}")
+    @DeleteMapping(value="/{diamondID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> deleteDiamond(@PathVariable String diamondID) {
         Diamond existingDiamond = diamondRepository.findByDiamondID(diamondID);
         if (existingDiamond == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy kim cương"));
         }
         diamondRepository.delete(existingDiamond);
         return ResponseEntity.ok("Kim cương đã xóa thành công");
@@ -95,8 +95,8 @@ public class DiamondController {
     }
 
     @GetMapping("/paged")
-    public ResponseEntity<Page<Diamond>> getAllDiamondsPaged(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public ResponseEntity<Page<Diamond>> getAllDiamondsPaged(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page-1, size);
         Page<Diamond> pageDiamonds = diamondRepository.findAll(pageable);
         return ResponseEntity.ok(pageDiamonds);
     }
