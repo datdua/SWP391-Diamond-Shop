@@ -2,6 +2,7 @@ package com.example.diamondstore.controller;
 
 import java.util.Collections;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.repository.PromotionRepository;
 import com.example.diamondstore.request.ApplyPromotionRequest;
 import com.example.diamondstore.request.putRequest.OrderPutRequest;
+import com.example.diamondstore.service.OrderService;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -62,12 +64,9 @@ public class OrderController {
             return ResponseEntity.notFound().build();
         }
         existingOrder.setAccountID(orderPutRequest.getAccountID());
-        existingOrder.setDiamondID(orderPutRequest.getDiamondID());
-        existingOrder.setJewelryID(orderPutRequest.getJewelryID());
         existingOrder.setDeliveryDate(orderPutRequest.getDeliveryDate());
         existingOrder.setStartorderDate(orderPutRequest.getStartorderDate());
         existingOrder.setOrderStatus(orderPutRequest.getOrderStatus());
-        existingOrder.setPaymentID(orderPutRequest.getPaymentID());
 
         return ResponseEntity.ok(orderRepository.save(existingOrder));
     }
@@ -96,4 +95,12 @@ public class OrderController {
         return ResponseEntity.ok(orderRepository.save(order));
     }
 
+    @Autowired
+    private OrderService orderService;
+
+    @PostMapping("/place")
+    public ResponseEntity<Order> placeOrder(@RequestBody Order order) {
+        Order placedOrder = orderService.placeOrder(order);
+        return ResponseEntity.ok(placedOrder);
+    }
 }

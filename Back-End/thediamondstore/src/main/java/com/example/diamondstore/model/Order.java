@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity
 @Table(name = "Orders")
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orderID")
