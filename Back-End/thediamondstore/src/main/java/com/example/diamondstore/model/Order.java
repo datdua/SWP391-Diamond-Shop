@@ -1,12 +1,19 @@
 package com.example.diamondstore.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -16,14 +23,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class Order {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orderID")
     private int orderID;
 
     @Column(name = "accountID", nullable = false)
     private int accountID;
-
-    @Column(name = "paymentID", nullable = false)
-    private int paymentID;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "startorderDate", nullable = false)
@@ -36,29 +41,34 @@ public class Order {
     @Column(name = "deliveryDate", nullable = false)
     private LocalDateTime deliveryDate;
 
-    @Column(name = "diamondID", nullable = false)
-    private String diamondID;
+    @Column(name = "totalAmount", precision = 8, scale = 2)
+    private BigDecimal totalAmount;
 
-    @Column(name = "jewelryID", nullable = false)
-    private String jewelryID;
+    @Column(name = "deliveryAddress")
+    private String deliveryAddress;
 
     @ManyToOne
     @JoinColumn(name = "promotionID", referencedColumnName = "promotionID", nullable = true)
     private Promotion promotion;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Cart> cartItems;
+
+    // getters and setters
+
     public Order() {
     }
 
-    public Order(int accountID, LocalDateTime deliveryDate, String diamondID, String jewelryID, int orderID, String orderStatus, int paymentID, Promotion promotion, LocalDateTime startorderDate) {
+    public Order(int accountID, List<Cart> cartItems, String deliveryAddress, LocalDateTime deliveryDate, int orderID, String orderStatus, Promotion promotion, LocalDateTime startorderDate, BigDecimal totalAmount) {
         this.accountID = accountID;
+        this.cartItems = cartItems;
+        this.deliveryAddress = deliveryAddress;
         this.deliveryDate = deliveryDate;
-        this.diamondID = diamondID;
-        this.jewelryID = jewelryID;
         this.orderID = orderID;
         this.orderStatus = orderStatus;
-        this.paymentID = paymentID;
         this.promotion = promotion;
         this.startorderDate = startorderDate;
+        this.totalAmount = totalAmount;
     }
 
     public int getOrderID() {
@@ -75,14 +85,6 @@ public class Order {
 
     public void setAccountID(int accountID) {
         this.accountID = accountID;
-    }
-
-    public int getPaymentID() {
-        return paymentID;
-    }
-
-    public void setPaymentID(int paymentID) {
-        this.paymentID = paymentID;
     }
 
     public LocalDateTime getStartorderDate() {
@@ -109,20 +111,20 @@ public class Order {
         this.deliveryDate = deliveryDate;
     }
 
-    public String getDiamondID() {
-        return diamondID;
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setDiamondID(String diamondID) {
-        this.diamondID = diamondID;
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
-    public String getJewelryID() {
-        return jewelryID;
+    public String getDeliveryAddress() {
+        return deliveryAddress;
     }
 
-    public void setJewelryID(String jewelryID) {
-        this.jewelryID = jewelryID;
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
     }
 
     public Promotion getPromotion() {
@@ -132,5 +134,18 @@ public class Order {
     public void setPromotion(Promotion promotion) {
         this.promotion = promotion;
     }
+
+    public List<Cart> getCartItems() {
+        return cartItems;
+    }
+
+    public void setCartItems(List<Cart> cartItems) {
+        this.cartItems = cartItems;
+    }
+
+
+
+
+
 
 }
