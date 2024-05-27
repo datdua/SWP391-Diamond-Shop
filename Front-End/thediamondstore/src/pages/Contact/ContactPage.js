@@ -1,7 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
 import "./ContactPage.css"
 function ContactPage() {
     return (
@@ -26,7 +24,6 @@ function ContactPage() {
             <div id="wrapper" className="wrapper">
 
                 {/* <!-- Header --> */}
-                <Header/>
                 {/* <!--// Header --> 
                 <!-- Breadcrumb Area --> */}
                 <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(assets/images/breadcrumb-bg.jpg)` }}>

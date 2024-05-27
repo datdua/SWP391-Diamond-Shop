@@ -35,9 +35,20 @@ public class AccountController {
         return "Welcome to Diamond Store";
     }
 
+
+
     @GetMapping("/accounts")
     public ResponseEntity<Iterable<Account>> getUsers() {
         return ResponseEntity.ok(accountRepository.findAll());
+    }
+
+    @GetMapping("/{accountName}")
+    public ResponseEntity<Account> getUser(@PathVariable String accountName) {
+        Account user = accountRepository.findByAccountName(accountName);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping(value = "/register", produces = "application/json;charset=UTF-8")

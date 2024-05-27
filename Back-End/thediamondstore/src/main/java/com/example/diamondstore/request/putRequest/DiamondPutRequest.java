@@ -1,11 +1,13 @@
 package com.example.diamondstore.request.putRequest;
 
+import java.math.BigDecimal;
+
 public class DiamondPutRequest {
 
     private String warrantityID;
     private String certificationID;
     private Float carat_size;
-    private Float diamondPrice;
+    private BigDecimal diamondPrice;
     private Float carat_weight;
     private String color;
     private String cut;
@@ -18,20 +20,22 @@ public class DiamondPutRequest {
     public DiamondPutRequest() {
     }
 
-    public DiamondPutRequest(String warrantityID, String certificationID, Float carat_size, Float diamondPrice, Float carat_weight, String color, String cut, String clarity, String diamondImage, String shape, String diamondName, String origin) {
-        this.warrantityID = warrantityID;
-        this.certificationID = certificationID;
+    public DiamondPutRequest(Float carat_size, Float carat_weight, String certificationID, String clarity, String color, String cut, String diamondImage, String diamondName, BigDecimal diamondPrice, String origin, String shape, String warrantityID) {
         this.carat_size = carat_size;
-        this.diamondPrice = diamondPrice;
         this.carat_weight = carat_weight;
+        this.certificationID = certificationID;
+        this.clarity = clarity;
         this.color = color;
         this.cut = cut;
-        this.clarity = clarity;
         this.diamondImage = diamondImage;
-        this.shape = shape;
         this.diamondName = diamondName;
+        this.diamondPrice = diamondPrice;
         this.origin = origin;
+        this.shape = shape;
+        this.warrantityID = warrantityID;
     }
+
+    
 
     public String getWarrantityID() {
         return warrantityID;
@@ -57,11 +61,11 @@ public class DiamondPutRequest {
         this.carat_size = carat_size;
     }
 
-    public Float getDiamondPrice() {
+    public BigDecimal getDiamondPrice() {
         return diamondPrice;
     }
 
-    public void setDiamondPrice(Float diamondPrice) {
+    public void setDiamondPrice(BigDecimal diamondPrice) {
         this.diamondPrice = diamondPrice;
     }
 
