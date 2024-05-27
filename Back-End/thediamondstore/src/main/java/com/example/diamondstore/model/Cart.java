@@ -7,12 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
 
 @Entity
 @Table(name = "Cart")
 public class Cart {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer cartID;
@@ -27,24 +29,29 @@ public class Cart {
     private String jewelryID;
 
     @Column(name = "quantity", nullable = false)
-    private Integer quantity;  
+    private Integer quantity;
 
     @Column(name = "totalPrice", nullable = false, precision = 8, scale = 2)
     private BigDecimal totalPrice;
 
+    @ManyToOne
+    @JoinColumn(name = "orderID", nullable = true)
+    private Order order;
+
+    // getters and setters
+
     public Cart() {
     }
 
-    public Cart(Integer accountID, Integer cartID, String diamondID, String jewelryID, Integer quantity, BigDecimal totalPrice) {
+    public Cart(Integer accountID, Integer cartID, String diamondID, String jewelryID, Order order, Integer quantity, BigDecimal totalPrice) {
         this.accountID = accountID;
         this.cartID = cartID;
         this.diamondID = diamondID;
         this.jewelryID = jewelryID;
+        this.order = order;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
     }
-
-    
 
     public Integer getCartID() {
         return cartID;
@@ -94,5 +101,17 @@ public class Cart {
         this.totalPrice = totalPrice;
     }
 
-    
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+
+
+
+
+
 }
