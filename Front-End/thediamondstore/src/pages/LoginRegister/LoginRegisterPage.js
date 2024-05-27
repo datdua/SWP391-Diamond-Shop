@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./LoginRegisterPage.css";
@@ -77,7 +75,6 @@ function LoginRegisterPage() {
     return (
         <div>
             <div id="wrapper" className="wrapper">
-                <Header />
                 <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(assets/images/banner-header.png)` }}>
                     <div className="container">
                         <div className="tm-breadcrumb">

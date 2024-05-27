@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Header.css"
 import { searchJewelryByName } from "../../api/JewelryAPI";
+import Nav from 'react-bootstrap/Nav';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+
 function Header() {
     const [isAccountDropdownOpen, setAccountDropdownOpen] = useState(false);
     const [isCurrencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
@@ -38,49 +41,23 @@ function Header() {
                     <div className="row justify-between items-center">
                         <div className="col-lg-8 col-12">
                             <ul className="tm-header-info">
-                                <li><a href="tel:18883456789"><i className="ion-ios-telephone"></i>1-888-345-6789</a></li>
-                                <li><a href="mailto:contact@example.com"><i className="ion-android-mail"></i>contact@example.com</a></li>
+                                <li><a href="tel:18883456789"><i className="ion-ios-telephone"></i>02.873.005.588</a></li>
+                                <li><a href="mailto:contact@example.com"><i className="ion-android-mail"></i>thediamondstore.info@gmail.com</a></li>
                             </ul>
                         </div>
                         <div className="col-lg-4 col-12">
                             <div className="tm-header-options">
                                 <div className="relative">
                                     <button onClick={() => toggleDropdown("account")} className="tm-dropdown-button tm-header-links">
-                                        My Account <i className={`ml-1 fas ${isAccountDropdownOpen ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
+                                        Tài Khoản <i className={`ml-1 fas ${isAccountDropdownOpen ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
                                     </button>
                                     {isAccountDropdownOpen && (
                                         <ul className="tm-dropdown-menu">
                                             <li><Link to="/account">My Account</Link></li>
-                                            <li><Link to="/dangnhap">Login/Register</Link></li>
+                                            <li><Link to="/dangnhap">Đăng Nhập / Đăng Ký</Link></li>
                                             <li><Link to="/cart">Shopping Cart</Link></li>
                                             <li><Link to="/wishlist">Wishlist</Link></li>
                                             <li><Link to="/checkout">Checkout</Link></li>
-                                        </ul>
-                                    )}
-                                </div>
-                                <div className="relative">
-                                    <button onClick={() => toggleDropdown("currency")} className="tm-dropdown-button tm-header-currency">
-                                        USD <i className={`ml-1 fas ${isCurrencyDropdownOpen ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
-                                    </button>
-                                    {isCurrencyDropdownOpen && (
-                                        <ul className="tm-dropdown-menu">
-                                            <li><a href="#">USD</a></li>
-                                            <li><a href="#">EUR</a></li>
-                                            <li><a href="#">JPY</a></li>
-                                            <li><a href="#">GBP</a></li>
-                                        </ul>
-                                    )}
-                                </div>
-                                <div className="relative">
-                                    <button onClick={() => toggleDropdown("language")} className="tm-dropdown-button tm-header-language">
-                                        <img src="assets/images/flag-english.png" alt="language" /> <i className={`ml-1 fas ${isLanguageDropdownOpen ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
-                                    </button>
-                                    {isLanguageDropdownOpen && (
-                                        <ul className="tm-dropdown-menu">
-                                            <li><a href="#"><img src="assets/images/flag-english.png" alt="language" /> English</a></li>
-                                            <li><a href="#"><img src="assets/images/flag-spain.png" alt="language" /> Spanish</a></li>
-                                            <li><a href="#"><img src="assets/images/flag-russian.png" alt="language" /> Russian</a></li>
-                                            <li><a href="#"><img src="assets/images/flag-french.png" alt="language" /> French</a></li>
                                         </ul>
                                     )}
                                 </div>
@@ -96,15 +73,15 @@ function Header() {
                     <div className="tm-mobilenav"></div>
                     <div className="row align-items-center">
                         <div className="col-lg-3 col-6 order-1 order-lg-1">
-                            <a href="index.html" className="tm-header-logo">
-                                <img src="assets/images/logo.png" alt="surose" />
+                            <a href="/trangchu" className="tm-header-logo">
+                                <img style={{width: "220px"}} src="assets/images/logo.png" alt="thediamondstore" />
                             </a>
                         </div>
                         <div className="col-lg-6 col-12 order-3 order-lg-2">
                         <form className="tm-header-search" onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
                                 <input 
                                     type="text" 
-                                    placeholder="Search product..." 
+                                    placeholder="Tìm kiếm sản phẩm..." 
                                     value={searchTerm} 
                                     onChange={(e) => setSearchTerm(e.target.value)} 
                                 />
@@ -127,10 +104,20 @@ function Header() {
                 <div className="container">
                     <nav className="tm-header-nav">
                         <ul>
-                            <li><Link to="/trangchu">Home</Link></li>
-                            <li><Link to="/gioithieu">About</Link></li>
-                            <li><Link to="/sanpham">Shop</Link></li>
-                            <li><Link to="/lienhe">Contact</Link></li>
+                            <li><Link to="/trangchu">Trang Chủ</Link></li>
+                            <li><Link to="/gioithieu">Giới Thiệu</Link></li>
+                            <li style={{marginRight:'5px'}}><Link to="/sanpham">Sản Phẩm</Link></li>
+                            <li style={{margin:'0px'}}>
+                                <NavDropdown className="drop-hover" id="collapsible-nav-dropdown">
+                                    <NavDropdown.Item style={{ textAlign: 'center' }} href="/kimcuong">Kim Cương</NavDropdown.Item>
+                                    <NavDropdown.Item style={{ textAlign: 'center' }} href="/trangsuc">
+                                        Trang Sức
+                                    </NavDropdown.Item>
+                                </NavDropdown>
+                            </li>
+                            <li><Link to="#">Bảng Giá</Link></li>
+                            <li><Link to="#">Kiến Thức Kim Cương</Link></li>
+                            <li><Link to="/lienhe">Liên Hệ</Link></li>
                         </ul>
                     </nav>
                 </div>

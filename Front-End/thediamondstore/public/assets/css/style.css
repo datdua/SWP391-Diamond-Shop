@@ -2611,6 +2611,7 @@ button.tm-videobutton img {
 .tm-header-options {
   text-align: right;
   padding: 3px 0;
+  margin-left: 100px;
 }
 
 .tm-header-links, .tm-header-currency, .tm-header-language {
