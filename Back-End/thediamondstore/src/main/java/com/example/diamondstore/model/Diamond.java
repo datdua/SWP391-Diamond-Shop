@@ -1,5 +1,7 @@
 package com.example.diamondstore.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -22,8 +24,8 @@ public class Diamond {
     @Column(name = "carat_size")
     private Float carat_size;
 
-    @Column(name = "diamondPrice")
-    private Float diamondPrice;
+    @Column(name = "diamondPrice", precision=8, scale=2)
+    private BigDecimal diamondPrice;
 
     @Column(name = "carat_weight")
     private Float carat_weight;
@@ -53,7 +55,7 @@ public class Diamond {
     public Diamond() {
     }
 
-    public Diamond(Float carat_size, Float carat_weight, String certificationID, String clarity, String color, String cut, String diamondID, String diamondName, Float diamondPrice, String diamondImage, String origin, String shape, String warrantityID) {
+    public Diamond(Float carat_size, Float carat_weight, String certificationID, String clarity, String color, String cut, String diamondID, String diamondImage, String diamondName, BigDecimal diamondPrice, String origin, String shape, String warrantityID) {
         this.carat_size = carat_size;
         this.carat_weight = carat_weight;
         this.certificationID = certificationID;
@@ -61,13 +63,15 @@ public class Diamond {
         this.color = color;
         this.cut = cut;
         this.diamondID = diamondID;
+        this.diamondImage = diamondImage;
         this.diamondName = diamondName;
         this.diamondPrice = diamondPrice;
-        this.diamondImage = diamondImage;
         this.origin = origin;
         this.shape = shape;
         this.warrantityID = warrantityID;
     }
+
+    
 
     public String getDiamondID() {
         return diamondID;
@@ -101,11 +105,11 @@ public class Diamond {
         this.carat_size = carat_size;
     }
 
-    public Float getDiamondPrice() {
+    public BigDecimal getDiamondPrice() {
         return diamondPrice;
     }
 
-    public void setDiamondPrice(Float diamondPrice) {
+    public void setDiamondPrice(BigDecimal diamondPrice) {
         this.diamondPrice = diamondPrice;
     }
 

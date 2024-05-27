@@ -1,5 +1,6 @@
 package com.example.diamondstore.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,21 +56,21 @@ public class CartService {
     }
 
     private void calculateAndSetTotalPrice(Cart cart) {
-        float totalPrice = 0;
+        BigDecimal totalPrice = BigDecimal.ZERO;
         if (cart.getDiamondID() != null) {
             Diamond diamond = diamondRepository.findById(cart.getDiamondID()).orElse(null);
             if (diamond != null) {
-                totalPrice += diamond.getDiamondPrice();
-            }
+                totalPrice = totalPrice.add(diamond.getDiamondPrice());
         }
         if (cart.getJewelryID() != null) {
             Jewelry jewelry = jewelryRepository.findById(cart.getJewelryID()).orElse(null);
             if (jewelry != null) {
-                totalPrice += jewelry.getJewelryPrice();
+                totalPrice = totalPrice.add(jewelry.getJewelryPrice());
             }
         }
-        totalPrice *= cart.getQuantity(); // Multiply by quantity
+        totalPrice = totalPrice.multiply(BigDecimal.valueOf(cart.getQuantity())); // Multiply by quantity
         cart.setTotalPrice(totalPrice);
+    }
     }
 
     public Cart getCartByCartID(Integer cartID) {

@@ -1,5 +1,7 @@
 package com.example.diamondstore.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -28,13 +30,13 @@ public class Jewelry {
     @Column(name = "jewelryImage")
     private String jewelryImage;
 
-    @Column(name = "jewelryPrice")
-    private float jewelryPrice;
+    @Column(name = "jewelryPrice", precision = 8, scale = 2)
+    private BigDecimal jewelryPrice;
 
     public Jewelry() {
     }
 
-    public Jewelry(String jewelryID, String diamondID, String gender, String size, float jewelryPrice,
+    public Jewelry(String jewelryID, String diamondID, String gender, String size, BigDecimal jewelryPrice,
             String jewelryImage, String jewelryName) {
         this.jewelryID = jewelryID;
         this.diamondID = diamondID;
@@ -77,11 +79,11 @@ public class Jewelry {
         this.size = size;
     }
 
-    public float getJewelryPrice() {
+    public BigDecimal getJewelryPrice() {
         return jewelryPrice;
     }
 
-    public void setJewelryPrice(float jewelryPrice) {
+    public void setJewelryPrice(BigDecimal jewelryPrice) {
         this.jewelryPrice = jewelryPrice;
     }
 
