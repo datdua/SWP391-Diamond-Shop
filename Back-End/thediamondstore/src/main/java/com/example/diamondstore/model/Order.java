@@ -41,7 +41,7 @@ public class Order {
     @Column(name = "deliveryDate", nullable = false)
     private LocalDateTime deliveryDate;
 
-    @Column(name = "totalAmount", precision = 8, scale = 2)
+    @Column(name = "totalAmount", precision = 18, scale = 2)
     private BigDecimal totalAmount;
 
     @Column(name = "deliveryAddress")
