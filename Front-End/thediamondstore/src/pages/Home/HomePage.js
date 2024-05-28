@@ -31,6 +31,7 @@ function HomePage() {
         setAccountDropdownOpen(false);
         setCurrencyDropdownOpen(false);
     };
+
     return (
         <div>
 
