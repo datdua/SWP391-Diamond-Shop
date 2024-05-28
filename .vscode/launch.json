@@ -5,6 +5,13 @@
             "name": "DiamondstoreApplication",
             "request": "launch",
             "mainClass": "com.example.diamondstore.DiamondstoreApplication",
+            "projectName": "demo"
+        },
+        {
+            "type": "java",
+            "name": "DiamondstoreApplication",
+            "request": "launch",
+            "mainClass": "com.example.diamondstore.DiamondstoreApplication",
             "projectName": "com.example-demo"
         },
         {
