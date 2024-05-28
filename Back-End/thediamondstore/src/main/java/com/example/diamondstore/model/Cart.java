@@ -1,5 +1,7 @@
 package com.example.diamondstore.model;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,19 +29,22 @@ public class Cart {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;  
 
-    @Column(name = "totalPrice", nullable = false)
-    private float totalPrice;
+    @Column(name = "totalPrice", nullable = false, precision = 8, scale = 2)
+    private BigDecimal totalPrice;
 
     public Cart() {
     }
 
-    public Cart(Integer accountID, String diamondID, String jewelryID, Integer quantity, float totalPrice) {
+    public Cart(Integer accountID, Integer cartID, String diamondID, String jewelryID, Integer quantity, BigDecimal totalPrice) {
         this.accountID = accountID;
+        this.cartID = cartID;
         this.diamondID = diamondID;
         this.jewelryID = jewelryID;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
     }
+
+    
 
     public Integer getCartID() {
         return cartID;
@@ -81,11 +86,11 @@ public class Cart {
         this.quantity = quantity;
     }
 
-    public float getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(float totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
 

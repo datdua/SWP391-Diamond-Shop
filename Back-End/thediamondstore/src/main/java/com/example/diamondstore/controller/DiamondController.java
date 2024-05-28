@@ -77,11 +77,11 @@ public class DiamondController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }
 
-    @DeleteMapping("/{diamondID}")
+    @DeleteMapping(value="/{diamondID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> deleteDiamond(@PathVariable String diamondID) {
         Diamond existingDiamond = diamondRepository.findByDiamondID(diamondID);
         if (existingDiamond == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy kim cương"));
         }
         diamondRepository.delete(existingDiamond);
         return ResponseEntity.ok("Kim cương đã xóa thành công");

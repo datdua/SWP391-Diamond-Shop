@@ -38,3 +38,7 @@
 .tm-dropdown[open] ul {
     display: block;
 }
+
+.drop-hover :hover{
+    color: #f2ba59;
+}

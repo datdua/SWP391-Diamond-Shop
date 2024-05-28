@@ -13,7 +13,9 @@ import CheckoutPage from './pages/Checkout/CheckoutPage';
 import WishlistPage from './pages/Wishlist/WishlistPage';
 import PortfolioPage from './pages/Portfolio/PortfolioPage';
 import ContactPage from './pages/Contact/ContactPage';
+import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
+
 
 function App() {
   return (
@@ -21,11 +23,11 @@ function App() {
       <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
       <Routes>
         <Route path="/" element={<Navigate to="/trangchu" replace />} />
-        <Route path='/dangnhap' element={<><LoginRegisterPage/> <Footer/></>}/>
-        <Route path='/trangchu' element={<><HomePage/> <Footer/></>}/>
-        <Route path='/gioithieu' element={<><AboutPage/> <Footer/></>}/>
-        <Route path='/lienhe' element={<><ContactPage/> <Footer/></>}/>
-        <Route path='/sanpham' element={<><ProductPage/> <Footer/></>}/>
+        <Route path='/dangnhap' element={<><Header/> <LoginRegisterPage/> <Footer/></>}/>
+        <Route path='/trangchu' element={<><Header/> <HomePage/> <Footer/></>}/>
+        <Route path='/gioithieu' element={<><Header/> <AboutPage/> <Footer/></>}/>
+        <Route path='/lienhe' element={<><Header/> <ContactPage/> <Footer/></>}/>
+        <Route path='/sanpham' element={<><Header/> <ProductPage/> <Footer/></>}/>
 
         <Route path='/cart' element={<CartPage/>}/>
         <Route path="/product-detail/:jewelryId" element={<ProductDetailPage />} />

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "fancybox/dist/css/jquery.fancybox.css"
 import HeroSlider from "../../components/HeroSlider/HeroSlider";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
 import "./HomePage.css"
 function HomePage() {
     const [value, setValue] = useState('Default value');
@@ -55,10 +53,6 @@ function HomePage() {
     <!-- Wrapper --> */}
             <div id="wrapper" className="wrapper">
 
-                {/* <!-- Header --> */}
-                <Header/>
-                {/* <!--// Header --> */}
-
                 {/* <!-- Heroslider Area --> */}
                 
                         <HeroSlider/>
@@ -66,68 +60,13 @@ function HomePage() {
                 {/* <!--// Heroslider Area --> 
         <!-- Page Content --> */}
                 <main className="page-content">
-
-                    {/* <!-- Features Area --> */}
-                    <div className="tm-section tm-feature-area bg-grey">
-                        <div className="container">
-                            <div className="row mt-30-reverse">
-
-                                {/* <!-- Single Feature --> */}
-                                <div className="col-lg-4 mt-30">
-                                    <div className="tm-feature">
-                                        <span className="tm-feature-icon">
-                                            <img src="assets/images/icons/icon-free-shipping.png" alt="free shipping" />
-                                        </span>
-                                        <div className="tm-feature-content">
-                                            <h6>Free Shipping</h6>
-                                            <p>We provide free shipping for all order over $200.00</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                {/* <!--// Single Feature -->
-
-                        <!-- Single Feature --> */}
-                                <div className="col-lg-4 mt-30">
-                                    <div className="tm-feature">
-                                        <span className="tm-feature-icon">
-                                            <img src="assets/images/icons/icon-fast-delivery.png" alt="fast delivery" />
-                                        </span>
-                                        <div className="tm-feature-content">
-                                            <h6>Fast Delivery</h6>
-                                            <p>We always deliver our customers very quickly.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                {/* <!--// Single Feature -->
-
-                        <!-- Single Feature --> */}
-                                <div className="col-lg-4 mt-30">
-                                    <div className="tm-feature">
-                                        <span className="tm-feature-icon">
-                                            <img src="assets/images/icons/icon-247-support.png" alt="24/7 Support" />
-                                        </span>
-                                        <div className="tm-feature-content">
-                                            <h6>24/7 Support</h6>
-                                            <p>We provide support to our customers within 24 hours. </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                {/* <!--// Single Feature --> */}
-
-                            </div>
-                        </div>
-                    </div>
-                    {/* <!--// Features Area -->
-
-            <!-- Popular Products Area --> */}
                     <div id="tm-popular-products-area" className="tm-section tm-popular-products-area tm-padding-section bg-white">
                         <div className="container">
                             <div className="row justify-content-center">
                                 <div className="col-lg-6 col-12">
                                     <div className="tm-sectiontitle text-center">
-                                        <h3>POPULAR PRODUCTS</h3>
-                                        <p>Our popular products are so beautyful to see that the shoppers are easily attracted
-                                            to them.</p>
+                                        <h3>BỘ SƯU TẬP</h3>
+                                        <p>Tổng hợp các bộ sưu tập mới và hot đến từ The Diamond Store</p>
                                     </div>
                                 </div>
                             </div>
@@ -560,9 +499,8 @@ function HomePage() {
                             <div className="row justify-content-center">
                                 <div className="col-lg-6 col-12">
                                     <div className="tm-sectiontitle text-center">
-                                        <h3>NEW ARRIVAL PRODUCTS</h3>
-                                        <p>Our popular products are so beautyful to see that the shoppers are easily attracted
-                                            to them.</p>
+                                        <h3>SẢN PHẨM NỔI BẬT</h3>
+                                        <p>Các sản phẩm được đánh giá cao và đạt top số lượt mua trong các tháng qua</p>
                                     </div>
                                 </div>
                             </div>
@@ -949,7 +887,7 @@ function HomePage() {
 
                             </div>
                             <div className="tm-product-loadmore text-center mt-50">
-                                <a href="/sanpham" className="tm-button">All Products</a>
+                                <a href="/sanpham" className="tm-button">Tất Cả Sản Phẩm</a>
                             </div>
                         </div>
                     </div>
@@ -961,15 +899,15 @@ function HomePage() {
                             <div className="row align-items-center">
                                 <div className="col-lg-6 col-12 order-2 order-lg-1">
                                     <div className="tm-offer-content">
-                                        <h6>Super deal of the Month</h6>
-                                        <h1>Brand ear ring on <span>$250</span> only</h1>
+                                        <h6>Siêu đại tiệc voucher</h6>
+                                        <h1>Nhanh tay mua hàng để nhận được <span>Voucher</span> siêu to khổng lồ</h1>
                                         <div className="tm-countdown" data-countdown="2020/10/12"></div>
-                                        <a href="/product" className="tm-button">Shop now</a>
+                                        <a href="/sanpham" className="tm-button">Mua ngay</a>
                                     </div>
                                 </div>
                                 <div className="col-lg-6 col-12 order-1 order-lg-2">
                                     <div className="tm-offer-image">
-                                        <img className="tm-offer" src="assets/images/offer-image-1.png" alt="offer image" />
+                                        <img className="tm-offer" src="assets/images/voucher.png" alt="voucher"/>
                                     </div>
                                 </div>
                             </div>

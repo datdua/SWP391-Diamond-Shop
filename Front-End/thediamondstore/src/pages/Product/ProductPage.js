@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
 import axios from "axios";
 import "./ProductPage.css";
 import Modal from "react-modal";
@@ -136,7 +134,6 @@ function ProductPage() {
     return (
         <div>
             <div id="wrapper" className="wrapper">
-                <Header />
                 <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(assets/images/breadcrumb-bg.jpg)` }}>
                     <div className="container">
                         <div className="tm-breadcrumb">

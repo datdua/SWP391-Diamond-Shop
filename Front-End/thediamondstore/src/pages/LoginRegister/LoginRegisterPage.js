@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./LoginRegisterPage.css";
@@ -22,7 +20,8 @@ function LoginRegisterPage() {
             const response = await axios.post("http://localhost:8080/login", {
                 email: loginEmail,
                 password: loginPassword
-            }, {
+            },
+             {
                 headers: {
                     "Content-Type": "application/json",
                     "accept": "*/*"
@@ -33,9 +32,11 @@ function LoginRegisterPage() {
                 const data = response.data;
                 console.log("Đăng nhập thành công:", data.jwt);
                 localStorage.setItem("jwt", data.jwt);
+                localStorage.setItem("username", loginEmail); 
                 toast.success("Đăng nhập thành công!");
                 navigate("/trangchu");
-            } else {
+            }    
+             else {
                 console.error("Đăng nhập thất bại:", response);
                 toast.error("Đăng nhập thất bại!");
             }
@@ -77,7 +78,6 @@ function LoginRegisterPage() {
     return (
         <div>
             <div id="wrapper" className="wrapper">
-                <Header />
                 <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(assets/images/banner-header.png)` }}>
                     <div className="container">
                         <div className="tm-breadcrumb">
