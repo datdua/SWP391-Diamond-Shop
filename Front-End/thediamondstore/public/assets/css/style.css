@@ -66,6 +66,8 @@ html {
   color: #222;
   font-size: 1em;
   line-height: 1.4;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 ::-moz-selection {
@@ -171,6 +173,7 @@ textarea {
     -webkit-box-shadow: none !important;
     box-shadow: none !important;
     text-shadow: none !important;
+    box-sizing: border-box;
   }
   a,
   a:visited {
@@ -2608,6 +2611,7 @@ button.tm-videobutton img {
 .tm-header-options {
   text-align: right;
   padding: 3px 0;
+  margin-left: 100px;
 }
 
 .tm-header-links, .tm-header-currency, .tm-header-language {
@@ -3220,7 +3224,7 @@ button.tm-videobutton img {
  * Heroslider
  */
 .tm-heroslider {
-  position: relative;
+  position: absolute;
   background-position: right center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -3460,8 +3464,12 @@ button.tm-videobutton img {
 
 .tm-heroslider-slider .tm-heroslider-contentwrapper {
   overflow: hidden;
+  transition: all 1s ease-in-out 0.5s;
+  transform: translateX(-100%)
 }
-
+.tm-heroslider-contentwrapper.active {
+  transform: translateX(0);
+}
 .tm-heroslider-slider .tm-heroslider-content {
   -webkit-transition: all 1s ease-in-out 0.5s;
   -o-transition: all 1s ease-in-out 0.5s;
@@ -7026,6 +7034,73 @@ button.tm-videobutton img {
   border-radius: 3px;
   margin-top: 5px;
 }
+.tm-product-actions .sr-only{
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+  }
+.tm-header-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tm-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.tm-dropdown button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+.tm-dropdown ul {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #ccc;
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+    display: none;
+    z-index: 1000;
+}
+
+.tm-dropdown ul li {
+    padding: 5px 10px;
+}
+
+.tm-dropdown ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.tm-dropdown ul li a:hover {
+    background: #f0f0f0;
+}
+.tm-dropdown img {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+/* Display the dropdown when it's open */
+.tm-header-links ul,
+.tm-header-currency ul,
+.tm-header-language ul {
+    display: block;
+}
+
 
 @media only screen and (max-width: 575px) {
   .tm-myaccount-dashboard, .tm-myaccount-address {
