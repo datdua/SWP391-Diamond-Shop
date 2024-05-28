@@ -394,6 +394,16 @@
 	animation: slideInRight 0.4s ease-in-out 1 both;
 	z-index: 999;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
 
 	i {
 		line-height: 45px;
@@ -404,6 +414,16 @@
 	}
 }
 
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
 .form-messages,
 .appointment-messages {
 	margin-bottom: 0;

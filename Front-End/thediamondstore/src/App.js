@@ -15,6 +15,8 @@ import PortfolioPage from './pages/Portfolio/PortfolioPage';
 import ContactPage from './pages/Contact/ContactPage';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
+import BackToTop from './components/BackToTop';
+
 
 
 function App() {
@@ -24,10 +26,11 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/trangchu" replace />} />
         <Route path='/dangnhap' element={<><Header/> <LoginRegisterPage/> <Footer/></>}/>
-        <Route path='/trangchu' element={<><Header/> <HomePage/> <Footer/></>}/>
+
+        <Route path='/trangchu' element={<><Header/> <HomePage/> <BackToTop/> <Footer/></>}/>
         <Route path='/gioithieu' element={<><Header/> <AboutPage/> <Footer/></>}/>
         <Route path='/lienhe' element={<><Header/> <ContactPage/> <Footer/></>}/>
-        <Route path='/sanpham' element={<><Header/> <ProductPage/> <Footer/></>}/>
+        <Route path='/sanpham' element={<><Header/> <ProductPage/> <BackToTop/> <Footer/></>}/>
 
         <Route path='/cart' element={<CartPage/>}/>
         <Route path="/product-detail/:jewelryId" element={<ProductDetailPage />} />

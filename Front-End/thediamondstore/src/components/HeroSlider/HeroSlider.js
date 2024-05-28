@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import "./HeroSlider.css"
 const slidesData = [
     {
-        backgroundImage: 'url(assets/images/heoslider-image-1.jpg)',
+        backgroundImage: 'url(assets/images/banner-silde2.png)',
         title: "Woman’s Jewellery Collection",
         description: "Jewellery may be made from a wide range of materials. Jewellery has been made to adorn nearly every body part from hairpins to toe.",
         link: "products.html",
     },
     {
-        backgroundImage: 'url(assets/images/heoslider-image-2.jpg)',
+        backgroundImage: 'url(assets/images/banner-silde1.png)',
         title: "Men’s Jewellery Collection",
         description: "Discover the unique range of men's jewellery. From rings to bracelets, find the perfect accessory.",
         link: "products.html",
@@ -30,8 +30,9 @@ const HeroSlider = () => {
         <div className="tm-heroslider-area">
             <div className="tm-heroslider-slider">
                 {slidesData.map((slide, index) => (
+                    <a href='/sanpham'>
                     <div
-                        key={index}
+                        key={index} 
                         className={`tm-heroslider ${currentSlide === index ? 'active' : ''}`}
                         style={{
                             backgroundImage: slide.backgroundImage,
@@ -46,7 +47,7 @@ const HeroSlider = () => {
                             color: 'white'
                         }}
                     >
-                        <div className="container">
+                        {/* <div className="container">
                             <div className="row align-items-center">
                                 <div className="col-lg-7 col-md-8 col-12">
                                     <div className="tm-heroslider-contentwrapper">
@@ -58,8 +59,9 @@ const HeroSlider = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
+                    </a>
                 ))}
             </div>
         </div>
