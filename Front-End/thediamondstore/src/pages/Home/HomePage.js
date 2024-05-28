@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "fancybox/dist/css/jquery.fancybox.css"
 import HeroSlider from "../../components/HeroSlider/HeroSlider";
 import "./HomePage.css"
+
 function HomePage() {
     const [value, setValue] = useState('Default value');
 
@@ -30,8 +31,7 @@ function HomePage() {
         setAccountDropdownOpen(false);
         setCurrencyDropdownOpen(false);
     };
-   
-    
+
     return (
         <div>
 
@@ -1299,10 +1299,6 @@ function HomePage() {
                     </div>
                 </div>
                 {/* <!--// Product Quickview --> */}
-
-                <button id="back-top-top" aria-label="Back to Top">
-                    <i className="ion-arrow-up-c"></i>
-                </button>
             </div>
             {/* <!--// Wrapper --> */}
         </div>

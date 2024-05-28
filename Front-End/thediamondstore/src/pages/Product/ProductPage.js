@@ -226,6 +226,13 @@ function ProductPage() {
                                                 <li><Link to="/product">Diamond</Link></li>
                                             </ul>
                                         </div>
+                                        <div className="single-widget widget-categories">
+                                            <h6 className="widget-title">Gender</h6>
+                                            <ul>
+                                                <li><button onClick={() => handleGenderFilter('male')}>Male</button></li>
+                                                <li><button onClick={() => handleGenderFilter('female')}>Female</button></li>
+                                            </ul>
+                                        </div>
                                         <div className="single-widget widget-pricefilter">
                                             <h6 className="widget-title">Filter by Price</h6>
                                             <div className="widget-pricefilter-inner">
@@ -288,9 +295,6 @@ function ProductPage() {
                     )}
                 </div>
                 {/*<Footer />*/}
-                <button id="back-top-top" aria-label="Back to Top">
-                    <i className="ion-arrow-up-c"></i>
-                </button>
             </div>
         </div>
     );
