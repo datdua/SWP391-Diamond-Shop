@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Entity
 @Table(name = "Orders")
 public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orderID")
@@ -54,7 +55,6 @@ public class Order {
     private List<Cart> cartItems;
 
     // getters and setters
-
     public Order() {
     }
 
@@ -141,10 +141,5 @@ public class Order {
     public void setCartItems(List<Cart> cartItems) {
         this.cartItems = cartItems;
     }
-
-
-
-
-
 
 }
