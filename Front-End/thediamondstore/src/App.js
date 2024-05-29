@@ -18,6 +18,7 @@ import Footer from './components/Footer/Footer';
 import BackToTop from './components/BackToTop';
 
 
+
 function App() {
   return (
     <>
@@ -25,6 +26,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/trangchu" replace />} />
         <Route path='/dangnhap' element={<><Header/> <LoginRegisterPage/> <Footer/></>}/>
+
         <Route path='/trangchu' element={<><Header/> <HomePage/> <BackToTop/> <Footer/></>}/>
         <Route path='/gioithieu' element={<><Header/> <AboutPage/> <Footer/></>}/>
         <Route path='/lienhe' element={<><Header/> <ContactPage/> <Footer/></>}/>
