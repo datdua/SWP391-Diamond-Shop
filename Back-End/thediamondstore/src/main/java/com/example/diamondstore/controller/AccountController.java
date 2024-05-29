@@ -121,4 +121,13 @@ public class AccountController {
         Page<Account> pageAccount = accountRepository.findAll(pageable);
         return ResponseEntity.ok(pageAccount);
     }
+
+    @GetMapping("/get/{accountID}")
+    public ResponseEntity<?> getByAccountID(@PathVariable Integer accountID) {
+        Account account = accountRepository.findByAccountID(accountID);
+        if (account == null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
+        }
+        return ResponseEntity.ok(account);
+    } 
 }
