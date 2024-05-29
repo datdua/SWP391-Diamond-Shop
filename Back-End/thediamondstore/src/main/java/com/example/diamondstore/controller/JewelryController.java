@@ -59,7 +59,7 @@ public class JewelryController {
         return ResponseEntity.ok(jewelryRepository.save(jewelry));
     }
 
-    @PutMapping("/{jewelryID}")
+    @PutMapping("/update/{jewelryID}")
     public ResponseEntity<Jewelry> updateJewelry(@PathVariable String jewelryID, @RequestBody JewelryPutRequest jewelryPutRequest) {
         Jewelry existingJewelry = jewelryRepository.findByJewelryID(jewelryID);
         if (existingJewelry == null) {
@@ -74,7 +74,7 @@ public class JewelryController {
 
     }
 
-    @DeleteMapping("/{jewelryID}")
+    @DeleteMapping("/delete/{jewelryID}")
     public ResponseEntity<String> deleteJewelry(@PathVariable String jewelryID) {
         Jewelry existingJewelry = jewelryRepository.findByJewelryID(jewelryID);
         if (existingJewelry == null) {

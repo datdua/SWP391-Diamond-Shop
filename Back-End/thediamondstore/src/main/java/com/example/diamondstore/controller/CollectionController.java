@@ -1,24 +1,18 @@
 package com.example.diamondstore.controller;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.model.Collection;
 import com.example.diamondstore.repository.CollectionRepository;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
-
-
-
-
 
 @RestController
 @RequestMapping("/api/collections")
@@ -56,7 +50,7 @@ public class CollectionController {
         return ResponseEntity.ok(collection);
     }
 
-    @PutMapping(value="/{collectionID}", produces = "application/json;charset=UTF-8")
+    @PutMapping(value="/update/{collectionID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> updateCollection(@PathVariable int collectionID, @RequestBody Collection collection) {
         Collection existingCollection = collectionRepository.findByCollectionID(collectionID);
         if (existingCollection == null) {
@@ -70,7 +64,7 @@ public class CollectionController {
         return ResponseEntity.ok(collection);
     }    
     
-    @DeleteMapping(value = "/{collectionID}", produces = "application/json;charset=UTF-8")
+    @DeleteMapping(value = "/delete/{collectionID}", produces = "application/json;charset=UTF-8")
     public  ResponseEntity<?> deleteCollection(@PathVariable int collectionID) {
         Collection existingCollection = collectionRepository.findByCollectionID(collectionID);
         if (existingCollection == null) {
@@ -79,7 +73,5 @@ public class CollectionController {
         collectionRepository.delete(existingCollection);
         return ResponseEntity.ok(existingCollection);
     }
-       
-    
     
 }

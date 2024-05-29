@@ -62,7 +62,7 @@ public class WarrantyController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Giấy bảo hành đã được tạo thành công"));
     }
 
-    @PutMapping(value="/{warrantyID}", produces = "application/json;charset=UTF-8")
+    @PutMapping(value="/update/{warrantyID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> updateWarranty(@PathVariable String warrantyID, @RequestBody WarrantyPutRequest  warrantyPutRequest) {
         Warranty existingWarranty = warrantyRepository.findByWarrantyID(warrantyID);
         if (existingWarranty == null) {
@@ -75,7 +75,7 @@ public class WarrantyController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Giấy bảo hành đã được cập nhật thành công"));
     }
 
-    @DeleteMapping(value="/{warrantyID}", produces = "application/json;charset=UTF-8")
+    @DeleteMapping(value="/delete/{warrantyID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> deleteCertificate(@PathVariable String warrantyID) {
         Warranty existingWarranty = warrantyRepository.findByWarrantyID(warrantyID);
         if (existingWarranty == null) {
