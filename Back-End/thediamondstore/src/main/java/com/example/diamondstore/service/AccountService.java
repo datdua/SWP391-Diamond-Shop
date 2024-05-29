@@ -12,11 +12,14 @@ import org.springframework.stereotype.Service;
 
 import com.example.diamondstore.model.Account;
 import com.example.diamondstore.repository.AccountRepository;
+import com.example.diamondstore.repository.CustomerRepository;
 
 @Service
 public class AccountService implements UserDetailsService {
 
     private AccountRepository userRepository;
+
+    private CustomerRepository customerRepository;
 
     public AccountService(AccountRepository userRepository) {
         this.userRepository = userRepository;

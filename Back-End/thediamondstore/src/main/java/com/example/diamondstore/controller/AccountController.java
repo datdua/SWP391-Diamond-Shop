@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.model.Account;
+import com.example.diamondstore.model.Customer;
 import com.example.diamondstore.repository.AccountRepository;
+import com.example.diamondstore.repository.CustomerRepository;
 import com.example.diamondstore.request.RegisterRequest;
 import com.example.diamondstore.request.putRequest.AccountPutRequest;
 
@@ -29,9 +31,11 @@ import com.example.diamondstore.request.putRequest.AccountPutRequest;
 public class AccountController {
 
     private final AccountRepository accountRepository;
+    private final CustomerRepository customerRepository;
 
-    public AccountController(AccountRepository accountRepository) {
+    public AccountController(AccountRepository accountRepository, CustomerRepository customerRepository) {
         this.accountRepository = accountRepository;
+        this.customerRepository = customerRepository;
     }
 
     @GetMapping("/home")
@@ -69,8 +73,11 @@ public class AccountController {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Tài khoản đã tồn tại"));
         }
 
-        Account user = new Account(null, accountName, password, "ROLE_CUSTOMER", null, email);
-        accountRepository.save(user);
+        Account account = new Account(null, accountName, password, "ROLE_CUSTOMER", null, email);
+        accountRepository.save(account);
+
+        Customer customer = new Customer(account.getAccountID(), 0);
+        customerRepository.save(customer);
         return ResponseEntity.ok(Collections.singletonMap("message", "Đăng kí thành công"));
     }
 
