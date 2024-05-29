@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 import { useLocation, Route, Switch } from "react-router-dom";
 import { createContext } from 'react';
@@ -14,6 +15,7 @@ function Admin() {
   const [hasImage, setHasImage] = React.useState(true);
   const location = useLocation();
   const mainPanel = React.useRef(null);
+
   React.useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
@@ -54,6 +56,7 @@ function Admin() {
           </div>
         </div>
       </div>
+
     </>
   );
 }

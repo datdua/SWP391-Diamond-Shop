@@ -63,7 +63,7 @@ public class CertificateController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công"));
     }
 
-    @PutMapping(value = "/{certificateID}", produces = "application/json;charset=UTF-8")
+    @PutMapping(value = "/update/{certificateID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> updateCertificate(@PathVariable String certificateID, @RequestBody CertificatePutRequest certificatePutRequest) {
         Certificate existingCertificate = certificateRepository.findByCertificateID(certificateID);
         if (existingCertificate == null) {
@@ -76,7 +76,7 @@ public class CertificateController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }
 
-    @DeleteMapping(value = "/{certificateID}", produces = "application/json;charset=UTF-8")
+    @DeleteMapping(value = "/delete/{certificateID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> deleteCertificate(@PathVariable String certificateID) {
         Certificate existingCertificate = certificateRepository.findByCertificateID(certificateID);
         if (existingCertificate == null) {
