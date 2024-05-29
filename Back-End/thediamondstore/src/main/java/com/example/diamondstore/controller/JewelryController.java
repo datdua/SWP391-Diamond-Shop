@@ -66,7 +66,7 @@ public class JewelryController {
     }
 
     @PutMapping("/update/{jewelryID}")
-    public ResponseEntity<Jewelry> updateJewelry(@PathVariable String jewelryID, @RequestBody JewelryPutRequest jewelryPutRequest) {
+    public ResponseEntity<?> updateJewelry(@PathVariable String jewelryID, @RequestBody JewelryPutRequest jewelryPutRequest) {
         Jewelry existingJewelry = jewelryRepository.findByJewelryID(jewelryID);
         if (existingJewelry == null) {
             return ResponseEntity.notFound().build();
@@ -76,8 +76,8 @@ public class JewelryController {
         existingJewelry.setGender(jewelryPutRequest.getGender());
         existingJewelry.setSize(jewelryPutRequest.getSize());
         existingJewelry.setjewelryImage(jewelryPutRequest.getJewelryImage());
-        return ResponseEntity.ok(jewelryRepository.save(existingJewelry));
-
+        jewelryRepository.save(existingJewelry);
+        return ResponseEntity.ok().body(Collections.singletonMap("message", "Cập nhật thành công"));
     }
 
     @DeleteMapping("/delete/{jewelryID}")

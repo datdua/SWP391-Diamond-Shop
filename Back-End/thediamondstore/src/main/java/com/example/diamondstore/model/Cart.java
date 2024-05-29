@@ -39,7 +39,6 @@ public class Cart {
     private Order order;
 
     // getters and setters
-
     public Cart() {
     }
 
@@ -108,10 +107,5 @@ public class Cart {
     public void setOrder(Order order) {
         this.order = order;
     }
-
-
-
-
-
 
 }
