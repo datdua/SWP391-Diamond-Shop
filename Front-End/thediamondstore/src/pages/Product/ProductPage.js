@@ -257,13 +257,6 @@ function ProductPage() {
                                                 <button onClick={handleFilterConfirm}>Apply Filter</button>
                                             </div>
                                         </div>
-                                        <div className="single-widget widget-categories">
-                                            <h6 className="widget-title">Gender</h6>
-                                            <ul>
-                                                <li><button onClick={() => handleGenderFilter('male')}>Male</button></li>
-                                                <li><button onClick={() => handleGenderFilter('female')}>Female</button></li>
-                                            </ul>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

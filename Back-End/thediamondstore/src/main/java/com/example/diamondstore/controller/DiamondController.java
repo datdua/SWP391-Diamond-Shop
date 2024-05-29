@@ -58,7 +58,7 @@ public class DiamondController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công"));
     }
 
-    @PutMapping(value="/{diamondID}", produces = "application/json;charset=UTF-8")
+    @PutMapping(value="/update/{diamondID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> updateDiamond(@PathVariable String diamondID, @RequestBody DiamondPutRequest diamondPutRequest) {
         Diamond existingDiamond = diamondRepository.findByDiamondID(diamondID);
         if (existingDiamond == null) {
@@ -77,7 +77,7 @@ public class DiamondController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }
 
-    @DeleteMapping(value="/{diamondID}", produces = "application/json;charset=UTF-8")
+    @DeleteMapping(value="/delete/{diamondID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> deleteDiamond(@PathVariable String diamondID) {
         Diamond existingDiamond = diamondRepository.findByDiamondID(diamondID);
         if (existingDiamond == null) {

@@ -3,6 +3,9 @@ package com.example.diamondstore.controller;
 import java.util.Collections;
 import java.util.Map;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.model.Account;
@@ -34,8 +38,6 @@ public class AccountController {
     public String welcome() {
         return "Welcome to Diamond Store";
     }
-
-
 
     @GetMapping("/accounts")
     public ResponseEntity<Iterable<Account>> getUsers() {
@@ -113,4 +115,19 @@ public class AccountController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật mật khẩu thành công"));
     }
 
+    @GetMapping("/paged")
+        public ResponseEntity<Page<Account>> getAllAccountsPaged(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page-1, size);
+        Page<Account> pageAccount = accountRepository.findAll(pageable);
+        return ResponseEntity.ok(pageAccount);
+    }
+
+    @GetMapping("/get/{accountID}")
+    public ResponseEntity<?> getByAccountID(@PathVariable Integer accountID) {
+        Account account = accountRepository.findByAccountID(accountID);
+        if (account == null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
+        }
+        return ResponseEntity.ok(account);
+    } 
 }

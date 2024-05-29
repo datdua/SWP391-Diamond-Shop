@@ -21,22 +21,34 @@ function LoginRegisterPage() {
                 email: loginEmail,
                 password: loginPassword
             },
-             {
+            {
                 headers: {
                     "Content-Type": "application/json",
                     "accept": "*/*"
                 }
             });
-
+    
             if (response.status === 200) {
                 const data = response.data;
                 console.log("Đăng nhập thành công:", data.jwt);
                 localStorage.setItem("jwt", data.jwt);
                 localStorage.setItem("username", loginEmail); 
                 toast.success("Đăng nhập thành công!");
+    
+                // Make an additional API call to get the accountId
+                const accountResponse = await axios.get("http://localhost:8080/account", {
+                    headers: {
+                        "Authorization": `Bearer ${data.jwt}`
+                    }
+                });
+    
+                if (accountResponse.status === 200) {
+                    localStorage.setItem("accountId", accountResponse.data.accountId);
+                }
+    
                 navigate("/trangchu");
             }    
-             else {
+            else {
                 console.error("Đăng nhập thất bại:", response);
                 toast.error("Đăng nhập thất bại!");
             }

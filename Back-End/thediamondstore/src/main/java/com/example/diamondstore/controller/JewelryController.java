@@ -1,6 +1,8 @@
 package com.example.diamondstore.controller;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,13 +55,17 @@ public class JewelryController {
         return ResponseEntity.ok(pageJewelrys);
     }
 
-    @PostMapping
-    public ResponseEntity<Jewelry> createJewelry(@RequestBody Jewelry jewelry) {
-        jewelry.setJewelryID(null);
-        return ResponseEntity.ok(jewelryRepository.save(jewelry));
+    @PostMapping(value="/create", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> createJewelry(@RequestBody Jewelry jewelry) {
+        Jewelry existingJewelry = jewelryRepository.findByJewelryID(jewelry.getJewelryID());
+        if (existingJewelry != null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Trang sức đã tồn tại"));
+        }
+        jewelryRepository.save(jewelry);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công"));
     }
 
-    @PutMapping("/{jewelryID}")
+    @PutMapping("/update/{jewelryID}")
     public ResponseEntity<Jewelry> updateJewelry(@PathVariable String jewelryID, @RequestBody JewelryPutRequest jewelryPutRequest) {
         Jewelry existingJewelry = jewelryRepository.findByJewelryID(jewelryID);
         if (existingJewelry == null) {
@@ -74,7 +80,7 @@ public class JewelryController {
 
     }
 
-    @DeleteMapping("/{jewelryID}")
+    @DeleteMapping("/delete/{jewelryID}")
     public ResponseEntity<String> deleteJewelry(@PathVariable String jewelryID) {
         Jewelry existingJewelry = jewelryRepository.findByJewelryID(jewelryID);
         if (existingJewelry == null) {

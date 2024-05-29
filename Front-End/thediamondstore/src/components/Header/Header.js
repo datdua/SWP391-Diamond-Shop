@@ -5,6 +5,7 @@ import { searchJewelryByName } from "../../api/JewelryAPI";
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import axios from "axios";
+import { searchDiamondByName } from "../../api/DiamondAPI";
 
 function Header() {
     const [isAccountDropdownOpen, setAccountDropdownOpen] = useState(false);
@@ -29,12 +30,26 @@ function Header() {
             setLanguageDropdownOpen(!isLanguageDropdownOpen);
         }
     };
-    const handleSearch = () => {
-        searchJewelryByName(searchTerm)
-            .then(data => setSearchResults(data))
-            .catch(error => console.error('Error searching for jewelry:', error));
-            window.location.href = `/sanpham?search=${encodeURIComponent(searchTerm)}`;
+    const handleSearch = async () => {
+        try {
+            const [jewelryResults, diamondResults] = await Promise.all([
+                searchJewelryByName(searchTerm),
+                searchDiamondByName(searchTerm)
+            ]);
+            
+            const combinedResults = [...jewelryResults, ...diamondResults];
+            setSearchResults(combinedResults);
+            
+            if (diamondResults.length > 0) {
+                window.location.href = `/kimcuong?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(diamondResults))}`; 
+            } else if (jewelryResults.length > 0) {
+                window.location.href = `/trangsuc?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(jewelryResults))}`; 
+            }
+        } catch (error) {
+            console.error('Error searching for jewelry and diamonds:', error);
+        }
     };
+    
     useEffect(() => {
         const fetchAccountName = async () => {
             try {
@@ -99,18 +114,18 @@ function Header() {
                     <div className="row align-items-center">
                         <div className="col-lg-3 col-6 order-1 order-lg-1">
                             <a href="/trangchu" className="tm-header-logo">
-                                <img style={{width: "220px"}} src="assets/images/logo.png" alt="thediamondstore" />
+                                <img style={{ width: "220px" }} src="assets/images/logo.png" alt="thediamondstore" />
                             </a>
                         </div>
                         <div className="col-lg-6 col-12 order-3 order-lg-2">
-                        <form className="tm-header-search" onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
-                                <input 
-                                    type="text" 
-                                    placeholder="Tìm kiếm sản phẩm..." 
-                                    value={searchTerm} 
-                                    onChange={(e) => setSearchTerm(e.target.value)} 
+                            <form className="tm-header-search" onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
+                                <input
+                                    type="text"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    placeholder="Search for jewelry or diamonds..."
                                 />
-                                <button aria-label="Search" type="submit"><i className="ion-android-search"></i></button>
+                                <button aria-label="Search" type="submit"><i className="ion-android-search" onClick={handleSearch}></i></button>
                             </form>
                         </div>
                         <div className="col-lg-3 col-6 order-2 order-lg-3">
@@ -131,8 +146,8 @@ function Header() {
                         <ul>
                             <li><Link to="/trangchu">Trang Chủ</Link></li>
                             <li><Link to="/gioithieu">Giới Thiệu</Link></li>
-                            <li style={{marginRight:'5px'}}><Link to="/sanpham">Sản Phẩm</Link></li>
-                            <li style={{margin:'0px'}}>
+                            <li style={{ marginRight: '5px' }}><Link to="/sanpham">Sản Phẩm</Link></li>
+                            <li style={{ margin: '0px' }}>
                                 <NavDropdown className="drop-hover" id="collapsible-nav-dropdown">
                                     <NavDropdown.Item style={{ textAlign: 'center' }} href="/kimcuong">Kim Cương</NavDropdown.Item>
                                     <NavDropdown.Item style={{ textAlign: 'center' }} href="/trangsuc">

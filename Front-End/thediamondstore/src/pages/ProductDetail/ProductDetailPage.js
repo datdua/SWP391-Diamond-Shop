@@ -2,14 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
-import { getJewelryById } from "../../api/JewelryAPI";
+import { addToCart, getJewelryById } from "../../api/JewelryAPI";
 import "./ProductDetailPage.css"
 
-function ProductDetailPage() {
+function JewelryDetailPage() {
     const [jewelry, setJewelry] = useState(null);
     const { jewelryId } = useParams();
     const [quantity, setQuantity] = useState(1);
     const [size, setSize] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [showNotification, setShowNotification] = useState(false);
 
     useEffect(() => {
         const fetchJewelry = async () => {
@@ -34,6 +36,19 @@ function ProductDetailPage() {
     };
     const handleSizeChange = (event) => {
         setSize(event.target.value);
+    };
+    const handleAddToCart = async () => {
+        if (!isLoggedIn) {
+            setShowNotification(true);
+        } else {
+            try {
+                const accountId = "your_account_id"; // Replace with actual account id
+                await addToCart(accountId, jewelryId, quantity);
+                alert("Item added to cart successfully!");
+            } catch (error) {
+                alert("Failed to add item to cart");
+            }
+        }
     };
 
     return (
@@ -77,13 +92,14 @@ function ProductDetailPage() {
                                                 <div className="col-lg-6 col-md-6 col-12">
                                                     <div className="tm-prodetails-content">
                                                         <h4 className="tm-prodetails-title">{jewelry.jewelryName}</h4>
-                                                        <span className="tm-prodetails-price">{jewelry.jewelryPrice} VND</span>
+                                                        <span className="tm-prodetails-price">{jewelry.jewelryPrice.toLocaleString()} VND</span>
                                                         {/* Other details */}
                                                         <div className="tm-prodetails-infos">
                                                             <div className="tm-prodetails-singleinfo">
                                                                 <b>Product ID : </b>{jewelry.jewelryID}
                                                             </div>
                                                             <div className="tm-prodetails-singleinfo">
+                                                                <b>Size : </b>
                                                                 <select value={size} onChange={handleSizeChange}>
                                                                     <option value="6">6</option>
                                                                     <option value="7">7</option>
@@ -118,9 +134,9 @@ function ProductDetailPage() {
                                                                     <button className="decrease-button" onClick={decreaseQuantity}>-</button>
                                                                 </div>
                                                             </div>
-                                                            <Link to="#" className="tm-button tm-button-dark">Add To Cart</Link>
+                                                            {showNotification && <p>Please log in to add items to the cart.</p>}
+                                                            <button onClick={handleAddToCart} href = "/cart">Add to cart</button>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -141,4 +157,4 @@ function ProductDetailPage() {
         </div>
     )
 }
-export default ProductDetailPage;
+export default JewelryDetailPage;
