@@ -137,4 +137,13 @@ public class AccountController {
         }
         return ResponseEntity.ok(account);
     } 
+
+    @GetMapping("/getByEmail/{email}")
+    public ResponseEntity<?> getByAccountEmail(@PathVariable String email) {
+        Account account = accountRepository.findByEmail(email);
+        if (account == null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
+        }
+        return ResponseEntity.ok(account);
+    }
 }
