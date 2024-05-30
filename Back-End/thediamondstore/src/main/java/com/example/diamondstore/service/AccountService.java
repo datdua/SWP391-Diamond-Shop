@@ -17,19 +17,19 @@ import com.example.diamondstore.repository.CustomerRepository;
 @Service
 public class AccountService implements UserDetailsService {
 
-    private AccountRepository userRepository;
+    private AccountRepository accountRepository;
 
     private CustomerRepository customerRepository;
 
-    public AccountService(AccountRepository userRepository) {
-        this.userRepository = userRepository;
+    public AccountService(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Account account = userRepository.findByEmail(email);
+        Account account = accountRepository.findByEmail(email);
         if (account == null) {
-            throw new UsernameNotFoundException("User not found with email: " + email);
+            throw new UsernameNotFoundException("Account not found with email: " + email);
         }
 
         List<GrantedAuthority> authorities = new ArrayList<>();
