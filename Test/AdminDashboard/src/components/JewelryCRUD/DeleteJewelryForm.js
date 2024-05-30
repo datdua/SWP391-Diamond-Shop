@@ -8,8 +8,9 @@ function DeleteJewelryButton({ jewelryID, onDelete }) {
       try {
         await deleteJewelry(jewelryID);
         onDelete(jewelryID);
+        alert('Xóa thành công');
       } catch (error) {
-        console.error('Xóa thất bại', error);
+        alert('Xóa thất bại');
       }
     }
   };
