@@ -1,6 +1,7 @@
 package com.example.diamondstore.controller;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
@@ -145,5 +146,15 @@ public class AccountController {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
         }
         return ResponseEntity.ok(account);
+    }
+
+    //get account by role
+    @GetMapping("/getByRole/{role}")
+    public ResponseEntity<?> getByRole(@PathVariable String role) {
+        List<Account> accounts = accountRepository.findByRole(role);
+        if (accounts.isEmpty()) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
+        }
+        return ResponseEntity.ok(accounts);
     }
 }
