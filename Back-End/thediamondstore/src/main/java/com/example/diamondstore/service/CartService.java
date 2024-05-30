@@ -3,6 +3,8 @@ package com.example.diamondstore.service;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,8 @@ public class CartService {
         return cartRepository.findByAccountIDAndOrderIsNull(accountID);
     }
 
+    //thêm sản phẩm vào giỏ hàng
+    @Transactional
     public void addItemToCart(Integer accountID, String diamondID, String jewelryID, Integer quantity) {
         Cart cart = new Cart();
         cart.setAccountID(accountID);
@@ -39,6 +43,8 @@ public class CartService {
         cartRepository.save(cart);
     }
 
+    //cập nhật sản phẩm trong giỏ hàng
+    @Transactional
     public void updateCartItem(Integer cartID, Integer accountID, String diamondID, String jewelryID, Integer quantity) {
         Cart cartItem = cartRepository.findById(cartID).orElse(null);
         if (cartItem != null) {
@@ -48,13 +54,17 @@ public class CartService {
             cartItem.setQuantity(quantity);
             calculateAndSetTotalPrice(cartItem);
             cartRepository.save(cartItem);
+        } else {
+            throw new IllegalArgumentException("Không tìm thấy sản phẩm trong giỏ hàng.");
         }
     }
 
+    @Transactional
     public void removeCartItem(Integer cartID) {
         cartRepository.deleteById(cartID);
     }
 
+    //tính tổng giá tiền
     private void calculateAndSetTotalPrice(Cart cart) {
         BigDecimal totalPrice = BigDecimal.ZERO;
         if (cart.getDiamondID() != null) {
@@ -77,6 +87,7 @@ public class CartService {
         return cartRepository.findById(cartID).orElse(null);
     }
 
+    @Transactional
     public void saveCart(Cart cart) {
         calculateAndSetTotalPrice(cart);
         cartRepository.save(cart);
