@@ -26,7 +26,7 @@ public class CartService {
     private JewelryRepository jewelryRepository;
 
     public List<Cart> getCartItems(Integer accountID) {
-        return cartRepository.findByAccountID(accountID);
+        return cartRepository.findByAccountIDAndOrderIsNull(accountID);
     }
 
     public void addItemToCart(Integer accountID, String diamondID, String jewelryID, Integer quantity) {
