@@ -1,34 +1,27 @@
 import axios from 'axios';
 
 export async function getAllDiamond() {
-    const response = await axios.get('http://localhost:8080/api/diamond');
+    const response = await axios.get('http://localhost:8080/api/diamonds');
     if (response.status !== 200) {
-        throw new Error('Failed to fetch jewelry data');
+        throw new Error('Failed to fetch diamond data');
     }
     return response.data;
 }
-export async function searchJewelryByName(name) {
-    const response = await axios.get(`http://localhost:8080/api/jewelry/searchName?name=${name}`);
-    if (!response.ok) {
-        throw new Error('Failed to search jewelry by name');
-    }
-    const data = await response.json();
-    return data;
-}
-export async function getJewelryById(jewelryId) {
+
+export async function getDiamondById(diamondId) {
     try {
-        const response = await axios.get(`http://localhost:8080/api/jewelry/${jewelryId}`);
+        const response = await axios.get(`http://localhost:8080/api/diamonds/${diamondId}`);
         return response.data;
     } catch (error) {
-        throw new Error('Failed to fetch jewelry by ID');
+        throw new Error('Failed to fetch diamond by ID');
     }
 }
 export async function getPage(page = 1, size = 9) {
     try {
-        const response = await axios.get(`http://localhost:8080/api/jewelry/paged?page=${page}&size=${size}`);
+        const response = await axios.get(`http://localhost:8080/api/diamonds/paged?page=${page}&size=${size}`);
         return response.data;
     } catch (error) {
-        throw new Error('Failed to fetch jewelry by page');
+        throw new Error('Failed to fetch diamond by page');
     }
 }
 export async function searchJewelryByGender(gender) {
@@ -40,29 +33,29 @@ export async function searchJewelryByGender(gender) {
     }
 }
 
-export async function createJewelry(jewelry) {
+export async function createDiamond(diamond) {
     try {
-        const response = await axios.post('http://localhost:8080/api/jewelry/create', jewelry);
+        const response = await axios.post('http://localhost:8080/api/diamonds/create', diamond);
         return response.data;
     } catch (error) {
         throw new Error('Failed to create jewelry');
     }
 }
 
-export async function updateJewelry(jewelryID, jewelry) {
+export async function updateDiamond(diamondID, diamond) {
     try {
-        const response = await axios.put(`http://localhost:8080/api/jewelry/update/${jewelryID}`, jewelry);
+        const response = await axios.put(`http://localhost:8080/api/diamonds/update/${diamondID}`, diamond);
         return response.data;
     } catch (error) {
-        throw new Error('Failed to update jewelry');
+        throw new Error('Failed to update Diamond');
     }
 }
 
-export async function deleteJewelry(jewelryID) {
+export async function deleteDiamond(diamondId) {
     try {
-        const response = await axios.delete(`http://localhost:8080/api/jewelry/delete/${jewelryID}`);
+        const response = await axios.delete(`http://localhost:8080/api/diamonds/delete/${diamondId}`);
         return response.data;
     } catch (error) {
-        throw new Error('Failed to delete jewelry');
+        throw new Error('Failed to delete diamond');
     }
 }
