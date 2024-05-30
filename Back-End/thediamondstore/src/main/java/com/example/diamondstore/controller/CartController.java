@@ -42,8 +42,9 @@ public class CartController {
             @RequestParam(required = false) Integer accountID,
             @RequestParam(required = false) String diamondID,
             @RequestParam(required = false) String jewelryID,
+            @RequestParam(required = false) Integer sizeJewelry,
             @RequestParam Integer quantity) {
-        cartService.addItemToCart(accountID, diamondID, jewelryID, quantity);
+        cartService.addItemToCart(accountID, diamondID, jewelryID, sizeJewelry, quantity);
         return ResponseEntity.ok(Collections.singletonMap("message", "Thêm vào giỏ hàng thành công"));
     }
 
@@ -54,8 +55,9 @@ public class CartController {
             @RequestParam Integer accountID,
             @RequestParam(required = false) String diamondID,
             @RequestParam(required = false) String jewelryID,
+            @RequestParam(required = false) Integer sizeJewelry,
             @RequestParam Integer quantity) {
-        cartService.updateCartItem(cartID, accountID, diamondID, jewelryID, quantity);
+        cartService.updateCartItem(cartID, accountID, diamondID, jewelryID, sizeJewelry, quantity);
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật giỏ hàng thành công"));
     }
 

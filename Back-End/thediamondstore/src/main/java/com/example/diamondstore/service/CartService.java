@@ -33,25 +33,34 @@ public class CartService {
 
     //thêm sản phẩm vào giỏ hàng
     @Transactional
-    public void addItemToCart(Integer accountID, String diamondID, String jewelryID, Integer quantity) {
+    public void addItemToCart(Integer accountID, String diamondID, String jewelryID, Integer sizeJewelry, Integer quantity) {
         Cart cart = new Cart();
         cart.setAccountID(accountID);
         cart.setDiamondID(diamondID);
         cart.setJewelryID(jewelryID);
         cart.setQuantity(quantity);
+        
+        // Fetch the jewelry item to get the size
+        if (jewelryID != null) {
+            Jewelry jewelry = jewelryRepository.findById(jewelryID).orElse(null);
+            if (jewelry != null) {
+                cart.setSizeJewelry(sizeJewelry); 
+            }
+        }
         calculateAndSetTotalPrice(cart);
         cartRepository.save(cart);
     }
 
     //cập nhật sản phẩm trong giỏ hàng
     @Transactional
-    public void updateCartItem(Integer cartID, Integer accountID, String diamondID, String jewelryID, Integer quantity) {
+    public void updateCartItem(Integer cartID, Integer accountID, String diamondID, String jewelryID, Integer sizeJewelry, Integer quantity) {
         Cart cartItem = cartRepository.findById(cartID).orElse(null);
         if (cartItem != null) {
             cartItem.setAccountID(accountID);
             cartItem.setDiamondID(diamondID);
             cartItem.setJewelryID(jewelryID);
             cartItem.setQuantity(quantity);
+            cartItem.setSizeJewelry(sizeJewelry); 
             calculateAndSetTotalPrice(cartItem);
             cartRepository.save(cartItem);
         } else {
