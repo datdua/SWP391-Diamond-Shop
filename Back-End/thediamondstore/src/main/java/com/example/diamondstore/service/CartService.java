@@ -61,16 +61,16 @@ public class CartService {
             Diamond diamond = diamondRepository.findById(cart.getDiamondID()).orElse(null);
             if (diamond != null) {
                 totalPrice = totalPrice.add(diamond.getDiamondPrice());
-        }
-        if (cart.getJewelryID() != null) {
-            Jewelry jewelry = jewelryRepository.findById(cart.getJewelryID()).orElse(null);
-            if (jewelry != null) {
-                totalPrice = totalPrice.add(jewelry.getJewelryPrice());
             }
+            if (cart.getJewelryID() != null) {
+                Jewelry jewelry = jewelryRepository.findById(cart.getJewelryID()).orElse(null);
+                if (jewelry != null) {
+                    totalPrice = totalPrice.add(jewelry.getJewelryPrice());
+                }
+            }
+            totalPrice = totalPrice.multiply(BigDecimal.valueOf(cart.getQuantity())); // Multiply by quantity
+            cart.setTotalPrice(totalPrice);
         }
-        totalPrice = totalPrice.multiply(BigDecimal.valueOf(cart.getQuantity())); // Multiply by quantity
-        cart.setTotalPrice(totalPrice);
-    }
     }
 
     public Cart getCartByCartID(Integer cartID) {
