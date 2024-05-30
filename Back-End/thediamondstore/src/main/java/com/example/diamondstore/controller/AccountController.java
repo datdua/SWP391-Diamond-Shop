@@ -1,6 +1,7 @@
 package com.example.diamondstore.controller;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
@@ -20,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.model.Account;
+import com.example.diamondstore.model.Customer;
 import com.example.diamondstore.repository.AccountRepository;
+import com.example.diamondstore.repository.CustomerRepository;
 import com.example.diamondstore.request.RegisterRequest;
 import com.example.diamondstore.request.putRequest.AccountPutRequest;
 
@@ -29,9 +32,11 @@ import com.example.diamondstore.request.putRequest.AccountPutRequest;
 public class AccountController {
 
     private final AccountRepository accountRepository;
+    private final CustomerRepository customerRepository;
 
-    public AccountController(AccountRepository accountRepository) {
+    public AccountController(AccountRepository accountRepository, CustomerRepository customerRepository) {
         this.accountRepository = accountRepository;
+        this.customerRepository = customerRepository;
     }
 
     @GetMapping("/home")
@@ -40,17 +45,17 @@ public class AccountController {
     }
 
     @GetMapping("/accounts")
-    public ResponseEntity<Iterable<Account>> getUsers() {
+    public ResponseEntity<Iterable<Account>> getaccounts() {
         return ResponseEntity.ok(accountRepository.findAll());
     }
 
     @GetMapping("/{accountName}")
     public ResponseEntity<Account> getByAccountName(@PathVariable String accountName) {
-        Account user = accountRepository.findByAccountName(accountName);
-        if (user == null) {
+        Account account = accountRepository.findByAccountName(accountName);
+        if (account == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(account);
     }
 
     @PostMapping(value = "/register", produces = "application/json;charset=UTF-8")
@@ -64,13 +69,16 @@ public class AccountController {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Vui lòng nhập đầy đủ thông tin"));
         }
 
-        Account existingUser = accountRepository.findByEmail(email);
-        if (existingUser != null) {
+        Account existingAccount = accountRepository.findByEmail(email);
+        if (existingAccount != null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Tài khoản đã tồn tại"));
         }
 
-        Account user = new Account(null, accountName, password, "ROLE_CUSTOMER", null, email);
-        accountRepository.save(user);
+        Account account = new Account(null, accountName, password, "ROLE_CUSTOMER", null, email);
+        accountRepository.save(account);
+
+        Customer customer = new Customer(account.getAccountID(), 0);
+        customerRepository.save(customer);
         return ResponseEntity.ok(Collections.singletonMap("message", "Đăng kí thành công"));
     }
 
@@ -83,35 +91,35 @@ public class AccountController {
 
     @PutMapping(value = "/update/{accountID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> update(@PathVariable Integer accountID, @RequestBody AccountPutRequest accountPutRequest) {
-        Account existingUser = accountRepository.findById(accountID).orElse(null);
-        if (existingUser == null) {
+        Account existingAccount = accountRepository.findById(accountID).orElse(null);
+        if (existingAccount == null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
         }
-        existingUser.setAccountName(accountPutRequest.getAccountName());
+        existingAccount.setAccountName(accountPutRequest.getAccountName());
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if (!passwordEncoder.matches(accountPutRequest.getPassword(), existingUser.getPassword())) {
-            existingUser.setPassword(passwordEncoder.encode(accountPutRequest.getPassword()));
+        if (!passwordEncoder.matches(accountPutRequest.getPassword(), existingAccount.getPassword())) {
+            existingAccount.setPassword(passwordEncoder.encode(accountPutRequest.getPassword()));
         }
-        existingUser.setRole(accountPutRequest.getRole());
-        accountRepository.save(existingUser);
+        existingAccount.setRole(accountPutRequest.getRole());
+        accountRepository.save(existingAccount);
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }
 
     //forget password
     @PutMapping(value = "/forgetPassword/{email}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> forgetPassword(@PathVariable String email, @RequestBody Account user) {
-        Account existingUser = accountRepository.findByEmail(email);
-        if (existingUser == null) {
+    public ResponseEntity<Map<String, String>> forgetPassword(@PathVariable String email, @RequestBody Account account) {
+        Account existingAccount = accountRepository.findByEmail(email);
+        if (existingAccount == null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Sai Email"));
         }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if (!passwordEncoder.matches(user.getPassword(), existingUser.getPassword())) {
-            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (!passwordEncoder.matches(account.getPassword(), existingAccount.getPassword())) {
+            existingAccount.setPassword(passwordEncoder.encode(account.getPassword()));
         }
 
-        accountRepository.save(existingUser);
-        accountRepository.save(existingUser);
+        accountRepository.save(existingAccount);
+        accountRepository.save(existingAccount);
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật mật khẩu thành công"));
     }
 
@@ -130,4 +138,23 @@ public class AccountController {
         }
         return ResponseEntity.ok(account);
     } 
+
+    @GetMapping("/getByEmail/{email}")
+    public ResponseEntity<?> getByAccountEmail(@PathVariable String email) {
+        Account account = accountRepository.findByEmail(email);
+        if (account == null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
+        }
+        return ResponseEntity.ok(account);
+    }
+
+    //get account by role
+    @GetMapping("/getByRole/{role}")
+    public ResponseEntity<?> getByAccountRole(@PathVariable String role) {
+        List<Account> accounts = accountRepository.findByRole(role);
+        if (accounts.isEmpty()) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
+        }
+        return ResponseEntity.ok(accounts);
+    }
 }
