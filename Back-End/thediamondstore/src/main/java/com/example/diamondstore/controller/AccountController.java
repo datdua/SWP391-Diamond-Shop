@@ -150,7 +150,7 @@ public class AccountController {
 
     //get account by role
     @GetMapping("/getByRole/{role}")
-    public ResponseEntity<?> getByRole(@PathVariable String role) {
+    public ResponseEntity<?> getByAccountRole(@PathVariable String role) {
         List<Account> accounts = accountRepository.findByRole(role);
         if (accounts.isEmpty()) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));

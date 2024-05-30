@@ -27,8 +27,11 @@ public class CartController {
     private CartService cartService;
 
     @GetMapping("/{accountID}")
-    public ResponseEntity<List<Cart>> getCartItems(@PathVariable Integer accountID) {
+    public ResponseEntity<?> getCartItems(@PathVariable Integer accountID) {
         List<Cart> cartItems = cartService.getCartItems(accountID);
+        if (cartItems.isEmpty()) {
+            return ResponseEntity.ok(Collections.singletonMap("message", "Giỏ hàng đang rỗng."));
+        }
         return ResponseEntity.ok(cartItems);
     }
 
