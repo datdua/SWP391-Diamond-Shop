@@ -3,6 +3,8 @@ package com.example.diamondstore.service;
 import java.math.BigDecimal;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,54 +31,72 @@ public class CartService {
         return cartRepository.findByAccountIDAndOrderIsNull(accountID);
     }
 
-    public void addItemToCart(Integer accountID, String diamondID, String jewelryID, Integer quantity) {
+    //thêm sản phẩm vào giỏ hàng
+    @Transactional
+    public void addItemToCart(Integer accountID, String diamondID, String jewelryID, Integer sizeJewelry, Integer quantity) {
         Cart cart = new Cart();
         cart.setAccountID(accountID);
         cart.setDiamondID(diamondID);
         cart.setJewelryID(jewelryID);
         cart.setQuantity(quantity);
+        
+        // Fetch the jewelry item to get the size
+        if (jewelryID != null) {
+            Jewelry jewelry = jewelryRepository.findById(jewelryID).orElse(null);
+            if (jewelry != null) {
+                cart.setSizeJewelry(sizeJewelry); 
+            }
+        }
         calculateAndSetTotalPrice(cart);
         cartRepository.save(cart);
     }
 
-    public void updateCartItem(Integer cartID, Integer accountID, String diamondID, String jewelryID, Integer quantity) {
+    //cập nhật sản phẩm trong giỏ hàng
+    @Transactional
+    public void updateCartItem(Integer cartID, Integer accountID, String diamondID, String jewelryID, Integer sizeJewelry, Integer quantity) {
         Cart cartItem = cartRepository.findById(cartID).orElse(null);
         if (cartItem != null) {
             cartItem.setAccountID(accountID);
             cartItem.setDiamondID(diamondID);
             cartItem.setJewelryID(jewelryID);
             cartItem.setQuantity(quantity);
+            cartItem.setSizeJewelry(sizeJewelry); 
             calculateAndSetTotalPrice(cartItem);
             cartRepository.save(cartItem);
+        } else {
+            throw new IllegalArgumentException("Không tìm thấy sản phẩm trong giỏ hàng.");
         }
     }
 
+    @Transactional
     public void removeCartItem(Integer cartID) {
         cartRepository.deleteById(cartID);
     }
 
+    //tính tổng giá tiền
     private void calculateAndSetTotalPrice(Cart cart) {
         BigDecimal totalPrice = BigDecimal.ZERO;
         if (cart.getDiamondID() != null) {
             Diamond diamond = diamondRepository.findById(cart.getDiamondID()).orElse(null);
             if (diamond != null) {
                 totalPrice = totalPrice.add(diamond.getDiamondPrice());
-        }
-        if (cart.getJewelryID() != null) {
-            Jewelry jewelry = jewelryRepository.findById(cart.getJewelryID()).orElse(null);
-            if (jewelry != null) {
-                totalPrice = totalPrice.add(jewelry.getJewelryPrice());
             }
+            if (cart.getJewelryID() != null) {
+                Jewelry jewelry = jewelryRepository.findById(cart.getJewelryID()).orElse(null);
+                if (jewelry != null) {
+                    totalPrice = totalPrice.add(jewelry.getJewelryPrice());
+                }
+            }
+            totalPrice = totalPrice.multiply(BigDecimal.valueOf(cart.getQuantity())); // Multiply by quantity
+            cart.setTotalPrice(totalPrice);
         }
-        totalPrice = totalPrice.multiply(BigDecimal.valueOf(cart.getQuantity())); // Multiply by quantity
-        cart.setTotalPrice(totalPrice);
-    }
     }
 
     public Cart getCartByCartID(Integer cartID) {
         return cartRepository.findById(cartID).orElse(null);
     }
 
+    @Transactional
     public void saveCart(Cart cart) {
         calculateAndSetTotalPrice(cart);
         cartRepository.save(cart);

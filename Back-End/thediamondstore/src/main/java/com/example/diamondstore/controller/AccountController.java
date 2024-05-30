@@ -88,7 +88,6 @@ public class AccountController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Xóa thành công"));
     }
 
-
     @PutMapping(value = "/update/{accountID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> update(@PathVariable Integer accountID, @RequestBody AccountPutRequest accountPutRequest) {
         Account existingAccount = accountRepository.findById(accountID).orElse(null);
@@ -124,8 +123,8 @@ public class AccountController {
     }
 
     @GetMapping("/paged")
-        public ResponseEntity<Page<Account>> getAllAccountsPaged(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page-1, size);
+    public ResponseEntity<Page<Account>> getAllAccountsPaged(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
         Page<Account> pageAccount = accountRepository.findAll(pageable);
         return ResponseEntity.ok(pageAccount);
     }
@@ -137,7 +136,7 @@ public class AccountController {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
         }
         return ResponseEntity.ok(account);
-    } 
+    }
 
     @GetMapping("/getByEmail/{email}")
     public ResponseEntity<?> getByAccountEmail(@PathVariable String email) {

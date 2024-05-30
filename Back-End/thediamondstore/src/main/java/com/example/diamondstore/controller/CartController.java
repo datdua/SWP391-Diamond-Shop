@@ -26,6 +26,7 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
+    //lấy câc sản phẩm trong giỏ hàng
     @GetMapping("/{accountID}")
     public ResponseEntity<?> getCartItems(@PathVariable Integer accountID) {
         List<Cart> cartItems = cartService.getCartItems(accountID);
@@ -35,33 +36,39 @@ public class CartController {
         return ResponseEntity.ok(cartItems);
     }
 
+    //thêm sản phầm vào giỏ hàng
     @PostMapping(value = "/add", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> addItemToCart(
-            @RequestParam(required= false) Integer accountID,
+            @RequestParam(required = false) Integer accountID,
             @RequestParam(required = false) String diamondID,
             @RequestParam(required = false) String jewelryID,
+            @RequestParam(required = false) Integer sizeJewelry,
             @RequestParam Integer quantity) {
-        cartService.addItemToCart(accountID, diamondID, jewelryID, quantity);
+        cartService.addItemToCart(accountID, diamondID, jewelryID, sizeJewelry, quantity);
         return ResponseEntity.ok(Collections.singletonMap("message", "Thêm vào giỏ hàng thành công"));
     }
 
+    //cập nhật sản phẩm trong giỏ hàng
     @PutMapping(value = "/update/{cartID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> updateCartItem(
             @PathVariable Integer cartID,
             @RequestParam Integer accountID,
             @RequestParam(required = false) String diamondID,
             @RequestParam(required = false) String jewelryID,
+            @RequestParam(required = false) Integer sizeJewelry,
             @RequestParam Integer quantity) {
-        cartService.updateCartItem(cartID, accountID, diamondID, jewelryID, quantity);
+        cartService.updateCartItem(cartID, accountID, diamondID, jewelryID, sizeJewelry, quantity);
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật giỏ hàng thành công"));
     }
 
+    //xóa sản phẩm trong giỏ hàng
     @DeleteMapping(value = "/remove/{cartID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> removeCartItem(@PathVariable Integer cartID) {
         cartService.removeCartItem(cartID);
         return ResponseEntity.ok(Collections.singletonMap("message", "Xóa khỏi giỏ hàng thành công"));
     }
 
+    //tạo giỏ hàng
     @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> createCart(@RequestBody Cart cart) {
         Cart existingCart = cartService.getCartByCartID(cart.getCartID());
