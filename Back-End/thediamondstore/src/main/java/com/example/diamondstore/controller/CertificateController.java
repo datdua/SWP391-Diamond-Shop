@@ -85,4 +85,13 @@ public class CertificateController {
         certificateRepository.delete(existingCertificate);
         return ResponseEntity.ok(Collections.singletonMap("message", "Xóa thành công"));
     }
+
+    @GetMapping(value = "/get/certificateImg/{certificateID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getCertificateImg(@PathVariable String certificateID) {
+        Certificate certificate = certificateRepository.findByCertificateID(certificateID);
+        if (certificate == null) {
+            return new ResponseEntity<>(Collections.singletonMap("message", "ID không tồn tại"), HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(Collections.singletonMap("certificateImage", certificate.getcertificateImage()));
+    }
 }

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class DiamondPutRequest {
 
-    private String warrantityID;
+    private String warrantyID;
     private String certificationID;
     private Float carat_size;
     private BigDecimal diamondPrice;
@@ -20,7 +20,7 @@ public class DiamondPutRequest {
     public DiamondPutRequest() {
     }
 
-    public DiamondPutRequest(Float carat_size, Float carat_weight, String certificationID, String clarity, String color, String cut, String diamondImage, String diamondName, BigDecimal diamondPrice, String origin, String shape, String warrantityID) {
+    public DiamondPutRequest(Float carat_size, Float carat_weight, String certificationID, String clarity, String color, String cut, String diamondImage, String diamondName, BigDecimal diamondPrice, String origin, String shape, String warrantyID) {
         this.carat_size = carat_size;
         this.carat_weight = carat_weight;
         this.certificationID = certificationID;
@@ -32,17 +32,17 @@ public class DiamondPutRequest {
         this.diamondPrice = diamondPrice;
         this.origin = origin;
         this.shape = shape;
-        this.warrantityID = warrantityID;
+        this.warrantyID = warrantyID;
     }
 
     
 
     public String getWarrantityID() {
-        return warrantityID;
+        return warrantyID;
     }
 
-    public void setWarrantityID(String warrantityID) {
-        this.warrantityID = warrantityID;
+    public void setWarrantityID(String warrantyID) {
+        this.warrantyID = warrantyID;
     }
 
     public String getCertificationID() {

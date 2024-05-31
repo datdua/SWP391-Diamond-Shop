@@ -59,3 +59,24 @@ export async function deleteDiamond(diamondId) {
         throw new Error('Failed to delete diamond');
     }
 }
+
+export async function getCertificateImage(certificationID) {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/certificates/get/certificateImg/${certificationID}`);
+      console.log('API Response:', response.data); // Debug line
+      return response.data.certificateImage; // Correctly extract the certificateImage URL
+    } catch (error) {
+      throw new Error('Failed to fetch diamond certificate image');
+    }
+  }
+
+export async function getWarrantityImage(warrantyID) {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/warranties/get/warrantyImg/${warrantyID}`);
+      console.log('API Response:', response.data); // Debug line
+      return response.data.warrantyImage; // Correctly extract the warrantityImage URL
+    } catch (error) {
+      throw new Error('Failed to fetch diamond warranty image');
+    }
+  }
+  

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Container, Navbar, Nav, Row, Col, Card, Table, Dropdown } from 'react-bootstrap';
-import { getAllJewelry } from '../api/jewelryCrud.js'; // Adjust this import to your file structure
+import { getAllJewelry } from '../api/jewelryCrud.js';
 import AddJewelryForm from '../components/JewelryCRUD/AddJewelryForm.js';
-import UpdateJewelryForm from '../components/JewelryCRUD/UpdateJewelryForm.js'; // Adjust this import to your file structure
-import DeleteJewelryButton from '../components/JewelryCRUD/DeleteJewelryForm.js'; // Adjust this import to your file structure
+import UpdateJewelryForm from '../components/JewelryCRUD/UpdateJewelryForm.js';
+import DeleteJewelryButton from '../components/JewelryCRUD/DeleteJewelryForm.js';
 import AddDiamondForm from '../components/DiamondCRUD/AddDiamondForm.js';
-import UpdateDiamondForm from '../components/DiamondCRUD/UpdateDiamondFrom.js'; // Corrected import path
-import DeleteDiamondButton from '../components/DiamondCRUD/DeleteDiamondForm.js'; // Adjust this import to your file structure
-import { getAllDiamond } from '../api/diamondCrud.js';
+import UpdateDiamondForm from '../components/DiamondCRUD/UpdateDiamondForm.js';
+import DeleteDiamondButton from '../components/DiamondCRUD/DeleteDiamondForm.js';
+import { getAllDiamond, getCertificateImage, getWarrantityImage } from '../api/diamondCrud.js';
 
 function TableList() {
   const [jewelryData, setJewelryData] = useState([]);
@@ -18,6 +18,10 @@ function TableList() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [showDiamondTable, setShowDiamondTable] = useState(false);
   const [showJewelryTable, setShowJewelryTable] = useState(true);
+  const [certificateImage, setCertificateImage] = useState(null);
+  const [showCertificateModal, setShowCertificateModal] = useState(false);
+  const [warrantyImg, setWarrantyImg] = useState(null);
+  const [showWarrantityModal, setShowWarrantityModal] = useState(false);
 
   const handleClose = () => {
     setShowModal(false);
@@ -58,6 +62,38 @@ function TableList() {
   const handleShowJewelryTable = () => {
     setShowDiamondTable(false);
     setShowJewelryTable(true);
+  };
+
+  const handleShowCertificate = async (certificationID) => {
+    try {
+      const imageUrl = await getCertificateImage(certificationID);
+      console.log('Certificate Image URL:', imageUrl);
+      setCertificateImage(imageUrl);
+      setShowCertificateModal(true);
+    } catch (error) {
+      console.error('Error fetching certificate image:', error);
+    }
+  };
+
+  const handleCloseCertificateModal = () => {
+    setShowCertificateModal(false);
+    setCertificateImage(null);
+  };
+
+  const handleShowWarrantity = async (warrantyID) => {
+    try {
+      const imageUrl = await getWarrantityImage(warrantyID);
+      console.log('Warrantity Image URL:', imageUrl);
+      setWarrantyImg(imageUrl);
+      setShowWarrantityModal(true);
+    } catch (error) {
+      console.error('Error fetching warranty image:', error);
+    }
+  };
+
+  const handleCloseWarrantityModal = () => {
+    setShowWarrantityModal(false);
+    setWarrantyImg(null);
   };
 
   useEffect(() => {
@@ -119,7 +155,7 @@ function TableList() {
                         <td>{jewelry.size}</td>
                         <td>{jewelry.gender}</td>
                         <td><img src={jewelry.jewelryImage} alt={jewelry.jewelryName} style={{ width: "100px", height: "100px" }} /> </td>
-                        <td>{jewelry.jewelryPrice}</td>
+                        <td>{jewelry.jewelryPrice.toLocaleString() +' VNĐ'}</td>
                         <td>
                           <Button variant="primary" onClick={() => handleShowUpdate(jewelry)}>Edit</Button>
                           <DeleteJewelryButton jewelryID={jewelry.jewelryID} onDelete={() => handleDelete(jewelry.jewelryID, null)} />
@@ -166,11 +202,15 @@ function TableList() {
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td>{diamond.diamondID}</td>
-                        <td>{diamond.warrantityID}</td>
-                        <td>{diamond.certificationID}</td>
+                        <td>
+                          <a href="#" onClick={() => handleShowWarrantity(diamond.warrantyID)}>{diamond.warrantyID}</a>
+                        </td>
+                        <td>
+                          <a href="#" onClick={() => handleShowCertificate(diamond.certificationID)}>{diamond.certificationID}</a>
+                        </td>
                         <td>{diamond.diamondName}</td>
-                        <td>{diamond.diamondPrice}</td>
-                        <td><img src={diamond.diamondImage} alt={diamond.diamondName} style={{ width: "100px", height: "100px" }}/></td>
+                        <td>{diamond.diamondPrice.toLocaleString() + ' VNĐ'}</td>
+                        <td><img src={diamond.diamondImage} alt={diamond.diamondName} style={{ width: "100px", height: "100px" }} /></td>
                         <td>{diamond.carat_weight}</td>
                         <td>{diamond.carat_size}</td>
                         <td>{diamond.color}</td>
@@ -180,7 +220,7 @@ function TableList() {
                         <td>{diamond.origin}</td>
                         <td>
                           <Button variant="primary" onClick={() => handleShowUpdate(diamond)}>Edit</Button>
-                          <DeleteDiamondButton diamondId={diamond.diamondID} onDelete={() => handleDelete(null, diamond.diamondID)} />
+                          <DeleteDiamondButton diamondID={diamond.diamondID} onDelete={() => handleDelete(null, diamond.diamondID)} />
                         </td>
                       </tr>
                     ))}
@@ -191,15 +231,59 @@ function TableList() {
           </Col>
         </Row>
       )}
+
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{isUpdating ? (showDiamondTable ? 'Update Diamond' : 'Update Jewelry') : (showDiamondTable ? 'Add Diamond' : 'Add Jewelry')}</Modal.Title>
+          <Modal.Title>{isUpdating ? 'Update Item' : 'Add Item'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {isUpdating ? (showDiamondTable ? <UpdateDiamondForm diamond={selectedDiamond} /> : <UpdateJewelryForm jewelry={selectedJewelry} />) : (showDiamondTable ? <AddDiamondForm /> : <AddJewelryForm />)}
+          {isUpdating ? (
+            showDiamondTable ? (
+              <UpdateDiamondForm diamond={selectedDiamond} onClose={handleClose} />
+            ) : (
+              <UpdateJewelryForm jewelry={selectedJewelry} onClose={handleClose} />
+            )
+          ) : (
+            showDiamondTable ? (
+              <AddDiamondForm onClose={handleClose} />
+            ) : (
+              <AddJewelryForm onClose={handleClose} />
+            )
+          )}
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={showCertificateModal} onHide={handleCloseCertificateModal} >
+        <Modal.Header closeButton>
+          <Modal.Title>Certificate Image</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {certificateImage ? (
+            <img src={certificateImage} alt="Certificate" style={{ width: '100%', height: '100%' }} />
+          ) : (
+            <p>Loading...</p>
+          )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={handleCloseCertificateModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showWarrantityModal} onHide={handleCloseWarrantityModal} >
+        <Modal.Header closeButton>
+          <Modal.Title>Warrantity Image</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {warrantyImg ? (
+            <img src={warrantyImg} alt="Warranty" style={{ width: '100%', height: '100%' }} />
+          ) : (
+            <p>Loading...</p>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseWarrantityModal}>
             Close
           </Button>
         </Modal.Footer>
