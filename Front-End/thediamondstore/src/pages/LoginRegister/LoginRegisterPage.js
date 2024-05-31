@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
@@ -49,6 +49,11 @@ function LoginRegisterPage() {
             toast.error("Lỗi khi đăng nhập!");
         }
     };    
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
@@ -68,6 +73,7 @@ function LoginRegisterPage() {
                 console.log("Đăng ký thành công:", data.message);
                 toast.success("Đăng ký thành công!");
                 navigate("/trangchu");
+                
             } else {
                 console.error("Đăng ký thất bại:", response);
                 toast.error("Đăng ký thất bại!");
