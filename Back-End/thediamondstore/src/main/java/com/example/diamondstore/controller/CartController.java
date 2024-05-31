@@ -27,8 +27,8 @@ public class CartController {
     private CartService cartService;
 
     //lấy câc sản phẩm trong giỏ hàng
-    @GetMapping("/{accountID}")
-    public ResponseEntity<?> getCartItems(@PathVariable Integer accountID) {
+    @GetMapping()
+    public ResponseEntity<?> getCartItems(@RequestParam Integer accountID) {
         List<Cart> cartItems = cartService.getCartItems(accountID);
         if (cartItems.isEmpty()) {
             return ResponseEntity.ok(Collections.singletonMap("message", "Giỏ hàng đang rỗng."));
