@@ -15,11 +15,11 @@ export const getAccountIDByEmail = async (email) => {
     }
 };
 
-export const addJewelryToCart = async (accountId, jewelryId, quantity, size) => {
+export const addJewelryToCart = async (accountID, jewelryId, quantity, size) => {
     try {
         const token = localStorage.getItem('jwt');
         const response = await axios.post(
-            `http://localhost:8080/api/cart/add?accountID=${accountId}&jewelryID=${jewelryId}&quantity=${quantity}&sizeJewelry=${size}`,
+            `http://localhost:8080/api/cart/add?accountID=${accountID}&jewelryID=${jewelryId}&quantity=${quantity}&sizeJewelry=${size}`,
             {}, 
             {
                 headers: {
@@ -33,10 +33,10 @@ export const addJewelryToCart = async (accountId, jewelryId, quantity, size) => 
         throw new Error("Failed to add item to cart");
     }
 };
-export const getAllCartItems = async (accountId) => {
+export const getAllCartItems = async (accountID) => {
     try {
         const token = localStorage.getItem('jwt');
-        const response = await axios.get(`http://localhost:8080/api/cart?accountID=${accountId}`, {
+        const response = await axios.get(`http://localhost:8080/api/cart?accountID=${accountID}`, {
             method:'GET',
             headers: {
                 Authorization: `Bearer ${token}`

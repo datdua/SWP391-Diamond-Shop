@@ -3,23 +3,27 @@ import { Link, useParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import { getAllCartItems } from "../../api/addToCart";
-// Import the getAllCartItems function
 
 function CartPage() {
     const [cartItems, setCartItems] = useState([]);
-    const accountId = useParams();
+    const { accountId } = useParams(); // Extract accountId from useParams
+
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
-                const items = await getAllCartItems(accountId);
-                setCartItems(items);
+                console.log("Fetching cart items for account ID:", accountId); // Debugging line
+                if (accountId) {
+                    const items = await getAllCartItems(accountId);
+                    setCartItems(items);
+                } else {
+                    console.error("Account ID is undefined");
+                }
             } catch (error) {
                 console.error("Error fetching cart items:", error);
             }
-            
         };
         fetchCartItems();
-    }, []);
+    }, [accountId]);
 
     return (
         <div>
@@ -54,7 +58,7 @@ function CartPage() {
                                     </thead>
                                     <tbody>
                                         {cartItems.map((item, index) => (
-                                            <tr key={index}>
+                                            <tr key={item.jewelryID}>
                                                 <td>
                                                     <Link to={`/product-detail/${item.jewelryID}`} className="tm-cart-productimage">
                                                         <img src={item.image} alt="product image" />
@@ -68,9 +72,7 @@ function CartPage() {
                                                     <div className="tm-quantitybox">
                                                         <label htmlFor={`quantity-${index}`}>Quantity:</label>
                                                         <div className="flex items-center">
-                                                            
                                                             <input id={`quantity-${index}`} type="text" value={item.quantity} readOnly className="w-12 text-center" />
-                                    
                                                         </div>
                                                     </div>
                                                 </td>
