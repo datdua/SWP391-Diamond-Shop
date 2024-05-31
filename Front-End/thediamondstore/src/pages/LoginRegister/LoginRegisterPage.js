@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
@@ -10,8 +10,11 @@ function LoginRegisterPage() {
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
     const [registerEmail, setRegisterEmail] = useState("");
+    const [accountName, setAccountName] = useState("");
     const [registerPassword, setRegisterPassword] = useState("");
     const [registerName, setRegisterName] = useState("");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const accountID = useParams();
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
@@ -32,23 +35,12 @@ function LoginRegisterPage() {
                 const data = response.data;
                 console.log("Đăng nhập thành công:", data.jwt);
                 localStorage.setItem("jwt", data.jwt);
-                localStorage.setItem("username", loginEmail); 
+                localStorage.setItem("email", loginEmail);
+                localStorage.setItem("accountName", accountName);
+                setIsLoggedIn(true); // Update the state
                 toast.success("Đăng nhập thành công!");
-    
-                // Make an additional API call to get the accountId
-                const accountResponse = await axios.get("http://localhost:8080/account", {
-                    headers: {
-                        "Authorization": `Bearer ${data.jwt}`
-                    }
-                });
-    
-                if (accountResponse.status === 200) {
-                    localStorage.setItem("accountId", accountResponse.data.accountId);
-                }
-    
-                navigate("/trangchu");
-            }    
-            else {
+                navigate('/trangchu');
+            } else {
                 console.error("Đăng nhập thất bại:", response);
                 toast.error("Đăng nhập thất bại!");
             }
@@ -56,8 +48,7 @@ function LoginRegisterPage() {
             console.error("Lỗi khi đăng nhập:", error);
             toast.error("Lỗi khi đăng nhập!");
         }
-    };
-
+    };    
     const handleRegister = async (e) => {
         e.preventDefault();
         try {

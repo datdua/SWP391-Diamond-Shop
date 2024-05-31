@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./ProductPage.css";
 import Modal from "react-modal";
 import { addToCart, fetchJewelryPage, getPage } from "../../api/JewelryAPI"; // Import the functions
+import { getAccountIDByEmail } from "../../api/addToCart";
 
 // Set the app element for accessibility
 Modal.setAppElement('#root'); // Ensure this matches your app's root element
@@ -26,6 +27,7 @@ const customModalStyles = {
 
 function JewelryPage() {
     const location = useLocation();
+    const navigate = useNavigate
     const [jewelry, setJewelry] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -39,6 +41,7 @@ function JewelryPage() {
     const [totalPages, setTotalPages] = useState(1);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showNotification, setShowNotification] = useState(false);
+    const [size, setSize] = useState(null);
     const { jewelryId } = useParams();
     const [quantity, setQuantity] = useState(1);
     const [searchResults, setSearchResults] = useState([]);
@@ -59,26 +62,24 @@ function JewelryPage() {
 
     useEffect(() => {
         fetchJewelryPage(currentPage);
-    },
-        [currentPage]);
-        useEffect(() => {
-            const params = new URLSearchParams(location.search);
-            const results = params.get('results');
-            if (results) {
-                const parsedResults = JSON.parse(decodeURIComponent(results));
-                // Map through the parsed results and add the jewelryImage property to each item
-                const resultsWithImages = parsedResults.map(item => ({
-                    ...item,
-                    jewelryImage: item.jewelryImage
-                }));
-                setSearchResults(resultsWithImages);
-                console.log(resultsWithImages.map(item => item.jewelryImage));
-            } else {
-                setSearchResults([]); 
-            }
-        }, [location]);
-        
+    }, [currentPage]);
 
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const results = params.get('results');
+        if (results) {
+            const parsedResults = JSON.parse(results);
+            // Map through the parsed results and add the jewelryImage property to each item
+            const resultsWithImages = parsedResults.map(item => ({
+                ...item,
+                jewelryImage: item.jewelryImage
+            }));
+            setSearchResults(resultsWithImages);
+            console.log(resultsWithImages.map(item => item.jewelryImage));
+        } else {
+            setSearchResults([]);
+        }
+    }, [location]);
 
     function openModal(item) {
         setSelectedItem(item);
@@ -111,6 +112,7 @@ function JewelryPage() {
                 setLoading(false);
             });
     };
+
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
@@ -135,28 +137,56 @@ function JewelryPage() {
                 setLoading(false);
             });
     };
-    const getLoggedInAccountId = () => {
-        return localStorage.getItem('accountId');
-    };
-    useEffect(() => {
-        if (isLoggedIn) {
-            setAccountId(getLoggedInAccountId());
-        }
-    }, [isLoggedIn]);
 
-    const handleAddToCart = async () => {
+
+    useEffect(() => {
+        const checkLoginStatus = () => {
+            const jwt = localStorage.getItem('jwt');
+            if (jwt) {
+                setIsLoggedIn(true);
+            } else {
+                setIsLoggedIn(false);
+            }
+        };
+
+        checkLoginStatus();
+    }, []);
+
+
+
+    const handleAddToCart = async (item) => {
+        console.log("Add to Cart clicked");
+        console.log("Item to be added:", item);
+
         if (!isLoggedIn) {
+            console.log("User not logged in");
             setShowNotification(true);
         } else {
             try {
-                await addToCart(accountId, jewelryId, quantity);
+                const email = localStorage.getItem('email');
+                console.log("User email:", email);
+
+                const accountID = await getAccountIDByEmail(email);
+                console.log("Account ID:", accountID);
+
+                if (item.hasOwnProperty("sizeJewelry")) {
+                    setSize(item.sizeJewelry);
+                }
+
+                const response = await addToCart(accountID, item.jewelryID || item.diamondID, quantity, size); // Pass the size parameter
+                console.log("Add to Cart response:", response);
+
                 alert("Item added to cart successfully!");
+                closeModal();
+                navigate("/cart"); // Redirect to CartPage after successful addition
             } catch (error) {
-                alert("Failed to add item to cart");
+                console.error("Failed to add item to cart:", error.message);
+                alert("Failed to add item to cart: " + error.message);
             }
         }
     };
     console.log(searchResults);
+
     return (
         <div>
             <div id="wrapper" className="wrapper">
@@ -209,7 +239,7 @@ function JewelryPage() {
                                                                 </div>
                                                                 <ul className="tm-product-actions">
                                                                     {showNotification && <p>Please log in to add items to the cart.</p>}
-                                                                    <li><button onClick={() => handleAddToCart(item)}>Add to cart</button></li> {/* Pass item to handleAddToCart */}
+                                                                    <li><button onClick={() => handleAddToCart(item)}>Add to cart</button></li>
                                                                     <li><button onClick={() => openModal(item)} aria-label="Product Quickview"><i className="ion-eye"></i></button></li>
                                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                                 </ul>
@@ -302,6 +332,7 @@ function JewelryPage() {
                                 <div className="img-container">
                                     <img src={selectedItem.jewelryImage} alt={selectedItem.jewelryName} />
                                 </div>
+                                <button onClick={() => handleAddToCart(selectedItem)}>Add to Cart</button>
                                 <button className="close-button" onClick={closeModal}>Close</button>
                                 <div className="content-container">
                                     <h2>{selectedItem.jewelryName}</h2>
@@ -309,10 +340,19 @@ function JewelryPage() {
                                     <p>Diamond ID: {selectedItem.diamondID}</p>
                                     <p>Gender: {selectedItem.gender}</p>
                                     <span>{selectedItem.jewelryPrice.toLocaleString()} VND</span>
+                                    <div className="size-dropdown">
+                                        <label htmlFor="size">Select Size:</label>
+                                        <select id="size" onChange={(e) => setSize(e.target.value)}>
+                                            {[6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((sizeOption) => (
+                                                <option key={sizeOption} value={sizeOption}>{sizeOption}</option>
+                                            ))}
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </Modal>
                     )}
+
                 </div>
                 {/*<Footer />*/}
             </div>

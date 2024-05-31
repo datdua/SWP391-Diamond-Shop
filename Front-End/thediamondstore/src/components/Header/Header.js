@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import "./Header.css"
+import { Link, useNavigate } from "react-router-dom";
+import "./Header.css";
 import { searchJewelryByName } from "../../api/JewelryAPI";
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import axios from "axios";
 import { searchDiamondByName } from "../../api/DiamondAPI";
+import { toast } from "react-toastify";
 
 function Header() {
+    const navigate = useNavigate();
     const [isAccountDropdownOpen, setAccountDropdownOpen] = useState(false);
     const [isCurrencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
     const [isLanguageDropdownOpen, setLanguageDropdownOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [username, setUsername] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [accountName, setAccountName] = useState('');
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
     const toggleDropdown = (dropdown) => {
         if (dropdown === "account") {
             setAccountDropdownOpen(!isAccountDropdownOpen);
@@ -30,51 +33,62 @@ function Header() {
             setLanguageDropdownOpen(!isLanguageDropdownOpen);
         }
     };
+
     const handleSearch = async () => {
         try {
             const [jewelryResults, diamondResults] = await Promise.all([
                 searchJewelryByName(searchTerm),
                 searchDiamondByName(searchTerm)
             ]);
-            
+
             const combinedResults = [...jewelryResults, ...diamondResults];
             setSearchResults(combinedResults);
-            
+
             if (diamondResults.length > 0) {
-                window.location.href = `/kimcuong?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(diamondResults))}`; 
+                window.location.href = `/kimcuong?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(diamondResults))}`;
             } else if (jewelryResults.length > 0) {
-                window.location.href = `/trangsuc?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(jewelryResults))}`; 
+                window.location.href = `/trangsuc?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(jewelryResults))}`;
             }
         } catch (error) {
             console.error('Error searching for jewelry and diamonds:', error);
         }
     };
-    
-    useEffect(() => {
-        const fetchAccountName = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                const username = localStorage.getItem('username');
-                if (token && username) {
-                    const response = await axios.get(`http://localhost:8080/api/accounts/${username}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    });
-                    setAccountName(response.data.accountName);
-                } else {
-                    console.error('No token or username found');
-                }
-            } catch (err) {
-                console.error('Error fetching account name:', err);
-            }
-        };
 
-        fetchAccountName();
+    useEffect(() => {
+        // Check if user is logged in when the component mounts
+        const token = localStorage.getItem('jwt');
+        const storedUsername = localStorage.getItem('email');
+        if (token && storedUsername) {
+            setIsLoggedIn(true);
+            fetchAccountName(storedUsername);
+        }
     }, []);
+
+    const fetchAccountName = async (username) => {
+        try {
+            const token = localStorage.getItem('jwt');
+            const response = await axios.get(`http://localhost:8080/api/accounts/${username}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            setAccountName(response.data.accountName);
+        } catch (err) {
+            console.error('Error fetching account name:', err);
+        }
+    };
+
+    const onLogout = () => {
+        localStorage.removeItem("jwt");
+        localStorage.removeItem("email");
+        setIsLoggedIn(false);
+        setAccountName('');
+        toast.success("Đăng xuất thành công!");
+        navigate('/dangnhap');
+    };
+
     return (
         <div className="tm-header tm-header-sticky">
-            {/* Header Top Area */}
             <div className="tm-header-toparea bg-black">
                 <div className="container">
                     <div className="row justify-between items-center">
@@ -94,7 +108,11 @@ function Header() {
                                     {isAccountDropdownOpen && (
                                         <ul className="tm-dropdown-menu">
                                             <li><Link to="/account">My Account</Link></li>
-                                            <li><Link to="/dangnhap">Đăng Nhập / Đăng Ký</Link></li>
+                                            {isLoggedIn ? (
+                                                <button onClick={onLogout}>Đăng xuất</button>
+                                            ) : (
+                                                <Link to="/dangnhap">Đăng nhập/Đăng ký</Link>
+                                            )}
                                             <li><Link to="/cart">Shopping Cart</Link></li>
                                             <li><Link to="/wishlist">Wishlist</Link></li>
                                             <li><Link to="/checkout">Checkout</Link></li>
@@ -106,8 +124,6 @@ function Header() {
                     </div>
                 </div>
             </div>
-            {/* // Header Top Area */}
-            {/* Header Middle Area */}
             <div className="tm-header-middlearea bg-white">
                 <div className="container">
                     <div className="tm-mobilenav"></div>
@@ -137,9 +153,6 @@ function Header() {
                     </div>
                 </div>
             </div>
-            {/* // Header Middle Area */}
-
-            {/* Header Bottom Area */}
             <div className="tm-header-bottomarea bg-white">
                 <div className="container">
                     <nav className="tm-header-nav">
@@ -162,7 +175,6 @@ function Header() {
                     </nav>
                 </div>
             </div>
-            {/* // Header Bottom Area */}
         </div>
     );
 }

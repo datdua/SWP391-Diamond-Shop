@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Modal from "react-modal";
-import { getAllDiamond, getPage } from "../../api/DiamondAPI";
+import { getAllDiamond, getPage, searchDiamondByColor } from "../../api/DiamondAPI";
 import "./ProductPage.css";
 
 Modal.setAppElement('#root'); // Ensure this matches your app's root element
@@ -31,9 +31,10 @@ function DiamondPage() {
     const [modalIsOpen, setIsOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [searchColor, setSearchColor] = useState('');
     const location = useLocation();
     const [searchResults, setSearchResults] = useState([]);
-
+    const colors = ['All', 'E', 'J', 'F', 'D'];
     function openModal(item) {
         setSelectedItem(item);
         setIsOpen(true);
@@ -61,19 +62,58 @@ function DiamondPage() {
         fetchDiamonds(currentPage);
     }, [currentPage]);
 
-    const handlePageChange = (page) => {
-        setCurrentPage(page);
-    };
-    
+    const handlePageChange = async (pageNumber) => {
+        setCurrentPage(pageNumber);
+        setLoading(true);
+        try {
+          let data;
+          if (searchColor === 'All') {
+            data = await getAllDiamond();
+          } else {
+            data = await searchDiamondByColor(searchColor);
+          }
+          // Get the results for the new page
+          const results = data.slice((pageNumber - 1) * resultsPerPage, pageNumber * resultsPerPage);
+          setDiamonds(results);
+          setLoading(false);
+        } catch (error) {
+          setError(error.message);
+          setLoading(false);
+        }
+      };
+
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const results = params.get('results');
         if (results) {
-            setSearchResults(JSON.parse(decodeURIComponent(results)));
+            setSearchResults(JSON.parse(results));
         } else {
             setSearchResults([]); // Reset search results when no search is performed
         }
     }, [location]);
+    const resultsPerPage = 9;
+    const handleColorSearch = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            let data;
+            if (searchColor === 'All') {
+                data = await getAllDiamond();
+            } else {
+                data = await searchDiamondByColor(searchColor);
+            }
+            // Calculate the total number of pages
+            const totalPages = Math.ceil(data.length / resultsPerPage);
+            setTotalPages(totalPages);
+            // Get the results for the current page
+            const results = data.slice((currentPage - 1) * resultsPerPage, currentPage * resultsPerPage);
+            setDiamonds(results);
+            setLoading(false);
+        } catch (error) {
+            setError(error.message);
+            setLoading(false);
+        }
+    };
 
     return (
         <div>
@@ -157,6 +197,34 @@ function DiamondPage() {
                                                 {index + 1}
                                             </button>
                                         ))}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-lg-3 col-12">
+                                <div className="widgets">
+                                    <div className="single-widget widget-categories">
+                                        <h6 className="widget-title">Categories</h6>
+                                        <ul>
+                                            <li><Link to="/trangsuc">Trang Sức</Link></li>
+                                            <li><Link to="/kimcuong">Kim Cương</Link></li>
+                                        </ul>
+                                    </div>
+                                    <div className="single-widget widget-colorfilter">
+                                        <h6 className="widget-title">Filter by Color</h6>
+                                        <form onSubmit={handleColorSearch}>
+                                            <select
+                                                id="colorSearch"
+                                                value={searchColor}
+                                                onChange={(e) => setSearchColor(e.target.value)}
+                                            >
+                                                {colors.map((color) => (
+                                                    <option key={color} value={color}>
+                                                        {color}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            <button type="submit">Search</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

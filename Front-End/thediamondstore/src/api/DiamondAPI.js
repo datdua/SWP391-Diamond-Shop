@@ -41,13 +41,17 @@ export async function searchDiamondByName(name) {
     }
 }
 export async function searchDiamondByColor(color) {
-    const response = await axios.get(`http://localhost:8080/api/diamonds/search/filter?color=${color}`);
-    if (!response.ok) {
-        throw new Error('Failed to search jewelry by color');
+    try {
+        const response = await axios.get(`http://localhost:8080/api/diamonds/search/filter?color=${color}`);
+        if (response.status !== 200) {
+            throw new Error('Failed to search jewelry by color');
+        }
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to search jewelry by color: ' + error.message);
     }
-    const data = await response.json();
-    return data;
 }
+
 export async function searchDiamondByCut(cut) {
     const response = await axios.get(`http://localhost:8080/api/diamonds/search/filter?cut=${cut}`);
     if (!response.ok) {
