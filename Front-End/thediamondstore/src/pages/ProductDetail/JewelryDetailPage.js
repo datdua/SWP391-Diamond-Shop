@@ -77,7 +77,7 @@ function JewelryDetailPage() {
                 console.log("Add to Cart response:", response);
 
                 alert("Thêm vào giỏ hàng thành công!");
-                navigate("/cart"); // Redirect to CartPage after successful addition
+                navigate("/cart/" + accountID);// Redirect to CartPage after successful addition
             } catch (error) {
                 console.error("Failed to add item to cart:", error.message);
                 alert("Thêm vào giỏ hàng không thành công: " + error.message);

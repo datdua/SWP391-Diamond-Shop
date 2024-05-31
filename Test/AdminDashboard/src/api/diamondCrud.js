@@ -8,9 +8,9 @@ export async function getAllDiamond() {
     return response.data;
 }
 
-export async function getDiamondById(diamondId) {
+export async function getDiamondByID(diamondID) {
     try {
-        const response = await axios.get(`http://localhost:8080/api/diamonds/${diamondId}`);
+        const response = await axios.get(`http://localhost:8080/api/diamonds/${diamondID}`);
         return response.data;
     } catch (error) {
         throw new Error('Failed to fetch diamond by ID');
@@ -51,9 +51,9 @@ export async function updateDiamond(diamondID, diamond) {
     }
 }
 
-export async function deleteDiamond(diamondId) {
+export async function deleteDiamond(diamondID) {
     try {
-        const response = await axios.delete(`http://localhost:8080/api/diamonds/delete/${diamondId}`);
+        const response = await axios.delete(`http://localhost:8080/api/diamonds/delete/${diamondID}`);
         return response.data;
     } catch (error) {
         throw new Error('Failed to delete diamond');

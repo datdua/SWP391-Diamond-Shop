@@ -4,7 +4,7 @@ import { createDiamond } from '../../api/diamondCrud'; // Adjust this import to 
 function AddDiamondForm() {
   const [diamond, setdiamond] = useState({
     diamondID: '',
-    warrantityID: '',
+    warrantyID: '',
     certificationID: '',
     diamondName: '',
     diamondPrice: '',
@@ -40,7 +40,7 @@ function AddDiamondForm() {
     <div>
       <form onSubmit={handleSubmit}>
         <input name="diamondID" value={diamond.diamondID} onChange={handleChange} placeholder="diamond ID" />
-        <input name="warrantityID" value={diamond.warrantityID} onChange={handleChange} placeholder="warrantity ID" />
+        <input name="warrantyID" value={diamond.warrantyID} onChange={handleChange} placeholder="warranty ID" />
         <input name="certificationID" value={diamond.certificationID} onChange={handleChange} placeholder="certification ID" />
         <input name="diamondName" value={diamond.diamondName} onChange={handleChange} placeholder="diamond Name" />
         <input name="diamondPrice" value={diamond.diamondPrice} onChange={handleChange} placeholder="diamond Price" />

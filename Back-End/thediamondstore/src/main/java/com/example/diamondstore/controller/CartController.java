@@ -36,6 +36,8 @@ public class CartController {
         return ResponseEntity.ok(cartItems);
     }
 
+    @GetMapping(value="/{accountID}=10")
+
     //thêm sản phầm vào giỏ hàng
     @PostMapping(value = "/add", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> addItemToCart(

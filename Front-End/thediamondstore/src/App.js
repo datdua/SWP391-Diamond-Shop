@@ -19,9 +19,6 @@ import BackToTop from './components/BackToTop';
 import DiamondPage from './pages/Product/DiamondPage';
 import JewelryDetailPage from './pages/ProductDetail/JewelryDetailPage';
 
-
-
-
 function App() {
   return (
     <>
@@ -36,7 +33,7 @@ function App() {
         <Route path='/sanpham' element={<><Header/> <ProductPage/> <BackToTop/> <Footer/></>}/>
         <Route path='/trangsuc' element={<><Header/> <JewelryPage/> <BackToTop/></>}/>
         <Route path='/kimcuong' element={<><Header/> <DiamondPage/> <BackToTop/> <Footer/></>}/>
-        <Route path='/cart' element={<CartPage/>}/>
+        <Route path='/cart/:accountId' element={<CartPage/>}/>
         <Route path='/product-detail/:jewelryId' element={<><Header/> <JewelryDetailPage/> <BackToTop/> <Footer/></> } />
         <Route path='/account' element={<MyAccountPage/>}/>
         <Route path='/checkout' element={<CheckoutPage/>}/>
