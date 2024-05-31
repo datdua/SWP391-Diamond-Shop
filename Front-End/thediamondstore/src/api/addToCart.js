@@ -33,10 +33,11 @@ export const addJewelryToCart = async (accountId, jewelryId, quantity, size) => 
         throw new Error("Failed to add item to cart");
     }
 };
-export const getAllCartItems = async () => {
+export const getAllCartItems = async (accountId) => {
     try {
         const token = localStorage.getItem('jwt');
-        const response = await axios.get(`http://localhost:8080/api/cart`, {
+        const response = await axios.get(`http://localhost:8080/api/cart?accountID=${accountId}`, {
+            method:'GET',
             headers: {
                 Authorization: `Bearer ${token}`
             }

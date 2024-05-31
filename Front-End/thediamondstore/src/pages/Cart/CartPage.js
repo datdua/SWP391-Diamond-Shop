@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import { getAllCartItems } from "../../api/addToCart";
@@ -7,26 +7,19 @@ import { getAllCartItems } from "../../api/addToCart";
 
 function CartPage() {
     const [cartItems, setCartItems] = useState([]);
-
+    const accountId = useParams();
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
-                const items = await getAllCartItems();
+                const items = await getAllCartItems(accountId);
                 setCartItems(items);
             } catch (error) {
                 console.error("Error fetching cart items:", error);
             }
+            
         };
         fetchCartItems();
     }, []);
-
-    const handleIncrease = () => {
-        // Implement your logic to increase quantity
-    };
-
-    const handleDecrease = () => {
-        // Implement your logic to decrease quantity
-    };
 
     return (
         <div>
