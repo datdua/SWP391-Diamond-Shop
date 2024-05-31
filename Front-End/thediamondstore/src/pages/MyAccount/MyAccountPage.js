@@ -1,9 +1,15 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import "./MyAccountPage.css"
 function MyAccountPage() {
+    let navigate = useNavigate();
+    let accountName = localStorage.getItem('accountName');
+    function handleLogout() {
+        localStorage.removeItem('token');
+        navigate('/trangchu');
+    }
     return (
         <div>
             {/* <!-- Preloader --> 
@@ -26,7 +32,7 @@ function MyAccountPage() {
             <div id="wrapper" className="wrapper">
 
                 {/* <!-- Header --> */}
-                <Header/>
+                <Header />
                 {/* <!--// Header --> 
 
                 <!-- Breadcrumb Area --> */}
@@ -70,8 +76,16 @@ function MyAccountPage() {
                                             aria-selected="false">Account Details</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" id="account-logout-tab" href="login-register.html" role="tab"
-                                            aria-controls="account-address" aria-selected="false">Logout</a>
+                                        <a
+                                            className="nav-link"
+                                            id="account-logout-tab"
+                                            role="tab"
+                                            aria-controls="account-address"
+                                            aria-selected="false"
+                                            onClick={handleLogout}
+                                        >
+                                            Logout
+                                        </a>
                                     </li>
                                 </ul>
 
@@ -79,11 +93,19 @@ function MyAccountPage() {
                                     <div className="tab-pane fade show active" id="account-dashboard" role="tabpanel"
                                         aria-labelledby="account-dashboard-tab">
                                         <div className="tm-myaccount-dashboard">
-                                            <p>Hello <b>William Bean</b> (not <b>William Bean</b>? <a
-                                                href="login-register.html">Log
-                                                out</a>)</p>
-                                            <p>From your account dashboard you can view your recent orders, manage your
-                                                shipping and billing addresses, and edit your password and account details.</p>
+                                            <p>Hello <b>{accountName}</b> (not <b>{accountName}</b>?
+                                                <a
+                                                    href="/trangchu"
+                                                    onClick={(e) => {
+                                                        e.preventDefault(); // Prevent the default action
+                                                        localStorage.removeItem('token'); // Clear the token
+                                                        window.location.href = '/home'; // Redirect to home page
+                                                    }}
+                                                >
+                                                    Log out
+                                                </a>
+                                                )</p>
+                                            <p>From your account dashboard you can view your recent orders, manage your shipping and billing addresses, and edit your password and account details.</p>
                                         </div>
                                     </div>
                                     <div className="tab-pane fade" id="account-orders" role="tabpanel"
@@ -213,7 +235,7 @@ function MyAccountPage() {
                 {/* <!--// Page Content -->
 
                                         <!-- Footer --> */}
-                <Footer/>
+                <Footer />
                 {/* <!--// Footer --> */}
 
                 <button id="back-top-top"><i className="ion-arrow-up-c"></i></button>

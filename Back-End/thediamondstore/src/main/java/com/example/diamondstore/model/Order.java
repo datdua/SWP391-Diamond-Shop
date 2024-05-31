@@ -47,6 +47,15 @@ public class Order {
     @Column(name = "deliveryAddress")
     private String deliveryAddress;
 
+    @Column(name = "phoneNumber")
+    private String phoneNumber;
+
+    @Column(name = "certificateImage")
+    private String certificateImage;
+
+    @Column(name = "warrantyImage")
+    private String warrantyImage;
+
     @ManyToOne
     @JoinColumn(name = "promotionID", referencedColumnName = "promotionID", nullable = true)
     private Promotion promotion;
@@ -58,7 +67,7 @@ public class Order {
     public Order() {
     }
 
-    public Order(int accountID, List<Cart> cartItems, String deliveryAddress, LocalDateTime deliveryDate, int orderID, String orderStatus, Promotion promotion, LocalDateTime startorderDate, BigDecimal totalAmount) {
+    public Order(int accountID, List<Cart> cartItems, String deliveryAddress, LocalDateTime deliveryDate, int orderID, String orderStatus, Promotion promotion, LocalDateTime startorderDate, BigDecimal totalAmount, String phoneNumber, String certificateImage, String warrantyImage) {
         this.accountID = accountID;
         this.cartItems = cartItems;
         this.deliveryAddress = deliveryAddress;
@@ -68,6 +77,9 @@ public class Order {
         this.promotion = promotion;
         this.startorderDate = startorderDate;
         this.totalAmount = totalAmount;
+        this.phoneNumber = phoneNumber;
+        this.certificateImage = certificateImage;
+        this.warrantyImage = warrantyImage;
     }
 
     public int getOrderID() {
@@ -142,4 +154,30 @@ public class Order {
         this.cartItems = cartItems;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getCertificateImage() {
+        return certificateImage;
+    }
+
+    public void setCertificateImage(String certificateImage) {
+        this.certificateImage = certificateImage;
+    }
+
+    public String getWarrantyImage() {
+        return warrantyImage;
+    }
+
+    public void setWarrantyImage(String warrantyImage) {
+        this.warrantyImage = warrantyImage;
+    }
+
+    
+    
 }

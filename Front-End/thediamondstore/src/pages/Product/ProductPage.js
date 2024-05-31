@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import "./ProductPage.css";
 import Modal from "react-modal";
-import { getPage, filterJewelryByGender } from "../../api/JewelryAPI"; // Import the functions
+import { fetchJewelryPage, getPage } from "../../api/JewelryAPI"; // Import the functions
 
 // Set the app element for accessibility
 Modal.setAppElement('#root'); // Ensure this matches your app's root element
@@ -35,36 +35,46 @@ function ProductPage() {
     const [maxPrice, setMaxPrice] = useState(10000000);
     const [jewelryPage, setJewelryPage] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [size, setSize] = useState('');
+    const [totalPages, setTotalPages] = useState(1);
+    const itemsPerPage = 9; 
+
+    const fetchJewelryPage = async (page, gender) => {
+        try {
+            setLoading(true);
+            const pageData = await getPage(page, gender);
+            setJewelry(pageData.content);
+            setTotalPages(pageData.totalPages);
+            setLoading(false);
+        } catch (error) {
+            setError(error.message);
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
-        const productName = searchParams.get('search');
+        const productName = searchParams.get("search");
 
         if (productName) {
-            // If a product name is provided in the search query, fetch only the products with that name
-            axios.get(`http://localhost:8080/api/jewelry/searchName?name=${encodeURIComponent(productName)}`)
-                .then(response => {
+            axios
+                .get(
+                    `http://localhost:8080/api/jewelry/searchName?name=${encodeURIComponent(
+                        productName
+                    )}`
+                )
+                .then((response) => {
                     setJewelry(response.data);
                     setLoading(false);
                 })
-                .catch(error => {
+                .catch((error) => {
                     setError(error.message);
                     setLoading(false);
                 });
         } else {
-            // Fetch all products if no specific product name is provided in the search query
-            axios.get("http://localhost:8080/api/jewelry")
-                .then(response => {
-                    setJewelry(response.data);
-                    setLoading(false);
-                })
-                .catch(error => {
-                    setError(error.message);
-                    setLoading(false);
-                });
+            fetchJewelryPage(currentPage);
         }
-    }, [location.search]);
+    }, [location.search, currentPage]);
+
 
     function openModal(item) {
         setSelectedItem(item);
@@ -97,55 +107,30 @@ function ProductPage() {
                 setLoading(false);
             });
     };
-
-    useEffect(() => {
-        const fetchJewelryPage = async () => {
-            try {
-                const pageData = await getPage(currentPage);
-                setJewelryPage(pageData);
-            } catch (error) {
-                console.error('Error fetching jewelry page:', error);
-            }
-        };
-
-        fetchJewelryPage();
-    }, [currentPage]);
-
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
 
     const handleGenderFilter = (gender) => {
-        setLoading(true); // Set loading state while fetching data
+        setLoading(true);
         axios.get(`http://localhost:8080/api/jewelry/search/filter?gender=${gender}`)
             .then(response => {
-                setJewelry(response.data);
-                setLoading(false); // Set loading state to false after data is fetched
+                const filteredData = response.data;
+                setJewelry(filteredData);
+                setCurrentPage(1);
+                // Update jewelryPage and totalPages
+                setJewelryPage({
+                    ...jewelryPage,
+                    content: filteredData,
+                });
+                setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
+                setLoading(false);
             })
             .catch(error => {
                 setError(error.message);
-                setLoading(false); // Set loading state to false in case of error
+                setLoading(false);
             });
     };
-    const handleSizeFilter = () => {
-        if (size) {
-            setLoading(true);
-            axios.get(`http://localhost:8080/api/jewelry/search/filter?size=${size}`)
-                .then(response => {
-                    setJewelry(response.data);
-                    setLoading(false);
-                })
-                .catch(error => {
-                    setError(error.message);
-                    setLoading(false);
-                });
-        }
-    };
-
-    const handleSizeInputChange = (event) => {
-        setSize(event.target.value);
-    };
-
     return (
         <div>
             <div id="wrapper" className="wrapper">
@@ -222,33 +207,9 @@ function ProductPage() {
                                                 ))
                                             )}
                                         </div>
-                                        {selectedItem && (
-                                            <Modal
-                                                isOpen={modalIsOpen}
-                                                onRequestClose={closeModal}
-                                                style={customModalStyles}
-                                                contentLabel="Product Quickview"
-                                            >
-                                                <div className="modal-content">
-                                                    <div className="img-container">
-                                                        <img src={selectedItem.jewelryImage} alt={selectedItem.jewelryName} />
-                                                    </div>
-                                                    <button className="close-button" onClick={closeModal}>Close</button>
-                                                    <div className="content-container">
-                                                        <h2>{selectedItem.jewelryName}</h2>
-                                                        <p>{selectedItem.jewelryDescription}</p>
-                                                        <p>Diamond ID: {selectedItem.diamondID}</p>
-                                                        <p>Size: {selectedItem.size}</p>
-                                                        <p>Gender: {selectedItem.gender}</p>
-                                                        <span>{selectedItem.jewelryPrice.toLocaleString()} VND</span>
-                                                    </div>
-                                                </div>
-                                            </Modal>
-                                        )}
-
                                         <div className="tm-pagination mt-50">
-                                            {jewelryPage && jewelryPage.totalPages && Array.from({ length: jewelryPage.totalPages }, (_, index) => (
-                                                <button key={index} onClick={() => handlePageChange(index + 1)}>
+                                            {Array.from({ length: totalPages }, (_, index) => (
+                                                <button key={index} onClick={() => handlePageChange(index + 1)} className={currentPage === index + 1 ? 'active' : ''}>
                                                     {index + 1}
                                                 </button>
                                             ))}
@@ -296,20 +257,6 @@ function ProductPage() {
                                                 <button onClick={handleFilterConfirm}>Apply Filter</button>
                                             </div>
                                         </div>
-                                        <div className="single-widget widget-sizes">
-                                            <h6 className="widget-title">Filter by Size</h6>
-                                            <div className="widget-sizes-inner">
-                                                <label htmlFor="sizeInput">Size:</label>
-                                                <input
-                                                    type="text"
-                                                    id="sizeInput"
-                                                    name="sizeInput"
-                                                    value={size}
-                                                    onChange={handleSizeInputChange}
-                                                />
-                                                <button onClick={handleSizeFilter}>Apply Filter</button>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -317,7 +264,28 @@ function ProductPage() {
                     </div>
                 </main>
                 <div id="tm-product-quickview"> {/* Ensure this div is outside the main content */}
-                    {/* Modal content goes here */}
+                    {selectedItem && (
+                        <Modal
+                            isOpen={modalIsOpen}
+                            onRequestClose={closeModal}
+                            style={customModalStyles}
+                            contentLabel="Product Quickview"
+                        >
+                            <div className="modal-content">
+                                <div className="img-container">
+                                    <img src={selectedItem.jewelryImage} alt={selectedItem.jewelryName} />
+                                </div>
+                                <button className="close-button" onClick={closeModal}>Close</button>
+                                <div className="content-container">
+                                    <h2>{selectedItem.jewelryName}</h2>
+                                    <p>{selectedItem.jewelryDescription}</p>
+                                    <p>Diamond ID: {selectedItem.diamondID}</p>
+                                    <p>Gender: {selectedItem.gender}</p>
+                                    <span>{selectedItem.jewelryPrice.toLocaleString()} VND</span>
+                                </div>
+                            </div>
+                        </Modal>
+                    )}
                 </div>
                 {/*<Footer />*/}
             </div>
