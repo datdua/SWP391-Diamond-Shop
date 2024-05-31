@@ -3,6 +3,7 @@ package com.example.diamondstore.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -30,8 +31,7 @@ public class SecurityConfig implements WebMvcConfigurer {
         "/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html", "/api/auth/**",
         "/api/test/**", "/authenticate"};
 
-    private static final String[] ADMIN_URL = {"/api/accounts", "/update/**"};
-    private static final String[] COMMON_URL = {"/login", "/api/accounts/register", "/api/diamonds/**", "/api/certificates/**", "/api/jewelry/**", "/api/customers/**", "/api/accounts/forgetPassword/**", "/api/promotion/**", "/api/warranties/**", "/api/orders/**", "/api/cart/**"};
+    private static final String[] COMMON_URL = {"/login", "/api/accounts/register", "/api/diamonds/**", "/api/certificates/**", "/api/jewelry/**", "/api/customers/**", "/api/accounts/forgetPassword/**", "/api/promotion/**", "/api/warranties/**", "/api/orders/**", "/api/cart/**", "/api/accounts/**", "/api/accounts"};
 
     @Autowired
     private final AccountService UserService;
@@ -59,9 +59,9 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(authz -> authz
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight requests
                 .antMatchers(SWAGGER_URL).permitAll()
                 .antMatchers(COMMON_URL).permitAll()
-                .antMatchers(ADMIN_URL).hasRole("ADMIN")
                 .anyRequest().authenticated())
                 .exceptionHandling(e -> e
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
@@ -80,5 +80,4 @@ public class SecurityConfig implements WebMvcConfigurer {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
-
 }

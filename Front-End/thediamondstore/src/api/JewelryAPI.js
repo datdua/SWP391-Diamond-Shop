@@ -9,13 +9,15 @@ export async function getAllJewelry() {
     return data;
 }
 export async function searchJewelryByName(name) {
-    const response = await axios.get(`http://localhost:8080/api/jewelry/searchName?name=${name}`);
-    if (!response.ok) {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/jewelry/search/filter?jewelryName=${name}`);
+        console.log(response.data); // Log the response data
+        return response.data;
+    } catch (error) {
         throw new Error('Failed to search jewelry by name');
     }
-    const data = await response.json();
-    return data;
 }
+
 export async function getJewelryById(jewelryId) {
     try {
         const response = await axios.get(`http://localhost:8080/api/jewelry/${jewelryId}`);
@@ -40,9 +42,10 @@ export async function searchJewelryByGender(gender) {
         throw new Error('Failed to filter jewelry by gender');
     }
 }
-export async function searchJewelryBySize(size) {
+
+export const addToCart = async (accountId, jewelryId, quantity, size) => {
     try {
-        const response = await axios.get(`http://localhost:8080/api/jewelry/search/filter?size=${encodeURIComponent(size)}`);
+        const response = await axios.post(`http://localhost:8080/api/cart/add?accountID=${accountId}&jewelryID=${jewelryId}&quantity=${quantity}&sizeJewelry=${size}`);
         return response.data;
     } catch (error) {
         throw new Error('Failed to filter jewelry by size');
