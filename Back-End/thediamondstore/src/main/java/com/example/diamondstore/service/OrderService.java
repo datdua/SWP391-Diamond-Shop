@@ -12,10 +12,14 @@ import com.example.diamondstore.model.Cart;
 import com.example.diamondstore.model.Customer;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.model.Promotion;
+import com.example.diamondstore.model.Warranty;
 import com.example.diamondstore.repository.CartRepository;
+import com.example.diamondstore.repository.CertificateRepository;
 import com.example.diamondstore.repository.CustomerRepository;
+import com.example.diamondstore.repository.DiamondRepository;
 import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.repository.PromotionRepository;
+import com.example.diamondstore.repository.WarrantyRepository;
 
 @Service
 public class OrderService {
@@ -32,7 +36,17 @@ public class OrderService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public Order createOrder(int accountID, String deliveryAddress, Integer promotionID, Integer pointsToRedeem) {
+    @Autowired
+    private WarrantyRepository warrantyRepository;
+
+    @Autowired
+    private CertificateRepository certificateRepository;
+    
+    @Autowired
+    private DiamondRepository diamondRepository;
+
+
+    public Order createOrder(int accountID, String deliveryAddress, Integer promotionID, Integer pointsToRedeem, String phoneNumber) {
         List<Cart> cartItems = cartRepository.findByAccountIDAndOrderIsNull(accountID);
 
         if (cartItems.isEmpty()) {
@@ -42,9 +56,22 @@ public class OrderService {
         Order order = new Order();
         order.setAccountID(accountID);
         order.setDeliveryAddress(deliveryAddress);
+        order.setPhoneNumber(phoneNumber);
         order.setStartorderDate(LocalDateTime.now());
         order.setDeliveryDate(LocalDateTime.now().plusDays(7)); // Ví dụ: giao hàng sau 7 ngày
         order.setOrderStatus("Đang xử lý");
+       
+        // lấy certificateImage thông qua certificateID
+        String diamondID = cartItems.get(0).getDiamondID();
+        String certificateID = diamondRepository.findByDiamondID(diamondID).getCertificationID();
+        order.setCertificateImage(certificateRepository.findByCertificateID(certificateID).getcertificateImage());
+
+        // lấy warrantyImage thông qua warrantyID
+        
+        String warrantyID = diamondRepository.findByDiamondID(diamondID).getWarrantyID();
+        order.setWarrantyImage(warrantyRepository.findByWarrantyID(warrantyID).getwarrantyImage());
+
+        
 
         BigDecimal totalAmount = BigDecimal.ZERO;
 
@@ -90,4 +117,6 @@ public class OrderService {
 
         return order;
     }
+
+
 }
