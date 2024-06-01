@@ -32,16 +32,18 @@ public class Account {
     @Column(name = "role", nullable = false)
     private String role;
 
-    @Column(name = "phoneNumber")
+    @Column(name = "phoneNumber", nullable = false)
     private String phoneNumber;
 
     @Column(name = "email", nullable = false)
     private String email;
 
     @JsonBackReference
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     @PrimaryKeyJoinColumn
     private Customer customer;
+    
+
 
     public Account() {
     }

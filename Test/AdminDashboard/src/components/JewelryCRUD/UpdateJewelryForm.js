@@ -16,9 +16,9 @@ function UpdateJewelryForm({ jewelry }) {
     event.preventDefault();
     try {
       await updateJewelry(jewelry.jewelryID, updatedJewelry);
-      alert('Jewelry updated successfully');
+      alert('Cập nhật thông tin Trang Sức thành công');
     } catch (error) {
-      alert('Failed to update jewelry');
+      alert('Cập nhật thông tin Trang Sức thất bại');
     }
   };
 
