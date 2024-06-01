@@ -23,10 +23,10 @@ function AddJewelryForm() {
     try {
       const response = await createJewelry(jewelry);
       console.log(response);
-      setMessage('Jewelry created successfully'); // Set the message on success
+      setMessage('Tạo mới Trang Sức thành công '); // Set the message on success
     } catch (error) {
       console.error(error);
-      setMessage('Failed to create jewelry'); // Set the message on failure
+      setMessage('Tạo mới Trang Sức thất bại'); // Set the message on failure
     }
   };
 

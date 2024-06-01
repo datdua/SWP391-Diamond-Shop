@@ -22,8 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.Customer;
+import com.example.diamondstore.model.Order;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.CustomerRepository;
+import com.example.diamondstore.repository.OrderRepository;
+import com.example.diamondstore.request.AccountRequest;
 import com.example.diamondstore.request.RegisterRequest;
 import com.example.diamondstore.request.putRequest.AccountPutRequest;
 
@@ -33,12 +36,13 @@ public class AccountController {
 
     private final AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
+    private final OrderRepository orderRepository;
 
-    public AccountController(AccountRepository accountRepository, CustomerRepository customerRepository) {
+    public AccountController(AccountRepository accountRepository, CustomerRepository customerRepository, OrderRepository orderRepository) {
         this.accountRepository = accountRepository;
         this.customerRepository = customerRepository;
+        this.orderRepository = orderRepository;
     }
-
     @GetMapping("/home")
     public String welcome() {
         return "Welcome to Diamond Store";
@@ -84,8 +88,50 @@ public class AccountController {
 
     @DeleteMapping(value = "/delete/{accountID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> delete(@PathVariable Integer accountID) {
-        accountRepository.deleteById(accountID);
+        Account account = accountRepository.findById(accountID).orElse(null);
+        if (account == null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
+        }
+
+        // Xóa các Order liên quan trước khi xóa Account
+        List<Order> orders = orderRepository.findByAccount(account);
+        for (Order order : orders) {
+            orderRepository.delete(order);
+        }
+
+        // Xóa Customer liên quan trước khi xóa Account
+        Customer customer = account.getCustomer();
+        if (customer != null) {
+            customerRepository.delete(customer);
+        }
+
+        accountRepository.delete(account);
         return ResponseEntity.ok(Collections.singletonMap("message", "Xóa thành công"));
+    }
+
+
+    @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> create(@RequestBody AccountRequest accountRequest) {
+        String accountName = accountRequest.getAccountName();
+        String password = accountRequest.getPassword();
+        String role = accountRequest.getRole();
+        String phoneNumber = accountRequest.getPhoneNumber();
+        String email = accountRequest.getEmail();
+
+        // Kiểm tra nếu bất kỳ trường nào trống
+        if (!StringUtils.hasText(accountName) || !StringUtils.hasText(password) || !StringUtils.hasText(role) || !StringUtils.hasText(email)) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Vui lòng nhập đầy đủ thông tin"));
+        }
+
+        Account existingAccount = accountRepository.findByEmail(email);
+        if (existingAccount != null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Tài khoản đã tồn tại"));
+        }
+
+        Account account = new Account(null, accountName, password, role, phoneNumber, email);
+        accountRepository.save(account);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Tạo tài khoản thành công"));
+        
     }
 
     @PutMapping(value = "/update/{accountID}", produces = "application/json;charset=UTF-8")

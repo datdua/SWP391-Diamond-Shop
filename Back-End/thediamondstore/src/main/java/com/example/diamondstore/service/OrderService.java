@@ -8,11 +8,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.Cart;
 import com.example.diamondstore.model.Customer;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.model.Promotion;
-import com.example.diamondstore.model.Warranty;
+import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.CertificateRepository;
 import com.example.diamondstore.repository.CustomerRepository;
@@ -45,16 +46,23 @@ public class OrderService {
     @Autowired
     private DiamondRepository diamondRepository;
 
+    @Autowired
+    private AccountRepository accountRepository;
+
 
     public Order createOrder(int accountID, String deliveryAddress, Integer promotionID, Integer pointsToRedeem, String phoneNumber) {
         List<Cart> cartItems = cartRepository.findByAccountIDAndOrderIsNull(accountID);
 
         if (cartItems.isEmpty()) {
-            throw new IllegalArgumentException("Giỏ hàng rỗng");
+           throw new IllegalArgumentException("Giỏ hàng rỗng");
         }
 
+        // Fetch the Account object
+        Account account = accountRepository.findById(accountID)
+        .orElseThrow(() -> new IllegalArgumentException("Invalid account ID: " + accountID));
+
         Order order = new Order();
-        order.setAccountID(accountID);
+        order.setAccount(account);  // Set the Account object instead of accountID
         order.setDeliveryAddress(deliveryAddress);
         order.setPhoneNumber(phoneNumber);
         order.setStartorderDate(LocalDateTime.now());
