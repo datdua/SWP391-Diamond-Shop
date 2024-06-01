@@ -25,10 +25,11 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orderID")
-    private int orderID;
+    private Integer orderID;
 
-    @Column(name = "accountID", nullable = false)
-    private int accountID;
+    @ManyToOne
+    @JoinColumn(name = "accountID", nullable = false)
+    private Account account;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "startorderDate", nullable = false)
@@ -67,35 +68,37 @@ public class Order {
     public Order() {
     }
 
-    public Order(int accountID, List<Cart> cartItems, String deliveryAddress, LocalDateTime deliveryDate, int orderID, String orderStatus, Promotion promotion, LocalDateTime startorderDate, BigDecimal totalAmount, String phoneNumber, String certificateImage, String warrantyImage) {
-        this.accountID = accountID;
-        this.cartItems = cartItems;
-        this.deliveryAddress = deliveryAddress;
-        this.deliveryDate = deliveryDate;
+    public Order(Integer orderID, Account account, LocalDateTime startorderDate, String orderStatus, LocalDateTime deliveryDate,
+            BigDecimal totalAmount, String deliveryAddress, String phoneNumber, String certificateImage, String warrantyImage,
+            Promotion promotion, List<Cart> cartItems) {
         this.orderID = orderID;
-        this.orderStatus = orderStatus;
-        this.promotion = promotion;
+        this.account = account;
         this.startorderDate = startorderDate;
+        this.orderStatus = orderStatus;
+        this.deliveryDate = deliveryDate;
         this.totalAmount = totalAmount;
+        this.deliveryAddress = deliveryAddress;
         this.phoneNumber = phoneNumber;
         this.certificateImage = certificateImage;
         this.warrantyImage = warrantyImage;
+        this.promotion = promotion;
+        this.cartItems = cartItems;
     }
 
-    public int getOrderID() {
+    public Integer getOrderID() {
         return orderID;
     }
 
-    public void setOrderID(int orderID) {
+    public void setOrderID(Integer orderID) {
         this.orderID = orderID;
     }
 
-    public int getAccountID() {
-        return accountID;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setAccountID(int accountID) {
-        this.accountID = accountID;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public LocalDateTime getStartorderDate() {
@@ -138,22 +141,6 @@ public class Order {
         this.deliveryAddress = deliveryAddress;
     }
 
-    public Promotion getPromotion() {
-        return promotion;
-    }
-
-    public void setPromotion(Promotion promotion) {
-        this.promotion = promotion;
-    }
-
-    public List<Cart> getCartItems() {
-        return cartItems;
-    }
-
-    public void setCartItems(List<Cart> cartItems) {
-        this.cartItems = cartItems;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -177,6 +164,24 @@ public class Order {
     public void setWarrantyImage(String warrantyImage) {
         this.warrantyImage = warrantyImage;
     }
+
+    public Promotion getPromotion() {
+        return promotion;
+    }
+
+    public void setPromotion(Promotion promotion) {
+        this.promotion = promotion;
+    }
+
+    public List<Cart> getCartItems() {
+        return cartItems;
+    }
+
+    public void setCartItems(List<Cart> cartItems) {
+        this.cartItems = cartItems;
+    }
+
+    
 
     
     

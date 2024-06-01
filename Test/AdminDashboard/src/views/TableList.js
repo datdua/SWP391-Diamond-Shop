@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Container, Navbar, Nav, Row, Col, Card, Table, Dropdown } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { getAllJewelry } from '../api/jewelryCrud.js';
 import AddJewelryForm from '../components/JewelryCRUD/AddJewelryForm.js';
 import UpdateJewelryForm from '../components/JewelryCRUD/UpdateJewelryForm.js';
@@ -8,6 +9,7 @@ import AddDiamondForm from '../components/DiamondCRUD/AddDiamondForm.js';
 import UpdateDiamondForm from '../components/DiamondCRUD/UpdateDiamondForm.js';
 import DeleteDiamondButton from '../components/DiamondCRUD/DeleteDiamondForm.js';
 import { getAllDiamond, getCertificateImage, getWarrantityImage } from '../api/diamondCrud.js';
+import '../assets/css/TableList.css'; // Import file CSS mới
 
 function TableList() {
   const [jewelryData, setJewelryData] = useState([]);
@@ -131,39 +133,41 @@ function TableList() {
                 <Card.Title as="h4">Jewelry List</Card.Title>
               </Card.Header>
               <Card.Body>
-                <Table striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Jewelry ID</th>
-                      <th>Diamond ID</th>
-                      <th>Jewelry Name</th>
-                      <th>Size</th>
-                      <th>Gender</th>
-                      <th>Jewelry Image</th>
-                      <th>Jewelry Price</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {jewelryData.map((jewelry, index) => (
-                      <tr key={index}>
-                        <td>{index + 1}</td>
-                        <td>{jewelry.jewelryID}</td>
-                        <td>{jewelry.diamondID}</td>
-                        <td>{jewelry.jewelryName}</td>
-                        <td>{jewelry.size}</td>
-                        <td>{jewelry.gender}</td>
-                        <td><img src={jewelry.jewelryImage} alt={jewelry.jewelryName} style={{ width: "100px", height: "100px" }} /> </td>
-                        <td>{jewelry.jewelryPrice.toLocaleString() +' VNĐ'}</td>
-                        <td>
-                          <Button variant="primary" onClick={() => handleShowUpdate(jewelry)}>Edit</Button>
-                          <DeleteJewelryButton jewelryID={jewelry.jewelryID} onDelete={() => handleDelete(jewelry.jewelryID, null)} />
-                        </td>
+                <div className="table-responsive">
+                  <Table striped bordered hover className="account-table">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Jewelry ID</th>
+                        <th>Diamond ID</th>
+                        <th>Jewelry Name</th>
+                        <th>Size</th>
+                        <th>Gender</th>
+                        <th>Jewelry Image</th>
+                        <th>Jewelry Price</th>
+                        <th>Action</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                    </thead>
+                    <tbody>
+                      {jewelryData.map((jewelry, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{jewelry.jewelryID}</td>
+                          <td>{jewelry.diamondID}</td>
+                          <td>{jewelry.jewelryName}</td>
+                          <td>{jewelry.size}</td>
+                          <td>{jewelry.gender}</td>
+                          <td><img src={jewelry.jewelryImage} alt={jewelry.jewelryName} style={{ width: "100px", height: "100px" }} /> </td>
+                          <td>{jewelry.jewelryPrice.toLocaleString() + ' VNĐ'}</td>
+                          <td>
+                            <Button variant="primary" onClick={() => handleShowUpdate(jewelry)}>Edit</Button>
+                            <DeleteJewelryButton jewelryID={jewelry.jewelryID} onDelete={() => handleDelete(jewelry.jewelryID, null)} />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </div>
               </Card.Body>
             </Card>
           </Col>
@@ -177,55 +181,57 @@ function TableList() {
                 <Card.Title as="h4">Diamond List</Card.Title>
               </Card.Header>
               <Card.Body>
-                <Table striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th>Diamond ID</th>
-                      <th>Warranty ID</th>
-                      <th>Certification ID</th>
-                      <th>Diamond Name</th>
-                      <th>Diamond Price</th>
-                      <th>Diamond Image</th>
-                      <th>Carat Weight</th>
-                      <th>Carat Size</th>
-                      <th>Color</th>
-                      <th>Cut</th>
-                      <th>Clarity</th>
-                      <th>Shape</th>
-                      <th>Origin</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {diamondData.map((diamond, index) => (
-                      <tr key={index}>
-                        <td>{index + 1}</td>
-                        <td>{diamond.diamondID}</td>
-                        <td>
-                          <a href="#" onClick={() => handleShowWarrantity(diamond.warrantyID)}>{diamond.warrantyID}</a>
-                        </td>
-                        <td>
-                          <a href="#" onClick={() => handleShowCertificate(diamond.certificationID)}>{diamond.certificationID}</a>
-                        </td>
-                        <td>{diamond.diamondName}</td>
-                        <td>{diamond.diamondPrice.toLocaleString() + ' VNĐ'}</td>
-                        <td><img src={diamond.diamondImage} alt={diamond.diamondName} style={{ width: "100px", height: "100px" }} /></td>
-                        <td>{diamond.carat_weight}</td>
-                        <td>{diamond.carat_size}</td>
-                        <td>{diamond.color}</td>
-                        <td>{diamond.cut}</td>
-                        <td>{diamond.clarity}</td>
-                        <td>{diamond.shape}</td>
-                        <td>{diamond.origin}</td>
-                        <td>
-                          <Button variant="primary" onClick={() => handleShowUpdate(diamond)}>Edit</Button>
-                          <DeleteDiamondButton diamondID={diamond.diamondID} onDelete={() => handleDelete(null, diamond.diamondID)} />
-                        </td>
+                <div className="table-responsive">
+                  <Table striped bordered hover className="account-table">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Diamond ID</th>
+                        <th>Warranty ID</th>
+                        <th>Certification ID</th>
+                        <th>Diamond Name</th>
+                        <th>Diamond Price</th>
+                        <th>Diamond Image</th>
+                        <th>Carat Weight</th>
+                        <th>Carat Size</th>
+                        <th>Color</th>
+                        <th>Cut</th>
+                        <th>Clarity</th>
+                        <th>Shape</th>
+                        <th>Origin</th>
+                        <th>Action</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                    </thead>
+                    <tbody>
+                      {diamondData.map((diamond, index) => (
+                        <tr key={index}>
+                          <td>{index + 1}</td>
+                          <td>{diamond.diamondID}</td>
+                          <td>
+                            <a href="#" onClick={() => handleShowWarrantity(diamond.warrantyID)}>{diamond.warrantyID}</a>
+                          </td>
+                          <td>
+                            <a href="#" onClick={() => handleShowCertificate(diamond.certificationID)}>{diamond.certificationID}</a>
+                          </td>
+                          <td>{diamond.diamondName}</td>
+                          <td>{diamond.diamondPrice.toLocaleString() + ' VNĐ'}</td>
+                          <td><img src={diamond.diamondImage} alt={diamond.diamondName} style={{ width: "100px", height: "100px" }} /></td>
+                          <td>{diamond.carat_weight}</td>
+                          <td>{diamond.carat_size}</td>
+                          <td>{diamond.color}</td>
+                          <td>{diamond.cut}</td>
+                          <td>{diamond.clarity}</td>
+                          <td>{diamond.shape}</td>
+                          <td>{diamond.origin}</td>
+                          <td>
+                            <Button variant="primary" onClick={() => handleShowUpdate(diamond)}>Edit</Button>
+                            <DeleteDiamondButton diamondID={diamond.diamondID} onDelete={() => handleDelete(null, diamond.diamondID)} />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </div>
               </Card.Body>
             </Card>
           </Col>

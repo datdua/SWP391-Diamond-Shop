@@ -23,9 +23,11 @@ public class Customer {
     private Integer point;
 
     @JsonManagedReference
-    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn
     private Account account;
+
+
 
     // getters and setters
     public Customer() {

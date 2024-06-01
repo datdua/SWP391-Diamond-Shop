@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,7 +35,7 @@ public class CartController {
         return ResponseEntity.ok(cartItems);
     }
 
-    @GetMapping(value="/{accountID}=10")
+    
 
     //thêm sản phầm vào giỏ hàng
     @PostMapping(value = "/add", produces = "application/json;charset=UTF-8")
@@ -71,14 +70,14 @@ public class CartController {
     }
 
     //tạo giỏ hàng
-    @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> createCart(@RequestBody Cart cart) {
-        Cart existingCart = cartService.getCartByCartID(cart.getCartID());
-        if (existingCart != null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Giỏ hàng đã tồn tại"));
-        }
-        cart.setCartID(null);  // Set cartID to null
-        cartService.saveCart(cart);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Tạo giỏ hàng thành công"));
-    }
+    // @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
+    // public ResponseEntity<Map<String, String>> createCart(@RequestBody Cart cart) {
+    //     Cart existingCart = cartService.getCartByCartID(cart.getCartID());
+    //     if (existingCart != null) {
+    //         return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Giỏ hàng đã tồn tại"));
+    //     }
+    //     cart.setCartID(null);  // Set cartID to null
+    //     cartService.saveCart(cart);
+    //     return ResponseEntity.ok(Collections.singletonMap("message", "Tạo giỏ hàng thành công"));
+    // }
 }
