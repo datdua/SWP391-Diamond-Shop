@@ -59,7 +59,7 @@ function CartPage() {
                                     </thead>
                                     <tbody>
                                         {cartItems.map((item, index) => (
-                                            <tr key={item.jewelryID}>
+                                            <tr key={`${item.jewelryID}-${index}`}>
                                                 <td>
                                                     <Link to={`/product-detail/${item.jewelryID}`} className="tm-cart-productimage">
                                                         <img src={item.image} alt="product image" />
@@ -88,9 +88,48 @@ function CartPage() {
                                     </tbody>
                                 </table>
                             </div>
+                        {/*<!-- Shopping Cart Content --> */}
                             <div className="tm-cart-bottomarea">
-                                {/* Continue Shopping, Update Cart, and Coupon Form */}
+                                <div className="row">
+                                    <div className="col-lg-8 col-md-6">
+                                        <div className="tm-buttongroup">
+                                            <a href="/sanpham" className="tm-button">Continue Shopping</a>
+                                            <a href="#" className="tm-button">Update Cart</a>
+                                        </div>
+                                        <form action="#" className="tm-cart-coupon">
+                                            <label for="coupon-field">Have a coupon code?</label>
+                                            <input type="text" id="coupon-field" placeholder="Enter coupon code"
+                                                required="required" />
+                                            <button type="submit" className="tm-button">Submit</button>
+                                        </form>
+                                    </div>
+                                    <div className="col-lg-4 col-md-6">
+                                        <div className="tm-cart-pricebox">
+                                            <h2>Cart Totals</h2>
+                                            <div className="table-responsive">
+                                                <table className="table table-borderless">
+                                                    <tbody>
+                                                        <tr className="tm-cart-pricebox-subtotal">
+                                                            <td>Cart Subtotal</td>
+                                                            <td>$175.00</td>
+                                                        </tr>
+                                                        <tr className="tm-cart-pricebox-shipping">
+                                                            <td>(+) Shipping Charge</td>
+                                                            <td>$15.00</td>
+                                                        </tr>
+                                                        <tr className="tm-cart-pricebox-total">
+                                                            <td>Total</td>
+                                                            <td>$190.00</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <a href="#" className="tm-button">Proceed To Checkout</a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            {/* <!--// Shopping Cart Content --> */}
                         </div>
                     </div>
                 </main>

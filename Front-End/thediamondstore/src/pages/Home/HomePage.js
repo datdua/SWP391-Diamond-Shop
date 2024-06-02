@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "fancybox/dist/css/jquery.fancybox.css"
 import HeroSlider from "../../components/HeroSlider/HeroSlider";
 import "./HomePage.css"
+import { toast } from "react-toastify";
 
 function HomePage() {
     const [value, setValue] = useState('Default value');
@@ -34,7 +35,7 @@ function HomePage() {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
-
+    
     return (
         <div>
 

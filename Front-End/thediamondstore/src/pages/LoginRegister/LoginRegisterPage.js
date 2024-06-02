@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
@@ -14,12 +14,15 @@ function LoginRegisterPage() {
     const [registerPassword, setRegisterPassword] = useState("");
     const [registerName, setRegisterName] = useState("");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [showLoginPassword, setShowLoginPassword] = useState(false);
+    const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+    const [termsAccepted, setTermsAccepted] = useState(false);
     const accountID = useParams();
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
-  
+
         try {
             const response = await axios.post("http://localhost:8080/login", {
                 email: loginEmail,
@@ -31,14 +34,14 @@ function LoginRegisterPage() {
                     "accept": "*/*"
                 }
             });
-    
+
             if (response.status === 200) {
                 const data = response.data;
                 console.log("Đăng nhập thành công:", data.jwt);
                 localStorage.setItem("jwt", data.jwt);
                 localStorage.setItem("email", loginEmail);
                 localStorage.setItem("accountName", accountName);
-                setIsLoggedIn(true); // Update the state
+                setIsLoggedIn(true);
                 toast.success("Đăng nhập thành công!");
                 navigate('/trangchu');
                 window.location.reload();
@@ -51,10 +54,16 @@ function LoginRegisterPage() {
             console.error("Lỗi khi đăng nhập:", error);
             toast.error("Lỗi khi đăng nhập!");
         }
-    };    
+    };
 
     const handleRegister = async (e) => {
         e.preventDefault();
+
+        if (!termsAccepted) {
+            toast.error("Bạn phải đồng ý với các điều khoản và điều kiện của trang web");
+            return;
+        }
+
         try {
             const response = await axios.post("http://localhost:8080/api/accounts/register", {
                 accountName: registerName,
@@ -72,7 +81,7 @@ function LoginRegisterPage() {
                 console.log("Đăng ký thành công:", data.message);
                 toast.success("Đăng ký thành công!");
                 navigate("/trangchu");
-                
+
             } else {
                 console.error("Đăng ký thất bại:", response);
                 toast.error("Đăng ký thất bại!");
@@ -82,7 +91,6 @@ function LoginRegisterPage() {
             toast.error("Lỗi khi đăng ký!");
         }
     };
-
 
     return (
         <div>
@@ -109,26 +117,36 @@ function LoginRegisterPage() {
                                         <div className="tm-form-inner">
                                             <div className="tm-form-field">
                                                 <label htmlFor="login-email">Email*</label>
-                                                <input 
-                                                    type="email" 
-                                                    id="login-email" 
-                                                    required="required" 
+                                                <input
+                                                    type="email"
+                                                    id="login-email"
+                                                    required="required"
                                                     value={loginEmail}
                                                     onChange={(e) => setLoginEmail(e.target.value)}
                                                 />
                                             </div>
                                             <div className="tm-form-field">
                                                 <label htmlFor="login-password">Mật khẩu*</label>
-                                                <input 
-                                                    type="password" 
-                                                    id="login-password" 
-                                                    required="required" 
+                                                <input
+                                                    type={showLoginPassword ? "text" : "password"}
+                                                    id="login-password"
+                                                    required="required"
                                                     value={loginPassword}
                                                     onChange={(e) => setLoginPassword(e.target.value)}
                                                 />
                                             </div>
                                             <div className="tm-form-field">
                                                 <p className="mb-0"><a href="#">Quên mật khẩu?</a></p>
+                                                <div>
+                                                    <input
+                                                        type="checkbox"
+                                                        id="login-pass-show"
+                                                        name="login-pass-show"
+                                                        checked={showLoginPassword}
+                                                        onChange={() => setShowLoginPassword(!showLoginPassword)}
+                                                    />
+                                                    <label htmlFor="login-pass-show">Hiển thị mật khẩu</label>
+                                                </div>
                                             </div>
                                             <div className="tm-form-field">
                                                 <button type="submit" className="tm-button">Đăng Nhập</button>
@@ -152,42 +170,54 @@ function LoginRegisterPage() {
                                         <div className="tm-form-inner">
                                             <div className="tm-form-field">
                                                 <label htmlFor="register-name">Tên tài khoản</label>
-                                                <input 
-                                                    type="text" 
-                                                    id="register-name" 
-                                                    required="required" 
+                                                <input
+                                                    type="text"
+                                                    id="register-name"
+                                                    required="required"
                                                     value={registerName}
                                                     onChange={(e) => setRegisterName(e.target.value)}
                                                 />
                                             </div>
                                             <div className="tm-form-field">
                                                 <label htmlFor="register-email">Email</label>
-                                                <input 
-                                                    type="email" 
-                                                    id="register-email" 
-                                                    required="required" 
+                                                <input
+                                                    type="email"
+                                                    id="register-email"
+                                                    required="required"
                                                     value={registerEmail}
                                                     onChange={(e) => setRegisterEmail(e.target.value)}
                                                 />
                                             </div>
                                             <div className="tm-form-field">
                                                 <label htmlFor="register-password">Mật khẩu</label>
-                                                <input 
-                                                    type="password" 
-                                                    id="register-password" 
+                                                <input
+                                                    type={showRegisterPassword ? "text" : "password"}
+                                                    id="register-password"
                                                     name="register-pass"
-                                                    required="required" 
+                                                    required="required"
                                                     value={registerPassword}
                                                     onChange={(e) => setRegisterPassword(e.target.value)}
                                                 />
                                             </div>
                                             <div className="tm-form-field">
                                                 <div>
-                                                    <input type="checkbox" id="register-pass-show" name="register-pass-show" />
-                                                    <label htmlFor="register-pass-show">Hiện thị mật khẩu</label>
+                                                    <input
+                                                        type="checkbox"
+                                                        id="register-pass-show"
+                                                        name="register-pass-show"
+                                                        checked={showRegisterPassword}
+                                                        onChange={() => setShowRegisterPassword(!showRegisterPassword)}
+                                                    />
+                                                    <label htmlFor="register-pass-show">Hiển thị mật khẩu</label>
                                                 </div>
                                                 <div>
-                                                    <input type="checkbox" id="register-terms" name="register-terms" />
+                                                    <input
+                                                        type="checkbox"
+                                                        id="register-terms"
+                                                        name="register-terms"
+                                                        checked={termsAccepted}
+                                                        onChange={() => setTermsAccepted(!termsAccepted)}
+                                                    />
                                                     <label htmlFor="register-terms">Tôi đã đọc và đồng ý với các điều khoản và điều kiện của trang web <a href="#"></a></label>
                                                 </div>
                                             </div>
@@ -201,10 +231,8 @@ function LoginRegisterPage() {
                         </div>
                     </div>
                 </main>
-                {/*<Footer />*/}
-                
-                <button id="back-top-top"><i className="ion-arrow-up-c"></i></button>
             </div>
+            <ToastContainer />
         </div>
     );
 }

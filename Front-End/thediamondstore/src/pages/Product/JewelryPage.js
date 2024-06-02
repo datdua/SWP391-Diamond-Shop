@@ -239,7 +239,7 @@ function JewelryPage() {
                                                                 </div>
                                                                 <ul className="tm-product-actions">
                                                                     {showNotification && <p>Please log in to add items to the cart.</p>}
-                                                                    
+
                                                                     <li><button onClick={() => openModal(item)} aria-label="Product Quickview"><i className="ion-eye"></i></button></li>
                                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                                 </ul>
@@ -279,8 +279,8 @@ function JewelryPage() {
                                         <div className="single-widget widget-categories">
                                             <h6 className="widget-title">Categories</h6>
                                             <ul>
-                                                <li><Link to="/product">Jewelry</Link></li>
-                                                <li><Link to="/product">Diamond</Link></li>
+                                                <li><Link to="/trangsuc">Trang Sức</Link></li>
+                                                <li><Link to="/kimcuong">Kim Cương</Link></li>
                                             </ul>
                                         </div>
                                         <div className="single-widget widget-categories">

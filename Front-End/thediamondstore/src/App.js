@@ -26,7 +26,7 @@ function App() {
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
       <Routes>
         <Route path='/' element={<> <Header/> <HomePage/> <Footer/> </>} />
-        <Route path='/dangnhap' element={<><Header/> <LoginRegisterPage/> <Footer/></>}/>
+        <Route path='/dangnhap' element={<><Header/> <LoginRegisterPage/> <BackToTop/> <Footer/></>}/>
         <Route path='/trangchu' element={<><Header/> <HomePage/> <BackToTop/> <Footer/></>}/>
         <Route path='/gioithieu' element={<><Header/> <AboutPage/> <Footer/></>}/>
         <Route path='/lienhe' element={<><Header/> <ContactPage/> <Footer/></>}/>

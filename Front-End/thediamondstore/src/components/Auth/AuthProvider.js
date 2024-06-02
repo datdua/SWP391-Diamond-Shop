@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { AuthContext } from './AuthContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 export const AuthProvider = ({ children }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [accountName, setAccountName] = useState('');
+    const navigate = useNavigate()
 
     const loginSuccess = (email, name) => { 
         setAccountName(name);
@@ -27,6 +29,7 @@ export const AuthProvider = ({ children }) => {
         setIsLoggedIn(false);
         setAccountName('');
         toast.success("Đăng xuất thành công!");
+        navigate("/dangnhap")
     };
     
     
