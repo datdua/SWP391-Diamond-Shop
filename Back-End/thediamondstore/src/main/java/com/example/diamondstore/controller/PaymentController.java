@@ -31,39 +31,32 @@ public class PaymentController {
     @GetMapping("/createPayment")
     public ResponseEntity<?> createPayment() throws UnsupportedEncodingException {
 
+        String vnp_Version = "2.1.0";
+        String vnp_Command = "pay";
         String orderType = "other";
-        // long amount = Integer.parseInt(req.getParameter("amount"))*100;
-        long amount = 1000000;
-        // String bankCode = req.getParameter("bankCode");
+        long amount = 10000*100;
         String bankCode = "NCB";
         
         String vnp_TxnRef = PaymentConfig.getRandomNumber(8);
-        // String vnp_IpAddr = Config.getIpAddress(req);
+        String vnp_IpAddr = "127.0.0.1";
+
         String vnp_TmnCode = PaymentConfig.vnp_TmnCode;
         
         Map<String, String> vnp_Params = new HashMap<>();
-        vnp_Params.put("vnp_Version", PaymentConfig.vnp_Version);
-        vnp_Params.put("vnp_Command", PaymentConfig.vnp_Command);
+        vnp_Params.put("vnp_Version", vnp_Version);
+        vnp_Params.put("vnp_Command", vnp_Command);
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
         vnp_Params.put("vnp_Amount", String.valueOf(amount));
         vnp_Params.put("vnp_CurrCode", "VND");
         
-        // if (bankCode != null && !bankCode.isEmpty()) {
-        //     vnp_Params.put("vnp_BankCode", bankCode);
-        // }
         vnp_Params.put("vnp_BankCode", bankCode);
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
         vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
         vnp_Params.put("vnp_OrderType", orderType);
 
-        // String locate = req.getParameter("language");
-        // if (locate != null && !locate.isEmpty()) {
-        //     vnp_Params.put("vnp_Locale", locate);
-        // } else {
-        //     vnp_Params.put("vnp_Locale", "vn");
-        // }
+        vnp_Params.put("vnp_Locale", "vn");
         vnp_Params.put("vnp_ReturnUrl", PaymentConfig.vnp_ReturnUrl);
-        // vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
+        vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -101,12 +94,6 @@ public class PaymentController {
         String vnp_SecureHash = PaymentConfig.hmacSHA512(PaymentConfig.secretKey, hashData.toString());
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = PaymentConfig.vnp_PayUrl + "?" + queryUrl;
-        // com.google.gson.JsonObject job = new JsonObject();
-        // job.addProperty("code", "00");
-        // job.addProperty("message", "success");
-        // job.addProperty("data", paymentUrl);
-        // Gson gson = new Gson();
-        // resp.getWriter().write(gson.toJson(job));
 
         PaymentResDTO paymentResDTO = new PaymentResDTO();
         paymentResDTO.setStatus("Ok");
