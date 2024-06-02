@@ -18,15 +18,15 @@ import Footer from './components/Footer/Footer';
 import BackToTop from './components/BackToTop';
 import DiamondPage from './pages/Product/DiamondPage';
 import JewelryDetailPage from './pages/ProductDetail/JewelryDetailPage';
+import { AuthProvider } from './components/Auth/AuthProvider';
 
 function App() {
   return (
     <>
-      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
       <Routes>
-        <Route path='/' element={<Navigate to="/trangchu" replace />} />
+        <Route path='/' element={<> <Header/> <HomePage/> <Footer/> </>} />
         <Route path='/dangnhap' element={<><Header/> <LoginRegisterPage/> <Footer/></>}/>
-
         <Route path='/trangchu' element={<><Header/> <HomePage/> <BackToTop/> <Footer/></>}/>
         <Route path='/gioithieu' element={<><Header/> <AboutPage/> <Footer/></>}/>
         <Route path='/lienhe' element={<><Header/> <ContactPage/> <Footer/></>}/>
@@ -40,7 +40,7 @@ function App() {
         <Route path='/wishlist' element={<WishlistPage/>}/>
         <Route path='/portfolio' element={<PortfolioPage/>}/>
       </Routes>
-    </>
+      </>
   );
 }
 

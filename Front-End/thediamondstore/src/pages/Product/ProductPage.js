@@ -58,7 +58,7 @@ function ProductPage() {
         if (productName) {
             axios
                 .get(
-                    `http://localhost:8080/api/jewelry/searchName?name=${encodeURIComponent(
+                    `/api/jewelry/searchName?name=${encodeURIComponent(
                         productName
                     )}`
                 )
@@ -96,8 +96,7 @@ function ProductPage() {
     };
 
     const handleFilterConfirm = () => {
-        // Call API with filtered price range
-        axios.get(`http://localhost:8080/api/jewelry/search/filter?maxjewelryPrice=${maxPrice}&minjewelryPrice=${minPrice}`)
+        axios.get(`/api/jewelry/search/filter?maxjewelryPrice=${maxPrice}&minjewelryPrice=${minPrice}`)
             .then(response => {
                 setJewelry(response.data);
                 setLoading(false);
@@ -113,7 +112,7 @@ function ProductPage() {
 
     const handleGenderFilter = (gender) => {
         setLoading(true);
-        axios.get(`http://localhost:8080/api/jewelry/search/filter?gender=${gender}`)
+        axios.get(`/api/jewelry/search/filter?gender=${gender}`)
             .then(response => {
                 const filteredData = response.data;
                 setJewelry(filteredData);
@@ -182,7 +181,6 @@ function ProductPage() {
                                                                     <img src={item.jewelryImage} alt={item.jewelryName} />
                                                                 </div>
                                                                 <ul className="tm-product-actions">
-                                                                    <li><a href="#"><i className="ion-android-cart"></i> Add to cart</a></li>
                                                                     <li><button onClick={() => openModal(item)} aria-label="Product Quickview"><i className="ion-eye"></i></button></li>
                                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                                 </ul>

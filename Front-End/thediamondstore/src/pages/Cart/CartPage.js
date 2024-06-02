@@ -11,9 +11,10 @@ function CartPage() {
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
-                console.log("Fetching cart items for account ID:", accountId); // Debugging line
+                console.log("Fetching cart items for account ID:", accountId);
                 if (accountId) {
                     const items = await getAllCartItems(accountId);
+                    console.log("Fetched cart items:", items); // Log the fetched items
                     setCartItems(items);
                 } else {
                     console.error("Account ID is undefined");

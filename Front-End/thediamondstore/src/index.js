@@ -7,12 +7,17 @@ import './sass/style.scss'
 import { BrowserRouter } from 'react-router-dom';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { AuthProvider } from './components/Auth/AuthProvider';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    
     <BrowserRouter>
+    <AuthProvider>
     <App />
+    </AuthProvider>
     </BrowserRouter>
+    
   </React.StrictMode>
 );
 reportWebVitals();

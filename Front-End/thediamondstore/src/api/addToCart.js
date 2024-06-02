@@ -3,7 +3,7 @@ import axios from 'axios';
 export const getAccountIDByEmail = async (email) => {
     try {
         const token = localStorage.getItem('jwt');
-        const response = await axios.get(`http://localhost:8080/api/accounts/getByEmail/${email}`, {
+        const response = await axios.get(`/api/accounts/getByEmail/${email}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -19,7 +19,7 @@ export const addJewelryToCart = async (accountID, jewelryId, quantity, size) => 
     try {
         const token = localStorage.getItem('jwt');
         const response = await axios.post(
-            `http://localhost:8080/api/cart/add?accountID=${accountID}&jewelryID=${jewelryId}&quantity=${quantity}&sizeJewelry=${size}`,
+            `/api/cart/add?accountID=${accountID}&jewelryID=${jewelryId}&quantity=${quantity}&sizeJewelry=${size}`,
             {}, 
             {
                 headers: {
@@ -36,7 +36,7 @@ export const addJewelryToCart = async (accountID, jewelryId, quantity, size) => 
 export const getAllCartItems = async (accountID) => {
     try {
         const token = localStorage.getItem('jwt');
-        const response = await axios.get(`http://localhost:8080/api/cart?accountID=${accountID}`, {
+        const response = await axios.get(`/api/cart?accountID=${accountID}`, {
             method:'GET',
             headers: {
                 Authorization: `Bearer ${token}`

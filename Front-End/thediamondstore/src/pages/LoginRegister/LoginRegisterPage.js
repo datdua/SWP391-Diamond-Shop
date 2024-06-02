@@ -19,6 +19,7 @@ function LoginRegisterPage() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
+  
         try {
             const response = await axios.post("http://localhost:8080/login", {
                 email: loginEmail,
@@ -40,6 +41,8 @@ function LoginRegisterPage() {
                 setIsLoggedIn(true); // Update the state
                 toast.success("Đăng nhập thành công!");
                 navigate('/trangchu');
+                window.location.reload();
+                window.scrollTo(0, 0);
             } else {
                 console.error("Đăng nhập thất bại:", response);
                 toast.error("Đăng nhập thất bại!");
@@ -49,10 +52,6 @@ function LoginRegisterPage() {
             toast.error("Lỗi khi đăng nhập!");
         }
     };    
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
 
     const handleRegister = async (e) => {
         e.preventDefault();
@@ -83,6 +82,7 @@ function LoginRegisterPage() {
             toast.error("Lỗi khi đăng ký!");
         }
     };
+
 
     return (
         <div>
