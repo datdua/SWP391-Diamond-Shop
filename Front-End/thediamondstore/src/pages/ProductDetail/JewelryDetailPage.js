@@ -61,8 +61,8 @@ function JewelryDetailPage() {
         console.log("Item to be added:", item);
 
         if (!isLoggedIn) {
-            console.log("User not logged in");
-            toast.error("Please log in to add items to the cart.");
+            console.log("Người dùng chưa đăng nhập");
+            toast.error("Vui lòng đăng nhập trước khi thêm sản phẩm vào giỏ hàng");
         } else {
             try {
                 const email = localStorage.getItem('email');
