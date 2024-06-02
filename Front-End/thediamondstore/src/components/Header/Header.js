@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 import { searchJewelryByName } from "../../api/JewelryAPI";
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import axios from "axios";
 import { searchDiamondByName } from "../../api/DiamondAPI";
-import { toast } from "react-toastify";
+import { AuthContext } from "../Auth/AuthContext";
 
 function Header() {
     const navigate = useNavigate();
@@ -14,9 +13,8 @@ function Header() {
     const [isCurrencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
     const [isLanguageDropdownOpen, setLanguageDropdownOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
-    const [accountName, setAccountName] = useState('');
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { isLoggedIn, accountName, onLogout } = useContext(AuthContext);
+    
 
     const toggleDropdown = (dropdown) => {
         if (dropdown === "account") {
@@ -41,50 +39,14 @@ function Header() {
                 searchDiamondByName(searchTerm)
             ]);
 
-            const combinedResults = [...jewelryResults, ...diamondResults];
-            setSearchResults(combinedResults);
-
             if (diamondResults.length > 0) {
-                window.location.href = `/kimcuong?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(diamondResults))}`;
+                navigate(`/kimcuong?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(diamondResults))}`);
             } else if (jewelryResults.length > 0) {
-                window.location.href = `/trangsuc?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(jewelryResults))}`;
+                navigate(`/trangsuc?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(jewelryResults))}`);
             }
         } catch (error) {
             console.error('Error searching for jewelry and diamonds:', error);
         }
-    };
-
-    useEffect(() => {
-        // Check if user is logged in when the component mounts
-        const token = localStorage.getItem('jwt');
-        const storedUsername = localStorage.getItem('email');
-        if (token && storedUsername) {
-            setIsLoggedIn(true);
-            fetchAccountName(storedUsername);
-        }
-    }, []);
-
-    const fetchAccountName = async (username) => {
-        try {
-            const token = localStorage.getItem('jwt');
-            const response = await axios.get(`http://localhost:8080/api/accounts/${username}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            setAccountName(response.data.accountName);
-        } catch (err) {
-            console.error('Error fetching account name:', err);
-        }
-    };
-
-    const onLogout = () => {
-        localStorage.removeItem("jwt");
-        localStorage.removeItem("email");
-        setIsLoggedIn(false);
-        setAccountName('');
-        toast.success("Đăng xuất thành công!");
-        navigate('/dangnhap');
     };
 
     return (
@@ -101,24 +63,26 @@ function Header() {
                         </div>
                         <div className="col-lg-4 col-12">
                             <div className="tm-header-options">
-                                <div className="relative">
-                                    <button onClick={() => toggleDropdown("account")} className="tm-dropdown-button tm-header-links">
-                                        Tài Khoản <i className={`ml-1 fas ${isAccountDropdownOpen ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
-                                    </button>
-                                    {isAccountDropdownOpen && (
-                                        <ul className="tm-dropdown-menu">
-                                            <li><Link to="/account">My Account</Link></li>
-                                            {isLoggedIn ? (
-                                                <button onClick={onLogout}>Đăng xuất</button>
-                                            ) : (
-                                                <Link to="/dangnhap">Đăng nhập/Đăng ký</Link>
+                                {isLoggedIn ? (
+                                    <>
+                                        <div className="relative">
+                                            <button onClick={() => toggleDropdown("account")} className="tm-dropdown-button tm-header-links">
+                                                Tài Khoản <i className={`ml-1 fas ${isAccountDropdownOpen ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
+                                            </button>
+                                            {isAccountDropdownOpen && (
+                                                <ul className="tm-dropdown-menu">
+                                                    <li><Link to="/account">My Account</Link></li>
+                                                    <li><Link to="/cart">Shopping Cart</Link></li>
+                                                    <li><Link to="/wishlist">Wishlist</Link></li>
+                                                    <li><Link to="/checkout">Checkout</Link></li>
+                                                </ul>
                                             )}
-                                            <li><Link to="/cart">Shopping Cart</Link></li>
-                                            <li><Link to="/wishlist">Wishlist</Link></li>
-                                            <li><Link to="/checkout">Checkout</Link></li>
-                                        </ul>
-                                    )}
-                                </div>
+                                        </div>
+                                        <button onClick={onLogout} className="tm-logout-button">Đăng xuất</button>
+                                    </>
+                                ) : (
+                                    <button onClick={() => navigate('/dangnhap')} className="tm-login-button">Đăng nhập/Đăng ký</button>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -178,4 +142,5 @@ function Header() {
         </div>
     );
 }
+
 export default Header;

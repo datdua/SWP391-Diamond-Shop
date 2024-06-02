@@ -102,7 +102,7 @@ function JewelryPage() {
 
     const handleFilterConfirm = () => {
         // Call API with filtered price range
-        axios.get(`http://localhost:8080/api/jewelry/search/filter?maxjewelryPrice=${maxPrice}&minjewelryPrice=${minPrice}`)
+        axios.get(`/api/jewelry/search/filter?maxjewelryPrice=${maxPrice}&minjewelryPrice=${minPrice}`)
             .then(response => {
                 setJewelry(response.data);
                 setLoading(false);
@@ -119,7 +119,7 @@ function JewelryPage() {
 
     const handleGenderFilter = (gender) => {
         setLoading(true);
-        axios.get(`http://localhost:8080/api/jewelry/search/filter?gender=${gender}`)
+        axios.get(`/api/jewelry/search/filter?gender=${gender}`)
             .then(response => {
                 const filteredData = response.data;
                 setJewelry(filteredData);
@@ -239,7 +239,7 @@ function JewelryPage() {
                                                                 </div>
                                                                 <ul className="tm-product-actions">
                                                                     {showNotification && <p>Please log in to add items to the cart.</p>}
-                                                                    <li><button onClick={() => handleAddToCart(item)}>Add to cart</button></li>
+
                                                                     <li><button onClick={() => openModal(item)} aria-label="Product Quickview"><i className="ion-eye"></i></button></li>
                                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                                 </ul>
@@ -279,8 +279,8 @@ function JewelryPage() {
                                         <div className="single-widget widget-categories">
                                             <h6 className="widget-title">Categories</h6>
                                             <ul>
-                                                <li><Link to="/product">Jewelry</Link></li>
-                                                <li><Link to="/product">Diamond</Link></li>
+                                                <li><Link to="/trangsuc">Trang Sức</Link></li>
+                                                <li><Link to="/kimcuong">Kim Cương</Link></li>
                                             </ul>
                                         </div>
                                         <div className="single-widget widget-categories">
@@ -332,7 +332,6 @@ function JewelryPage() {
                                 <div className="img-container">
                                     <img src={selectedItem.jewelryImage} alt={selectedItem.jewelryName} />
                                 </div>
-                                <button onClick={() => handleAddToCart(selectedItem)}>Add to Cart</button>
                                 <button className="close-button" onClick={closeModal}>Close</button>
                                 <div className="content-container">
                                     <h2>{selectedItem.jewelryName}</h2>
@@ -340,14 +339,6 @@ function JewelryPage() {
                                     <p>Diamond ID: {selectedItem.diamondID}</p>
                                     <p>Gender: {selectedItem.gender}</p>
                                     <span>{selectedItem.jewelryPrice.toLocaleString()} VND</span>
-                                    <div className="size-dropdown">
-                                        <label htmlFor="size">Select Size:</label>
-                                        <select id="size" onChange={(e) => setSize(e.target.value)}>
-                                            {[6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((sizeOption) => (
-                                                <option key={sizeOption} value={sizeOption}>{sizeOption}</option>
-                                            ))}
-                                        </select>
-                                    </div>
                                 </div>
                             </div>
                         </Modal>
