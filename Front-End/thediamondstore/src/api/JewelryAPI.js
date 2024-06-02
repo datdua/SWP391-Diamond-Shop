@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export async function getAllJewelry() {
-    const response = await axios.get('http://localhost:8080/api/jewelry');
+    const response = await axios.get('/api/jewelry');
     if (!response.ok) {
         throw new Error('Failed to fetch jewelry data');
     }
@@ -10,7 +10,7 @@ export async function getAllJewelry() {
 }
 export async function searchJewelryByName(name) {
     try {
-        const response = await axios.get(`http://localhost:8080/api/jewelry/search/filter?jewelryName=${name}`);
+        const response = await axios.get(`/api/jewelry/search/filter?jewelryName=${name}`);
         console.log(response.data); // Log the response data
         return response.data;
     } catch (error) {
@@ -20,7 +20,7 @@ export async function searchJewelryByName(name) {
 
 export async function getJewelryById(jewelryId) {
     try {
-        const response = await axios.get(`http://localhost:8080/api/jewelry/${jewelryId}`);
+        const response = await axios.get(`/api/jewelry/${jewelryId}`);
         return response.data;
     } catch (error) {
         throw new Error('Failed to fetch jewelry by ID');
@@ -28,7 +28,7 @@ export async function getJewelryById(jewelryId) {
 }
 export async function getPage(page = 1, size = 9) {
     try {
-        const response = await axios.get(`http://localhost:8080/api/jewelry/paged?page=${page}&size=${size}`);
+        const response = await axios.get(`/api/jewelry/paged?page=${page}&size=${size}`);
         return response.data;
     } catch (error) {
         throw new Error('Failed to fetch jewelry by page');
@@ -36,7 +36,7 @@ export async function getPage(page = 1, size = 9) {
 }
 export async function searchJewelryByGender(gender) {
     try {
-        const response = await axios.get(`http://localhost:8080/api/jewelry/search/filter?gender=%20${encodeURIComponent(gender)}`);
+        const response = await axios.get(`/api/jewelry/search/filter?gender=%20${encodeURIComponent(gender)}`);
         return response.data;
     } catch (error) {
         throw new Error('Failed to filter jewelry by gender');
@@ -45,7 +45,7 @@ export async function searchJewelryByGender(gender) {
 
 export const addToCart = async (accountId, jewelryId, quantity, size) => {
     try {
-        const response = await axios.post(`http://localhost:8080/api/cart/add?accountID=${accountId}&jewelryID=${jewelryId}&quantity=${quantity}&sizeJewelry=${size}`);
+        const response = await axios.post(`/api/cart/add?accountID=${accountId}&jewelryID=${jewelryId}&quantity=${quantity}&sizeJewelry=${size}`);
         return response.data;
     } catch (error) {
         throw new Error('Failed to filter jewelry by size');

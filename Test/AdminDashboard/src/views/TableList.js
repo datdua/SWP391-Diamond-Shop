@@ -1,15 +1,31 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Modal, Container, Navbar, Nav, Row, Col, Card, Table, Dropdown } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { getAllJewelry } from '../api/jewelryCrud.js';
-import AddJewelryForm from '../components/JewelryCRUD/AddJewelryForm.js';
-import UpdateJewelryForm from '../components/JewelryCRUD/UpdateJewelryForm.js';
-import DeleteJewelryButton from '../components/JewelryCRUD/DeleteJewelryForm.js';
-import AddDiamondForm from '../components/DiamondCRUD/AddDiamondForm.js';
-import UpdateDiamondForm from '../components/DiamondCRUD/UpdateDiamondForm.js';
-import DeleteDiamondButton from '../components/DiamondCRUD/DeleteDiamondForm.js';
-import { getAllDiamond, getCertificateImage, getWarrantityImage } from '../api/diamondCrud.js';
-import '../assets/css/TableList.css'; // Import file CSS mới
+import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Modal,
+  Container,
+  Navbar,
+  Nav,
+  Row,
+  Col,
+  Card,
+  Table,
+  Dropdown,
+} from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { getAllJewelry } from "../api/jewelryCrud.js";
+import AddJewelryForm from "../components/JewelryCRUD/AddJewelryForm.js";
+import UpdateJewelryForm from "../components/JewelryCRUD/UpdateJewelryForm.js";
+import DeleteJewelryButton from "../components/JewelryCRUD/DeleteJewelryForm.js";
+import AddDiamondForm from "../components/DiamondCRUD/AddDiamondForm.js";
+import UpdateDiamondForm from "../components/DiamondCRUD/UpdateDiamondForm.js";
+import DeleteDiamondButton from "../components/DiamondCRUD/DeleteDiamondForm.js";
+import {
+  getAllDiamond,
+  getCertificateImage,
+  getWarrantityImage,
+} from "../api/diamondCrud.js";
+import "../assets/css/TableList.css"; // Import file CSS mới
+import { FiRefreshCw } from "react-icons/fi";
 
 function TableList() {
   const [jewelryData, setJewelryData] = useState([]);
@@ -49,10 +65,14 @@ function TableList() {
 
   const handleDelete = (jewelryID, diamondID) => {
     if (jewelryID) {
-      setJewelryData(jewelryData.filter(jewelry => jewelry.jewelryID !== jewelryID));
+      setJewelryData(
+        jewelryData.filter((jewelry) => jewelry.jewelryID !== jewelryID)
+      );
     }
     if (diamondID) {
-      setDiamondData(diamondData.filter(diamond => diamond.diamondID !== diamondID));
+      setDiamondData(
+        diamondData.filter((diamond) => diamond.diamondID !== diamondID)
+      );
     }
   };
 
@@ -69,11 +89,11 @@ function TableList() {
   const handleShowCertificate = async (certificationID) => {
     try {
       const imageUrl = await getCertificateImage(certificationID);
-      console.log('Certificate Image URL:', imageUrl);
+      console.log("Certificate Image URL:", imageUrl);
       setCertificateImage(imageUrl);
       setShowCertificateModal(true);
     } catch (error) {
-      console.error('Error fetching certificate image:', error);
+      console.error("Error fetching certificate image:", error);
     }
   };
 
@@ -85,11 +105,11 @@ function TableList() {
   const handleShowWarrantity = async (warrantyID) => {
     try {
       const imageUrl = await getWarrantityImage(warrantyID);
-      console.log('Warrantity Image URL:', imageUrl);
+      console.log("Warrantity Image URL:", imageUrl);
       setWarrantyImg(imageUrl);
       setShowWarrantityModal(true);
     } catch (error) {
-      console.error('Error fetching warranty image:', error);
+      console.error("Error fetching warranty image:", error);
     }
   };
 
@@ -98,14 +118,24 @@ function TableList() {
     setWarrantyImg(null);
   };
 
+  const refreshTable = () => {
+    getAllDiamond().then((data) => {
+      setDiamondData(data);
+    });
+
+    getAllJewelry().then((data) => {
+      setJewelryData(data);
+    });
+  };
+
   useEffect(() => {
     getAllJewelry()
-      .then(data => setJewelryData(data))
-      .catch(error => console.error(error));
+      .then((data) => setJewelryData(data))
+      .catch((error) => console.error(error));
 
     getAllDiamond()
-      .then(data => setDiamondData(data))
-      .catch(error => console.error(error));
+      .then((data) => setDiamondData(data))
+      .catch((error) => console.error(error));
   }, []);
 
   return (
@@ -113,7 +143,13 @@ function TableList() {
       <Navbar bg="light" expand="lg">
         <Navbar.Brand href="#home">Diamond Store</Navbar.Brand>
         <Nav className="mr-auto">
-          <Dropdown onSelect={(eventKey) => eventKey === 'diamond' ? handleShowDiamondTable() : handleShowJewelryTable()}>
+          <Dropdown
+            onSelect={(eventKey) =>
+              eventKey === "diamond"
+                ? handleShowDiamondTable()
+                : handleShowJewelryTable()
+            }
+          >
             <Dropdown.Toggle variant="success" id="dropdown-basic">
               Select Manager
             </Dropdown.Toggle>
@@ -122,7 +158,9 @@ function TableList() {
               <Dropdown.Item eventKey="jewelry">Jewelry Manager</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
-          <Button onClick={handleShowAdd}>{showDiamondTable ? 'Add Diamond' : 'Add Jewelry'}</Button>
+          <Button onClick={handleShowAdd}>
+            {showDiamondTable ? "Add Diamond" : "Add Jewelry"}
+          </Button>
         </Nav>
       </Navbar>
       {showJewelryTable && (
@@ -130,7 +168,12 @@ function TableList() {
           <Col md={12}>
             <Card>
               <Card.Header>
-                <Card.Title as="h4">Jewelry List</Card.Title>
+                <Card.Title as="h4">
+                  Jewelry List
+                  <Button variant="link" onClick={refreshTable}>
+                    <FiRefreshCw />
+                  </Button>
+                </Card.Title>
               </Card.Header>
               <Card.Body>
                 <div className="table-responsive">
@@ -157,11 +200,29 @@ function TableList() {
                           <td>{jewelry.jewelryName}</td>
                           <td>{jewelry.size}</td>
                           <td>{jewelry.gender}</td>
-                          <td><img src={jewelry.jewelryImage} alt={jewelry.jewelryName} style={{ width: "100px", height: "100px" }} /> </td>
-                          <td>{jewelry.jewelryPrice.toLocaleString() + ' VNĐ'}</td>
                           <td>
-                            <Button variant="primary" onClick={() => handleShowUpdate(jewelry)}>Edit</Button>
-                            <DeleteJewelryButton jewelryID={jewelry.jewelryID} onDelete={() => handleDelete(jewelry.jewelryID, null)} />
+                            <img
+                              src={jewelry.jewelryImage}
+                              alt={jewelry.jewelryName}
+                              style={{ width: "100px", height: "100px" }}
+                            />{" "}
+                          </td>
+                          <td>
+                            {jewelry.jewelryPrice.toLocaleString() + " VNĐ"}
+                          </td>
+                          <td>
+                            <Button
+                              variant="primary"
+                              onClick={() => handleShowUpdate(jewelry)}
+                            >
+                              Edit
+                            </Button>
+                            <DeleteJewelryButton
+                              jewelryID={jewelry.jewelryID}
+                              onDelete={() =>
+                                handleDelete(jewelry.jewelryID, null)
+                              }
+                            />
                           </td>
                         </tr>
                       ))}
@@ -178,7 +239,12 @@ function TableList() {
           <Col md={12}>
             <Card>
               <Card.Header>
-                <Card.Title as="h4">Diamond List</Card.Title>
+                <Card.Title as="h4">
+                  Diamond List
+                  <Button variant="link" onClick={refreshTable}>
+                    <FiRefreshCw />
+                  </Button>
+                </Card.Title>
               </Card.Header>
               <Card.Body>
                 <div className="table-responsive">
@@ -208,14 +274,36 @@ function TableList() {
                           <td>{index + 1}</td>
                           <td>{diamond.diamondID}</td>
                           <td>
-                            <a href="#" onClick={() => handleShowWarrantity(diamond.warrantyID)}>{diamond.warrantyID}</a>
+                            <a
+                              href="#"
+                              onClick={() =>
+                                handleShowWarrantity(diamond.warrantyID)
+                              }
+                            >
+                              {diamond.warrantyID}
+                            </a>
                           </td>
                           <td>
-                            <a href="#" onClick={() => handleShowCertificate(diamond.certificationID)}>{diamond.certificationID}</a>
+                            <a
+                              href="#"
+                              onClick={() =>
+                                handleShowCertificate(diamond.certificationID)
+                              }
+                            >
+                              {diamond.certificationID}
+                            </a>
                           </td>
                           <td>{diamond.diamondName}</td>
-                          <td>{diamond.diamondPrice.toLocaleString() + ' VNĐ'}</td>
-                          <td><img src={diamond.diamondImage} alt={diamond.diamondName} style={{ width: "100px", height: "100px" }} /></td>
+                          <td>
+                            {diamond.diamondPrice.toLocaleString() + " VNĐ"}
+                          </td>
+                          <td>
+                            <img
+                              src={diamond.diamondImage}
+                              alt={diamond.diamondName}
+                              style={{ width: "100px", height: "100px" }}
+                            />
+                          </td>
                           <td>{diamond.carat_weight}</td>
                           <td>{diamond.carat_size}</td>
                           <td>{diamond.color}</td>
@@ -224,8 +312,18 @@ function TableList() {
                           <td>{diamond.shape}</td>
                           <td>{diamond.origin}</td>
                           <td>
-                            <Button variant="primary" onClick={() => handleShowUpdate(diamond)}>Edit</Button>
-                            <DeleteDiamondButton diamondID={diamond.diamondID} onDelete={() => handleDelete(null, diamond.diamondID)} />
+                            <Button
+                              variant="primary"
+                              onClick={() => handleShowUpdate(diamond)}
+                            >
+                              Edit
+                            </Button>
+                            <DeleteDiamondButton
+                              diamondID={diamond.diamondID}
+                              onDelete={() =>
+                                handleDelete(null, diamond.diamondID)
+                              }
+                            />
                           </td>
                         </tr>
                       ))}
@@ -240,32 +338,40 @@ function TableList() {
 
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{isUpdating ? 'Update Item' : 'Add Item'}</Modal.Title>
+          <Modal.Title>{isUpdating ? "Update Item" : "Add Item"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {isUpdating ? (
             showDiamondTable ? (
-              <UpdateDiamondForm diamond={selectedDiamond} onClose={handleClose} />
+              <UpdateDiamondForm
+                diamond={selectedDiamond}
+                onClose={handleClose}
+              />
             ) : (
-              <UpdateJewelryForm jewelry={selectedJewelry} onClose={handleClose} />
+              <UpdateJewelryForm
+                jewelry={selectedJewelry}
+                onClose={handleClose}
+              />
             )
+          ) : showDiamondTable ? (
+            <AddDiamondForm onClose={handleClose} />
           ) : (
-            showDiamondTable ? (
-              <AddDiamondForm onClose={handleClose} />
-            ) : (
-              <AddJewelryForm onClose={handleClose} />
-            )
+            <AddJewelryForm onClose={handleClose} />
           )}
         </Modal.Body>
       </Modal>
 
-      <Modal show={showCertificateModal} onHide={handleCloseCertificateModal} >
+      <Modal show={showCertificateModal} onHide={handleCloseCertificateModal}>
         <Modal.Header closeButton>
           <Modal.Title>Certificate Image</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {certificateImage ? (
-            <img src={certificateImage} alt="Certificate" style={{ width: '100%', height: '100%' }} />
+            <img
+              src={certificateImage}
+              alt="Certificate"
+              style={{ width: "100%", height: "100%" }}
+            />
           ) : (
             <p>Loading...</p>
           )}
@@ -277,13 +383,17 @@ function TableList() {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={showWarrantityModal} onHide={handleCloseWarrantityModal} >
+      <Modal show={showWarrantityModal} onHide={handleCloseWarrantityModal}>
         <Modal.Header closeButton>
           <Modal.Title>Warrantity Image</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {warrantyImg ? (
-            <img src={warrantyImg} alt="Warranty" style={{ width: '100%', height: '100%' }} />
+            <img
+              src={warrantyImg}
+              alt="Warranty"
+              style={{ width: "100%", height: "100%" }}
+            />
           ) : (
             <p>Loading...</p>
           )}

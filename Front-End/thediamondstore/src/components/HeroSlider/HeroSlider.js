@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import "./HeroSlider.css"
+
 const slidesData = [
     {
         backgroundImage: 'url(assets/images/banner-silde2.png)',
@@ -30,37 +31,36 @@ const HeroSlider = () => {
         <div className="tm-heroslider-area">
             <div className="tm-heroslider-slider">
                 {slidesData.map((slide, index) => (
-                    <a href='/sanpham'>
-                    <div
-                        key={index} 
-                        className={`tm-heroslider ${currentSlide === index ? 'active' : ''}`}
-                        style={{
-                            backgroundImage: slide.backgroundImage,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            position: 'absolute',
-                            top: 0,
-                            left: `${(index - currentSlide) * 100}%`,
-                            width: '100%',
-                            height: '100%',
-                            transition: 'left 1s ease-in-out',
-                            color: 'white'
-                        }}
-                    >
-                        {/* <div className="container">
-                            <div className="row align-items-center">
-                                <div className="col-lg-7 col-md-8 col-12">
-                                    <div className="tm-heroslider-contentwrapper">
-                                        <div className="tm-heroslider-content">
-                                            <h1 className="tm-heroslider-title">{slide.title}</h1>
-                                            <p className="tm-heroslider-description">{slide.description}</p>
-                                            <a href={slide.link} className="tm-button">Shop Now</a>
+                    <a href='/sanpham' key={index}>
+                        <div
+                            className={`tm-heroslider ${currentSlide === index ? 'active' : ''}`}
+                            style={{
+                                backgroundImage: slide.backgroundImage,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center',
+                                position: 'absolute',
+                                top: 0,
+                                left: `${(index - currentSlide) * 100}%`,
+                                width: '100%',
+                                height: '100%',
+                                transition: 'left 1s ease-in-out',
+                                color: 'white'
+                            }}
+                        >
+                            {/* <div className="container">
+                                <div className="row align-items-center">
+                                    <div className="col-lg-7 col-md-8 col-12">
+                                        <div className="tm-heroslider-contentwrapper">
+                                            <div className="tm-heroslider-content">
+                                                <h1 className="tm-heroslider-title">{slide.title}</h1>
+                                                <p className="tm-heroslider-description">{slide.description}</p>
+                                                <a href={slide.link} className="tm-button">Shop Now</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div> */}
-                    </div>
+                            </div> */}
+                        </div>
                     </a>
                 ))}
             </div>
