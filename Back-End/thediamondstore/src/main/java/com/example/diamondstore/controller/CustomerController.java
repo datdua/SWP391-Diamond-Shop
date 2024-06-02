@@ -3,7 +3,6 @@ package com.example.diamondstore.controller;
 import java.util.Collections;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +16,6 @@ import com.example.diamondstore.model.Customer;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.CustomerRepository;
 import com.example.diamondstore.request.CustomerRequest;
-import com.example.diamondstore.service.CustomerService;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -68,7 +66,6 @@ public class CustomerController {
         }
     }
 
-    @Autowired
-    private CustomerService customerService;
+   
 
 }
