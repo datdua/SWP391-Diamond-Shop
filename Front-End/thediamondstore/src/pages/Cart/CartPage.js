@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
-import { getAllCartItems } from "../../api/addToCart";
+import { getAllCartItems, removeCartItem } from "../../api/addToCart";
 
 function CartPage() {
     const [cartItems, setCartItems] = useState([]);
@@ -26,10 +26,22 @@ function CartPage() {
         fetchCartItems();
     }, [accountId]);
 
+    const handleRemoveItem = async (cartID) => {
+        try {
+            await removeCartItem(cartID);
+            const updatedCartItems = cartItems.filter(item => item.cartID !== cartID);
+            setCartItems(updatedCartItems);
+            console.log("Item removed successfully");
+        } catch (error) {
+            console.error("Error removing item:", error);
+        }
+    };
+
+
     return (
         <div>
             <div id="wrapper" className="wrapper">
-                
+
                 <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(assets/images/breadcrumb-bg.jpg)` }}>
                     <div className="container">
                         <div className="tm-breadcrumb">
@@ -81,14 +93,16 @@ function CartPage() {
                                                     <span className="tm-cart-totalprice">${item.totalPrice}</span>
                                                 </td>
                                                 <td>
-                                                    <button className="tm-cart-removeproduct"><i className="ion-close"></i></button>
+                                                    <button className="tm-cart-removeproduct" onClick={() => handleRemoveItem(item.cartID)}>
+                                                        <i className="ion-close"></i>
+                                                    </button>
                                                 </td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
                             </div>
-                        {/*<!-- Shopping Cart Content --> */}
+                            {/*<!-- Shopping Cart Content --> */}
                             <div className="tm-cart-bottomarea">
                                 <div className="row">
                                     <div className="col-lg-8 col-md-6">
@@ -124,7 +138,7 @@ function CartPage() {
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <a href="#" className="tm-button">Proceed To Checkout</a>
+                                            <a href="/checkout" className="tm-button">Proceed To Checkout</a>
                                         </div>
                                     </div>
                                 </div>
@@ -132,7 +146,8 @@ function CartPage() {
                             {/* <!--// Shopping Cart Content --> */}
                         </div>
                     </div>
-                </main>            
+                </main>
+
                 <button id="back-top-top"><i className="ion-arrow-up-c"></i></button>
             </div>
         </div>
