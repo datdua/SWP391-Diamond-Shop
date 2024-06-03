@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
-import { getAllCartItems } from "../../api/addToCart";
+import { getAllCartItems, removeCartItem } from "../../api/addToCart";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function CartPage() {
     const [cartItems, setCartItems] = useState([]);
@@ -26,10 +28,24 @@ function CartPage() {
         fetchCartItems();
     }, [accountId]);
 
+    const handleRemoveItem = async (cartID) => {
+        try {
+            await removeCartItem(cartID);
+            const updatedCartItems = cartItems.filter(item => item.cartID !== cartID);
+            setCartItems(updatedCartItems);
+            console.log("Item removed successfully");
+            toast.success("Xoá sản phẩm thành công");
+        } catch (error) {
+            console.error("Error removing item:", error);
+            toast.error("Xoá sản phẩm thất bại");
+        }
+    };
+
+
     return (
         <div>
             <div id="wrapper" className="wrapper">
-                <Header />
+
                 <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(assets/images/breadcrumb-bg.jpg)` }}>
                     <div className="container">
                         <div className="tm-breadcrumb">
@@ -81,14 +97,16 @@ function CartPage() {
                                                     <span className="tm-cart-totalprice">${item.totalPrice}</span>
                                                 </td>
                                                 <td>
-                                                    <button className="tm-cart-removeproduct"><i className="ion-close"></i></button>
+                                                    <button className="tm-cart-removeproduct" onClick={() => handleRemoveItem(item.cartID)}>
+                                                        <i className="ion-close"></i>
+                                                    </button>
                                                 </td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
                             </div>
-                        {/*<!-- Shopping Cart Content --> */}
+                            {/*<!-- Shopping Cart Content --> */}
                             <div className="tm-cart-bottomarea">
                                 <div className="row">
                                     <div className="col-lg-8 col-md-6">
@@ -97,7 +115,7 @@ function CartPage() {
                                             <a href="#" className="tm-button">Update Cart</a>
                                         </div>
                                         <form action="#" className="tm-cart-coupon">
-                                            <label for="coupon-field">Have a coupon code?</label>
+                                            <label htmlFor="coupon-field">Have a coupon code?</label>
                                             <input type="text" id="coupon-field" placeholder="Enter coupon code"
                                                 required="required" />
                                             <button type="submit" className="tm-button">Submit</button>
@@ -124,7 +142,7 @@ function CartPage() {
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <a href="#" className="tm-button">Proceed To Checkout</a>
+                                            <a href="/checkout" className="tm-button">Proceed To Checkout</a>
                                         </div>
                                     </div>
                                 </div>
@@ -133,7 +151,6 @@ function CartPage() {
                         </div>
                     </div>
                 </main>
-                <Footer />
                 <button id="back-top-top"><i className="ion-arrow-up-c"></i></button>
             </div>
         </div>

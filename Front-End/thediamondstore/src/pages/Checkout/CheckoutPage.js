@@ -27,7 +27,7 @@ function CheckoutPage() {
             <div id="wrapper" className="wrapper">
 
                 {/* <!-- Header --> */}
-                  <Header/>
+                  
                 {/* <!--// Header --> 
 
                 <!-- Breadcrumb Area --> */}
@@ -287,7 +287,7 @@ function CheckoutPage() {
                 {/* <!--// Page Content --> */}
 
                 {/* <!-- Footer --> */}
-                <Footer/>
+                
                 {/* <!--// Footer --> */}
 
                 <button id="back-top-top"><i className="ion-arrow-up-c"></i></button>
