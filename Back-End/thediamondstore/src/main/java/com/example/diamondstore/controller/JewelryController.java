@@ -49,13 +49,13 @@ public class JewelryController {
     }
 
     @GetMapping("/paged")
-        public ResponseEntity<Page<Jewelry>> getAllDiamondsPaged(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page-1, size);
+    public ResponseEntity<Page<Jewelry>> getAllDiamondsPaged(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
         Page<Jewelry> pageJewelrys = jewelryRepository.findAll(pageable);
         return ResponseEntity.ok(pageJewelrys);
     }
 
-    @PostMapping(value="/create", produces = "application/json;charset=UTF-8")
+    @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> createJewelry(@RequestBody Jewelry jewelry) {
         Jewelry existingJewelry = jewelryRepository.findByJewelryID(jewelry.getJewelryID());
         if (existingJewelry != null) {
@@ -95,7 +95,7 @@ public class JewelryController {
             @RequestParam(required = false) String jewelryName,
             @RequestParam(required = false) Float minjewelryPrice,
             @RequestParam(required = false) Float maxjewelryPrice,
-            @RequestParam(required = false) String gender){
+            @RequestParam(required = false) String gender) {
 
         Specification<Jewelry> spec = Specification.where(null);
 

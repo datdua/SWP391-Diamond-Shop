@@ -35,7 +35,7 @@ public class ProductionController {
     public Map<String, Object> getAllProduction() {
         List<Diamond> diamonds = diamondRepository.findAll();
         List<Jewelry> jewelry = jewelryRepository.findAll();
-        
+
         Map<String, Object> response = new HashMap<>();
         response.put("diamonds", diamonds);
         response.put("jewelry", jewelry);
@@ -50,7 +50,7 @@ public class ProductionController {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Diamond> diamondPage = diamondRepository.findAll(pageable);
         Page<Jewelry> jewelryPage = jewelryRepository.findAll(pageable);
-        
+
         Map<String, Object> response = new HashMap<>();
         response.put("diamonds", diamondPage.getContent());
         response.put("diamondsTotalPages", diamondPage.getTotalPages());
@@ -62,4 +62,3 @@ public class ProductionController {
         return response;
     }
 }
-

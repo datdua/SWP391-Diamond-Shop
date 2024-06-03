@@ -43,6 +43,7 @@ public class AccountController {
         this.customerRepository = customerRepository;
         this.orderRepository = orderRepository;
     }
+
     @GetMapping("/home")
     public String welcome() {
         return "Welcome to Diamond Store";
@@ -109,7 +110,6 @@ public class AccountController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Xóa thành công"));
     }
 
-
     @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> create(@RequestBody AccountRequest accountRequest) {
         String accountName = accountRequest.getAccountName();
@@ -131,7 +131,7 @@ public class AccountController {
         Account account = new Account(null, accountName, password, role, phoneNumber, email);
         accountRepository.save(account);
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo tài khoản thành công"));
-        
+
     }
 
     @PutMapping(value = "/update/{accountID}", produces = "application/json;charset=UTF-8")

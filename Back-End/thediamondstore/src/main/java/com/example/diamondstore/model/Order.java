@@ -42,8 +42,8 @@ public class Order {
     @Column(name = "deliveryDate", nullable = false)
     private LocalDateTime deliveryDate;
 
-    @Column(name = "totalAmount", precision = 18, scale = 2)
-    private BigDecimal totalAmount;
+    @Column(name = "totalCart", precision = 18, scale = 2)
+    private BigDecimal totalCart;
 
     @Column(name = "deliveryAddress")
     private String deliveryAddress;
@@ -64,19 +64,18 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Cart> cartItems;
 
-    // getters and setters
     public Order() {
     }
 
     public Order(Integer orderID, Account account, LocalDateTime startorderDate, String orderStatus, LocalDateTime deliveryDate,
-            BigDecimal totalAmount, String deliveryAddress, String phoneNumber, String certificateImage, String warrantyImage,
+            BigDecimal totalCart, String deliveryAddress, String phoneNumber, String certificateImage, String warrantyImage,
             Promotion promotion, List<Cart> cartItems) {
         this.orderID = orderID;
         this.account = account;
         this.startorderDate = startorderDate;
         this.orderStatus = orderStatus;
         this.deliveryDate = deliveryDate;
-        this.totalAmount = totalAmount;
+        this.totalCart = totalCart;
         this.deliveryAddress = deliveryAddress;
         this.phoneNumber = phoneNumber;
         this.certificateImage = certificateImage;
@@ -125,12 +124,12 @@ public class Order {
         this.deliveryDate = deliveryDate;
     }
 
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
+    public BigDecimal gettotalCart() {
+        return totalCart;
     }
 
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
+    public void settotalCart(BigDecimal totalCart) {
+        this.totalCart = totalCart;
     }
 
     public String getDeliveryAddress() {
@@ -180,9 +179,4 @@ public class Order {
     public void setCartItems(List<Cart> cartItems) {
         this.cartItems = cartItems;
     }
-
-    
-
-    
-    
 }

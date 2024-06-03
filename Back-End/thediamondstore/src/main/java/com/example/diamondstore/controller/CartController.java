@@ -1,5 +1,6 @@
 package com.example.diamondstore.controller;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +35,6 @@ public class CartController {
         }
         return ResponseEntity.ok(cartItems);
     }
-
-    
 
     //thêm sản phầm vào giỏ hàng
     @PostMapping(value = "/add", produces = "application/json;charset=UTF-8")
@@ -80,4 +79,11 @@ public class CartController {
     //     cartService.saveCart(cart);
     //     return ResponseEntity.ok(Collections.singletonMap("message", "Tạo giỏ hàng thành công"));
     // }
+    
+    // Lấy totalCart từ CartService và trả về api
+    @GetMapping(value = "/totalCart")
+    public ResponseEntity<?> getTotalCart(@RequestParam Integer accountID) {
+        BigDecimal totalCart = cartService.getTotalCart(accountID);
+        return ResponseEntity.ok(totalCart);
+    }
 }

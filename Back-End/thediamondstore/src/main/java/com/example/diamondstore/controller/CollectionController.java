@@ -16,12 +16,10 @@ import com.example.diamondstore.repository.CollectionRepository;
 
 @RestController
 @RequestMapping("/api/collections")
-
-
 public class CollectionController {
-    
+
     private final CollectionRepository collectionRepository;
-    
+
     public CollectionController(CollectionRepository collectionRepository) {
         this.collectionRepository = collectionRepository;
     }
@@ -30,7 +28,7 @@ public class CollectionController {
     public ResponseEntity<Iterable<Collection>> getCollections() {
         return ResponseEntity.ok(collectionRepository.findAll());
     }
-    
+
     @GetMapping("/{collectionID}")
     public ResponseEntity<Collection> getCollection(@RequestParam int collectionID) {
         Collection collection = collectionRepository.findByCollectionID(collectionID);
@@ -39,8 +37,8 @@ public class CollectionController {
         }
         return ResponseEntity.ok(collection);
     }
-    
-    @PostMapping(value="/create", produces = "application/json;charset=UTF-8")
+
+    @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> createCollection(@RequestBody Collection collection) {
         Collection existingCollection = collectionRepository.findByCollectionID(collection.getCollectionID());
         if (existingCollection != null) {
@@ -50,7 +48,7 @@ public class CollectionController {
         return ResponseEntity.ok(collection);
     }
 
-    @PutMapping(value="/update/{collectionID}", produces = "application/json;charset=UTF-8")
+    @PutMapping(value = "/update/{collectionID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> updateCollection(@PathVariable int collectionID, @RequestBody Collection collection) {
         Collection existingCollection = collectionRepository.findByCollectionID(collectionID);
         if (existingCollection == null) {
@@ -62,10 +60,10 @@ public class CollectionController {
         existingCollection.setJewelryImage(collection.getJewelryImage());
         collectionRepository.save(existingCollection);
         return ResponseEntity.ok(collection);
-    }    
-    
+    }
+
     @DeleteMapping(value = "/delete/{collectionID}", produces = "application/json;charset=UTF-8")
-    public  ResponseEntity<?> deleteCollection(@PathVariable int collectionID) {
+    public ResponseEntity<?> deleteCollection(@PathVariable int collectionID) {
         Collection existingCollection = collectionRepository.findByCollectionID(collectionID);
         if (existingCollection == null) {
             return ResponseEntity.notFound().build();
@@ -73,5 +71,4 @@ public class CollectionController {
         collectionRepository.delete(existingCollection);
         return ResponseEntity.ok(existingCollection);
     }
-    
 }
