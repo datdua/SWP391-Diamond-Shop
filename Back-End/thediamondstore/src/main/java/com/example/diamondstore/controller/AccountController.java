@@ -145,6 +145,8 @@ public class AccountController {
         if (!passwordEncoder.matches(accountPutRequest.getPassword(), existingAccount.getPassword())) {
             existingAccount.setPassword(passwordEncoder.encode(accountPutRequest.getPassword()));
         }
+        existingAccount.setEmail(accountPutRequest.getEmail());
+        existingAccount.setPhoneNumber(accountPutRequest.getPhoneNumber());
         existingAccount.setRole(accountPutRequest.getRole());
         accountRepository.save(existingAccount);
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
