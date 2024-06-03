@@ -35,8 +35,6 @@ public class CartController {
         return ResponseEntity.ok(cartItems);
     }
 
-    
-
     //thêm sản phầm vào giỏ hàng
     @PostMapping(value = "/add", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> addItemToCart(
@@ -69,15 +67,4 @@ public class CartController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Xóa khỏi giỏ hàng thành công"));
     }
 
-    //tạo giỏ hàng
-    // @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
-    // public ResponseEntity<Map<String, String>> createCart(@RequestBody Cart cart) {
-    //     Cart existingCart = cartService.getCartByCartID(cart.getCartID());
-    //     if (existingCart != null) {
-    //         return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Giỏ hàng đã tồn tại"));
-    //     }
-    //     cart.setCartID(null);  // Set cartID to null
-    //     cartService.saveCart(cart);
-    //     return ResponseEntity.ok(Collections.singletonMap("message", "Tạo giỏ hàng thành công"));
-    // }
 }

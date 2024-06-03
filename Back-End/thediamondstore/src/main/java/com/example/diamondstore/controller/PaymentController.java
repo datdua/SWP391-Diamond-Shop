@@ -41,7 +41,6 @@ public class PaymentController {
         
         // String vnp_TxnRef = PaymentConfig.getRandomNumber(8);
         String vnp_IpAddr = "127.0.0.1";
-
         String vnp_TmnCode = PaymentConfig.vnp_TmnCode;
         
         Map<String, String> vnp_Params = new HashMap<>();
