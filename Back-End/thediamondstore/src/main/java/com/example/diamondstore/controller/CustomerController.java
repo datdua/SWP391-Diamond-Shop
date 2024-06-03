@@ -44,7 +44,7 @@ public class CustomerController {
         }
     }
 
-    @PutMapping(value="/update/{accountID}", produces = "application/json;charset=UTF-8")
+    @PutMapping(value = "/update/{accountID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> updateCustomer(@PathVariable Integer accountID, @RequestBody CustomerRequest updatedCustomerRequest) {
         Optional<Account> optionalAccount = accountRepository.findById(accountID);
         if (optionalAccount.isPresent()) {
@@ -65,7 +65,4 @@ public class CustomerController {
             return ResponseEntity.notFound().build();
         }
     }
-
-   
-
 }

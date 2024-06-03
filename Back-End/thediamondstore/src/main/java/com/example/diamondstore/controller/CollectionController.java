@@ -71,5 +71,4 @@ public class CollectionController {
         collectionRepository.delete(existingCollection);
         return ResponseEntity.ok(existingCollection);
     }
-
 }

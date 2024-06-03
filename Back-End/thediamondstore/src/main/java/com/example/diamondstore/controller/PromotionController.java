@@ -49,7 +49,7 @@ public class PromotionController {
         return ResponseEntity.ok(promotion);
     }
 
-    @PutMapping(value="/update/{promotionID}", produces = "application/json;charset=UTF-8")
+    @PutMapping(value = "/update/{promotionID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> updatePromotion(@PathVariable Integer promotionID, @RequestBody PromotionPutRequest promotionPutRequest) {
         Promotion existingPromotion = promotionRepository.findByPromotionID(promotionID);
         if (existingPromotion == null) {
@@ -73,7 +73,7 @@ public class PromotionController {
         return ResponseEntity.ok(promotion);
     }
 
-    @PostMapping(value="/create", produces = "application/json;charset=UTF-8")
+    @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> createPromotion(@RequestBody Promotion promotion) {
         Promotion existingPromotion = promotionRepository.findByPromotionID(promotion.getPromotionID());
         if (existingPromotion != null) {
@@ -82,5 +82,4 @@ public class PromotionController {
         promotionRepository.save(promotion);
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công"));
     }
-
 }

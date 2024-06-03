@@ -79,15 +79,11 @@ public class CartController {
     //     cartService.saveCart(cart);
     //     return ResponseEntity.ok(Collections.singletonMap("message", "Tạo giỏ hàng thành công"));
     // }
-
+    
     // Lấy totalCart từ CartService và trả về api
     @GetMapping(value = "/totalCart")
     public ResponseEntity<?> getTotalCart(@RequestParam Integer accountID) {
         BigDecimal totalCart = cartService.getTotalCart(accountID);
         return ResponseEntity.ok(totalCart);
     }
-    
-
-
-
 }
