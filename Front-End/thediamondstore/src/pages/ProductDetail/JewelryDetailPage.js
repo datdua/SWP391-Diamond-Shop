@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import {  getJewelryById } from "../../api/JewelryAPI";
-import "./ProductDetailPage.css"
+import { getJewelryById } from "../../api/JewelryAPI";
+import "./ProductDetailPage.css";
 import { addJewelryToCart, getAccountIDByEmail } from "../../api/addToCart";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function JewelryDetailPage() {
     const navigate = useNavigate();
@@ -12,7 +13,6 @@ function JewelryDetailPage() {
     const [quantity, setQuantity] = useState(1);
     const [sizeJewelry, setSize] = useState(null);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [showNotification, setShowNotification] = useState(false);
 
     useEffect(() => {
         const fetchJewelry = async () => {
@@ -26,6 +26,7 @@ function JewelryDetailPage() {
         };
         fetchJewelry();
     }, [jewelryId]);
+
     const increaseQuantity = () => {
         setQuantity(prevQuantity => prevQuantity + 1);
     };
@@ -35,13 +36,12 @@ function JewelryDetailPage() {
             setQuantity(prevQuantity => prevQuantity - 1);
         }
     };
+
     const handleSizeChange = (event) => {
         const selectedSize = event.target.value || null; // Ensure that selectedSize is null if no size is selected
         setSize(selectedSize);
         console.log("Selected size:", selectedSize);
     };
-
-
 
     useEffect(() => {
         const checkLoginStatus = () => {
@@ -55,13 +55,14 @@ function JewelryDetailPage() {
 
         checkLoginStatus();
     }, []);
+
     const handleAddToCart = async (item) => {
         console.log("Add to Cart clicked");
         console.log("Item to be added:", item);
 
         if (!isLoggedIn) {
-            console.log("User not logged in");
-            setShowNotification(true);
+            console.log("Người dùng chưa đăng nhập");
+            toast.error("Vui lòng đăng nhập trước khi thêm sản phẩm vào giỏ hàng");
         } else {
             try {
                 const email = localStorage.getItem('email');
@@ -71,13 +72,13 @@ function JewelryDetailPage() {
 
                 const accountID = await getAccountIDByEmail(email);
                 console.log("Account ID:", accountID);
-                
+
                 console.log("Size:", sizeJewelry);
-                const response = await addJewelryToCart(accountID, item.jewelryID || item.diamondID, quantity, sizeJewelry); 
+                const response = await addJewelryToCart(accountID, item.jewelryID || item.diamondID, quantity, sizeJewelry);
                 console.log("Add to Cart response:", response);
 
                 alert("Thêm vào giỏ hàng thành công!");
-                navigate("/cart/" + accountID);// Redirect to CartPage after successful addition
+                navigate("/cart/" + accountID);
             } catch (error) {
                 console.error("Failed to add item to cart:", error.message);
                 alert("Thêm vào giỏ hàng không thành công: " + error.message);
@@ -85,13 +86,13 @@ function JewelryDetailPage() {
         }
     };
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     return (
         <div>
             <div id="wrapper" className="wrapper">
-                {/* <!-- Header --> */}
-                
-                {/* <!--// Header --> */}
-                {/* <!-- Breadcrumb Area --> */}
                 <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(assets/images/breadcrumb-bg.jpg)` }}>
                     <div className="container">
                         <div className="tm-breadcrumb">
@@ -104,8 +105,6 @@ function JewelryDetailPage() {
                         </div>
                     </div>
                 </div>
-                {/* <!--// Breadcrumb Area --> */}
-                {/* <!-- Page Content --> */}
                 <main className="page-content">
                     {jewelry && (
                         <div className="tm-product-details-area tm-section tm-padding-section bg-white">
@@ -133,7 +132,7 @@ function JewelryDetailPage() {
                                                             </div>
                                                             <div className="tm-prodetails-singleinfo">
                                                                 <b>Size : </b>
-                                                                <select value={sizeJewelry} onChange={handleSizeChange}>    
+                                                                <select value={sizeJewelry} onChange={handleSizeChange}>
                                                                     {[6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20].map((sizeOption) => (
                                                                         <option key={sizeOption} value={sizeOption}>{sizeOption}</option>
                                                                     ))}
@@ -145,7 +144,6 @@ function JewelryDetailPage() {
                                                             </div>
                                                         </div>
                                                         <p>{jewelry.description}</p>
-                                                        {/* Add to Cart */}
                                                         <div className="tm-prodetails-quantitycart">
                                                             <h6>Quantity :</h6>
                                                             <div className="tm-quantitybox">
@@ -155,8 +153,8 @@ function JewelryDetailPage() {
                                                                     <button className="decrease-button" onClick={decreaseQuantity}>-</button>
                                                                 </div>
                                                             </div>
-                                                            {showNotification && <p>Please log in to add items to the cart.</p>}
                                                             <button onClick={() => handleAddToCart(jewelry)} href="/cart">Add to cart</button>
+                                                            <ToastContainer />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -170,9 +168,9 @@ function JewelryDetailPage() {
                 </main>
                 {/* <!--// Page Content --> */}
                 {/* <!-- Footer --> */}
-                
+
                 {/* <!--// Footer --> */}
-                
+
             </div>
             {/* <!--// Wrapper --> */}
         </div>

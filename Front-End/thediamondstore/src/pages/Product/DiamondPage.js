@@ -132,7 +132,7 @@ function DiamondPage() {
                 <main className="page-content">
                     <div className="tm-products-area tm-section tm-padding-section bg-white">
                         <div className="container">
-                            <div className="row">
+                            <div className="row" style={{marginRight:"-308px"}}>
                                 <div className="col-lg-9 col-12">
                                     <form action="#" className="tm-shop-header">
                                         <div className="tm-shop-productview">
