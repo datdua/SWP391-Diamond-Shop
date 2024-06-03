@@ -64,7 +64,6 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Cart> cartItems;
 
-    // getters and setters
     public Order() {
     }
 
@@ -180,9 +179,4 @@ public class Order {
     public void setCartItems(List<Cart> cartItems) {
         this.cartItems = cartItems;
     }
-
-    
-
-    
-    
 }

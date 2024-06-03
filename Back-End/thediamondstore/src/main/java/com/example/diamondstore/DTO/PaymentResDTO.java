@@ -40,5 +40,4 @@ public class PaymentResDTO implements Serializable {
     public void setURL(String URL) {
         this.URL = URL;
     }
-
 }
