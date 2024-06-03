@@ -2,6 +2,7 @@ package com.example.diamondstore.request.putRequest;
 
 public class AccountPutRequest {
 
+    private String email;
     private String accountName;
     private String password;
     private String phoneNumber;
@@ -10,11 +11,20 @@ public class AccountPutRequest {
     public AccountPutRequest() {
     }
 
-    public AccountPutRequest(String accountName, String password, String phoneNumber, String role) {
+    public AccountPutRequest(String email, String accountName, String password, String phoneNumber, String role) {
+        this.email = email;
         this.accountName = accountName;
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.role = role;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getAccountName() {
@@ -48,5 +58,7 @@ public class AccountPutRequest {
     public void setRole(String role) {
         this.role = role;
     }
+
+    
     
 }

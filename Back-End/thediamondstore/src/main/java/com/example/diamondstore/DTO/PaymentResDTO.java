@@ -2,16 +2,12 @@ package com.example.diamondstore.DTO;
 
 import java.io.Serializable;
 
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class PaymentResDTO implements Serializable {
+
     private String status;
     private String message;
     private String URL;
-    
+
     public PaymentResDTO() {
     }
 
@@ -44,5 +40,5 @@ public class PaymentResDTO implements Serializable {
     public void setURL(String URL) {
         this.URL = URL;
     }
-    
+
 }
