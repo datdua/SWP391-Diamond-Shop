@@ -1,5 +1,6 @@
 package com.example.diamondstore.controller;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -80,4 +81,15 @@ public class CartController {
     //     cartService.saveCart(cart);
     //     return ResponseEntity.ok(Collections.singletonMap("message", "Tạo giỏ hàng thành công"));
     // }
+
+    // Lấy totalCart từ CartService và trả về api
+    @GetMapping(value = "/totalCart")
+    public ResponseEntity<?> getTotalCart(@RequestParam Integer accountID) {
+        BigDecimal totalCart = cartService.getTotalCart(accountID);
+        return ResponseEntity.ok(totalCart);
+    }
+    
+
+
+
 }
