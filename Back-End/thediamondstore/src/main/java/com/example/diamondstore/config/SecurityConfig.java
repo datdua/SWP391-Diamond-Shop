@@ -25,7 +25,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.example.diamondstore.filter.JwtRequestFilter;
 import com.example.diamondstore.service.AccountService;
 
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -36,7 +35,6 @@ public class SecurityConfig {
         "/api/test/**", "/authenticate"};
 
     private static final String[] COMMON_URL = {"/login", "/api/accounts/register", "/api/diamonds/**", "/api/certificates/**", "/api/jewelry/**", "/api/customers/**", "/api/accounts/forgetPassword/**", "/api/promotion/**", "/api/warranties/**", "/api/orders/**", "/api/cart/**", "/api/accounts/**", "/api/accounts", "/api/cart"};
-
 
     @Autowired
     private final AccountService UserService;
@@ -80,14 +78,14 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://the-diamond-store-demo.web.app"));
-    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-    configuration.setAllowedHeaders(Arrays.asList("*"));
-    configuration.setAllowCredentials(true);
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://the-diamond-store-demo.web.app"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
 
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-    return source;
-}
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 }

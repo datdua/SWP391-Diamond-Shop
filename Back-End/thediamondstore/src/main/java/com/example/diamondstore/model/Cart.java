@@ -52,13 +52,10 @@ public class Cart {
     @Column(name = "price", nullable = false, precision = 8, scale = 2)
     private BigDecimal price;
 
-    
-
     @ManyToOne
     @JoinColumn(name = "orderID", nullable = true)
     private Order order;
 
-    // getters and setters
     public Cart() {
     }
 
@@ -76,11 +73,9 @@ public class Cart {
         this.diamondName = diamondName;
         this.jewelryName = jewelryName;
         this.price = price;
-        
 
     }
 
-    //getters and setters size
     public Integer getsizeJewelry() {
         return sizeJewelry;
     }
@@ -188,8 +183,4 @@ public class Cart {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
-
-    
-
-    
 }

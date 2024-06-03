@@ -24,7 +24,7 @@ public class Diamond {
     @Column(name = "carat_size")
     private Float carat_size;
 
-    @Column(name = "diamondPrice", precision=8, scale=2)
+    @Column(name = "diamondPrice", precision = 8, scale = 2)
     private BigDecimal diamondPrice;
 
     @Column(name = "carat_weight")
@@ -51,7 +51,6 @@ public class Diamond {
     @Column(name = "origin")
     private String origin;
 
-    // Add your getters and setters here
     public Diamond() {
     }
 
@@ -174,7 +173,4 @@ public class Diamond {
     public void setOrigin(String origin) {
         this.origin = origin;
     }
-
-    
-   
 }

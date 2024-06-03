@@ -42,8 +42,6 @@ public class Account {
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     @PrimaryKeyJoinColumn
     private Customer customer;
-    
-
 
     public Account() {
     }
@@ -115,6 +113,4 @@ public class Account {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-
-
 }

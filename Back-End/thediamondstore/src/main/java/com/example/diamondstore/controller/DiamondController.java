@@ -48,7 +48,7 @@ public class DiamondController {
         return ResponseEntity.ok(diamond);
     }
 
-    @PostMapping(value="/create", produces = "application/json;charset=UTF-8")
+    @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> createDiamond(@RequestBody Diamond diamond) {
         Diamond existingDiamond = diamondRepository.findByDiamondID(diamond.getDiamondID());
         if (existingDiamond != null) {
@@ -58,7 +58,7 @@ public class DiamondController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công"));
     }
 
-    @PutMapping(value="/update/{diamondID}", produces = "application/json;charset=UTF-8")
+    @PutMapping(value = "/update/{diamondID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> updateDiamond(@PathVariable String diamondID, @RequestBody DiamondPutRequest diamondPutRequest) {
         Diamond existingDiamond = diamondRepository.findByDiamondID(diamondID);
         if (existingDiamond == null) {
@@ -77,7 +77,7 @@ public class DiamondController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }
 
-    @DeleteMapping(value="/delete/{diamondID}", produces = "application/json;charset=UTF-8")
+    @DeleteMapping(value = "/delete/{diamondID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> deleteDiamond(@PathVariable String diamondID) {
         Diamond existingDiamond = diamondRepository.findByDiamondID(diamondID);
         if (existingDiamond == null) {
@@ -96,67 +96,67 @@ public class DiamondController {
 
     @GetMapping("/paged")
     public ResponseEntity<Page<Diamond>> getAllDiamondsPaged(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page-1, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
         Page<Diamond> pageDiamonds = diamondRepository.findAll(pageable);
         return ResponseEntity.ok(pageDiamonds);
     }
 
     @GetMapping("/search/filter")
     public ResponseEntity<List<Diamond>> searchDiamonds(
-        @RequestParam(required = false) Float minDiamondPrice,
-        @RequestParam(required = false) Float maxDiamondPrice,
-        @RequestParam(required = false) String origin,
-        @RequestParam(required = false) String cut,
-        @RequestParam(required = false) String shape,
-        @RequestParam(required = false) String color,
-        @RequestParam(required = false) Float minCaratSize,
-        @RequestParam(required = false) Float maxCaratSize,
-        @RequestParam(required = false) Float minCaratWeight,
-        @RequestParam(required = false) Float maxCaratWeight,
-        @RequestParam(required = false) String clarity,
-        @RequestParam(required = false) String diamondNameLike) {
+            @RequestParam(required = false) Float minDiamondPrice,
+            @RequestParam(required = false) Float maxDiamondPrice,
+            @RequestParam(required = false) String origin,
+            @RequestParam(required = false) String cut,
+            @RequestParam(required = false) String shape,
+            @RequestParam(required = false) String color,
+            @RequestParam(required = false) Float minCaratSize,
+            @RequestParam(required = false) Float maxCaratSize,
+            @RequestParam(required = false) Float minCaratWeight,
+            @RequestParam(required = false) Float maxCaratWeight,
+            @RequestParam(required = false) String clarity,
+            @RequestParam(required = false) String diamondNameLike) {
 
-    Specification<Diamond> spec = Specification.where(null);
+        Specification<Diamond> spec = Specification.where(null);
 
-    if (minDiamondPrice != null) {
-        spec = spec.and(DiamondSpecification.hasMinDiamondPrice(minDiamondPrice));
-    }
-    if (maxDiamondPrice != null) {
-        spec = spec.and(DiamondSpecification.hasMaxDiamondPrice(maxDiamondPrice));
-    }
-    if (origin != null) {
-        spec = spec.and(DiamondSpecification.hasOrigin(origin));
-    }
-    if (cut != null) {
-        spec = spec.and(DiamondSpecification.hasCut(cut));
-    }
-    if (shape != null) {
-        spec = spec.and(DiamondSpecification.hasShape(shape));
-    }   
-    if (color != null) {
-        spec = spec.and(DiamondSpecification.hasColor(color));
-    }
-    if (clarity != null) {
-        spec = spec.and(DiamondSpecification.hasClarity(clarity));
-    }
-    if (minCaratSize != null) {
-        spec = spec.and(DiamondSpecification.hasMinCaratSize(minCaratSize));
-    }
-    if (maxCaratSize != null) {
-        spec = spec.and(DiamondSpecification.hasMaxCaratSize(maxCaratSize));
-    }
-    if (minCaratWeight != null) {
-        spec = spec.and(DiamondSpecification.hasMinCaratWeight(minCaratWeight));
-    }
-    if (maxCaratWeight != null) {
-        spec = spec.and(DiamondSpecification.hasMaxCaratWeight(maxCaratWeight));
-    }
-    if (diamondNameLike != null) {
-        List<Diamond> diamonds = diamondRepository.findByDiamondNameLike("%" + diamondNameLike + "%");
+        if (minDiamondPrice != null) {
+            spec = spec.and(DiamondSpecification.hasMinDiamondPrice(minDiamondPrice));
+        }
+        if (maxDiamondPrice != null) {
+            spec = spec.and(DiamondSpecification.hasMaxDiamondPrice(maxDiamondPrice));
+        }
+        if (origin != null) {
+            spec = spec.and(DiamondSpecification.hasOrigin(origin));
+        }
+        if (cut != null) {
+            spec = spec.and(DiamondSpecification.hasCut(cut));
+        }
+        if (shape != null) {
+            spec = spec.and(DiamondSpecification.hasShape(shape));
+        }
+        if (color != null) {
+            spec = spec.and(DiamondSpecification.hasColor(color));
+        }
+        if (clarity != null) {
+            spec = spec.and(DiamondSpecification.hasClarity(clarity));
+        }
+        if (minCaratSize != null) {
+            spec = spec.and(DiamondSpecification.hasMinCaratSize(minCaratSize));
+        }
+        if (maxCaratSize != null) {
+            spec = spec.and(DiamondSpecification.hasMaxCaratSize(maxCaratSize));
+        }
+        if (minCaratWeight != null) {
+            spec = spec.and(DiamondSpecification.hasMinCaratWeight(minCaratWeight));
+        }
+        if (maxCaratWeight != null) {
+            spec = spec.and(DiamondSpecification.hasMaxCaratWeight(maxCaratWeight));
+        }
+        if (diamondNameLike != null) {
+            List<Diamond> diamonds = diamondRepository.findByDiamondNameLike("%" + diamondNameLike + "%");
+            return ResponseEntity.ok(diamonds);
+        }
+
+        List<Diamond> diamonds = diamondRepository.findAll(spec);
         return ResponseEntity.ok(diamonds);
     }
-
-    List<Diamond> diamonds = diamondRepository.findAll(spec);
-    return ResponseEntity.ok(diamonds);
-}
 }

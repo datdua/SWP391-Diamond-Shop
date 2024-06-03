@@ -27,9 +27,6 @@ public class Customer {
     @PrimaryKeyJoinColumn
     private Account account;
 
-
-
-    // getters and setters
     public Customer() {
     }
 
@@ -53,5 +50,4 @@ public class Customer {
     public void setPoint(Integer point) {
         this.point = point;
     }
-
 }

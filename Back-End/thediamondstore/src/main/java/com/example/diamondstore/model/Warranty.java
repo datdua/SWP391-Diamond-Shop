@@ -68,5 +68,4 @@ public class Warranty {
     public void setwarrantyImage(String warrantyImage) {
         this.warrantyImage = warrantyImage;
     }
-
 }
