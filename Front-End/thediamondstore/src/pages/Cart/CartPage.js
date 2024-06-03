@@ -29,7 +29,7 @@ function CartPage() {
     return (
         <div>
             <div id="wrapper" className="wrapper">
-                <Header />
+                
                 <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(assets/images/breadcrumb-bg.jpg)` }}>
                     <div className="container">
                         <div className="tm-breadcrumb">
@@ -97,7 +97,7 @@ function CartPage() {
                                             <a href="#" className="tm-button">Update Cart</a>
                                         </div>
                                         <form action="#" className="tm-cart-coupon">
-                                            <label for="coupon-field">Have a coupon code?</label>
+                                            <label htmlFor="coupon-field">Have a coupon code?</label>
                                             <input type="text" id="coupon-field" placeholder="Enter coupon code"
                                                 required="required" />
                                             <button type="submit" className="tm-button">Submit</button>
@@ -132,8 +132,7 @@ function CartPage() {
                             {/* <!--// Shopping Cart Content --> */}
                         </div>
                     </div>
-                </main>
-                <Footer />
+                </main>            
                 <button id="back-top-top"><i className="ion-arrow-up-c"></i></button>
             </div>
         </div>

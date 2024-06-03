@@ -24,7 +24,7 @@ function LoginRegisterPage() {
         e.preventDefault();
 
         try {
-            const response = await axios.post("http://localhost:8080/login", {
+            const response = await axios.post("/login", {
                 email: loginEmail,
                 password: loginPassword
             },
@@ -65,7 +65,7 @@ function LoginRegisterPage() {
         }
 
         try {
-            const response = await axios.post("http://localhost:8080/api/accounts/register", {
+            const response = await axios.post("/api/accounts/register", {
                 accountName: registerName,
                 email: registerEmail,
                 password: registerPassword
