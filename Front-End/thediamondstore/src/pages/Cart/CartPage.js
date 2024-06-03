@@ -3,6 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import { getAllCartItems, removeCartItem } from "../../api/addToCart";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function CartPage() {
     const [cartItems, setCartItems] = useState([]);
@@ -32,8 +34,10 @@ function CartPage() {
             const updatedCartItems = cartItems.filter(item => item.cartID !== cartID);
             setCartItems(updatedCartItems);
             console.log("Item removed successfully");
+            toast.success("Xoá sản phẩm thành công");
         } catch (error) {
             console.error("Error removing item:", error);
+            toast.error("Xoá sản phẩm thất bại");
         }
     };
 
@@ -147,7 +151,6 @@ function CartPage() {
                         </div>
                     </div>
                 </main>
-
                 <button id="back-top-top"><i className="ion-arrow-up-c"></i></button>
             </div>
         </div>

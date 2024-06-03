@@ -77,11 +77,11 @@ function JewelryDetailPage() {
                 const response = await addJewelryToCart(accountID, item.jewelryID || item.diamondID, quantity, sizeJewelry);
                 console.log("Add to Cart response:", response);
 
-                alert("Thêm vào giỏ hàng thành công!");
+                toast.success("Thêm vào giỏ hàng thành công!");
                 navigate("/cart/" + accountID);
             } catch (error) {
                 console.error("Failed to add item to cart:", error.message);
-                alert("Thêm vào giỏ hàng không thành công: " + error.message);
+                toast.error("Thêm vào giỏ hàng không thành công: " + error.message);
             }
         }
     };
@@ -154,7 +154,7 @@ function JewelryDetailPage() {
                                                                 </div>
                                                             </div>
                                                             <button onClick={() => handleAddToCart(jewelry)} href="/cart">Add to cart</button>
-                                                            <ToastContainer />
+                                                            
                                                         </div>
                                                     </div>
                                                 </div>

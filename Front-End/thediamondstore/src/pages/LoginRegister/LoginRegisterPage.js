@@ -232,7 +232,7 @@ function LoginRegisterPage() {
                     </div>
                 </main>
             </div>
-            <ToastContainer />
+            
         </div>
     );
 }
