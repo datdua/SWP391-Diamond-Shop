@@ -81,17 +81,17 @@ public class OrderService {
 
         
 
-        BigDecimal totalAmount = BigDecimal.ZERO;
+        BigDecimal totalCart = BigDecimal.ZERO;
 
         for (Cart cart : cartItems) {
-            totalAmount = totalAmount.add(cart.getTotalPrice());
+            totalCart = totalCart.add(cart.getTotalPrice());
         }
 
         if (promotionID != null) {
             Optional<Promotion> promotion = promotionRepository.findById(promotionID);
             if (promotion.isPresent()) {
                 BigDecimal discountAmount = promotion.get().getDiscountAmount();
-                totalAmount = totalAmount.subtract(totalAmount.multiply(discountAmount));
+                totalCart = totalCart.subtract(totalCart.multiply(discountAmount));
                 order.setPromotion(promotion.get());
             }
         }
@@ -103,12 +103,12 @@ public class OrderService {
                 throw new IllegalArgumentException("Điểm không đủ");
             }
             BigDecimal discount = BigDecimal.valueOf(pointsToRedeem / 100.0);
-            totalAmount = totalAmount.subtract(discount.multiply(BigDecimal.valueOf(1000000)));
+            totalCart = totalCart.subtract(discount.multiply(BigDecimal.valueOf(1000000)));
             customer.setPoint(availablePoints - pointsToRedeem);
             customerRepository.save(customer);
         }
 
-        order.setTotalAmount(totalAmount);
+        order.settotalCart(totalCart);
         
         // Save the order first
         order = orderRepository.save(order);
