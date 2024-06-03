@@ -75,22 +75,25 @@ public class CartService {
 
     //tính tổng giá tiền
     private void calculateAndSetTotalPrice(Cart cart) {
-        BigDecimal totalPrice = BigDecimal.ZERO;
-        if (cart.getDiamondID() != null) {
-            Diamond diamond = diamondRepository.findById(cart.getDiamondID()).orElse(null);
-            if (diamond != null) {
-                totalPrice = totalPrice.add(diamond.getDiamondPrice());
-            }
-            if (cart.getJewelryID() != null) {
-                Jewelry jewelry = jewelryRepository.findById(cart.getJewelryID()).orElse(null);
-                if (jewelry != null) {
-                    totalPrice = totalPrice.add(jewelry.getJewelryPrice());
-                }
-            }
-            totalPrice = totalPrice.multiply(BigDecimal.valueOf(cart.getQuantity())); // Multiply by quantity
-            cart.setTotalPrice(totalPrice);
+    BigDecimal totalPrice = BigDecimal.ZERO;
+
+    if (cart.getDiamondID() != null) {
+        Diamond diamond = diamondRepository.findById(cart.getDiamondID()).orElse(null);
+        if (diamond != null) {
+            totalPrice = totalPrice.add(diamond.getDiamondPrice());
         }
     }
+
+    if (cart.getJewelryID() != null) {
+        Jewelry jewelry = jewelryRepository.findById(cart.getJewelryID()).orElse(null);
+        if (jewelry != null) {
+            totalPrice = totalPrice.add(jewelry.getJewelryPrice());
+        }
+    }
+
+    totalPrice = totalPrice.multiply(BigDecimal.valueOf(cart.getQuantity())); // Multiply by quantity
+    cart.setTotalPrice(totalPrice);
+}
 
     public Cart getCartByCartID(Integer cartID) {
         return cartRepository.findById(cartID).orElse(null);
