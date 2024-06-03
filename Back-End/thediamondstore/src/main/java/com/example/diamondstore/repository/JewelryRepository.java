@@ -10,5 +10,4 @@ import com.example.diamondstore.model.Jewelry;
 public interface JewelryRepository extends JpaRepository<Jewelry, String>, JpaSpecificationExecutor<Jewelry> {
 
     Jewelry findByJewelryID(String jewelryID);
-
 }

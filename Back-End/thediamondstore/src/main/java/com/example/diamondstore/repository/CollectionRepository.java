@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.diamondstore.model.Collection;
 
-public interface CollectionRepository extends JpaRepository<Collection, Integer>{
+public interface CollectionRepository extends JpaRepository<Collection, Integer> {
+
     Collection findByCollectionID(int collectionID);
-    
 }

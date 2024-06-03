@@ -7,5 +7,4 @@ import com.example.diamondstore.model.Customer;
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
     Customer findByAccountID(Integer accountID);
-
 }
