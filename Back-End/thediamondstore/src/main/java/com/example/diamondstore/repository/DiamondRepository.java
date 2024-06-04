@@ -16,5 +16,4 @@ public interface DiamondRepository extends JpaRepository<Diamond, String>, JpaSp
     List<Diamond> findByColor(String color);
 
     List<Diamond> findByDiamondNameLike(String diamondNamePattern);
-
 }
