@@ -62,7 +62,7 @@ public class CartService {
         if (jewelryID != null) {
             Jewelry jewelry = jewelryRepository.findById(jewelryID).orElse(null);
             if (jewelry != null) {
-                cart.setSizeJewelry(sizeJewelry);
+                cart.setsizeJewelry(sizeJewelry);
             }
         }
 
@@ -79,7 +79,7 @@ public class CartService {
             cartItem.setDiamondID(diamondID);
             cartItem.setJewelryID(jewelryID);
             cartItem.setQuantity(quantity);
-            cartItem.setSizeJewelry(sizeJewelry);
+            cartItem.setsizeJewelry(sizeJewelry);
             calculateAndSetTotalPrice(cartItem);
             cartRepository.save(cartItem);
         } else {
