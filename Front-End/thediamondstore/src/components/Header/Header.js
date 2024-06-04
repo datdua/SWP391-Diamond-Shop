@@ -72,7 +72,7 @@ function Header() {
                                             {isAccountDropdownOpen && (
                                                 <ul className="tm-dropdown-menu">
                                                     <li><Link to="/account">My Account</Link></li>
-                                                    <li><Link to="/cart">Shopping Cart</Link></li>
+                                                    <li><Link to="/cart/:accountId">Shopping Cart</Link></li>
                                                     <li><Link to="/wishlist">Wishlist</Link></li>
                                                     <li><Link to="/checkout">Checkout</Link></li>
                                                 </ul>

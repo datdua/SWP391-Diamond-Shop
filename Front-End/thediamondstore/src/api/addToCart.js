@@ -19,7 +19,7 @@ export const addJewelryToCart = async (accountID, jewelryId, quantity, size) => 
     try {
         const token = localStorage.getItem('jwt');
         const response = await axios.post(
-            `/api/cart/add?accountID=${accountID}&jewelryID=${jewelryId}&quantity=${quantity}&sizeJewelry=${size}`,
+            `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/cart/add?accountID=${accountID}&jewelryID=${jewelryId}&quantity=${quantity}&sizeJewelry=${size}`,
             {}, 
             {
                 headers: {
@@ -48,5 +48,19 @@ export const getAllCartItems = async (accountID) => {
         throw new Error("Failed to fetch cart items");
     }
 };
+
+export const removeCartItem = async (cartID) => {
+    try {
+        const response = await axios.delete(`https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/cart/remove/${cartID}`);
+        console.log("Item removed successfully:", response.data.message);
+        return response.data;
+    } catch (error) {
+        console.error("Error removing item:", error);
+        throw error;
+    }
+};
+
+
+
 
 
