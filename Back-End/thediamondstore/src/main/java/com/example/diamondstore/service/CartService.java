@@ -58,16 +58,14 @@ public class CartService {
             }
         }
 
-
-
-        
         // Fetch the jewelry item to get the size
         if (jewelryID != null) {
             Jewelry jewelry = jewelryRepository.findById(jewelryID).orElse(null);
             if (jewelry != null) {
-                cart.setSizeJewelry(sizeJewelry); 
+                cart.setSizeJewelry(sizeJewelry);
             }
         }
+
         calculateAndSetTotalPrice(cart);
         cartRepository.save(cart);
     }
@@ -81,7 +79,7 @@ public class CartService {
             cartItem.setDiamondID(diamondID);
             cartItem.setJewelryID(jewelryID);
             cartItem.setQuantity(quantity);
-            cartItem.setSizeJewelry(sizeJewelry); 
+            cartItem.setSizeJewelry(sizeJewelry);
             calculateAndSetTotalPrice(cartItem);
             cartRepository.save(cartItem);
         } else {
@@ -96,37 +94,36 @@ public class CartService {
 
     //tính tổng giá tiền
     private void calculateAndSetTotalPrice(Cart cart) {
-    BigDecimal totalPrice = BigDecimal.ZERO;
-    BigDecimal totalCart = BigDecimal.ZERO;
-    BigDecimal diamondPrice = BigDecimal.ZERO;
-    BigDecimal jewelryPrice = BigDecimal.ZERO;
-    BigDecimal price = BigDecimal.ZERO;
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        BigDecimal totalCart = BigDecimal.ZERO;
+        BigDecimal diamondPrice = BigDecimal.ZERO;
+        BigDecimal jewelryPrice = BigDecimal.ZERO;
+        BigDecimal price = BigDecimal.ZERO;
 
-    if (cart.getDiamondID() != null) {
-        Diamond diamond = diamondRepository.findById(cart.getDiamondID()).orElse(null);
-        if (diamond != null) {
-            diamondPrice = diamondPrice.add(diamond.getDiamondPrice());
+        if (cart.getDiamondID() != null) {
+            Diamond diamond = diamondRepository.findById(cart.getDiamondID()).orElse(null);
+            if (diamond != null) {
+                diamondPrice = diamondPrice.add(diamond.getDiamondPrice());
+            }
         }
-    }
 
-    if (cart.getJewelryID() != null) {
-        Jewelry jewelry = jewelryRepository.findById(cart.getJewelryID()).orElse(null);
-        if (jewelry != null) {
-            jewelryPrice = jewelryPrice.add(jewelry.getJewelryPrice());
+        if (cart.getJewelryID() != null) {
+            Jewelry jewelry = jewelryRepository.findById(cart.getJewelryID()).orElse(null);
+            if (jewelry != null) {
+                jewelryPrice = jewelryPrice.add(jewelry.getJewelryPrice());
+            }
         }
-    }
 
-    //totalPrice = totalPrice.multiply(BigDecimal.valueOf(cart.getQuantity())); // Multiply by quantity
-    // tính totalPrice bằng tổng diamondPrice và jewelryPrice
-    // tính price bằng tổng diamondPrice và jewelryPrice
-    price = price.add(diamondPrice).add(jewelryPrice);
-    totalPrice = price.multiply(BigDecimal.valueOf(cart.getQuantity()));
-    
-    // totalCart bằng tổng tất cả totalPrice có trong Cart
-    
-    cart.setTotalPrice(totalPrice);
-    cart.setPrice(price);
-}
+        //totalPrice = totalPrice.multiply(BigDecimal.valueOf(cart.getQuantity())); // Multiply by quantity
+        // tính totalPrice bằng tổng diamondPrice và jewelryPrice
+        // tính price bằng tổng diamondPrice và jewelryPrice
+        price = price.add(diamondPrice).add(jewelryPrice);
+        totalPrice = price.multiply(BigDecimal.valueOf(cart.getQuantity()));
+
+        // totalCart bằng tổng tất cả totalPrice có trong Cart
+        cart.setTotalPrice(totalPrice);
+        cart.setPrice(price);
+    }
 
     public Cart getCartByCartID(Integer cartID) {
         return cartRepository.findById(cartID).orElse(null);
@@ -138,16 +135,14 @@ public class CartService {
         cartRepository.save(cart);
     }
 
-   // Lấy totalCart từ CartService và trả về api
-   public BigDecimal getTotalCart(Integer accountID) {
-    List<Cart> cartItems = cartRepository.findByAccountIDAndOrderIsNull(accountID);
-    BigDecimal totalCart = BigDecimal.ZERO;
-    for (Cart cart : cartItems) {
-        totalCart = totalCart.add(cart.getTotalPrice());
-    }
-    return totalCart;
-    
+    // Lấy totalCart từ CartService và trả về api
+    public BigDecimal getTotalCart(Integer accountID) {
+        List<Cart> cartItems = cartRepository.findByAccountIDAndOrderIsNull(accountID);
+        BigDecimal totalCart = BigDecimal.ZERO;
+        for (Cart cart : cartItems) {
+            totalCart = totalCart.add(cart.getTotalPrice());
+        }
+        return totalCart;
 
-    
-}
+    }
 }
