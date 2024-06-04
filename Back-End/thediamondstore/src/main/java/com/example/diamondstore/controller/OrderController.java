@@ -24,11 +24,11 @@ public class OrderController {
     public ResponseEntity<Map<String, String>> createOrder(
             @RequestParam int accountID,
             @RequestParam String deliveryAddress,
-            @RequestParam(required = false) Integer promotionID,
+            @RequestParam(required = false) String promotionCode,
             @RequestParam(required = false) Integer pointsToRedeem,
             @RequestParam String phoneNumber) {
 
-        Order order = orderService.createOrder(accountID, deliveryAddress, promotionID, pointsToRedeem, phoneNumber);
+        Order order = orderService.createOrder(accountID, deliveryAddress, promotionCode, pointsToRedeem, phoneNumber);
 
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo đơn hàng thành công"));
     }

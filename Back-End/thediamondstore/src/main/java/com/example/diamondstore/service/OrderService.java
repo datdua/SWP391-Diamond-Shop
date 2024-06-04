@@ -3,7 +3,6 @@ package com.example.diamondstore.service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,24 +41,23 @@ public class OrderService {
 
     @Autowired
     private CertificateRepository certificateRepository;
-    
+
     @Autowired
     private DiamondRepository diamondRepository;
 
     @Autowired
     private AccountRepository accountRepository;
 
-
-    public Order createOrder(int accountID, String deliveryAddress, Integer promotionID, Integer pointsToRedeem, String phoneNumber) {
+    public Order createOrder(int accountID, String deliveryAddress, String promotionCode, Integer pointsToRedeem, String phoneNumber) {
         List<Cart> cartItems = cartRepository.findByAccountIDAndOrderIsNull(accountID);
 
         if (cartItems.isEmpty()) {
-           throw new IllegalArgumentException("Giỏ hàng rỗng");
+            throw new IllegalArgumentException("Giỏ hàng rỗng");
         }
 
         // Fetch the Account object
         Account account = accountRepository.findById(accountID)
-        .orElseThrow(() -> new IllegalArgumentException("Invalid account ID: " + accountID));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid account ID: " + accountID));
 
         Order order = new Order();
         order.setAccount(account);  // Set the Account object instead of accountID
@@ -68,18 +66,15 @@ public class OrderService {
         order.setStartorderDate(LocalDateTime.now());
         order.setDeliveryDate(LocalDateTime.now().plusDays(7)); // Ví dụ: giao hàng sau 7 ngày
         order.setOrderStatus("Đang xử lý");
-       
+
         // lấy certificateImage thông qua certificateID
         String diamondID = cartItems.get(0).getDiamondID();
         String certificateID = diamondRepository.findByDiamondID(diamondID).getCertificationID();
         order.setCertificateImage(certificateRepository.findByCertificateID(certificateID).getcertificateImage());
 
         // lấy warrantyImage thông qua warrantyID
-        
         String warrantyID = diamondRepository.findByDiamondID(diamondID).getWarrantyID();
         order.setWarrantyImage(warrantyRepository.findByWarrantyID(warrantyID).getwarrantyImage());
-
-        
 
         BigDecimal totalCart = BigDecimal.ZERO;
 
@@ -87,13 +82,11 @@ public class OrderService {
             totalCart = totalCart.add(cart.getTotalPrice());
         }
 
-        if (promotionID != null) {
-            Optional<Promotion> promotion = promotionRepository.findById(promotionID);
-            if (promotion.isPresent()) {
-                BigDecimal discountAmount = promotion.get().getDiscountAmount();
-                totalCart = totalCart.subtract(totalCart.multiply(discountAmount));
-                order.setPromotion(promotion.get());
-            }
+        Promotion promotion = promotionRepository.findByPromotionCode(promotionCode);
+        if (promotion != null) {
+            BigDecimal discountAmount = promotion.getDiscountAmount();
+            totalCart = totalCart.subtract(totalCart.multiply(discountAmount));
+            order.setPromotion(promotion);
         }
 
         if (pointsToRedeem != null && pointsToRedeem > 0) {
@@ -109,7 +102,7 @@ public class OrderService {
         }
 
         order.settotalCart(totalCart);
-        
+
         // Save the order first
         order = orderRepository.save(order);
 
@@ -125,6 +118,5 @@ public class OrderService {
 
         return order;
     }
-
 
 }

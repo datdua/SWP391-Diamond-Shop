@@ -80,7 +80,7 @@ public class Cart {
         return sizeJewelry;
     }
 
-    public void setSizeJewelry(Integer sizeJewelry) {
+    public void setsizeJewelry(Integer sizeJewelry) {
         this.sizeJewelry = sizeJewelry;
     }
 
@@ -138,10 +138,6 @@ public class Cart {
 
     public void setOrder(Order order) {
         this.order = order;
-    }
-
-    public Integer getSizeJewelry() {
-        return sizeJewelry;
     }
 
     public String getDiamondImage() {
