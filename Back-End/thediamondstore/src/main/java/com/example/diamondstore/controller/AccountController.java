@@ -118,6 +118,21 @@ public class AccountController {
         String phoneNumber = accountRequest.getPhoneNumber();
         String email = accountRequest.getEmail();
 
+        //Kiểm tra email hợp lệ theo form chuẩn @gmail
+        if (!email.matches("^[a-zA-Z0-9._%+-]+@gmail.com$")) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Email không hợp lệ"));
+        }
+
+        //Kiểu tra số điện thoại hợp lệ đủ 10 số
+        if (!phoneNumber.matches("^[0-9]{10}$")) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số điện thoại không hợp lệ"));
+        }
+
+        //Kiểm tra số điện thoại bắt đầu bằng số 090, 093, 089, 096, 097, 098
+        if (!phoneNumber.matches("^(090|093|089|096|097|098)[0-9]{7}$")) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số điện thoại không hợp lệ"));
+        }
+
         // Kiểm tra nếu bất kỳ trường nào trống
         if (!StringUtils.hasText(accountName) || !StringUtils.hasText(password) || !StringUtils.hasText(role) || !StringUtils.hasText(email)) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Vui lòng nhập đầy đủ thông tin"));

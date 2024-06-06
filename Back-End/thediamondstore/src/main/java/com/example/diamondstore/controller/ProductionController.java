@@ -1,5 +1,6 @@
 package com.example.diamondstore.controller;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,6 +46,33 @@ public class ProductionController {
         return response;
     }
 
+    //API search theo tên, giá diamond và jewelry
+    @GetMapping("/search")
+    public Map<String, Object> searchProduction(
+            @RequestParam(required = false) String diamondName,
+            @RequestParam(required = false) String jewelryName,         
+            @RequestParam(required = false) BigDecimal minDiamondPrice,
+            @RequestParam(required = false) BigDecimal maxDiamondPrice,
+            @RequestParam(required = false) BigDecimal minjewelryPrice,
+            @RequestParam(required = false) BigDecimal maxjewelryPrice) {
+        List<Diamond> diamonds = diamondRepository.findByDiamondNameLike("%" + diamondName + "%");
+        List<Jewelry> jewelry = jewelryRepository.findByJewelryNameLike("%" + jewelryName + "%");
+
+        //filter theo giá
+        if (minDiamondPrice != null || maxDiamondPrice != null) {
+            diamonds = diamondRepository.findByDiamondPriceBetween(minDiamondPrice, maxDiamondPrice);
+        }
+        if (minjewelryPrice != null || maxjewelryPrice != null) {
+            jewelry = jewelryRepository.findByJewelryPriceBetween(minjewelryPrice, maxjewelryPrice);
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("diamonds", diamonds);
+        response.put("jewelry", jewelry);
+        return response;
+           
+    }
+
     @GetMapping("/paged")
     public Map<String, Object> getPagedProduction(
             @RequestParam(defaultValue = "1") int page,
@@ -61,4 +91,8 @@ public class ProductionController {
 
         return response;
     }
+
+    
+    
+    
 }
