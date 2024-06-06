@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
-import { getAllCartItems, removeCartItem } from "../../api/addToCart";
+import { getAllCartItems, removeCartItem, getTotalCart } from "../../api/addToCart";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 function CartPage() {
     const [cartItems, setCartItems] = useState([]);
+    const [totalCart, setTotalCart] = useState(0);
     const { accountId } = useParams(); // Extract accountId from useParams
 
     useEffect(() => {
@@ -25,7 +26,24 @@ function CartPage() {
                 console.error("Error fetching cart items:", error);
             }
         };
+
+        const fetchTotalCart = async () => {
+            try {
+                console.log("Fetching total cart value for account ID:", accountId);
+                if (accountId) {
+                    const total = await getTotalCart(accountId);
+                    console.log("Fetched total cart value:", total); // Log the fetched total
+                    setTotalCart(total);
+                } else {
+                    console.error("Account ID is undefined");
+                }
+            } catch (error) {
+                console.error("Error fetching total cart value:", error);
+            }
+        };
+
         fetchCartItems();
+        fetchTotalCart();
     }, [accountId]);
 
     const handleRemoveItem = async (cartID) => {
@@ -41,11 +59,9 @@ function CartPage() {
         }
     };
 
-
     return (
         <div>
             <div id="wrapper" className="wrapper">
-
                 <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(assets/images/breadcrumb-bg.jpg)` }}>
                     <div className="container">
                         <div className="tm-breadcrumb">
@@ -78,23 +94,22 @@ function CartPage() {
                                             <tr key={`${item.jewelryID}-${index}`}>
                                                 <td>
                                                     <Link to={`/product-detail/${item.jewelryID}`} className="tm-cart-productimage">
-                                                        <img src={item.image} alt="product image" />
+                                                        <img src={item.jewelryImage} alt="product image" />
                                                     </Link>
                                                 </td>
                                                 <td>
-                                                    <Link to={`/product-detail/${item.jewelryID}`} className="tm-cart-productname">{item.name}</Link>
+                                                    <Link to={`/product-detail/${item.jewelryID}`} className="tm-cart-productname">{item.jewelryName}</Link>
                                                 </td>
-                                                <td className="tm-cart-price">${item.price}</td>
+                                                <td className="tm-cart-price">{item.price.toLocaleString()} VND</td>
                                                 <td>
                                                     <div className="tm-quantitybox">
-                                                        <label htmlFor={`quantity-${index}`}>Quantity:</label>
                                                         <div className="flex items-center">
                                                             <input id={`quantity-${index}`} type="text" value={item.quantity} readOnly className="w-12 text-center" />
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <span className="tm-cart-totalprice">${item.totalPrice}</span>
+                                                    <span className="tm-cart-totalprice">{item.totalPrice.toLocaleString()} VND</span>
                                                 </td>
                                                 <td>
                                                     <button className="tm-cart-removeproduct" onClick={() => handleRemoveItem(item.cartID)}>
@@ -114,12 +129,6 @@ function CartPage() {
                                             <a href="/sanpham" className="tm-button">Continue Shopping</a>
                                             <a href="#" className="tm-button">Update Cart</a>
                                         </div>
-                                        <form action="#" className="tm-cart-coupon">
-                                            <label htmlFor="coupon-field">Have a coupon code?</label>
-                                            <input type="text" id="coupon-field" placeholder="Enter coupon code"
-                                                required="required" />
-                                            <button type="submit" className="tm-button">Submit</button>
-                                        </form>
                                     </div>
                                     <div className="col-lg-4 col-md-6">
                                         <div className="tm-cart-pricebox">
@@ -127,17 +136,9 @@ function CartPage() {
                                             <div className="table-responsive">
                                                 <table className="table table-borderless">
                                                     <tbody>
-                                                        <tr className="tm-cart-pricebox-subtotal">
-                                                            <td>Cart Subtotal</td>
-                                                            <td>$175.00</td>
-                                                        </tr>
-                                                        <tr className="tm-cart-pricebox-shipping">
-                                                            <td>(+) Shipping Charge</td>
-                                                            <td>$15.00</td>
-                                                        </tr>
                                                         <tr className="tm-cart-pricebox-total">
                                                             <td>Total</td>
-                                                            <td>$190.00</td>
+                                                            <td>{totalCart ? totalCart.toLocaleString() : 0} VND</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>

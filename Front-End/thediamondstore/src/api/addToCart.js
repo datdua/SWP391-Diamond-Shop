@@ -59,6 +59,20 @@ export const removeCartItem = async (cartID) => {
         throw error;
     }
 };
+export const getTotalCart = async (accountID) => {
+    try {
+        const token = localStorage.getItem('jwt');
+        const response = await axios.get(`https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/cart/totalCart?accountID=${accountID}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data; // Adjust this line according to your actual API response
+    } catch (error) {
+        console.error("Error fetching total cart value:", error);
+        throw new Error("Failed to fetch total cart value: " + error.message);
+    }
+};
 
 
 
