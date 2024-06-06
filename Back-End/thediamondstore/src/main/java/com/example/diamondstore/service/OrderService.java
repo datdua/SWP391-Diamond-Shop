@@ -67,14 +67,16 @@ public class OrderService {
         order.setDeliveryDate(LocalDateTime.now().plusDays(7)); // Ví dụ: giao hàng sau 7 ngày
         order.setOrderStatus("Đang xử lý");
 
-        // lấy certificateImage thông qua certificateID
         String diamondID = cartItems.get(0).getDiamondID();
-        String certificateID = diamondRepository.findByDiamondID(diamondID).getCertificationID();
-        order.setCertificateImage(certificateRepository.findByCertificateID(certificateID).getcertificateImage());
+        if (diamondID != null) {
+            // lấy certificateImage thông qua certificateID
+            String certificateID = diamondRepository.findByDiamondID(diamondID).getCertificationID();
+            order.setCertificateImage(certificateRepository.findByCertificateID(certificateID).getcertificateImage());
 
-        // lấy warrantyImage thông qua warrantyID
-        String warrantyID = diamondRepository.findByDiamondID(diamondID).getWarrantyID();
-        order.setWarrantyImage(warrantyRepository.findByWarrantyID(warrantyID).getwarrantyImage());
+            // lấy warrantyImage thông qua warrantyID
+            String warrantyID = diamondRepository.findByDiamondID(diamondID).getWarrantyID();
+            order.setWarrantyImage(warrantyRepository.findByWarrantyID(warrantyID).getwarrantyImage());
+        }
 
         BigDecimal totalCart = BigDecimal.ZERO;
 
