@@ -58,7 +58,7 @@ public class Order {
     private String warrantyImage;
 
     @ManyToOne
-    @JoinColumn(name = "promotionID", referencedColumnName = "promotionID", nullable = true)
+    @JoinColumn(name = "promotionCode", referencedColumnName = "promotionCode", nullable = true)
     private Promotion promotion;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
