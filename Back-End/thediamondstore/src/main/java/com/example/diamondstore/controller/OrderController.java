@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,5 +33,16 @@ public class OrderController {
         Order order = orderService.createOrder(accountID, deliveryAddress, promotionCode, pointsToRedeem, phoneNumber);
 
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo đơn hàng thành công"));
+    }
+
+    @GetMapping(value = "/{orderID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Order> getOrder(@PathVariable int orderID) {
+        Order order = orderService.getOrder(orderID);
+        
+        if (order == null) {
+            return ResponseEntity.status(404).body(null);
+        }
+
+        return ResponseEntity.ok(order);
     }
 }
