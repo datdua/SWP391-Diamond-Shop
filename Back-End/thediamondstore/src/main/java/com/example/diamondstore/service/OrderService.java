@@ -121,4 +121,10 @@ public class OrderService {
         return order;
     }
 
+    public Order getOrder(int orderID) {
+    Order order = orderRepository.findByOrderID(orderID);
+    order.getCartItems().size(); // This will fetch the cartItems from the database
+    return order;
+}
+
 }
