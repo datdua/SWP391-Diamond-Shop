@@ -53,6 +53,11 @@ function CartPage() {
             setCartItems(updatedCartItems);
             console.log("Item removed successfully");
             toast.success("Xoá sản phẩm thành công");
+
+            // Fetch the updated total cart value
+            const total = await getTotalCart(accountId);
+            console.log("Updated total cart value:", total);
+            setTotalCart(total);
         } catch (error) {
             console.error("Error removing item:", error);
             toast.error("Xoá sản phẩm thất bại");
@@ -143,7 +148,7 @@ function CartPage() {
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <a href="/checkout" className="tm-button">Proceed To Checkout</a>
+                                            <Link to={`/checkout/${accountId}`} className="tm-button">Proceed To Checkout</Link>
                                         </div>
                                     </div>
                                 </div>

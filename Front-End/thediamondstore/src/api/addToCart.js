@@ -19,7 +19,7 @@ export const addJewelryToCart = async (accountID, jewelryId, quantity, size) => 
     try {
         const token = localStorage.getItem('jwt');
         const response = await axios.post(
-            `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/cart/add?accountID=${accountID}&jewelryID=${jewelryId}&quantity=${quantity}&sizeJewelry=${size}`,
+            `http://localhost:8080/api/cart/add?accountID=${accountID}&jewelryID=${jewelryId}&quantity=${quantity}&sizeJewelry=${size}`,
             {}, 
             {
                 headers: {
@@ -36,7 +36,7 @@ export const addJewelryToCart = async (accountID, jewelryId, quantity, size) => 
 export const getAllCartItems = async (accountID) => {
     try {
         const token = localStorage.getItem('jwt');
-        const response = await axios.get(`/api/cart?accountID=${accountID}`, {
+        const response = await axios.get(`http://localhost:8080/api/cart?accountID=${accountID}`, {
             method:'GET',
             headers: {
                 Authorization: `Bearer ${token}`
@@ -51,7 +51,7 @@ export const getAllCartItems = async (accountID) => {
 
 export const removeCartItem = async (cartID) => {
     try {
-        const response = await axios.delete(`https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/cart/remove/${cartID}`);
+        const response = await axios.delete(`http://localhost:8080/api/cart/remove/${cartID}`);
         console.log("Item removed successfully:", response.data.message);
         return response.data;
     } catch (error) {
@@ -62,7 +62,7 @@ export const removeCartItem = async (cartID) => {
 export const getTotalCart = async (accountID) => {
     try {
         const token = localStorage.getItem('jwt');
-        const response = await axios.get(`https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/cart/totalCart?accountID=${accountID}`, {
+        const response = await axios.get(`http://localhost:8080/api/cart/totalCart?accountID=${accountID}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
