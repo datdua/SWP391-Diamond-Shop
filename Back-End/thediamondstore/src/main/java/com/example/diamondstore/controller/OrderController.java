@@ -38,11 +38,26 @@ public class OrderController {
     @GetMapping(value = "/{orderID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Order> getOrder(@PathVariable int orderID) {
         Order order = orderService.getOrder(orderID);
-        
+
         if (order == null) {
             return ResponseEntity.status(404).body(null);
         }
 
         return ResponseEntity.ok(order);
     }
+
+    @GetMapping(value = "/account/{accountID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getOrdersByAccount(@PathVariable int accountID) {
+        try {
+            return ResponseEntity.ok(orderService.getOrdersByAccountId(accountID));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+        }
+    }
+
+    @GetMapping(value = "/getAll", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getAllOrders() {
+        return ResponseEntity.ok(orderService.getAllOrders());
+    }
 }
+
