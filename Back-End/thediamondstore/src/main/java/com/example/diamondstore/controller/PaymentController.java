@@ -34,7 +34,9 @@ import com.example.diamondstore.DTO.TransactionStatusDTO;
 import com.example.diamondstore.config.PaymentConfig;
 import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.Order;
+import com.example.diamondstore.model.OrderHistory;
 import com.example.diamondstore.repository.AccountRepository;
+import com.example.diamondstore.repository.OrderHistoryRepository;
 import com.example.diamondstore.repository.OrderRepository;
 
 @RestController
@@ -46,6 +48,9 @@ public class PaymentController {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private OrderHistoryRepository orderhistoryRepository;
 
     @GetMapping("/createPayment")
     public ResponseEntity<?> createPayment(@RequestParam Integer orderID) throws UnsupportedEncodingException {
@@ -127,9 +132,11 @@ public class PaymentController {
     public ResponseEntity<TransactionStatusDTO> vnpayReturn(
             @RequestParam(value = "vnp_BankCode") String bankCode,
             @RequestParam(value = "vnp_OrderInfo") int orderID,
-            @RequestParam(value = "vnp_ResponseCode") String responseCode
+            @RequestParam(value = "vnp_ResponseCode") String responseCode,
+            @RequestParam(value = "vnp_BankTranNo") String transactionNo
     ) {
         Order order = orderRepository.findByOrderID(orderID);
+        OrderHistory orderHistory = orderhistoryRepository.findByOrderID(orderID);
         TransactionStatusDTO transactionStatusDTO = new TransactionStatusDTO();
         if (responseCode.equals("00")) {
             transactionStatusDTO.setStatus("Ok");
@@ -137,12 +144,16 @@ public class PaymentController {
             transactionStatusDTO.setData("");
             order.setOrderStatus("Đã thanh toán");
             orderRepository.save(order);
+            orderHistory.setOrderhistoryStatus("Đã thanh toán");
+            orderhistoryRepository.save(orderHistory);
         } else {
             transactionStatusDTO.setStatus("No");
             transactionStatusDTO.setMessage("Thanh toán thất bại");
             transactionStatusDTO.setData("");
             order.setOrderStatus("Thanh toán thất bại");
             orderRepository.save(order);
+            orderHistory.setOrderhistoryStatus("Thanh toán thất bại");
+            orderhistoryRepository.save(orderHistory);
         }
         return ResponseEntity.status(HttpStatus.OK).body(transactionStatusDTO);
     }

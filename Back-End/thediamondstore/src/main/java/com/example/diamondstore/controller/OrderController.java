@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.model.Order;
+import com.example.diamondstore.model.OrderHistory;
+import com.example.diamondstore.service.OrderHistoryService;
 import com.example.diamondstore.service.OrderService;
 
 @RestController
@@ -29,7 +31,8 @@ public class OrderController {
             @RequestParam String phoneNumber) {
 
         Order order = orderService.createOrder(accountID, deliveryAddress, promotionCode, pointsToRedeem, phoneNumber);
-
+        int orderID = order.getOrderID();
+        OrderHistory orderHistory = OrderHistoryService.createOrderHistoryByOrder(orderID, accountID);
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo đơn hàng thành công"));
     }
 }
