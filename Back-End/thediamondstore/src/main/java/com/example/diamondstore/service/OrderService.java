@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.diamondstore.model.Account;
@@ -119,5 +120,25 @@ public class OrderService {
         customerRepository.save(customer);
 
         return order;
+    }
+
+    public Order getOrder(int orderID) {
+        Order order = orderRepository.findByOrderID(orderID);
+        order.getCartItems().size(); // This will fetch the cartItems from the database
+        return order;
+    }
+
+    public List<Order> getOrdersByAccountId(int accountID) {
+        Account account = accountRepository.findById(accountID)
+                .orElseThrow(() -> new IllegalArgumentException("AccountID không tồn tại"));
+        List<Order> orders = orderRepository.findByAccount(account);
+        if (orders.isEmpty()) {
+            throw new IllegalArgumentException("Chưa có Order nào");
+        }
+        return orders;
+    }
+
+    public List<Order> getAllOrders() {
+        return orderRepository.findAll(Sort.by(Sort.Direction.DESC, "startorderDate"));
     }
 }
