@@ -1,4 +1,6 @@
+
 import axios from "axios";
+
 
 // Cart API functions
 export const addToCart = async (accountId, diamondId, quantity) => {
@@ -31,6 +33,7 @@ export async function getDiamondByID(diamondID) {
 }
 
 export async function getPage(page = 1, size = 9) {
+
   try {
     const response = await axios.get(
       `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/diamonds/paged?page=${page}&size=${size}`
@@ -112,6 +115,15 @@ export async function getWarrantityImage(warrantyID) {
 }
 
 // Search API functions
+    try {
+        const response = await axios.get(`http://localhost:8080/api/diamonds/paged?page=${page}&size=${size}`);
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to fetch jewelry by page');
+    }
+}
+
+
 export async function searchDiamondByName(name) {
   try {
     const response = await axios.get(
@@ -128,99 +140,19 @@ export async function searchDiamondByName(name) {
     throw error;
   }
 }
+export const searchDiamond = async (filters, page = 1) => {
+    try {
+        const params = { ...filters, page };
+        const queryString = Object.keys(params)
+            .map(key => `${key}=${encodeURIComponent(params[key])}`)
+            .join('&');
 
-export async function searchDiamondByColor(color) {
-  try {
-    const response = await axios.get(
-      `/api/diamonds/search/filter?color=${color}`
-    );
-    if (response.status !== 200) {
-      throw new Error("Failed to search jewelry by color");
+        const response = await axios.get(`http://localhost:8080/api/diamonds/search/filter?${queryString}`);
+        if (response.status !== 200) {
+            throw new Error('Failed to fetch diamonds');
+        }
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to fetch diamonds');
     }
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to search jewelry by color: " + error.message);
-  }
-}
-
-export async function searchDiamondByCut(cut) {
-  try {
-    const response = await axios.get(`/api/diamonds/search/filter?cut=${cut}`);
-    if (response.status !== 200) {
-      throw new Error("Failed to search jewelry by cut");
-    }
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to search jewelry by cut");
-  }
-}
-
-export async function searchDiamondByCarat(maxCarat, minCarat) {
-  try {
-    const response = await axios.get(
-      `/api/diamonds/search/filter?maxCaratSize=${maxCarat}&minCaratSize=${minCarat}`
-    );
-    if (response.status !== 200) {
-      throw new Error("Failed to search jewelry by carat");
-    }
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to search jewelry by carat");
-  }
-}
-
-export async function searchDiamondByPrice(maxDiamondPrice, minDiamondPrice) {
-  try {
-    const response = await axios.get(
-      `/api/diamonds/search/filter?maxDiamondPrice=${maxDiamondPrice}&minDiamondPrice=${minDiamondPrice}`
-    );
-    if (response.status !== 200) {
-      throw new Error("Failed to search jewelry by price");
-    }
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to search jewelry by price");
-  }
-}
-
-export async function searchDiamondByCaratSize(maxCaratSize, minCaratSize) {
-  try {
-    const response = await axios.get(
-      `/api/diamonds/search/filter?maxCaratSize=${maxCaratSize}&minCaratSize=${minCaratSize}`
-    );
-    if (response.status !== 200) {
-      throw new Error("Failed to search jewelry by carat size");
-    }
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to search jewelry by carat size");
-  }
-}
-
-export async function searchDiamondByOrigin(origin) {
-  try {
-    const response = await axios.get(
-      `/api/diamonds/search/filter?origin=${origin}`
-    );
-    if (response.status !== 200) {
-      throw new Error("Failed to search jewelry by origin");
-    }
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to search jewelry by origin");
-  }
-}
-
-export async function searchDiamondByCaratShape(shape) {
-  try {
-    const response = await axios.get(
-      `/api/diamonds/search/filter?shape=${shape}`
-    );
-    if (response.status !== 200) {
-      throw new Error("Failed to search jewelry by shape");
-    }
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to search jewelry by shape");
-  }
-}
+};

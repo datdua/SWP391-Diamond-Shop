@@ -203,7 +203,6 @@ function App() {
             <Route path="diamond-manager" element={<ProductManagerPage />} />
             <Route path="account-manager" element={<AccountManager />} />
             <Route path="jewelry-manager" element={<JewelryManagerPage />} />
-            {/* Add other admin routes here */}
           </Route>
         </Routes>
       </AuthProvider>

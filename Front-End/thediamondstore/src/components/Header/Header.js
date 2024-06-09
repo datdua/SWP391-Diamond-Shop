@@ -1,20 +1,21 @@
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "./Header.css";
-import { searchJewelryByName } from "../../api/JewelryAPI";
-import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import { searchJewelryByName } from "../../api/JewelryAPI";
 import { searchDiamondByName } from "../../api/DiamondAPI";
 import { AuthContext } from "../Auth/AuthContext";
+import { toast } from "react-toastify";
+import { searchProductionByName } from "../../api/ProductAPI";
 
 function Header() {
-    const navigate = useNavigate();
+    const { accountId } = useParams();
+    const { isLoggedIn, accountName, onLogout } = useContext(AuthContext);
     const [isAccountDropdownOpen, setAccountDropdownOpen] = useState(false);
     const [isCurrencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
     const [isLanguageDropdownOpen, setLanguageDropdownOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
-    const { isLoggedIn, accountName, onLogout } = useContext(AuthContext);
-    
+    const navigate = useNavigate();
 
     const toggleDropdown = (dropdown) => {
         if (dropdown === "account") {
@@ -34,15 +35,21 @@ function Header() {
 
     const handleSearch = async () => {
         try {
-            const [jewelryResults, diamondResults] = await Promise.all([
+            const [jewelryResults, diamondResults, productResults] = await Promise.all([
                 searchJewelryByName(searchTerm),
-                searchDiamondByName(searchTerm)
+                searchDiamondByName(searchTerm),
+                searchProductionByName(searchTerm)
             ]);
 
-            if (diamondResults.length > 0) {
+            if (productResults.length > 0) {
+                navigate(`/sanpham?search=${encodeURIComponent(searchTerm)}&jewelryResults=${encodeURIComponent(JSON.stringify(jewelryResults))}&diamondResults=${encodeURIComponent(JSON.stringify(diamondResults))}`);
+            } else if (diamondResults.length > 0) {
                 navigate(`/kimcuong?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(diamondResults))}`);
             } else if (jewelryResults.length > 0) {
                 navigate(`/trangsuc?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(jewelryResults))}`);
+            } else {
+                console.log('No search results found');
+                toast.error('Không tìm thấy kết quả tìm kiếm!');
             }
         } catch (error) {
             console.error('Error searching for jewelry and diamonds:', error);
@@ -71,8 +78,8 @@ function Header() {
                                             </button>
                                             {isAccountDropdownOpen && (
                                                 <ul className="tm-dropdown-menu">
-                                                    <li><Link to="/account">My Account</Link></li>
-                                                    <li><Link to="/cart/:accountId">Shopping Cart</Link></li>
+                                                    <li><Link to={`/account/${accountId}`}>My Account</Link></li>
+                                                    <li><Link to={`/cart/${accountId}`}>Shopping Cart</Link></li>
                                                     <li><Link to="/wishlist">Wishlist</Link></li>
                                                     <li><Link to="/checkout">Checkout</Link></li>
                                                 </ul>
@@ -105,7 +112,7 @@ function Header() {
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                     placeholder="Search for jewelry or diamonds..."
                                 />
-                                <button aria-label="Search" type="submit"><i className="ion-android-search" onClick={handleSearch}></i></button>
+                                <button aria-label="Search" type="submit"><i className="ion-android-search"></i></button>
                             </form>
                         </div>
                         <div className="col-lg-3 col-6 order-2 order-lg-3">
