@@ -15,12 +15,16 @@ export const createOrder = async (accountId, deliveryAddress, phoneNumber, point
         if (pointsToRedeem) data.append('pointsToRedeem', pointsToRedeem);
         if (promotionCode) data.append('promotionCode', promotionCode);
 
-        const response = await axios.post('http://localhost:8080/orders/create', data, {
+        const response = await axios.post(
+          "http://localhost:8080/orders/create",
+          data,
+          {
             headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        });
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          }
+        );
 
         return response.data;
     } catch (error) {

@@ -9,11 +9,14 @@ export async function getAllProduct() {
     try {
         const token = getAuthToken();
         console.log('Token:', token); // Logging token for debugging
-        const response = await axios.get('http://localhost:8080/api/production/all', {
+        const response = await axios.get(
+          "http://localhost:8080/api/production/all",
+          {
             headers: {
-                Authorization: `Bearer ${token}` // Example of using Bearer token authentication
-            }
-        });
+              Authorization: `Bearer ${token}`, // Example of using Bearer token authentication
+            },
+          }
+        );
         console.log('Response:', response); // Logging entire response object for inspection
 
         // Check if response.data is an object and contains properties 'jewelry' and 'diamonds'
@@ -32,11 +35,14 @@ export async function getAllProduct() {
 export async function getProductPage(pageNumber = 1, pageSize = 4) {
     try {
         const token = getAuthToken();
-        const response = await axios.get(`http://localhost:8080/api/production/paged?page=${pageNumber}&size=${pageSize}`,{
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    });
+        const response = await axios.get(
+          `http://localhost:8080/api/production/paged?page=${pageNumber}&size=${pageSize}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
       if (response.status !== 200) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -49,15 +55,18 @@ export async function getProductPage(pageNumber = 1, pageSize = 4) {
 export const searchProductionByName = async (diamondName, jewelryName) => {
     try {
         const token = getAuthToken();
-        const response = await axios.get(`http://localhost:8080/api/production/search`, {
+        const response = await axios.get(
+          `http://localhost:8080/api/production/search`,
+          {
             params: {
-                diamondName: diamondName,
-                jewelryName: jewelryName
+              diamondName: diamondName,
+              jewelryName: jewelryName,
             },
             headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         return response.data;
     } catch (error) {

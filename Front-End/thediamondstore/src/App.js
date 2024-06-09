@@ -163,7 +163,7 @@ function App() {
                 <BackToTop />
               </>
             }
-          />
+            />
           <Route
             path="/account/:accountId"
             element={

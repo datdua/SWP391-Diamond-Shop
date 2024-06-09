@@ -15,14 +15,10 @@ public class Jewelry {
     @Column(name = "jewelryID")
     private String jewelryID;
 
-    @Column(name = "diamondID")
-    private String diamondID;
 
     @Column(name = "jewelryName")
     private String jewelryName;
 
-    @Column(name = "size")
-    private String size;
 
     @Column(name = "gender")
     private String gender;
@@ -36,11 +32,9 @@ public class Jewelry {
     public Jewelry() {
     }
 
-    public Jewelry(String jewelryID, String diamondID, String gender, String size, BigDecimal jewelryPrice,
+    public Jewelry(String jewelryID, String gender, BigDecimal jewelryPrice,
             String jewelryImage, String jewelryName) {
         this.jewelryID = jewelryID;
-        this.diamondID = diamondID;
-        this.size = size;
         this.gender = gender;
         this.jewelryImage = jewelryImage;
         this.jewelryPrice = jewelryPrice;
@@ -55,13 +49,6 @@ public class Jewelry {
         this.jewelryID = jewelryID;
     }
 
-    public String getDiamondID() {
-        return diamondID;
-    }
-
-    public void setDiamondID(String diamondID) {
-        this.diamondID = diamondID;
-    }
 
     public String getGender() {
         return gender;
@@ -71,13 +58,6 @@ public class Jewelry {
         this.gender = gender;
     }
 
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
 
     public BigDecimal getJewelryPrice() {
         return jewelryPrice;
