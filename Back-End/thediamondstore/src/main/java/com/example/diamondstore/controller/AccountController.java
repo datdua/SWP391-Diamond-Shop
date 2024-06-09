@@ -79,7 +79,7 @@ public class AccountController {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Tài khoản đã tồn tại"));
         }
 
-        Account account = new Account(null, accountName, password, "ROLE_CUSTOMER", null, email);
+        Account account = new Account(null, accountName, password, "ROLE_CUSTOMER", null, email, null);
         accountRepository.save(account);
 
         Customer customer = new Customer(account.getAccountID(), 0);
@@ -143,7 +143,7 @@ public class AccountController {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Tài khoản đã tồn tại"));
         }
 
-        Account account = new Account(null, accountName, password, role, phoneNumber, email);
+        Account account = new Account(null, accountName, password, role, phoneNumber, email, null);
         accountRepository.save(account);
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo tài khoản thành công"));
 
