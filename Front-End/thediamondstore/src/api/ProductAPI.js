@@ -46,3 +46,22 @@ export async function getProductPage(pageNumber = 1, pageSize = 4) {
         throw error;
     }
 }
+export const searchProductionByName = async (diamondName, jewelryName) => {
+    try {
+        const token = getAuthToken();
+        const response = await axios.get(`http://localhost:8080/api/production/search`, {
+            params: {
+                diamondName: diamondName,
+                jewelryName: jewelryName
+            },
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error searching for productions:', error);
+        throw error;
+    }
+};

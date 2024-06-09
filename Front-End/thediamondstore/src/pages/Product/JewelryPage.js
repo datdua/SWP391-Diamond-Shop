@@ -35,6 +35,7 @@ function JewelryPage() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [searchResults, setSearchResults] = useState([]);
     const resultsPerPage = 9;
+    const {jewelryId} = useParams();
     const genders = ['All', 'male', 'female'];
 
     const fetchJewelryPage = async (page) => {
@@ -191,6 +192,7 @@ function JewelryPage() {
                                                                 </div>
                                                                 <ul className="tm-product-actions">
                                                                     {isLoggedIn ? null : <p>Please log in to add items to the cart.</p>}
+                                                                    <li><Link to={`/product-detail/${item.jewelryID}`}><i className="ion-android-cart"></i> Add to cart</Link></li>
                                                                     <li><button onClick={() => openModal(item)} aria-label="Product Quickview"><i className="ion-eye"></i></button></li>
                                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                                 </ul>

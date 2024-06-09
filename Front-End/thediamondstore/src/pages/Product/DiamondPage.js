@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Modal from "react-modal";
-import "./ProductPage.css";
+
 import { getAllDiamond, getPage, searchDiamond } from "../../api/DiamondAPI";
 
 Modal.setAppElement('#root');
@@ -37,7 +37,7 @@ function DiamondPage() {
     const colors = ['All', 'E', 'J', 'F', 'D'];
     const cuts = ['All', 'Excellent'];
     const clarities = ['All', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2', 'I1', 'I2', 'I3'];
-    const shapes = ['All', 'Radiant', 'Around', 'Pear' ];
+    const shapes = ['All', 'Radiant', 'Around', 'Pear'];
     const origins = ['All', 'GIA']
 
     function openModal(item) {
@@ -71,7 +71,7 @@ function DiamondPage() {
         setCurrentPage(pageNumber);
         setLoading(true);
         try {
-            const data = filters.color === 'All' && filters.cut === 'All' && filters.shape ==='All' && filters.clarity ==='All' && filters.origin ==='All'
+            const data = filters.color === 'All' && filters.cut === 'All' && filters.shape === 'All' && filters.clarity === 'All' && filters.origin === 'All'
                 ? await getAllDiamond()
                 : await searchDiamond(filters);
             const results = data.slice((pageNumber - 1) * resultsPerPage, pageNumber * resultsPerPage);
@@ -101,16 +101,16 @@ function DiamondPage() {
         try {
             const filtersToUse = { ...filters };
             if (filters.cut === 'All') {
-                delete filtersToUse.cut; 
+                delete filtersToUse.cut;
             }
             if (filters.color === 'All') {
-                delete filtersToUse.color; 
+                delete filtersToUse.color;
             }
             if (filters.clarity === 'All') {
-                delete filtersToUse.clarity; 
+                delete filtersToUse.clarity;
             }
             if (filters.shape === 'All') {
-                delete filtersToUse.shape; 
+                delete filtersToUse.shape;
             }
             if (filters.origin === 'All') {
                 delete filtersToUse.origin;
@@ -358,27 +358,34 @@ function DiamondPage() {
                     </div>
                 </main>
             </div>
-            <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
-                style={customModalStyles}
-                contentLabel="Product Modal"
-            >
+            <div id="tm-product-quickview">
                 {selectedItem && (
-                    <div>
-                        <h2>{selectedItem.diamondName}</h2>
-                        <img src={selectedItem.diamondImage} alt={selectedItem.diamondName} />
-                        <p>Price: {selectedItem.diamondPrice.toLocaleString()} VND</p>
-                        <p>Carat Size: {selectedItem.carat_size}</p>
-                        <p>Color: {selectedItem.color}</p>
-                        <p>Cut: {selectedItem.cut}</p>
-                        <p>Clarity: {selectedItem.clarity}</p>
-                        <p>Shape: {selectedItem.shape}</p>
-                        <p>Origin: {selectedItem.origin}</p>
-                        <button onClick={closeModal}>Close</button>
-                    </div>
+                    <Modal
+                        isOpen={modalIsOpen}
+                        onRequestClose={closeModal}
+                        style={customModalStyles}
+                        contentLabel="Product Modal"
+                    >
+                        <div className="modal-content">
+                            <div className="img-container">
+                                <img src={selectedItem.diamondImage} alt={selectedItem.diamondName} />
+                            </div>
+                            <button className="close-button" onClick={closeModal}>Close</button>
+                            <div className="content-container">
+                                <h2>{selectedItem.diamondName}</h2>
+                                <p>Price: {selectedItem.diamondPrice.toLocaleString()} VND</p>
+                                <p>Carat Size: {selectedItem.carat_size}</p>
+                                <p>Color: {selectedItem.color}</p>
+                                <p>Cut: {selectedItem.cut}</p>
+                                <p>Clarity: {selectedItem.clarity}</p>
+                                <p>Shape: {selectedItem.shape}</p>
+                                <p>Origin: {selectedItem.origin}</p>
+                            </div>
+                        </div>
+                    </Modal>
                 )}
-            </Modal>
+
+            </div>
         </div>
     );
 }

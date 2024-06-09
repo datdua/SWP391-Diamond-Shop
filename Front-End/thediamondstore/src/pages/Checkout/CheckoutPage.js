@@ -18,6 +18,7 @@ function CheckoutPage() {
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
+                
                 if (accountId) {
                     const items = await getAllCartItems(accountId);
                     setCartItems(items);
@@ -49,7 +50,7 @@ function CheckoutPage() {
     useEffect(() => {
         calculatePointsToRedeem();
     }, [totalCart]);
-
+    
     const calculatePointsToRedeem = () => {
         const points = Math.floor(totalCart / 100000); // Assuming 1 point = 100,000 VND
         setPointsToRedeem(points);
@@ -69,7 +70,7 @@ function CheckoutPage() {
             toast.error("Failed to place order");
         }
     };
-
+    console.log("Points to Redeem:", pointsToRedeem)
     return (
         <div>
             <div id="wrapper" className="wrapper">

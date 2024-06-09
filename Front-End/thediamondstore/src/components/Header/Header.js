@@ -5,6 +5,8 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { searchJewelryByName } from "../../api/JewelryAPI";
 import { searchDiamondByName } from "../../api/DiamondAPI";
 import { AuthContext } from "../Auth/AuthContext";
+import { toast } from "react-toastify";
+import { searchProductionByName } from "../../api/ProductAPI";
 
 function Header() {
     const { accountId } = useParams();
@@ -33,15 +35,21 @@ function Header() {
 
     const handleSearch = async () => {
         try {
-            const [jewelryResults, diamondResults] = await Promise.all([
+            const [jewelryResults, diamondResults, productResults] = await Promise.all([
                 searchJewelryByName(searchTerm),
-                searchDiamondByName(searchTerm)
+                searchDiamondByName(searchTerm),
+                searchProductionByName(searchTerm)
             ]);
 
-            if (diamondResults.length > 0) {
+            if (productResults.length > 0) {
+                navigate(`/sanpham?search=${encodeURIComponent(searchTerm)}&jewelryResults=${encodeURIComponent(JSON.stringify(jewelryResults))}&diamondResults=${encodeURIComponent(JSON.stringify(diamondResults))}`);
+            } else if (diamondResults.length > 0) {
                 navigate(`/kimcuong?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(diamondResults))}`);
             } else if (jewelryResults.length > 0) {
                 navigate(`/trangsuc?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(jewelryResults))}`);
+            } else {
+                console.log('No search results found');
+                toast.error('Không tìm thấy kết quả tìm kiếm!');
             }
         } catch (error) {
             console.error('Error searching for jewelry and diamonds:', error);
@@ -70,7 +78,7 @@ function Header() {
                                             </button>
                                             {isAccountDropdownOpen && (
                                                 <ul className="tm-dropdown-menu">
-                                                    <li><Link to="/account">My Account</Link></li>
+                                                    <li><Link to={`/account/${accountId}`}>My Account</Link></li>
                                                     <li><Link to={`/cart/${accountId}`}>Shopping Cart</Link></li>
                                                     <li><Link to="/wishlist">Wishlist</Link></li>
                                                     <li><Link to="/checkout">Checkout</Link></li>

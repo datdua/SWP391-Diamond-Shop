@@ -28,7 +28,7 @@ export const createOrder = async (accountId, deliveryAddress, phoneNumber, point
         throw error;
     }
 };
-// api.js
+
 export async function fetchOrders(accountID) {
     const response = await fetch(`http://localhost:8080/orders/account/${accountID}`);
     

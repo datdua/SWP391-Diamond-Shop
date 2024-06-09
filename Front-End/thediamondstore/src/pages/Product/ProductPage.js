@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import Modal from "react-modal";
 import { getAllProduct, getProductPage } from "../../api/ProductAPI"; // Ensure this API call is correct
 
@@ -31,6 +31,7 @@ function ProductPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const itemsPerPage = 4;
+    
 
     useEffect(() => {
         const fetchProductPage = async () => {
@@ -133,6 +134,7 @@ function ProductPage() {
                                                                     <img src={item.imageUrl} alt={item.name} />
                                                                 </div>
                                                                 <ul className="tm-product-actions">
+                                                                
                                                                     <li><button onClick={() => openModal(item)} aria-label="Product Quickview"><i className="ion-eye"></i></button></li>
                                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                                 </ul>
@@ -174,8 +176,8 @@ function ProductPage() {
                                         <div className="single-widget widget-categories">
                                             <h6 className="widget-title">Categories</h6>
                                             <ul>
-                                                <li><Link to="/product">Jewelry</Link></li>
-                                                <li><Link to="/product">Diamond</Link></li>
+                                                <li><Link to="/trangsuc">Trang Sức</Link></li>
+                                                <li><Link to="/kimcuong">Kim Cương</Link></li>
                                             </ul>
                                         </div>
                                     </div>
