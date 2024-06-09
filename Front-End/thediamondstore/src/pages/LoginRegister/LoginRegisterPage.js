@@ -24,7 +24,7 @@ function LoginRegisterPage() {
         e.preventDefault();
 
         try {
-            const response = await axios.post("https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/login", {
+            const response = await axios.post("http://localhost:8080/login", {
                 email: loginEmail,
                 password: loginPassword
             },
@@ -41,6 +41,7 @@ function LoginRegisterPage() {
                 localStorage.setItem("jwt", data.jwt);
                 localStorage.setItem("email", loginEmail);
                 localStorage.setItem("accountName", accountName);
+                localStorage.setItem("accountID", accountID);
                 setIsLoggedIn(true);
                 toast.success("Đăng nhập thành công!");
                 navigate('/trangchu');
@@ -65,7 +66,7 @@ function LoginRegisterPage() {
         }
 
         try {
-            const response = await axios.post("https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/accounts/register", {
+            const response = await axios.post("http://localhost:8080/api/accounts/register", {
                 accountName: registerName,
                 email: registerEmail,
                 password: registerPassword

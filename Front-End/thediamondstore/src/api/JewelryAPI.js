@@ -34,21 +34,22 @@ export async function getPage(page = 1, size = 9) {
         throw new Error('Failed to fetch jewelry by page');
     }
 }
-export async function searchJewelryByGender(gender) {
+export async function searchJewelry(filters) {
     try {
-        const response = await axios.get(`/api/jewelry/search/filter?gender=%20${encodeURIComponent(gender)}`);
+        const response = await axios.get('/api/jewelry/search/filter', {
+            params: filters
+        });
+
+        if (response.status !== 200) {
+            throw new Error('Failed to fetch jewelry');
+        }
+
         return response.data;
     } catch (error) {
-        throw new Error('Failed to filter jewelry by gender');
+        console.error('Error searching for jewelry:', error);
+        throw new Error('Failed to fetch jewelry');
     }
 }
 
-export const addToCart = async (accountId, jewelryId, quantity, size) => {
-    try {
-        const response = await axios.post(`/api/cart/add?accountID=${accountId}&jewelryID=${jewelryId}&quantity=${quantity}&sizeJewelry=${size}`);
-        return response.data;
-    } catch (error) {
-        throw new Error('Failed to filter jewelry by size');
-    }
-}
+
 

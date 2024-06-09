@@ -47,8 +47,8 @@ function App() {
           <Route path='/kimcuong' element={<DiamondPage />} />
           <Route path='/cart/:accountId' element={<CartPage />} />
           <Route path='/product-detail/:jewelryId' element={<JewelryDetailPage />} />
-          <Route path='/account' element={<MyAccountPage />} />
-          <Route path='/checkout' element={<CheckoutPage />} />
+          <Route path='/account/:accountId' element={<MyAccountPage />} />
+          <Route path="/checkout/:accountId" element={<CheckoutPage />} />
           <Route path='/wishlist' element={<WishlistPage />} />
           <Route path='/portfolio' element={<PortfolioPage />} />
         </Routes>
