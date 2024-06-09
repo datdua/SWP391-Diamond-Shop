@@ -43,8 +43,8 @@ public class Order {
     @Column(name = "deliveryDate", nullable = false)
     private LocalDateTime deliveryDate;
 
-    @Column(name = "totalCart", precision = 18, scale = 2)
-    private BigDecimal totalCart;
+    @Column(name = "totalOrder", precision = 18, scale = 2)
+    private BigDecimal totalOrder;
 
     @Column(name = "deliveryAddress")
     private String deliveryAddress;
@@ -70,14 +70,14 @@ public class Order {
     }
 
     public Order(Integer orderID, Account account, LocalDateTime startorderDate, String orderStatus, LocalDateTime deliveryDate,
-            BigDecimal totalCart, String deliveryAddress, String phoneNumber, String certificateImage, String warrantyImage,
+            BigDecimal totalOrder, String deliveryAddress, String phoneNumber, String certificateImage, String warrantyImage,
             Promotion promotion, List<Cart> cartItems) {
         this.orderID = orderID;
         this.account = account;
         this.startorderDate = startorderDate;
         this.orderStatus = orderStatus;
         this.deliveryDate = deliveryDate;
-        this.totalCart = totalCart;
+        this.totalOrder = totalOrder;
         this.deliveryAddress = deliveryAddress;
         this.phoneNumber = phoneNumber;
         this.certificateImage = certificateImage;
@@ -126,12 +126,12 @@ public class Order {
         this.deliveryDate = deliveryDate;
     }
 
-    public BigDecimal gettotalCart() {
-        return totalCart;
+    public BigDecimal gettotalOrder() {
+        return totalOrder;
     }
 
-    public void settotalCart(BigDecimal totalCart) {
-        this.totalCart = totalCart;
+    public void settotalOrder(BigDecimal totalOrder) {
+        this.totalOrder = totalOrder;
     }
 
     public String getDeliveryAddress() {

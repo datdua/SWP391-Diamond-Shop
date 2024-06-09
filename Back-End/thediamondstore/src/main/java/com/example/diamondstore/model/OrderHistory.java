@@ -30,15 +30,28 @@ public class OrderHistory {
     @Column(name = "accountID")
     private Integer accountID;
 
+    @Column(name = "TransactionNo")
+    private Integer TransactionNo;
+
     public OrderHistory() {
     }
 
-    public OrderHistory(LocalDateTime createDate, Integer orderID, Integer orderhistoryID, String orderhistoryStatus, Integer accountID) {
+    public OrderHistory(LocalDateTime createDate, Integer orderID, Integer orderhistoryID, String orderhistoryStatus, 
+        Integer accountID, Integer TransactionNo) {
         this.createDate = createDate;
         this.orderID = orderID;
         this.orderhistoryID = orderhistoryID;
         this.orderhistoryStatus = orderhistoryStatus;
         this.accountID = accountID;
+        this.TransactionNo = TransactionNo;
+    }
+
+    public Integer getTransactionNo() {
+        return TransactionNo;
+    }
+
+    public void setTransactionNo(Integer TransactionNo) {
+        this.TransactionNo = TransactionNo;
     }
 
     public Integer getAccountID() {

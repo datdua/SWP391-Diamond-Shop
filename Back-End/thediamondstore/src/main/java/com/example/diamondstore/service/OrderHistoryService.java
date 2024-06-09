@@ -9,14 +9,21 @@ import com.example.diamondstore.repository.OrderHistoryRepository;
 
 @Service
 public class OrderHistoryService {
+
     private OrderHistoryRepository orderHistoryRepository;
 
+    public OrderHistoryService(OrderHistoryRepository orderHistoryRepository) {
+        this.orderHistoryRepository = orderHistoryRepository;
+    }
+
     //tạo lịch sử đơn hàng từ đơn hàng
-    public static OrderHistory createOrderHistoryByOrder(int OrderID, int accountID) {
+    public static OrderHistory createOrderHistoryByOrder(Integer OrderID, Integer accountID) {
         OrderHistory orderHistory = new OrderHistory();
         orderHistory.setOrderID(OrderID);
         orderHistory.setAccountID(accountID);
         orderHistory.setOrderhistoryStatus("Đang xử lí");
+        orderHistory.setTransactionNo(0);
+        
         return orderHistory;
     }
 

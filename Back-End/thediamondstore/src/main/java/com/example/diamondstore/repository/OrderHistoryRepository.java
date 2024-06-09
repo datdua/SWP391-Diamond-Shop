@@ -10,7 +10,7 @@ import com.example.diamondstore.model.OrderHistory;
 @Repository
 public interface OrderHistoryRepository extends JpaRepository<OrderHistory, Integer>{
 
-    OrderHistory findByOrderID(int orderID);
+    OrderHistory findByOrderID(Integer orderID);
 
     List<OrderHistory> findByAccountID(Integer accountID);
 }
