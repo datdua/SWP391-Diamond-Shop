@@ -71,11 +71,10 @@ public class JewelryController {
         if (existingJewelry == null) {
             return ResponseEntity.notFound().build();
         }
-        existingJewelry.setDiamondID(jewelryPutRequest.getDiamondID());
         existingJewelry.setJewelryName(jewelryPutRequest.getJewelryName());
         existingJewelry.setGender(jewelryPutRequest.getGender());
-        existingJewelry.setSize(jewelryPutRequest.getSize());
         existingJewelry.setjewelryImage(jewelryPutRequest.getJewelryImage());
+        existingJewelry.setJewelryPrice(jewelryPutRequest.getJewelryPrice());
         jewelryRepository.save(existingJewelry);
         return ResponseEntity.ok().body(Collections.singletonMap("message", "Cập nhật thành công"));
     }
