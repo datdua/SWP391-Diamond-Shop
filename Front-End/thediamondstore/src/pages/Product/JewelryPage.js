@@ -192,7 +192,7 @@ function JewelryPage() {
                                                                 </div>
                                                                 <ul className="tm-product-actions">
                                                                     {isLoggedIn ? null : <p>Please log in to add items to the cart.</p>}
-                                                                    <li><Link to={`/product-detail/${item.jewelryID}`}><i className="ion-android-cart"></i> Add to cart</Link></li>
+                                                                    <li><Link to={`/product-detail/jewelry/${item.jewelryID}`}><i className="ion-android-cart"></i> Add to cart</Link></li>
                                                                     <li><button onClick={() => openModal(item)} aria-label="Product Quickview"><i className="ion-eye"></i></button></li>
                                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                                 </ul>
@@ -202,7 +202,7 @@ function JewelryPage() {
                                                                 </div>
                                                             </div>
                                                             <div className="tm-product-bottomside">
-                                                                <h6 className="tm-product-title"><Link to={`/product-detail/${item.jewelryID || item.diamondID}`}>{item.jewelryName || item.diamondName}</Link></h6>
+                                                                <h6 className="tm-product-title"><Link to={`/product-detail/jewelry/${item.jewelryID}`}>{item.jewelryName}</Link></h6>
                                                                 <div className="tm-ratingbox">
                                                                     <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                                     <span className="is-active"><i className="ion-android-star-outline"></i></span>
@@ -210,7 +210,7 @@ function JewelryPage() {
                                                                     <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                                     <span><i className="ion-android-star-outline"></i></span>
                                                                 </div>
-                                                                <span className="tm-product-price">{(item.jewelryPrice || item.diamondPrice).toLocaleString()} VND</span>
+                                                                <span className="tm-product-price">{(item.jewelryPrice).toLocaleString()} VND</span>
                                                             </div>
                                                         </div>
                                                     </div>

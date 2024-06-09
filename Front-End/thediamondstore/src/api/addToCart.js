@@ -33,6 +33,24 @@ export const addJewelryToCart = async (accountID, jewelryId, quantity, size) => 
         throw new Error("Failed to add item to cart");
     }
 };
+export const addDiamondToCart = async (accountID, diamondId, quantity) => {
+    try {
+        const token = localStorage.getItem('jwt');
+        const response = await axios.post(
+            `http://localhost:8080/api/cart/add?accountID=${accountID}&diamondID=${diamondId}&quantity=${quantity}`,
+            {}, 
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+        return response.data; 
+    } catch (error) {
+        console.error("Error adding item to cart:", error);
+        throw new Error("Failed to add item to cart");
+    }
+};
 export const getAllCartItems = async (accountID) => {
     try {
         const token = localStorage.getItem('jwt');

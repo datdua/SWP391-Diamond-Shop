@@ -178,6 +178,7 @@ function DiamondPage() {
                                                                 </div>
                                                                 <ul className="tm-product-actions">
                                                                     {showNotification && <p>Please log in to add items to the cart.</p>}
+                                                                    <li><Link to={`/product-detail/diamond/${item.diamondID}`}><i className="ion-android-cart"></i> Add to cart</Link></li>
                                                                     <li><button onClick={() => openModal(item)} aria-label="Product Quickview"><i className="ion-eye"></i></button></li>
                                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                                 </ul>
@@ -187,7 +188,7 @@ function DiamondPage() {
                                                                 </div>
                                                             </div>
                                                             <div className="tm-product-bottomside">
-                                                                <h6 className="tm-product-title"><a href="product-details.html">{item.diamondName}</a></h6>
+                                                            <h6 className="tm-product-title"><Link to={`/product-detail/diamond/${item.diamondID}`}>{item.diamondName}</Link></h6>
                                                                 <div className="tm-rating">
                                                                     <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                                     <span className="is-active"><i className="ion-android-star-outline"></i></span>

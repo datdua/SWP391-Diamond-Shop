@@ -70,7 +70,7 @@ function CheckoutPage() {
             toast.error("Failed to place order");
         }
     };
-    console.log("Points to Redeem:", pointsToRedeem)
+
     return (
         <div>
             <div id="wrapper" className="wrapper">
@@ -131,8 +131,15 @@ function CheckoutPage() {
                                                     </thead>
                                                     <tbody>
                                                         {cartItems.map((item, index) => (
-                                                            <tr key={`${item.jewelryID}-${index}`}>
-                                                                <td>{item.jewelryName} * {item.quantity}</td>
+                                                            <tr key={`${item.diamondID || item.jewelryID}-${index}`}>
+                                                                <td>
+                                                                    {item.diamondID && (
+                                                                        <Link to={`/product-detail/diamond/${item.diamondID}`} className="tm-checkout-productlink">{item.diamondName} * {item.quantity}</Link>
+                                                                    )}
+                                                                    {item.jewelryID && (
+                                                                        <Link to={`/product-detail/jewelry/${item.jewelryID}`} className="tm-checkout-productlink">{item.jewelryName} * {item.quantity}</Link>
+                                                                    )}
+                                                                </td>
                                                                 <td>{item.totalPrice.toLocaleString()} VND</td>
                                                             </tr>
                                                         ))}

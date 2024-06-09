@@ -9,15 +9,13 @@ import 'react-toastify/dist/ReactToastify.css';
 function CartPage() {
     const [cartItems, setCartItems] = useState([]);
     const [totalCart, setTotalCart] = useState(0);
-    const { accountId } = useParams(); // Extract accountId from useParams
+    const { accountId } = useParams();
 
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
-                console.log("Fetching cart items for account ID:", accountId);
                 if (accountId) {
                     const items = await getAllCartItems(accountId);
-                    console.log("Fetched cart items:", items); // Log the fetched items
                     setCartItems(items);
                 } else {
                     console.error("Account ID is undefined");
@@ -29,10 +27,8 @@ function CartPage() {
 
         const fetchTotalCart = async () => {
             try {
-                console.log("Fetching total cart value for account ID:", accountId);
                 if (accountId) {
                     const total = await getTotalCart(accountId);
-                    console.log("Fetched total cart value:", total); // Log the fetched total
                     setTotalCart(total);
                 } else {
                     console.error("Account ID is undefined");
@@ -51,12 +47,10 @@ function CartPage() {
             await removeCartItem(cartID);
             const updatedCartItems = cartItems.filter(item => item.cartID !== cartID);
             setCartItems(updatedCartItems);
-            console.log("Item removed successfully");
             toast.success("Xoá sản phẩm thành công");
 
             // Fetch the updated total cart value
             const total = await getTotalCart(accountId);
-            console.log("Updated total cart value:", total);
             setTotalCart(total);
         } catch (error) {
             console.error("Error removing item:", error);
@@ -96,14 +90,26 @@ function CartPage() {
                                     </thead>
                                     <tbody>
                                         {cartItems.map((item, index) => (
-                                            <tr key={`${item.jewelryID}-${index}`}>
+                                            <tr key={`${item.cartID}-${index}`}>
                                                 <td>
-                                                    <Link to={`/product-detail/${item.jewelryID}`} className="tm-cart-productimage">
-                                                        <img src={item.jewelryImage} alt="product image" />
-                                                    </Link>
+                                                    {item.diamondID && (
+                                                        <Link to={`/product-detail/diamond/${item.diamondID}`} className="tm-cart-productimage">
+                                                            <img src={item.diamondImage} alt="Diamond" />
+                                                        </Link>
+                                                    )}
+                                                    {item.jewelryID && (
+                                                        <Link to={`/product-detail/jewelry/${item.jewelryID}`} className="tm-cart-productimage">
+                                                            <img src={item.jewelryImage} alt="Jewelry" />
+                                                        </Link>
+                                                    )}
                                                 </td>
                                                 <td>
-                                                    <Link to={`/product-detail/${item.jewelryID}`} className="tm-cart-productname">{item.jewelryName}</Link>
+                                                    {item.diamondID && (
+                                                        <Link to={`/product-detail/diamond/${item.diamondID}`} className="tm-cart-productname">{item.diamondName}</Link>
+                                                    )}
+                                                    {item.jewelryID && (
+                                                        <Link to={`/product-detail/jewelry/${item.jewelryID}`} className="tm-cart-productname">{item.jewelryName}</Link>
+                                                    )}
                                                 </td>
                                                 <td className="tm-cart-price">{item.price.toLocaleString()} VND</td>
                                                 <td>
@@ -126,7 +132,6 @@ function CartPage() {
                                     </tbody>
                                 </table>
                             </div>
-                            {/*<!-- Shopping Cart Content --> */}
                             <div className="tm-cart-bottomarea">
                                 <div className="row">
                                     <div className="col-lg-8 col-md-6">
@@ -153,14 +158,13 @@ function CartPage() {
                                     </div>
                                 </div>
                             </div>
-                            {/* <!--// Shopping Cart Content --> */}
                         </div>
                     </div>
                 </main>
                 <button id="back-top-top"><i className="ion-arrow-up-c"></i></button>
             </div>
         </div>
-    )
+    );
 }
 
 export default CartPage;

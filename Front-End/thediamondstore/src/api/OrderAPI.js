@@ -30,13 +30,63 @@ export const createOrder = async (accountId, deliveryAddress, phoneNumber, point
 };
 
 export async function fetchOrders(accountID) {
-    const response = await fetch(`http://localhost:8080/orders/account/${accountID}`);
-    
-    if (!response.ok) {
-        const errorDetail = await response.text(); // Get the response text for more details
-        throw new Error(`Network response was not ok: ${response.status} - ${errorDetail}`);
+    if (!accountID) {
+        throw new Error('Invalid accountID. Please provide a valid accountID.');
     }
-    
-    const data = await response.json();
-    return data;
+
+    const token = getAuthToken();
+    try {
+        const response = await fetch(`http://localhost:8080/orders/account/${accountID}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            const errorDetail = await response.text(); // Get the response text for more details
+            throw new Error(`Network response was not ok: ${response.status} - ${errorDetail}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Failed to fetch orders:', error);
+        throw error; // Re-throw the error to handle it elsewhere if needed
+    }
+}
+
+
+export async function createPayment(orderID) {
+    try {
+        // URL to make the GET request
+        const url = `http://localhost:8080/api/payment/createPayment?orderID=${orderID}`;
+
+        // Retrieve the token from localStorage (or wherever you store it)
+        const token = getAuthToken();
+
+        // Set up headers with the token
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        };
+
+        // Make the GET request using axios
+        const response = await axios.get(url, config);
+
+        // Check if the response status is OK
+        if (response.status === 200) {
+            // Extract the payment URL from the response body
+            const { url } = response.data;
+
+            // Return the URL
+            return url;
+        } else {
+            throw new Error('Failed to create payment');
+        }
+    } catch (error) {
+        console.error('Error creating payment:', error);
+        throw error;
+    }
 }

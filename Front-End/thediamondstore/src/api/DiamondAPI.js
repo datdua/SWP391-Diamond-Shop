@@ -1,23 +1,20 @@
 import axios from 'axios';
 
-export const addToCart = async (accountId, diamondId, quantity) => {
-    const response = await axios.post(`/api/cart/add?accountID=${accountId}&jewelryID=${diamondId}&quantity=${quantity}`);
-    return response.data;
-};
-
 export async function getAllDiamond() {
     const response = await axios.get('/api/diamonds');
     return response.data;
 }
 
-export async function getDiamondById(diamondId) {
+const BASE_URL = 'http://localhost:3000/api/diamonds';
+
+export const getDiamondById = async (diamondId) => {
     try {
-        const response = await axios.get(`/api/jewelry/${diamondId}`);
+        const response = await axios.get(`${BASE_URL}/${diamondId}`);
         return response.data;
     } catch (error) {
-        throw new Error('Failed to fetch jewelry by ID');
+        throw new Error('Error fetching diamond data');
     }
-}
+};
 
 export async function getPage(page = 1, size = 9) {
     try {

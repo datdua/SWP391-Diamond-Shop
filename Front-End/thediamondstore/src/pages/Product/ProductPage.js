@@ -31,7 +31,6 @@ function ProductPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const itemsPerPage = 4;
-    
 
     useEffect(() => {
         const fetchProductPage = async () => {
@@ -63,8 +62,6 @@ function ProductPage() {
 
         fetchProductPage();
     }, [currentPage]);
-
-
 
     function openModal(item) {
         setSelectedItem(item);
@@ -104,8 +101,9 @@ function ProductPage() {
                                             <span>View:</span>
                                             <button data-view="grid" className="active" aria-label="Grid View"><i className="ion-android-apps"></i></button>
                                             <button data-view="list" aria-label="List View"><i className="ion-android-menu"></i></button>
-                                        </div><p className="tm-shop-countview">
-                                            Showing {((currentPage - 1) * itemsPerPage * 2) + 1} to {Math.min(currentPage * itemsPerPage * 2 )} of {products.length} products
+                                        </div>
+                                        <p className="tm-shop-countview">
+                                            Showing {((currentPage - 1) * itemsPerPage * 2) + 1} to {Math.min(currentPage * itemsPerPage * 2, products.length)} of {products.length} products
                                         </p>
                                         <label htmlFor="mySelect">My Select:</label>
                                         <select id="mySelect">
@@ -134,7 +132,6 @@ function ProductPage() {
                                                                     <img src={item.imageUrl} alt={item.name} />
                                                                 </div>
                                                                 <ul className="tm-product-actions">
-                                                                
                                                                     <li><button onClick={() => openModal(item)} aria-label="Product Quickview"><i className="ion-eye"></i></button></li>
                                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                                 </ul>
@@ -144,7 +141,17 @@ function ProductPage() {
                                                                 </div>
                                                             </div>
                                                             <div className="tm-product-bottomside">
-                                                                <h6 className="tm-product-title"><Link to={`/product-detail/${item.id}`}>{item.name}</Link></h6>
+                                                                <h6 className="tm-product-title">
+                                                                    <Link
+                                                                        to={
+                                                                            item.type === 'jewelry'
+                                                                                ? `/product-detail/jewelry/${item.id}`
+                                                                                : `/product-detail/diamond/${item.id}`
+                                                                        }
+                                                                    >
+                                                                        {item.name}
+                                                                    </Link>
+                                                                </h6>
                                                                 <div className="tm-ratingbox">
                                                                     <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                                     <span className="is-active"><i className="ion-android-star-outline"></i></span>
