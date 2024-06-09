@@ -82,9 +82,7 @@ function JewelryManagerPage() {
                     <tr>
                       <th>#</th>
                       <th>Jewelry ID</th>
-                      <th>Diamond ID</th>
                       <th>Jewelry Name</th>
-                      <th>Size</th>
                       <th>Gender</th>
                       <th>Jewelry Image</th>
                       <th>Jewelry Price</th>
@@ -96,9 +94,7 @@ function JewelryManagerPage() {
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td>{jewelry.jewelryID}</td>
-                        <td>{jewelry.diamondID}</td>
                         <td>{jewelry.jewelryName}</td>
-                        <td>{jewelry.size}</td>
                         <td>{jewelry.gender}</td>
                         <td>
                           <img

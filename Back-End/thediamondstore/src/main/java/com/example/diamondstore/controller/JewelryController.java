@@ -73,7 +73,6 @@ public class JewelryController {
         }
         existingJewelry.setJewelryName(jewelryPutRequest.getJewelryName());
         existingJewelry.setGender(jewelryPutRequest.getGender());
-        existingJewelry.setSize(jewelryPutRequest.getSize());
         existingJewelry.setjewelryImage(jewelryPutRequest.getJewelryImage());
         existingJewelry.setJewelryPrice(jewelryPutRequest.getJewelryPrice());
         jewelryRepository.save(existingJewelry);

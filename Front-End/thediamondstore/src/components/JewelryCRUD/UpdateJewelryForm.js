@@ -25,15 +25,6 @@ function UpdateJewelryForm({ jewelry }) {
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group>
-        <Form.Label>Diamond ID</Form.Label>
-        <Form.Control
-          type="text"
-          name="diamondID"
-          value={updatedJewelry.diamondID}
-          onChange={handleChange}
-        />
-      </Form.Group>
-      <Form.Group>
         <Form.Label>Jewelry Name</Form.Label>
         <Form.Control
           type="text"

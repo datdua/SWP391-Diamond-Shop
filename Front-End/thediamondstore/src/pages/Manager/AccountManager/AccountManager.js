@@ -15,6 +15,9 @@ import AddAccountForm from "../../../components/AccountCRUD/AddAccountForm.js";
 import UpdateAccountForm from "../../../components/AccountCRUD/UpdateAccountForm.js";
 import DeleteAccountForm from "../../../components/AccountCRUD/DeleteAccountForm.js";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import "./AccountManager.css";
 
 function AccountManager() {
@@ -73,9 +76,6 @@ function AccountManager() {
     <Container fluid>
       <Navbar bg="light" expand="lg">
         <Navbar.Brand href="#home">Account Manager</Navbar.Brand>
-        <Nav className="mr-auto">
-          <Button onClick={handleShowAdd}>Add Account</Button>
-        </Nav>
       </Navbar>
       <Row>
         <Col md={12}>
@@ -85,6 +85,9 @@ function AccountManager() {
                 Account List
                 <Button variant="link" onClick={refreshTable}>
                   <RefreshIcon />
+                </Button>
+                <Button variant="link" onClick={handleShowAdd}>
+                  <AddIcon />
                 </Button>
               </Card.Title>
             </Card.Header>
@@ -113,18 +116,18 @@ function AccountManager() {
                         <td>{account.role}</td>
                         <td>
                           <Button
-                            variant="primary"
+                            variant="link"
                             size="sm"
                             onClick={() => handleShowUpdate(account)}
                           >
-                            Edit
+                            <EditIcon />
                           </Button>
                           <Button
-                            variant="danger"
+                            variant="link"
                             size="sm"
                             onClick={() => handleShowDeleteModal(account)}
                           >
-                            Delete
+                            <DeleteIcon />
                           </Button>
                         </td>
                       </tr>

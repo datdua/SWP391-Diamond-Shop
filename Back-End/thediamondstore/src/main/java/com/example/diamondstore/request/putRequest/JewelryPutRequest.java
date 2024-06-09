@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 public class JewelryPutRequest {
 
     private String jewelryName;
-    private String size;
     private String gender;
     private String jewelryImage;
     private BigDecimal jewelryPrice;
@@ -16,9 +15,8 @@ public class JewelryPutRequest {
     public JewelryPutRequest() {
     }
 
-    public JewelryPutRequest(String jewelryName, String size, String gender, String jewelryImage, BigDecimal jewelryPrice) {
+    public JewelryPutRequest(String jewelryName, String gender, String jewelryImage, BigDecimal jewelryPrice) {
         this.jewelryName = jewelryName;
-        this.size = size;
         this.gender = gender;
         this.jewelryImage = jewelryImage;
         this.jewelryPrice = jewelryPrice;
@@ -35,13 +33,6 @@ public class JewelryPutRequest {
         this.jewelryName = jewelryName;
     }
 
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
 
     public String getGender() {
         return gender;

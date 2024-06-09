@@ -5,9 +5,7 @@ import { createJewelry } from "../../api/JewelryAPI.js"; // Adjust this import t
 function AddJewelryForm() {
   const [jewelry, setJewelry] = useState({
     jewelryID: "",
-    diamondID: "",
     jewelryName: "",
-    size: "",
     gender: "",
     jewelryImage: "",
     jewelryPrice: "",

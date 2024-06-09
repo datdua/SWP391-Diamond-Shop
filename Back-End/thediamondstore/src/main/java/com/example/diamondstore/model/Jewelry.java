@@ -19,8 +19,6 @@ public class Jewelry {
     @Column(name = "jewelryName")
     private String jewelryName;
 
-    @Column(name = "size", nullable = false)
-    private String size;
 
     @Column(name = "gender")
     private String gender;
@@ -34,10 +32,9 @@ public class Jewelry {
     public Jewelry() {
     }
 
-    public Jewelry(String jewelryID, String gender, String size, BigDecimal jewelryPrice,
+    public Jewelry(String jewelryID, String gender, BigDecimal jewelryPrice,
             String jewelryImage, String jewelryName) {
         this.jewelryID = jewelryID;
-        this.size = size;
         this.gender = gender;
         this.jewelryImage = jewelryImage;
         this.jewelryPrice = jewelryPrice;
@@ -61,13 +58,6 @@ public class Jewelry {
         this.gender = gender;
     }
 
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
 
     public BigDecimal getJewelryPrice() {
         return jewelryPrice;
