@@ -37,12 +37,12 @@ public class DiamondSpecification {
         return (root, query, builder) -> builder.lessThanOrEqualTo(root.get("carat_weight"), maxCaratWeight);
     }
 
-    public static Specification<Diamond> hasMinDiamondPrice(Float minDiamondPrice) {
-        return (root, query, builder) -> builder.greaterThanOrEqualTo(root.get("diamondPrice"), minDiamondPrice);
+    public static Specification<Diamond> hasMinDiamondEntryPrice(Float mindiamondEntryPrice) {
+        return (root, query, builder) -> builder.greaterThanOrEqualTo(root.get("diamondEntryPrice"), mindiamondEntryPrice);
     }
 
-    public static Specification<Diamond> hasMaxDiamondPrice(Float maxDiamondPrice) {
-        return (root, query, builder) -> builder.lessThanOrEqualTo(root.get("diamondPrice"), maxDiamondPrice);
+    public static Specification<Diamond> hasMaxDiamondEntryPrice(Float maxdiamondEntryPrice) {
+        return (root, query, builder) -> builder.lessThanOrEqualTo(root.get("diamondEntryPrice"), maxdiamondEntryPrice);
     }
 
     public static Specification<Diamond> hasClarity(String clarity) {

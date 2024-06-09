@@ -103,7 +103,7 @@ public class CartService {
         if (cart.getDiamondID() != null) {
             Diamond diamond = diamondRepository.findById(cart.getDiamondID()).orElse(null);
             if (diamond != null) {
-                diamondPrice = diamondPrice.add(diamond.getDiamondPrice());
+                diamondPrice = diamondPrice.add(diamond.getDiamondEntryPrice());
             }
         }
 

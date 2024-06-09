@@ -35,8 +35,6 @@ public class DiamondPutRequest {
         this.warrantyID = warrantyID;
     }
 
-    
-
     public String getWarrantityID() {
         return warrantyID;
     }
@@ -133,7 +131,4 @@ public class DiamondPutRequest {
         this.origin = origin;
     }
 
-
-
-    
 }
