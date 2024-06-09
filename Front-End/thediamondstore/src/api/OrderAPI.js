@@ -15,12 +15,16 @@ export const createOrder = async (accountId, deliveryAddress, phoneNumber, point
         if (pointsToRedeem) data.append('pointsToRedeem', pointsToRedeem);
         if (promotionCode) data.append('promotionCode', promotionCode);
 
-        const response = await axios.post('http://localhost:8080/orders/create', data, {
+        const response = await axios.post(
+          "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/orders/create",
+          data,
+          {
             headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        });
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          }
+        );
 
         return response.data;
     } catch (error) {
@@ -30,7 +34,9 @@ export const createOrder = async (accountId, deliveryAddress, phoneNumber, point
 };
 
 export async function fetchOrders(accountID) {
-    const response = await fetch(`http://localhost:8080/orders/account/${accountID}`);
+    const response = await fetch(
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/orders/account/${accountID}`
+    );
     
     if (!response.ok) {
         const errorDetail = await response.text(); // Get the response text for more details

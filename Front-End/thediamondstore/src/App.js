@@ -153,7 +153,7 @@ function App() {
             }
           />
           <Route
-            path="/account"
+            path="/account/:accountId"
             element={
               <>
                 <Header />
@@ -164,7 +164,7 @@ function App() {
             }
           />
           <Route
-            path="/checkout"
+            path="/checkout/:accountId"
             element={
               <>
                 <Header />
