@@ -37,7 +37,7 @@ export async function getJewelryById(jewelryId) {
 export async function getPage(page = 1, size = 9) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/jewelry/paged?page=${page}&size=${size}`
+      `http://localhost:8080/api/jewelry/paged/jewelry?page=${page}&size=${size}`
     );
     return response.data;
   } catch (error) {

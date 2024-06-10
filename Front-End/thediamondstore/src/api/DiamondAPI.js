@@ -25,7 +25,7 @@ export const getDiamondById = async (diamondId) => {
 export async function getPage(page = 1, size = 9) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/diamonds/paged?page=${page}&size=${size}`
+      `http://localhost:8080/api/diamonds/paged/diamonds?page=${page}&size=${size}`
     );
     return response.data;
   } catch (error) {
