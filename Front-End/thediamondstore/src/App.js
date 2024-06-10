@@ -27,6 +27,7 @@ import ProductManagerPage from "./pages/Manager/DiamondManager/DiamonsManager";
 import AccountManager from "./pages/Manager/AccountManager/AccountManager";
 import JewelryManagerPage from "./pages/Manager/JewelryManager/JewelryManagerPage";
 
+
 function App() {
   const handleLogout = (logoutCallback) => {
     if (logoutCallback) {
@@ -203,6 +204,7 @@ function App() {
             <Route path="diamond-manager" element={<ProductManagerPage />} />
             <Route path="account-manager" element={<AccountManager />} />
             <Route path="jewelry-manager" element={<JewelryManagerPage />} />
+            <Route path="order-manager" element={<Dashboard />} />
           </Route>
         </Routes>
       </AuthProvider>
