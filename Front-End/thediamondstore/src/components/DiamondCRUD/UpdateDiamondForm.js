@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { updateDiamond } from "../../api/DiamondAPI.js"; // Adjust this import to your file structure
 
-
 function UpdateDiamondForm({ diamond }) {
   const [updatedDiamond, setUpdatedDiamond] = useState(diamond);
 
@@ -53,11 +52,11 @@ function UpdateDiamondForm({ diamond }) {
         />
       </Form.Group>
       <Form.Group>
-        <Form.Label>Diamond Price</Form.Label>
+        <Form.Label>Diamond Entry Price</Form.Label>
         <Form.Control
           type="text"
-          name="diamondPrice"
-          value={updatedDiamond.diamondPrice}
+          name="diamondEntryPrice"
+          value={updatedDiamond.diamondEntryPrice}
           onChange={handleChange}
         />
       </Form.Group>

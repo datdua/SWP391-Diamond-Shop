@@ -94,6 +94,16 @@ function SideBarAdmin() {
               </span>{" "}
               Tài khoản
             </NavLink>
+            <NavLink
+              to="/admin/order-manager"
+              className="nav-item"
+              activeClassName="active"
+            >
+              <span className="nav-icon">
+                <span className="nav-icon-bullet"></span>
+              </span>{" "}
+              Đơn hàng
+            </NavLink>
           </CNavGroup>
         </CSidebarNav>
         <CSidebarHeader className="border-top">

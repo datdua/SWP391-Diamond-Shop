@@ -67,11 +67,19 @@ function JewelryManagerPage() {
             <Card.Header>
               <Card.Title as="h4">
                 Jewelry List
-                <Button variant="link" onClick={refreshTable}>
-                  <RefreshIcon />
+                <Button
+                  variant="link"
+                  style={{ textDecoration: "none" }}
+                  onClick={refreshTable}
+                >
+                  <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> REFRESH
                 </Button>
-                <Button variant="link" onClick={handleShowAdd}>
-                  <AddIcon />
+                <Button
+                  variant="link"
+                  style={{ textDecoration: "none" }}
+                  onClick={handleShowAdd}
+                >
+                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> ADD
                 </Button>
               </Card.Title>
             </Card.Header>
@@ -85,7 +93,8 @@ function JewelryManagerPage() {
                       <th>Jewelry Name</th>
                       <th>Gender</th>
                       <th>Jewelry Image</th>
-                      <th>Jewelry Price</th>
+                      <th>Jewelry Entry Price</th>
+                      <th>Jewelry Gross Price</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -104,7 +113,16 @@ function JewelryManagerPage() {
                           />{" "}
                         </td>
                         <td>
-                          {jewelry.jewelryEntryPrice.toLocaleString() + " VNĐ"}
+                          {jewelry.jewelryEntryPrice
+                            ? jewelry.jewelryEntryPrice.toLocaleString() +
+                              " VNĐ"
+                            : "N/A"}
+                        </td>
+                        <td>
+                          {jewelry.grossJewelryPrice
+                            ? jewelry.grossJewelryPrice.toLocaleString() +
+                              " VNĐ"
+                            : "N/A"}
                         </td>
                         <td>
                           <Button
