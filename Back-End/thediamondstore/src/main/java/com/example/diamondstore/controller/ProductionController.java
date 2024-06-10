@@ -51,8 +51,8 @@ public class ProductionController {
             @RequestParam(required = false) String jewelryName,         
             @RequestParam(required = false) BigDecimal minDiamondPrice,
             @RequestParam(required = false) BigDecimal maxDiamondPrice,
-            @RequestParam(required = false) BigDecimal minjewelryPrice,
-            @RequestParam(required = false) BigDecimal maxjewelryPrice) {
+            @RequestParam(required = false) BigDecimal minjewelryEntryPrice,
+            @RequestParam(required = false) BigDecimal maxjewelryEntryPrice) {
         List<Diamond> diamonds = diamondRepository.findByDiamondNameLike("%" + diamondName + "%");
         List<Jewelry> jewelry = jewelryRepository.findByJewelryNameLike("%" + jewelryName + "%");
 
@@ -60,8 +60,8 @@ public class ProductionController {
         if (minDiamondPrice != null || maxDiamondPrice != null) {
             diamonds = diamondRepository.findBydiamondEntryPriceBetween(minDiamondPrice, maxDiamondPrice);
         }
-        if (minjewelryPrice != null || maxjewelryPrice != null) {
-            jewelry = jewelryRepository.findByJewelryPriceBetween(minjewelryPrice, maxjewelryPrice);
+        if (minjewelryEntryPrice != null || maxjewelryEntryPrice != null) {
+            jewelry = jewelryRepository.findByJewelryEntryPriceBetween(minjewelryEntryPrice, maxjewelryEntryPrice);
         }
 
         Map<String, Object> response = new HashMap<>();

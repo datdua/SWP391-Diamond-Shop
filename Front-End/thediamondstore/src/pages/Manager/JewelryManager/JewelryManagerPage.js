@@ -104,7 +104,7 @@ function JewelryManagerPage() {
                           />{" "}
                         </td>
                         <td>
-                          {jewelry.jewelryPrice.toLocaleString() + " VNĐ"}
+                          {jewelry.jewelryEntryPrice.toLocaleString() + " VNĐ"}
                         </td>
                         <td>
                           <Button

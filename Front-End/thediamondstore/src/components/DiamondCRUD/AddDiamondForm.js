@@ -8,7 +8,7 @@ function AddDiamondForm() {
     warrantyID: "",
     certificationID: "",
     diamondName: "",
-    diamondPrice: "",
+    diamondEntryPrice: "",
     diamondImage: "",
     carat_weight: "",
     carat_size: "",

@@ -16,5 +16,5 @@ public interface JewelryRepository extends JpaRepository<Jewelry, String>, JpaSp
 
     List<Jewelry> findByJewelryNameLike(String jewelryNamePattern);
 
-    List<Jewelry> findByJewelryPriceBetween(BigDecimal minjewelryPrice, BigDecimal maxjewelryPrice);
+    List<Jewelry> findByJewelryEntryPriceBetween(BigDecimal minjewelryEntryPrice, BigDecimal maxjewelryEntryPrice);
 }
