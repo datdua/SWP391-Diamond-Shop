@@ -7,7 +7,7 @@ public class DiamondPutRequest {
     private String warrantyID;
     private String certificationID;
     private Float carat_size;
-    private BigDecimal diamondPrice;
+    private BigDecimal diamondEntryPrice;
     private Float carat_weight;
     private String color;
     private String cut;
@@ -20,7 +20,7 @@ public class DiamondPutRequest {
     public DiamondPutRequest() {
     }
 
-    public DiamondPutRequest(Float carat_size, Float carat_weight, String certificationID, String clarity, String color, String cut, String diamondImage, String diamondName, BigDecimal diamondPrice, String origin, String shape, String warrantyID) {
+    public DiamondPutRequest(Float carat_size, Float carat_weight, String certificationID, String clarity, String color, String cut, String diamondImage, String diamondName, BigDecimal diamondEntryPrice, String origin, String shape, String warrantyID) {
         this.carat_size = carat_size;
         this.carat_weight = carat_weight;
         this.certificationID = certificationID;
@@ -29,13 +29,11 @@ public class DiamondPutRequest {
         this.cut = cut;
         this.diamondImage = diamondImage;
         this.diamondName = diamondName;
-        this.diamondPrice = diamondPrice;
+        this.diamondEntryPrice = diamondEntryPrice;
         this.origin = origin;
         this.shape = shape;
         this.warrantyID = warrantyID;
     }
-
-    
 
     public String getWarrantityID() {
         return warrantyID;
@@ -61,12 +59,12 @@ public class DiamondPutRequest {
         this.carat_size = carat_size;
     }
 
-    public BigDecimal getDiamondPrice() {
-        return diamondPrice;
+    public BigDecimal getDiamondEntryPrice() {
+        return diamondEntryPrice;
     }
 
-    public void setDiamondPrice(BigDecimal diamondPrice) {
-        this.diamondPrice = diamondPrice;
+    public void setDiamondEntryPrice(BigDecimal diamondEntryPrice) {
+        this.diamondEntryPrice = diamondEntryPrice;
     }
 
     public Float getCarat_weight() {
@@ -133,7 +131,4 @@ public class DiamondPutRequest {
         this.origin = origin;
     }
 
-
-
-    
 }

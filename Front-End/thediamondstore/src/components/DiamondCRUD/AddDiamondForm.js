@@ -8,7 +8,7 @@ function AddDiamondForm() {
     warrantyID: "",
     certificationID: "",
     diamondName: "",
-    diamondPrice: "",
+    diamondEntryPrice: "",
     diamondImage: "",
     carat_weight: "",
     carat_size: "",
@@ -38,7 +38,7 @@ function AddDiamondForm() {
   };
 
   return (
-    <div style={{ width: "50px" }}>
+    <div>
       <Form onSubmit={handleSubmit}>
         {Object.keys(diamond).map((key) => (
           <Form.Group controlId={key} key={key}>

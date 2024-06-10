@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,21 +47,23 @@ public class ProductionController {
     //API search theo tên, giá diamond và jewelry
     @GetMapping("/search")
     public Map<String, Object> searchProduction(
-            @RequestParam(required = false) String diamondName,
-            @RequestParam(required = false) String jewelryName,         
-            @RequestParam(required = false) BigDecimal minDiamondPrice,
-            @RequestParam(required = false) BigDecimal maxDiamondPrice,
-            @RequestParam(required = false) BigDecimal minjewelryPrice,
-            @RequestParam(required = false) BigDecimal maxjewelryPrice) {
-        List<Diamond> diamonds = diamondRepository.findByDiamondNameLike("%" + diamondName + "%");
-        List<Jewelry> jewelry = jewelryRepository.findByJewelryNameLike("%" + jewelryName + "%");
+            @RequestParam(required = false) String name,
+            //@RequestParam(required = false) String jewelryName,         
+            // @RequestParam(required = false) BigDecimal minDiamondPrice,
+            // @RequestParam(required = false) BigDecimal maxDiamondPrice,
+            // @RequestParam(required = false) BigDecimal minjewelryEntryPrice,
+            // @RequestParam(required = false) BigDecimal maxjewelryEntryPrice,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice) {
+        List<Diamond> diamonds = diamondRepository.findByDiamondNameLike("%" + name + "%");
+        List<Jewelry> jewelry = jewelryRepository.findByJewelryNameLike("%" + name + "%");
 
         //filter theo giá
-        if (minDiamondPrice != null || maxDiamondPrice != null) {
-            diamonds = diamondRepository.findByDiamondPriceBetween(minDiamondPrice, maxDiamondPrice);
+        if (minPrice != null || maxPrice != null) {
+            diamonds = diamondRepository.findBydiamondEntryPriceBetween(minPrice, maxPrice);
         }
-        if (minjewelryPrice != null || maxjewelryPrice != null) {
-            jewelry = jewelryRepository.findByJewelryPriceBetween(minjewelryPrice, maxjewelryPrice);
+        if (minPrice != null || maxPrice != null) {
+            jewelry = jewelryRepository.findByJewelryEntryPriceBetween(minPrice, maxPrice);
         }
 
         Map<String, Object> response = new HashMap<>();

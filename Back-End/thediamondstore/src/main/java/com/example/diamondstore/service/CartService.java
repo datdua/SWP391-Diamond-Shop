@@ -95,34 +95,41 @@ public class CartService {
     //tính tổng giá tiền
     private void calculateAndSetTotalPrice(Cart cart) {
         BigDecimal totalPrice = BigDecimal.ZERO;
-        BigDecimal totalCart = BigDecimal.ZERO;
         BigDecimal diamondPrice = BigDecimal.ZERO;
-        BigDecimal jewelryPrice = BigDecimal.ZERO;
+        BigDecimal jewelryEntryPrice = BigDecimal.ZERO;
         BigDecimal price = BigDecimal.ZERO;
+        BigDecimal grossCartPrice = BigDecimal.ZERO;
 
         if (cart.getDiamondID() != null) {
             Diamond diamond = diamondRepository.findById(cart.getDiamondID()).orElse(null);
             if (diamond != null) {
-                diamondPrice = diamondPrice.add(diamond.getDiamondPrice());
+                diamondPrice = diamondPrice.add(diamond.getDiamondEntryPrice());
             }
         }
 
         if (cart.getJewelryID() != null) {
             Jewelry jewelry = jewelryRepository.findById(cart.getJewelryID()).orElse(null);
             if (jewelry != null) {
-                jewelryPrice = jewelryPrice.add(jewelry.getJewelryPrice());
+                jewelryEntryPrice = jewelryEntryPrice.add(jewelry.getJewelryEntryPrice());
             }
         }
 
-        //totalPrice = totalPrice.multiply(BigDecimal.valueOf(cart.getQuantity())); // Multiply by quantity
-        // tính totalPrice bằng tổng diamondPrice và jewelryPrice
-        // tính price bằng tổng diamondPrice và jewelryPrice
-        price = price.add(diamondPrice).add(jewelryPrice);
-        totalPrice = price.multiply(BigDecimal.valueOf(cart.getQuantity()));
-
-        // totalCart bằng tổng tất cả totalPrice có trong Cart
-        cart.setTotalPrice(totalPrice);
+        // tính price bằng tổng diamondPrice và jewelryEntryPrice
+        price = price.add(diamondPrice).add(jewelryEntryPrice);
         cart.setPrice(price);
+
+        // tính totalPrice bằng tổng diamondPrice và jewelryEntryPrice
+        totalPrice = price.multiply(BigDecimal.valueOf(cart.getQuantity()));
+        cart.setTotalPrice(totalPrice);
+
+        //nếu cart vừa có diamondID và jewelryID thì tính grossCartPrice = totalPrice * 1.2
+        //nếu không thì grossCartPrice = totalPrice * 1.1
+        if (cart.getDiamondID() != null && cart.getJewelryID() != null) {
+            grossCartPrice = totalPrice.multiply(BigDecimal.valueOf(1.2));
+        } else {
+            grossCartPrice = totalPrice.multiply(BigDecimal.valueOf(1.1));
+        }
+        cart.setGrossCartPrice(grossCartPrice);
     }
 
     public Cart getCartByCartID(Integer cartID) {
@@ -143,6 +150,5 @@ public class CartService {
             totalCart = totalCart.add(cart.getTotalPrice());
         }
         return totalCart;
-
     }
 }

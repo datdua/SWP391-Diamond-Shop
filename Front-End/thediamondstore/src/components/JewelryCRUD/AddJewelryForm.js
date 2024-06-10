@@ -8,7 +8,7 @@ function AddJewelryForm() {
     jewelryName: "",
     gender: "",
     jewelryImage: "",
-    jewelryPrice: "",
+    jewelryEntryPrice: "",
   });
 
   const [message, setMessage] = useState(""); // New state variable for the message

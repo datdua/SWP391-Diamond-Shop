@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 
 import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.Cart;
+import com.example.diamondstore.model.Certificate;
 import com.example.diamondstore.model.Customer;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.model.Promotion;
+import com.example.diamondstore.model.Warranty;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.CertificateRepository;
@@ -67,28 +69,51 @@ public class OrderService {
         order.setStartorderDate(LocalDateTime.now());
         order.setDeliveryDate(LocalDateTime.now().plusDays(7)); // Ví dụ: giao hàng sau 7 ngày
         order.setOrderStatus("Đang xử lý");
+        
+        //lưu phoneNumber, deliveryAddress vào Account khi Account chưa có phoneNumber, deliveryAddress
+        if (account.getPhoneNumber() == null) {
+            account.setPhoneNumber(phoneNumber);
+        }
+        if (account.getAddressAccount() == null) {
+            account.setAddressAccount(deliveryAddress);
+        }
+        accountRepository.save(account);
 
         String diamondID = cartItems.get(0).getDiamondID();
         if (diamondID != null) {
             // lấy certificateImage thông qua certificateID
             String certificateID = diamondRepository.findByDiamondID(diamondID).getCertificationID();
-            order.setCertificateImage(certificateRepository.findByCertificateID(certificateID).getcertificateImage());
+            //nếu diamondID không có certificateID thì không set certificateImage
+            if (certificateID != null) {
+                Certificate certificate = certificateRepository.findByCertificateID(certificateID);
+                if (certificate != null) {
+                    order.setCertificateImage(certificate.getcertificateImage());
+                }
+            }
+            // order.setCertificateImage(certificateRepository.findByCertificateID(certificateID).getcertificateImage());
 
             // lấy warrantyImage thông qua warrantyID
             String warrantyID = diamondRepository.findByDiamondID(diamondID).getWarrantyID();
-            order.setWarrantyImage(warrantyRepository.findByWarrantyID(warrantyID).getwarrantyImage());
+            //nếu diamondID không có warrantyID thì không set warrantyImage
+            if (warrantyID != null) {
+                Warranty warranty = warrantyRepository.findByWarrantyID(warrantyID);
+                if (warranty != null) {
+                    order.setWarrantyImage(warranty.getwarrantyImage());
+                }
+            }
+            // order.setWarrantyImage(warrantyRepository.findByWarrantyID(warrantyID).getwarrantyImage());
         }
 
-        BigDecimal totalCart = BigDecimal.ZERO;
+        BigDecimal totalOrder = BigDecimal.ZERO;
 
         for (Cart cart : cartItems) {
-            totalCart = totalCart.add(cart.getTotalPrice());
+            totalOrder = totalOrder.add(cart.getGrossCartPrice());
         }
 
         Promotion promotion = promotionRepository.findByPromotionCode(promotionCode);
         if (promotion != null) {
             BigDecimal discountAmount = promotion.getDiscountAmount();
-            totalCart = totalCart.subtract(totalCart.multiply(discountAmount));
+            totalOrder = totalOrder.subtract(totalOrder.multiply(discountAmount));
             order.setPromotion(promotion);
         }
 
@@ -99,12 +124,12 @@ public class OrderService {
                 throw new IllegalArgumentException("Điểm không đủ");
             }
             BigDecimal discount = BigDecimal.valueOf(pointsToRedeem / 100.0);
-            totalCart = totalCart.subtract(discount.multiply(BigDecimal.valueOf(1000000)));
+            totalOrder = totalOrder.subtract(discount.multiply(BigDecimal.valueOf(1000000)));
             customer.setPoint(availablePoints - pointsToRedeem);
             customerRepository.save(customer);
         }
 
-        order.settotalCart(totalCart);
+        order.settotalOrder(totalOrder);
 
         // Save the order first
         order = orderRepository.save(order);
@@ -141,4 +166,14 @@ public class OrderService {
     public List<Order> getAllOrders() {
         return orderRepository.findAll(Sort.by(Sort.Direction.DESC, "startorderDate"));
     }
+
+    public Object getTotalOrder(Integer orderID) {
+        Order order = orderRepository.findByOrderID(orderID);
+        if (order == null) {
+            throw new IllegalArgumentException("Không tìm thấy Order");
+        }
+        return order.gettotalOrder();
+    }
+
+    
 }
