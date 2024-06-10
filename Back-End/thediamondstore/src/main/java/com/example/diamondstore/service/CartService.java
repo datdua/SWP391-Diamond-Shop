@@ -96,7 +96,7 @@ public class CartService {
     private void calculateAndSetTotalPrice(Cart cart) {
         BigDecimal totalPrice = BigDecimal.ZERO;
         BigDecimal diamondPrice = BigDecimal.ZERO;
-        BigDecimal jewelryPrice = BigDecimal.ZERO;
+        BigDecimal jewelryEntryPrice = BigDecimal.ZERO;
         BigDecimal price = BigDecimal.ZERO;
         BigDecimal grossCartPrice = BigDecimal.ZERO;
 
@@ -110,15 +110,15 @@ public class CartService {
         if (cart.getJewelryID() != null) {
             Jewelry jewelry = jewelryRepository.findById(cart.getJewelryID()).orElse(null);
             if (jewelry != null) {
-                jewelryPrice = jewelryPrice.add(jewelry.getJewelryPrice());
+                jewelryEntryPrice = jewelryEntryPrice.add(jewelry.getJewelryEntryPrice());
             }
         }
 
-        // tính price bằng tổng diamondPrice và jewelryPrice
-        price = price.add(diamondPrice).add(jewelryPrice);
+        // tính price bằng tổng diamondPrice và jewelryEntryPrice
+        price = price.add(diamondPrice).add(jewelryEntryPrice);
         cart.setPrice(price);
 
-        // tính totalPrice bằng tổng diamondPrice và jewelryPrice
+        // tính totalPrice bằng tổng diamondPrice và jewelryEntryPrice
         totalPrice = price.multiply(BigDecimal.valueOf(cart.getQuantity()));
         cart.setTotalPrice(totalPrice);
 

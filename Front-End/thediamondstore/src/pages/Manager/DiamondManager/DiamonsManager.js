@@ -105,13 +105,21 @@ function DiamondManagerPage() {
         <Col md={12}>
           <Card>
             <Card.Header>
-              <Card.Title as="h4">
+              <Card.Title as="h4" style={{ marginRight: "10px" }}>
                 Diamond List
-                <Button variant="link" onClick={refreshTable}>
-                  <RefreshIcon />
+                <Button
+                  variant="link"
+                  style={{ textDecoration: "none" }}
+                  onClick={refreshTable}
+                >
+                  <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> REFRESH
                 </Button>
-                <Button variant="link" onClick={handleShowAdd}>
-                  <AddIcon />
+                <Button
+                  variant="link"
+                  style={{ textDecoration: "none" }}
+                  onClick={handleShowAdd}
+                >
+                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> ADD
                 </Button>
               </Card.Title>
             </Card.Header>
@@ -125,7 +133,8 @@ function DiamondManagerPage() {
                       <th>Warranty ID</th>
                       <th>Certification ID</th>
                       <th>Diamond Name</th>
-                      <th>Diamond Price</th>
+                      <th>Diamond Entry Price</th>
+                      <th>Diamond Gross Price</th>
                       <th>Diamond Image</th>
                       <th>Carat Weight</th>
                       <th>Carat Size</th>
@@ -164,7 +173,16 @@ function DiamondManagerPage() {
                         </td>
                         <td>{diamond.diamondName}</td>
                         <td>
-                          {diamond.diamondPrice.toLocaleString() + " VNĐ"}
+                          {diamond.diamondEntryPrice
+                            ? diamond.diamondEntryPrice.toLocaleString() +
+                              " VNĐ"
+                            : "N/A"}
+                        </td>
+                        <td>
+                          {diamond.grossDiamondPrice
+                            ? diamond.grossDiamondPrice.toLocaleString() +
+                              " VNĐ"
+                            : "N/A"}
                         </td>
                         <td>
                           <img

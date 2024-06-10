@@ -43,11 +43,11 @@ function UpdateJewelryForm({ jewelry }) {
         />
       </Form.Group>
       <Form.Group>
-        <Form.Label>Size</Form.Label>
+        <Form.Label>Entry Price</Form.Label>
         <Form.Control
           type="text"
-          name="size"
-          value={updatedJewelry.size}
+          name="jewelryEntryPrice"
+          value={updatedJewelry.jewelryEntryPrice}
           onChange={handleChange}
         />
       </Form.Group>

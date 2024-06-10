@@ -80,11 +80,11 @@ public class JewelryController {
     @GetMapping("/search/filter")
     public ResponseEntity<List<Jewelry>> searchJewelry(
             @RequestParam(required = false) String jewelryName,
-            @RequestParam(required = false) Float minjewelryPrice,
-            @RequestParam(required = false) Float maxjewelryPrice,
+            @RequestParam(required = false) Float minjewelryEntryPrice,
+            @RequestParam(required = false) Float maxjewelryEntryPrice,
             @RequestParam(required = false) String gender) {
 
-        List<Jewelry> jewelrys = jewelryService.searchJewelry(jewelryName, minjewelryPrice, maxjewelryPrice, gender);
+        List<Jewelry> jewelrys = jewelryService.searchJewelry(jewelryName, minjewelryEntryPrice, maxjewelryEntryPrice, gender);
         return ResponseEntity.ok(jewelrys);
     }
 

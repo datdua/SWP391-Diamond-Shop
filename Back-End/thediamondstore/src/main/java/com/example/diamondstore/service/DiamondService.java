@@ -52,22 +52,32 @@ public class DiamondService {
     }
 
     public Map<String, String> updateDiamond(String diamondID, DiamondPutRequest diamondPutRequest) {
-        Diamond existingDiamond = diamondRepository.findByDiamondID(diamondID);
-        if (existingDiamond == null) {
-            return Collections.singletonMap("message", "Không tìm thấy kim cương");
-        }
-        existingDiamond.setDiamondName(diamondPutRequest.getDiamondName());
-        existingDiamond.setGrossDiamondPrice(diamondPutRequest.getDiamondPrice());
-        existingDiamond.setOrigin(diamondPutRequest.getOrigin());
-        existingDiamond.setCut(diamondPutRequest.getCut());
-        existingDiamond.setShape(diamondPutRequest.getShape());
-        existingDiamond.setColor(diamondPutRequest.getColor());
-        existingDiamond.setCarat_size(diamondPutRequest.getCarat_size());;
-        existingDiamond.setCarat_weight(diamondPutRequest.getCarat_weight());;
-        existingDiamond.setClarity(diamondPutRequest.getClarity());
-        diamondRepository.save(existingDiamond);
-        return Collections.singletonMap("message", "Cập nhật thành công");
+    Diamond existingDiamond = diamondRepository.findByDiamondID(diamondID);
+    if (existingDiamond == null) {
+        return Collections.singletonMap("message", "Không tìm thấy kim cương");
     }
+
+    existingDiamond.setDiamondName(diamondPutRequest.getDiamondName());
+    existingDiamond.setDiamondEntryPrice(diamondPutRequest.getDiamondEntryPrice());
+    existingDiamond.setOrigin(diamondPutRequest.getOrigin());
+    existingDiamond.setCut(diamondPutRequest.getCut());
+    existingDiamond.setShape(diamondPutRequest.getShape());
+    existingDiamond.setColor(diamondPutRequest.getColor());
+    existingDiamond.setCarat_size(diamondPutRequest.getCarat_size());
+    existingDiamond.setCarat_weight(diamondPutRequest.getCarat_weight());
+    existingDiamond.setClarity(diamondPutRequest.getClarity());
+
+    // Cập nhật grossDiamondPrice nếu diamondEntryPrice thay đổi
+    if (diamondPutRequest.getDiamondEntryPrice() != null) {
+        BigDecimal newDiamondEntryPrice = diamondPutRequest.getDiamondEntryPrice();
+        BigDecimal newGrossDiamondPrice = newDiamondEntryPrice.multiply(new BigDecimal(1.1));
+        existingDiamond.setGrossDiamondPrice(newGrossDiamondPrice);
+    }
+
+    diamondRepository.save(existingDiamond);
+    return Collections.singletonMap("message", "Cập nhật thành công");
+}
+
 
     public Map<String, String> deleteDiamond(String diamondID) {
         Diamond existingDiamond = diamondRepository.findByDiamondID(diamondID);

@@ -7,10 +7,11 @@ import {
   CNavTitle,
   CNavGroup,
   CSidebarToggler,
+  CNavLink,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { NavLink, Outlet } from "react-router-dom";
-import { cilSpeedometer, cilPuzzle, cilUser } from "@coreui/icons";
+import { cilSpeedometer, cilPuzzle, cilUser, cilBank } from "@coreui/icons";
 import "../../components/Sidebar/SidebarAdmin.css";
 
 function SideBarAdmin() {
@@ -34,7 +35,7 @@ function SideBarAdmin() {
             className="nav-item"
             activeClassName="active"
           >
-            <CIcon className="nav-icon" icon={cilUser} /> Profile
+            <CIcon className="nav-icon" icon={cilUser} /> Thông tin cá nhân
           </NavLink>
 
           <NavLink
@@ -44,6 +45,13 @@ function SideBarAdmin() {
           >
             <CIcon customClassName="nav-icon" icon={cilSpeedometer} /> Dashboard
           </NavLink>
+          <NavLink
+            to="https://sandbox.vnpayment.vn/merchantv2/Users/Login.htm"
+            className="nav-item"
+          >
+            <CIcon customClassName="nav-icon" icon={cilBank} />
+            Quản Lý Giao Dịch
+          </NavLink>
           <CNavGroup
             toggler={
               <>
@@ -52,7 +60,7 @@ function SideBarAdmin() {
                   customClassName="nav-icon"
                   icon={cilPuzzle}
                 />{" "}
-                Manager
+                Quản lý
               </>
             }
           >
@@ -64,7 +72,7 @@ function SideBarAdmin() {
               <span className="nav-icon">
                 <span className="nav-icon-bullet"></span>
               </span>{" "}
-              Diamond
+              Kim cương
             </NavLink>
             <NavLink
               to="/admin/jewelry-manager"
@@ -74,7 +82,7 @@ function SideBarAdmin() {
               <span className="nav-icon">
                 <span className="nav-icon-bullet"></span>
               </span>{" "}
-              Jewelry
+              Trang sức
             </NavLink>
             <NavLink
               to="/admin/account-manager"
@@ -84,7 +92,17 @@ function SideBarAdmin() {
               <span className="nav-icon">
                 <span className="nav-icon-bullet"></span>
               </span>{" "}
-              Account
+              Tài khoản
+            </NavLink>
+            <NavLink
+              to="/admin/order-manager"
+              className="nav-item"
+              activeClassName="active"
+            >
+              <span className="nav-icon">
+                <span className="nav-icon-bullet"></span>
+              </span>{" "}
+              Đơn hàng
             </NavLink>
           </CNavGroup>
         </CSidebarNav>

@@ -50,7 +50,7 @@ public class JewelryService {
         }
         
         //calculate gross jewelry price = jewelry price * 1.1
-        BigDecimal grossJewelryPrice = jewelry.getJewelryPrice().multiply(new BigDecimal(1.1));
+        BigDecimal grossJewelryPrice = jewelry.getJewelryEntryPrice().multiply(new BigDecimal(1.1));
         jewelry.setGrossJewelryPrice(grossJewelryPrice);
         
         jewelryRepository.save(jewelry);
@@ -65,7 +65,13 @@ public class JewelryService {
         existingJewelry.setJewelryName(jewelryPutRequest.getJewelryName());
         existingJewelry.setGender(jewelryPutRequest.getGender());
         existingJewelry.setjewelryImage(jewelryPutRequest.getJewelryImage());
-        existingJewelry.setJewelryPrice(jewelryPutRequest.getJewelryPrice());
+        existingJewelry.setJewelryEntryPrice(jewelryPutRequest.getJewelryEntryPrice());
+
+        // Cập nhật grossJewelryPrice nếu jewelryEntryPrice thay đổi
+        if (jewelryPutRequest.getJewelryEntryPrice() != null) {
+            BigDecimal grossJewelryPrice = jewelryPutRequest.getJewelryEntryPrice().multiply(new BigDecimal(1.1));
+            existingJewelry.setGrossJewelryPrice(grossJewelryPrice);
+        }
         jewelryRepository.save(existingJewelry);
         return Collections.singletonMap("message", "Cập nhật thành công");
     }
@@ -79,14 +85,14 @@ public class JewelryService {
         return "Xóa thành công";
     }
 
-    public List<Jewelry> searchJewelry(String jewelryName, Float minjewelryPrice, Float maxjewelryPrice, String gender) {
+    public List<Jewelry> searchJewelry(String jewelryName, Float minjewelryEntryPrice, Float maxjewelryEntryPrice, String gender) {
         Specification<Jewelry> spec = Specification.where(null);
 
         if (jewelryName != null) {
             spec = spec.and(JewelrySpecification.hasNameLike(jewelryName));
         }
-        if (minjewelryPrice != null || maxjewelryPrice != null) {
-            spec = spec.and(JewelrySpecification.hasPriceBetween(minjewelryPrice, maxjewelryPrice));
+        if (minjewelryEntryPrice != null || maxjewelryEntryPrice != null) {
+            spec = spec.and(JewelrySpecification.hasPriceBetween(minjewelryEntryPrice, maxjewelryEntryPrice));
         }
         if (gender != null) {
             spec = spec.and(JewelrySpecification.hasGender(gender));

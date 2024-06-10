@@ -24,10 +24,10 @@ public class Diamond {
     @Column(name = "carat_size")
     private Float carat_size;
 
-    @Column(name = "diamondEntryPrice", precision = 8, scale = 2)
+    @Column(name = "diamondEntryPrice", precision = 16, scale = 2)
     private BigDecimal diamondEntryPrice;
 
-    @Column(name = "grossDiamondPrice", precision = 8, scale = 2)
+    @Column(name = "grossDiamondPrice", precision = 16, scale = 2)
     private BigDecimal grossDiamondPrice;
 
     @Column(name = "carat_weight")
