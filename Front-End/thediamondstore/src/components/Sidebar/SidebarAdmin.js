@@ -7,10 +7,11 @@ import {
   CNavTitle,
   CNavGroup,
   CSidebarToggler,
+  CNavLink,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { NavLink, Outlet } from "react-router-dom";
-import { cilSpeedometer, cilPuzzle, cilUser } from "@coreui/icons";
+import { cilSpeedometer, cilPuzzle, cilUser, cilBank } from "@coreui/icons";
 import "../../components/Sidebar/SidebarAdmin.css";
 
 function SideBarAdmin() {
@@ -43,6 +44,13 @@ function SideBarAdmin() {
             activeClassName="active"
           >
             <CIcon customClassName="nav-icon" icon={cilSpeedometer} /> Dashboard
+          </NavLink>
+          <NavLink
+            to="https://sandbox.vnpayment.vn/merchantv2/Users/Login.htm"
+            className="nav-item"
+          >
+            <CIcon customClassName="nav-icon" icon={cilBank} />
+            Quản Lý Giao Dịch
           </NavLink>
           <CNavGroup
             toggler={
