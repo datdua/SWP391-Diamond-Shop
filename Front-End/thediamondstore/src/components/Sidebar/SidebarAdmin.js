@@ -35,7 +35,7 @@ function SideBarAdmin() {
             className="nav-item"
             activeClassName="active"
           >
-            <CIcon className="nav-icon" icon={cilUser} /> Profile
+            <CIcon className="nav-icon" icon={cilUser} /> Thông tin cá nhân
           </NavLink>
 
           <NavLink
@@ -60,7 +60,7 @@ function SideBarAdmin() {
                   customClassName="nav-icon"
                   icon={cilPuzzle}
                 />{" "}
-                Manager
+                Quản lý
               </>
             }
           >
@@ -72,7 +72,7 @@ function SideBarAdmin() {
               <span className="nav-icon">
                 <span className="nav-icon-bullet"></span>
               </span>{" "}
-              Diamond
+              Kim cương
             </NavLink>
             <NavLink
               to="/admin/jewelry-manager"
@@ -82,7 +82,7 @@ function SideBarAdmin() {
               <span className="nav-icon">
                 <span className="nav-icon-bullet"></span>
               </span>{" "}
-              Jewelry
+              Trang sức
             </NavLink>
             <NavLink
               to="/admin/account-manager"
@@ -92,7 +92,7 @@ function SideBarAdmin() {
               <span className="nav-icon">
                 <span className="nav-icon-bullet"></span>
               </span>{" "}
-              Account
+              Tài khoản
             </NavLink>
           </CNavGroup>
         </CSidebarNav>
