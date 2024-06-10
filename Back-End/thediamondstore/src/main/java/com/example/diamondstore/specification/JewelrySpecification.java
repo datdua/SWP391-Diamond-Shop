@@ -10,8 +10,8 @@ public class JewelrySpecification {
         return (root, query, cb) -> cb.equal(root.get("jewelryName"), jewelryName);
     }
 
-    public static Specification<Jewelry> hasPrice(Float jewelryPrice) {
-        return (root, query, cb) -> cb.equal(root.get("jewelryPrice"), jewelryPrice);
+    public static Specification<Jewelry> hasPrice(Float jewelryEntryPrice) {
+        return (root, query, cb) -> cb.equal(root.get("jewelryEntryPrice"), jewelryEntryPrice);
     }
 
     public static Specification<Jewelry> hasGender(String gender) {
@@ -23,14 +23,14 @@ public class JewelrySpecification {
     }
 
 
-    public static Specification<Jewelry> hasPriceBetween(Float minjewelryPrice, Float maxjewelryPrice) {
+    public static Specification<Jewelry> hasPriceBetween(Float minjewelryEntryPrice, Float maxjewelryEntryPrice) {
         return (root, query, criteriaBuilder) -> {
-            if (minjewelryPrice != null && maxjewelryPrice != null) {
-                return criteriaBuilder.between(root.get("jewelryPrice"), minjewelryPrice, maxjewelryPrice);
-            } else if (minjewelryPrice != null) {
-                return criteriaBuilder.greaterThanOrEqualTo(root.get("jewelryPrice"), maxjewelryPrice);
-            } else if (minjewelryPrice != null) {
-                return criteriaBuilder.lessThanOrEqualTo(root.get("jewelryPrice"), maxjewelryPrice);
+            if (minjewelryEntryPrice != null && maxjewelryEntryPrice != null) {
+                return criteriaBuilder.between(root.get("jewelryEntryPrice"), minjewelryEntryPrice, maxjewelryEntryPrice);
+            } else if (minjewelryEntryPrice != null) {
+                return criteriaBuilder.greaterThanOrEqualTo(root.get("jewelryEntryPrice"), maxjewelryEntryPrice);
+            } else if (minjewelryEntryPrice != null) {
+                return criteriaBuilder.lessThanOrEqualTo(root.get("jewelryEntryPrice"), maxjewelryEntryPrice);
             } else {
                 return criteriaBuilder.conjunction();
             }
