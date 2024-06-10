@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.diamondstore.DTO.AccountContactInfoDTO;
 import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.Customer;
 import com.example.diamondstore.model.Order;
@@ -218,5 +219,16 @@ public class AccountController {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
         }
         return ResponseEntity.ok(accounts);
+    }
+
+    //get phoneNumber, addressAccount by accountID
+    @GetMapping("/contactInfo/{accountID}")
+    public ResponseEntity<?> getContactInfoByAccountID(@PathVariable Integer accountID) {
+        Account account = accountRepository.findById(accountID).orElse(null);
+        if (account == null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
+        }
+        AccountContactInfoDTO contactInfo = new AccountContactInfoDTO(account.getPhoneNumber(), account.getAddressAccount());
+        return ResponseEntity.ok(contactInfo);
     }
 }

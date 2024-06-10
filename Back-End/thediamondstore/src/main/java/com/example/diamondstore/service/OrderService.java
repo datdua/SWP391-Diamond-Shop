@@ -69,14 +69,6 @@ public class OrderService {
         order.setStartorderDate(LocalDateTime.now());
         order.setDeliveryDate(LocalDateTime.now().plusDays(7)); // Ví dụ: giao hàng sau 7 ngày
         order.setOrderStatus("Đang xử lý");
-
-        // nếu Account đã có phoneNumber, deliveryAddress thì xuất hiện ra gợi ý trong khi tạo order
-        if (account.getPhoneNumber() != null) {
-            order.setPhoneNumber(account.getPhoneNumber());
-        }
-        if (account.getAddressAccount() != null) {
-            order.setDeliveryAddress(account.getAddressAccount());
-        }
         
         //lưu phoneNumber, deliveryAddress vào Account khi Account chưa có phoneNumber, deliveryAddress
         if (account.getPhoneNumber() == null) {

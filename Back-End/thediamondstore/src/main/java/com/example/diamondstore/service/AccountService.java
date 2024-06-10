@@ -39,5 +39,4 @@ public class AccountService implements UserDetailsService {
 
         return userDetails;
     }
-
 }
