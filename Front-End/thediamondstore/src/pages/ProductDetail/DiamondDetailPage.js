@@ -100,7 +100,7 @@ function DiamondDetailPage() {
                                                 <div className="col-lg-6 col-md-6 col-12">
                                                     <div className="tm-prodetails-content">
                                                         <h4 className="tm-prodetails-title">{diamond.diamondName}</h4>
-                                                        <span className="tm-prodetails-price">{diamond.diamondPrice.toLocaleString()} VND</span>
+                                                        <span className="tm-prodetails-price">{diamond.diamondEntryPrice.toLocaleString()} VND</span>
                                                         <div className="tm-prodetails-infos">
                                                             <div className="tm-prodetails-singleinfo">
                                                                 <b>Carat Size : </b>

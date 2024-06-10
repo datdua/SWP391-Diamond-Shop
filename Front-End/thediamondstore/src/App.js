@@ -22,11 +22,12 @@ import JewelryDetailPage from "./pages/ProductDetail/JewelryDetailPage";
 import { AuthProvider } from "./components/Auth/AuthProvider";
 import DiamondDetailPage from "./pages/ProductDetail/DiamondDetailPage";
 
-/*import Dashboard from "./pages/DashBoard/DashBoard";
+import Dashboard from "./pages/DashBoard/DashBoard";
 import SideBarAdmin from "./components/Sidebar/SidebarAdmin";
 import ProductManagerPage from "./pages/Manager/DiamondManager/DiamonsManager";
 import AccountManager from "./pages/Manager/AccountManager/AccountManager";
-import JewelryManagerPage from "./pages/Manager/JewelryManager/JewelryManagerPage";*/
+import JewelryManagerPage from "./pages/Manager/JewelryManager/JewelryManagerPage";
+
 
 function App() {
   const handleLogout = (logoutCallback) => {
@@ -209,13 +210,14 @@ function App() {
             }
           />
 
-          {/*<Route path="/admin/*" element={<SideBarAdmin />}>
+          <Route path="/admin/*" element={<SideBarAdmin />}>
             <Route path="profile" element={<Dashboard />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="diamond-manager" element={<ProductManagerPage />} />
             <Route path="account-manager" element={<AccountManager />} />
             <Route path="jewelry-manager" element={<JewelryManagerPage />} />
-          </Route>*/}
+            <Route path="order-manager" element={<Dashboard />} />
+          </Route>
         </Routes>
       </AuthProvider>
     </BrowserRouter>

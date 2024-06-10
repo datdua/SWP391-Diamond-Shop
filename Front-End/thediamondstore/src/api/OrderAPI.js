@@ -16,7 +16,7 @@ export const createOrder = async (accountId, deliveryAddress, phoneNumber, point
         if (promotionCode) data.append('promotionCode', promotionCode);
 
         const response = await axios.post(
-          "http://localhost:8080/orders/create",
+          "http://localhost:8080/api/orders/create",
           data,
           {
             headers: {
@@ -40,7 +40,7 @@ export async function fetchOrders(accountID) {
 
     const token = getAuthToken();
     try {
-        const response = await fetch(`http://localhost:8080/orders/account/${accountID}`, {
+        const response = await fetch(`http://localhost:8080/api/orders/account/${accountID}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }

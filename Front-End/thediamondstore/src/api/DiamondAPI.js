@@ -11,7 +11,7 @@ export async function getAllDiamond() {
   return response.data;
 }
 
-const BASE_URL = 'http://localhost:3000/api/diamonds';
+const BASE_URL = 'http://localhost:8080/api/diamonds/get';
 
 export const getDiamondById = async (diamondId) => {
     try {

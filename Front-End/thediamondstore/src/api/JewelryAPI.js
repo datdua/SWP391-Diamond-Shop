@@ -26,7 +26,7 @@ export async function searchJewelryByName(name) {
 export async function getJewelryById(jewelryId) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/jewelry/${jewelryId}`
+      `http://localhost:8080/api/jewelry/get/${jewelryId}`
     );
     return response.data;
   } catch (error) {
@@ -37,7 +37,7 @@ export async function getJewelryById(jewelryId) {
 export async function getPage(page = 1, size = 9) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/jewelry/paged/jewelry?page=${page}&size=${size}`
+      `http://localhost:8080/api/jewelry/paged/jewelrys?page=${page}&size=${size}`
     );
     return response.data;
   } catch (error) {

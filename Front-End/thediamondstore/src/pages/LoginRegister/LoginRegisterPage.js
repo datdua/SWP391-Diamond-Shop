@@ -17,7 +17,7 @@ function LoginRegisterPage() {
     const [showLoginPassword, setShowLoginPassword] = useState(false);
     const [showRegisterPassword, setShowRegisterPassword] = useState(false);
     const [termsAccepted, setTermsAccepted] = useState(false);
-    const accountID = useParams();
+    const accountId = useParams();
     const navigate = useNavigate();
 
     const handleLogin = async (e) => {
@@ -41,7 +41,7 @@ function LoginRegisterPage() {
                 localStorage.setItem("jwt", data.jwt);
                 localStorage.setItem("email", loginEmail);
                 localStorage.setItem("accountName", accountName);
-                localStorage.setItem("accountID", accountID);
+                localStorage.setItem("accountID", accountId);
                 setIsLoggedIn(true);
                 toast.success("Đăng nhập thành công!");
                 navigate('/trangchu');

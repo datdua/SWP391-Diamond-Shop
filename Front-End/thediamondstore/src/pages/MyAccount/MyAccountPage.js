@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import "./MyAccountPage.css";
 import { createPayment, fetchOrders } from "../../api/OrderAPI";
- // Import the createPayment function
+import { AuthContext } from "../../components/Auth/AuthContext";
 
 function MyAccountPage() {
-    const accountName = localStorage.getItem('accountName');
-    const { accountId } = useParams(); // Use destructuring to get accountId from params
+    const { accountName } = useContext(AuthContext);
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const {accountId} = useParams();
 
     useEffect(() => {
         if (!accountId) {
@@ -37,13 +37,9 @@ function MyAccountPage() {
     }, [accountId]);
 
     function PaymentButton({ orderID }) {
-        // Function to handle payment button click
         const handlePayment = async () => {
             try {
-                // Call the createPayment function and get the URL
                 const paymentUrl = await createPayment(orderID);
-                
-                // Redirect the user to the payment URL
                 window.location.href = paymentUrl;
             } catch (error) {
                 console.error('Payment failed:', error);
@@ -122,9 +118,9 @@ function MyAccountPage() {
                                                         orders.map(order => (
                                                             <tr key={order.orderID}>
                                                                 <td>{order.orderID}</td>
-                                                                <td>{order.startorderDate}</td>
+                                                                <td>{order.orderDate}</td>
                                                                 <td>{order.orderStatus}</td>
-                                                                <td>{order.totalCart.toLocaleString()}</td>
+                                                                <td>{order.totalOrder !== undefined && order.totalOrder !== null ? order.totalOrder.toLocaleString() : 'N/A'}</td>
                                                                 <td><a href="#" className="tm-button tm-button-small">View</a></td>
                                                                 <td><PaymentButton orderID={order.orderID} /></td>
                                                             </tr>
@@ -135,6 +131,7 @@ function MyAccountPage() {
                                                         </tr>
                                                     )}
                                                 </tbody>
+
                                             </table>
                                         </div>
                                     </div>
@@ -190,8 +187,6 @@ function MyAccountPage() {
                     </div>
                 </div>
             </main>
-
-            
         </div>
     );
 }

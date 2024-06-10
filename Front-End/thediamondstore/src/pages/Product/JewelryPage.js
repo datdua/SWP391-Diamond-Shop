@@ -233,7 +233,7 @@ function JewelryPage() {
                                                                     <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                                     <span><i className="ion-android-star-outline"></i></span>
                                                                 </div>
-                                                                <span className="tm-product-price">{(item.jewelryPrice).toLocaleString()} VND</span>
+                                                                <span className="tm-product-price">{(item.jewelryEntryPrice).toLocaleString()} VND</span>
                                                             </div>
                                                         </div>
                                                     </div>

@@ -9,28 +9,14 @@ import { toast } from "react-toastify";
 import { searchProductionByName } from "../../api/ProductAPI";
 
 function Header() {
-    const { accountId } = useParams();
     const { isLoggedIn, accountName, onLogout } = useContext(AuthContext);
     const [isAccountDropdownOpen, setAccountDropdownOpen] = useState(false);
-    const [isCurrencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
-    const [isLanguageDropdownOpen, setLanguageDropdownOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
+    const {accountId} = useParams();
 
-    const toggleDropdown = (dropdown) => {
-        if (dropdown === "account") {
-            setAccountDropdownOpen(!isAccountDropdownOpen);
-            setCurrencyDropdownOpen(false);
-            setLanguageDropdownOpen(false);
-        } else if (dropdown === "currency") {
-            setAccountDropdownOpen(false);
-            setCurrencyDropdownOpen(!isCurrencyDropdownOpen);
-            setLanguageDropdownOpen(false);
-        } else if (dropdown === "language") {
-            setAccountDropdownOpen(false);
-            setCurrencyDropdownOpen(false);
-            setLanguageDropdownOpen(!isLanguageDropdownOpen);
-        }
+    const toggleDropdown = () => {
+        setAccountDropdownOpen(!isAccountDropdownOpen);
     };
 
     const handleSearch = async () => {
@@ -73,7 +59,7 @@ function Header() {
                                 {isLoggedIn ? (
                                     <>
                                         <div className="relative">
-                                            <button onClick={() => toggleDropdown("account")} className="tm-dropdown-button tm-header-links">
+                                            <button onClick={toggleDropdown} className="tm-dropdown-button tm-header-links">
                                                 Tài Khoản <i className={`ml-1 fas ${isAccountDropdownOpen ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
                                             </button>
                                             {isAccountDropdownOpen && (
