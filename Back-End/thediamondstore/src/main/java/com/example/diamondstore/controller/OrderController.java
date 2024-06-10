@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.model.Order;
+import com.example.diamondstore.model.OrderHistory;
+import com.example.diamondstore.service.OrderHistoryService;
 import com.example.diamondstore.service.OrderService;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/orders")
 public class OrderController {
 
     @Autowired
@@ -24,18 +26,19 @@ public class OrderController {
 
     @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> createOrder(
-            @RequestParam int accountID,
+            @RequestParam Integer accountID,
             @RequestParam String deliveryAddress,
             @RequestParam(required = false) String promotionCode,
             @RequestParam(required = false) Integer pointsToRedeem,
             @RequestParam String phoneNumber) {
 
         Order order = orderService.createOrder(accountID, deliveryAddress, promotionCode, pointsToRedeem, phoneNumber);
-
+        int orderID = order.getOrderID();
+        OrderHistory orderHistory = OrderHistoryService.createOrderHistoryByOrder(orderID, accountID);
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo đơn hàng thành công"));
     }
 
-    @GetMapping(value = "/{orderID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/get/{orderID}")
     public ResponseEntity<Order> getOrder(@PathVariable int orderID) {
         Order order = orderService.getOrder(orderID);
 
@@ -58,6 +61,16 @@ public class OrderController {
     @GetMapping(value = "/getAll", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getAllOrders() {
         return ResponseEntity.ok(orderService.getAllOrders());
+    }
+
+    //api lấy totalOrder của order
+    @GetMapping(value = "/totalOrder/{orderID}")
+    public ResponseEntity<?> getTotalOrder(@PathVariable Integer orderID) {
+        try {
+            return ResponseEntity.ok(orderService.getTotalOrder(orderID));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+        }
     }
 }
 

@@ -52,6 +52,9 @@ public class Cart {
     @Column(name = "price", nullable = false, precision = 8, scale = 2)
     private BigDecimal price;
 
+    @Column(name = "grossCartPrice", precision = 8, scale = 2)
+    private BigDecimal grossCartPrice;
+
     @ManyToOne
     @JoinColumn(name = "orderID", nullable = true)
     private Order order;
@@ -59,7 +62,9 @@ public class Cart {
     public Cart() {
     }
 
-    public Cart(Integer accountID, Integer cartID, String diamondID, String jewelryID, Order order, Integer quantity, BigDecimal totalPrice, Integer sizeJewelry, String diamondImage, String jewelryImage, String diamondName, String jewelryName, BigDecimal price) {
+    public Cart(Integer accountID, Integer cartID, String diamondID, String jewelryID, Order order, Integer quantity, 
+        BigDecimal totalPrice, Integer sizeJewelry, String diamondImage, String jewelryImage, String diamondName, 
+        String jewelryName, BigDecimal price, BigDecimal grossCartPrice) {
         this.accountID = accountID;
         this.cartID = cartID;
         this.diamondID = diamondID;
@@ -73,7 +78,15 @@ public class Cart {
         this.diamondName = diamondName;
         this.jewelryName = jewelryName;
         this.price = price;
+        this.grossCartPrice = grossCartPrice;
+    }
 
+    public BigDecimal getGrossCartPrice() {
+        return grossCartPrice;
+    }
+
+    public void setGrossCartPrice(BigDecimal grossCartPrice) {
+        this.grossCartPrice = grossCartPrice;
     }
 
     public Integer getsizeJewelry() {

@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -60,7 +58,7 @@ public class ProductionController {
 
         //filter theo giá
         if (minDiamondPrice != null || maxDiamondPrice != null) {
-            diamonds = diamondRepository.findByDiamondPriceBetween(minDiamondPrice, maxDiamondPrice);
+            diamonds = diamondRepository.findBydiamondEntryPriceBetween(minDiamondPrice, maxDiamondPrice);
         }
         if (minjewelryPrice != null || maxjewelryPrice != null) {
             jewelry = jewelryRepository.findByJewelryPriceBetween(minjewelryPrice, maxjewelryPrice);

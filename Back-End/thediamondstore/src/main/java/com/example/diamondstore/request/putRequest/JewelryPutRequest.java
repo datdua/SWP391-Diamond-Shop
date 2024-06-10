@@ -2,7 +2,6 @@ package com.example.diamondstore.request.putRequest;
 
 import java.math.BigDecimal;
 
-
 public class JewelryPutRequest {
 
     private String jewelryName;
@@ -11,7 +10,6 @@ public class JewelryPutRequest {
     private BigDecimal jewelryPrice;
 
     // Add your getters and setters here
-
     public JewelryPutRequest() {
     }
 
@@ -22,9 +20,7 @@ public class JewelryPutRequest {
         this.jewelryPrice = jewelryPrice;
     }
 
-    
     // getters and setters...
-
     public String getJewelryName() {
         return jewelryName;
     }
@@ -32,7 +28,6 @@ public class JewelryPutRequest {
     public void setJewelryName(String jewelryName) {
         this.jewelryName = jewelryName;
     }
-
 
     public String getGender() {
         return gender;
