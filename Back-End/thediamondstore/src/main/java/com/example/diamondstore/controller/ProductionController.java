@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,17 +51,17 @@ public class ProductionController {
             @RequestParam(required = false) String jewelryName,         
             @RequestParam(required = false) BigDecimal minDiamondPrice,
             @RequestParam(required = false) BigDecimal maxDiamondPrice,
-            @RequestParam(required = false) BigDecimal minjewelryPrice,
-            @RequestParam(required = false) BigDecimal maxjewelryPrice) {
+            @RequestParam(required = false) BigDecimal minjewelryEntryPrice,
+            @RequestParam(required = false) BigDecimal maxjewelryEntryPrice) {
         List<Diamond> diamonds = diamondRepository.findByDiamondNameLike("%" + diamondName + "%");
         List<Jewelry> jewelry = jewelryRepository.findByJewelryNameLike("%" + jewelryName + "%");
 
         //filter theo giá
         if (minDiamondPrice != null || maxDiamondPrice != null) {
-            diamonds = diamondRepository.findByDiamondPriceBetween(minDiamondPrice, maxDiamondPrice);
+            diamonds = diamondRepository.findBydiamondEntryPriceBetween(minDiamondPrice, maxDiamondPrice);
         }
-        if (minjewelryPrice != null || maxjewelryPrice != null) {
-            jewelry = jewelryRepository.findByJewelryPriceBetween(minjewelryPrice, maxjewelryPrice);
+        if (minjewelryEntryPrice != null || maxjewelryEntryPrice != null) {
+            jewelry = jewelryRepository.findByJewelryEntryPriceBetween(minjewelryEntryPrice, maxjewelryEntryPrice);
         }
 
         Map<String, Object> response = new HashMap<>();

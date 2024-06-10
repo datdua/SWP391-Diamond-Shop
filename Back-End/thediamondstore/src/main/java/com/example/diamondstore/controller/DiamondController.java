@@ -1,13 +1,9 @@
 package com.example.diamondstore.controller;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,84 +16,65 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.model.Diamond;
-import com.example.diamondstore.repository.DiamondRepository;
 import com.example.diamondstore.request.putRequest.DiamondPutRequest;
-import com.example.diamondstore.specification.DiamondSpecification;
+import com.example.diamondstore.service.DiamondService;
 
 @RestController
 @RequestMapping("/api/diamonds")
 public class DiamondController {
 
-    private final DiamondRepository diamondRepository;
+    private final DiamondService diamondService;
 
-    public DiamondController(DiamondRepository diamondRepository) {
-        this.diamondRepository = diamondRepository;
+    public DiamondController(DiamondService diamondService) {
+        this.diamondService = diamondService;
     }
 
     @GetMapping
-    public ResponseEntity<Iterable<Diamond>> getDiamonds() {
-        return ResponseEntity.ok(diamondRepository.findAll());
+    public ResponseEntity<List<Diamond>> getDiamonds() {
+        return ResponseEntity.ok(diamondService.getAllDiamonds());
     }
 
-    @GetMapping("/{diamondID}")
+    @GetMapping("/get/{diamondID}")
     public ResponseEntity<Diamond> getDiamond(@PathVariable String diamondID) {
-        Diamond diamond = diamondRepository.findByDiamondID(diamondID);
+        Diamond diamond = diamondService.getDiamondById(diamondID);
         if (diamond == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(diamond);
     }
 
-    @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
+    @PostMapping(value = "/create")
     public ResponseEntity<Map<String, String>> createDiamond(@RequestBody Diamond diamond) {
-        Diamond existingDiamond = diamondRepository.findByDiamondID(diamond.getDiamondID());
-        if (existingDiamond != null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Kim cương đã tồn tại"));
-        }
-        diamondRepository.save(diamond);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công"));
+        return diamondService.createDiamond(diamond);
     }
 
-    @PutMapping(value = "/update/{diamondID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> updateDiamond(@PathVariable String diamondID, @RequestBody DiamondPutRequest diamondPutRequest) {
-        Diamond existingDiamond = diamondRepository.findByDiamondID(diamondID);
-        if (existingDiamond == null) {
+    @PutMapping(value = "/update/{diamondID}")
+    public ResponseEntity<Map<String, String>> updateDiamond(@PathVariable String diamondID, @RequestBody DiamondPutRequest diamondPutRequest) {
+        Map<String, String> response = diamondService.updateDiamond(diamondID, diamondPutRequest);
+        if (response.containsKey("message") && response.get("message").equals("Không tìm thấy kim cương")) {
             return ResponseEntity.notFound().build();
         }
-        existingDiamond.setDiamondName(diamondPutRequest.getDiamondName());
-        existingDiamond.setDiamondPrice(diamondPutRequest.getDiamondPrice());
-        existingDiamond.setOrigin(diamondPutRequest.getOrigin());
-        existingDiamond.setCut(diamondPutRequest.getCut());
-        existingDiamond.setShape(diamondPutRequest.getShape());
-        existingDiamond.setColor(diamondPutRequest.getColor());
-        existingDiamond.setCarat_size(diamondPutRequest.getCarat_size());
-        existingDiamond.setCarat_weight(diamondPutRequest.getCarat_weight());
-        existingDiamond.setClarity(diamondPutRequest.getClarity());
-        diamondRepository.save(existingDiamond);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
+        return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping(value = "/delete/{diamondID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> deleteDiamond(@PathVariable String diamondID) {
-        Diamond existingDiamond = diamondRepository.findByDiamondID(diamondID);
-        if (existingDiamond == null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy kim cương"));
+    @DeleteMapping("/delete/{diamondID}")
+    public ResponseEntity<Map<String, String>> deleteDiamond(@PathVariable String diamondID) {
+        Map<String, String> response = diamondService.deleteDiamond(diamondID);
+        if (response.containsKey("message") && response.get("message").equals("Không tìm thấy kim cương")) {
+            return ResponseEntity.badRequest().body(response);
         }
-        diamondRepository.delete(existingDiamond);
-        return ResponseEntity.ok("Kim cương đã xóa thành công");
-
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/search")
+    @GetMapping("/searchByColor")
     public ResponseEntity<List<Diamond>> searchDiamonds(@RequestParam String color) {
-        List<Diamond> diamonds = diamondRepository.findByColor(color);
+        List<Diamond> diamonds = diamondService.searchDiamondsByColor(color);
         return ResponseEntity.ok(diamonds);
     }
 
-    @GetMapping("/paged")
+    @GetMapping("/paged/diamonds")
     public ResponseEntity<Page<Diamond>> getAllDiamondsPaged(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Diamond> pageDiamonds = diamondRepository.findAll(pageable);
+        Page<Diamond> pageDiamonds = diamondService.getAllDiamondsPaged(page, size);
         return ResponseEntity.ok(pageDiamonds);
     }
 
@@ -116,47 +93,10 @@ public class DiamondController {
             @RequestParam(required = false) String clarity,
             @RequestParam(required = false) String diamondNameLike) {
 
-        Specification<Diamond> spec = Specification.where(null);
-
-        if (minDiamondPrice != null) {
-            spec = spec.and(DiamondSpecification.hasMinDiamondPrice(minDiamondPrice));
-        }
-        if (maxDiamondPrice != null) {
-            spec = spec.and(DiamondSpecification.hasMaxDiamondPrice(maxDiamondPrice));
-        }
-        if (origin != null) {
-            spec = spec.and(DiamondSpecification.hasOrigin(origin));
-        }
-        if (cut != null) {
-            spec = spec.and(DiamondSpecification.hasCut(cut));
-        }
-        if (shape != null) {
-            spec = spec.and(DiamondSpecification.hasShape(shape));
-        }
-        if (color != null) {
-            spec = spec.and(DiamondSpecification.hasColor(color));
-        }
-        if (clarity != null) {
-            spec = spec.and(DiamondSpecification.hasClarity(clarity));
-        }
-        if (minCaratSize != null) {
-            spec = spec.and(DiamondSpecification.hasMinCaratSize(minCaratSize));
-        }
-        if (maxCaratSize != null) {
-            spec = spec.and(DiamondSpecification.hasMaxCaratSize(maxCaratSize));
-        }
-        if (minCaratWeight != null) {
-            spec = spec.and(DiamondSpecification.hasMinCaratWeight(minCaratWeight));
-        }
-        if (maxCaratWeight != null) {
-            spec = spec.and(DiamondSpecification.hasMaxCaratWeight(maxCaratWeight));
-        }
-        if (diamondNameLike != null) {
-            List<Diamond> diamonds = diamondRepository.findByDiamondNameLike("%" + diamondNameLike + "%");
-            return ResponseEntity.ok(diamonds);
-        }
-
-        List<Diamond> diamonds = diamondRepository.findAll(spec);
+        List<Diamond> diamonds = diamondService.searchDiamondsWithFilters(
+                minDiamondPrice, maxDiamondPrice, origin, cut, shape, color,
+                minCaratSize, maxCaratSize, minCaratWeight, maxCaratWeight, clarity, diamondNameLike);
+        
         return ResponseEntity.ok(diamonds);
     }
 }

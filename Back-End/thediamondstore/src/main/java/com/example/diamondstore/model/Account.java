@@ -38,6 +38,9 @@ public class Account {
     @Column(name = "email", nullable = false)
     private String email;
 
+    @Column(name = "addressAccount", nullable = false)
+    private String addressAccount;
+
     @JsonBackReference
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     @PrimaryKeyJoinColumn
@@ -46,7 +49,7 @@ public class Account {
     public Account() {
     }
 
-    public Account(Integer accountID, String accountName, String password, String role, String phoneNumber, String email) {
+    public Account(Integer accountID, String accountName, String password, String role, String phoneNumber, String email, String addressAccount) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(password);
 
@@ -56,6 +59,15 @@ public class Account {
         this.role = role;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.addressAccount = addressAccount;
+    }
+
+    public String getAddressAccount() {
+        return addressAccount;
+    }
+
+    public void setAddressAccount(String addressAccount) {
+        this.addressAccount = addressAccount;
     }
 
     public Integer getAccountID() {
