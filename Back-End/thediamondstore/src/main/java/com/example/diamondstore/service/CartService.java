@@ -147,7 +147,7 @@ public class CartService {
         List<Cart> cartItems = cartRepository.findByAccountIDAndOrderIsNull(accountID);
         BigDecimal totalCart = BigDecimal.ZERO;
         for (Cart cart : cartItems) {
-            totalCart = totalCart.add(cart.getTotalPrice());
+            totalCart = totalCart.add(cart.getGrossCartPrice());
         }
         return totalCart;
     }
