@@ -26,7 +26,7 @@ export async function searchJewelryByName(name) {
 export async function getJewelryById(jewelryId) {
   try {
     const response = await axios.get(
-      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/jewelry/${jewelryId}`
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/jewelry/get/${jewelryId}`
     );
     return response.data;
   } catch (error) {
