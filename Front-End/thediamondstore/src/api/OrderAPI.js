@@ -94,3 +94,25 @@ export async function createPayment(orderID) {
         throw error;
     }
 }
+export const handleVnpayReturn = async (params) => {
+    try {
+        const token = getAuthToken();
+        const response = await axios.get(`http://localhost:8080/api/payment/vnpay_return`, {
+            params: params,
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('VNPAY return request failed with status:', error.response.status);
+            console.error('Response data:', error.response.data);
+        } else if (error.request) {
+            console.error('No response received:', error.request);
+        } else {
+            console.error('Error setting up request:', error.message);
+        }
+        throw error;
+    }
+};

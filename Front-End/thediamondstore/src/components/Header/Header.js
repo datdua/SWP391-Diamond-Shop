@@ -13,7 +13,8 @@ function Header() {
     const [isAccountDropdownOpen, setAccountDropdownOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
-    const {accountId} = useParams();
+    const accountId = localStorage.getItem('accountID')
+    
 
     const toggleDropdown = () => {
         setAccountDropdownOpen(!isAccountDropdownOpen);

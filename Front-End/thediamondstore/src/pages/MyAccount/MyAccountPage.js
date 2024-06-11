@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import "./MyAccountPage.css";
-import { createPayment, fetchOrders } from "../../api/OrderAPI";
+import { createPayment, fetchOrders, handleVnpayReturn } from "../../api/OrderAPI"; // Assuming you have an API function for handling VNPay return
 import { AuthContext } from "../../components/Auth/AuthContext";
 
 function MyAccountPage() {
@@ -11,7 +11,7 @@ function MyAccountPage() {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const {accountId} = useParams();
+    const { accountId } = useParams();
 
     useEffect(() => {
         if (!accountId) {
@@ -36,7 +36,7 @@ function MyAccountPage() {
         getOrders();
     }, [accountId]);
 
-    function PaymentButton({ orderID }) {
+    const PaymentButton = ({ orderID }) => {
         const handlePayment = async () => {
             try {
                 const paymentUrl = await createPayment(orderID);
@@ -51,7 +51,40 @@ function MyAccountPage() {
                 Pay
             </button>
         );
-    }
+    };
+
+    // Function to handle VNPay return
+    const handleVnpayReturnHandler = async () => {
+        try {
+            // Assuming you capture the URL parameters here
+            const urlParams = new URLSearchParams(window.location.search);
+            const vnp_BankCode = urlParams.get('vnp_BankCode');
+            const vnp_BankTranNo = urlParams.get('vnp_BankTranNo');
+            const vnp_OrderInfo = urlParams.get('vnp_OrderInfo');
+            const vnp_ResponseCode = urlParams.get('vnp_ResponseCode');
+
+            // Construct the object to send to your backend API
+            const vnpReturnParams = {
+                vnp_BankCode,
+                vnp_BankTranNo,
+                vnp_OrderInfo,
+                vnp_ResponseCode
+            };
+
+            // Call your backend API to handle VNPay return
+            const response = await handleVnpayReturn(vnpReturnParams);
+
+            // Handle response as needed (e.g., update UI, show message)
+            console.log('VNPay return handled successfully:', response);
+        } catch (error) {
+            console.error('Failed to handle VNPay return:', error);
+        }
+    };
+
+    // Run handleVnpayReturnHandler when component mounts (to handle initial return)
+    useEffect(() => {
+        handleVnpayReturnHandler();
+    }, []);
 
     return (
         <div>
@@ -118,7 +151,7 @@ function MyAccountPage() {
                                                         orders.map(order => (
                                                             <tr key={order.orderID}>
                                                                 <td>{order.orderID}</td>
-                                                                <td>{order.orderDate}</td>
+                                                                <td>{order.deliveryDate}</td>
                                                                 <td>{order.orderStatus}</td>
                                                                 <td>{order.totalOrder !== undefined && order.totalOrder !== null ? order.totalOrder.toLocaleString() : 'N/A'}</td>
                                                                 <td><a href="#" className="tm-button tm-button-small">View</a></td>

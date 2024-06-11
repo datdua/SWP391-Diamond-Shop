@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 function HomePage() {
     const [value, setValue] = useState('Default value');
-
+    const token = localStorage.getItem('jwt')
     const handleChange = (event) => {
         setValue(event.target.value);
     };
@@ -35,6 +35,7 @@ function HomePage() {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
+    console.log('Token:', token)
     
     return (
         <div>

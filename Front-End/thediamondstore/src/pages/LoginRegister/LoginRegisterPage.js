@@ -37,11 +37,11 @@ function LoginRegisterPage() {
 
             if (response.status === 200) {
                 const data = response.data;
-                console.log("Đăng nhập thành công:", data.jwt);
                 localStorage.setItem("jwt", data.jwt);
                 localStorage.setItem("email", loginEmail);
                 localStorage.setItem("accountName", accountName);
                 localStorage.setItem("accountID", accountId);
+                console.log("Đăng nhập thành công:", data.jwt);
                 setIsLoggedIn(true);
                 toast.success("Đăng nhập thành công!");
                 navigate('/trangchu');
