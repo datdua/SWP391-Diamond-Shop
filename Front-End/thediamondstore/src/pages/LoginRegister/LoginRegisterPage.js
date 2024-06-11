@@ -26,7 +26,7 @@ function LoginRegisterPage() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/login",
+        "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/login",
         {
           email: loginEmail,
           password: loginPassword,
