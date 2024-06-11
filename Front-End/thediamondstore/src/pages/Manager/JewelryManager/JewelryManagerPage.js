@@ -16,17 +16,29 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { Pagination } from "@mui/material";
 import "../ProductManager.css";
+
 
 function JewelryManagerPage() {
   const [jewelryData, setJewelryData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedJewelry, setSelectedJewelry] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const size = 8;
+  const startIndex = (currentPage - 1) * size;
+  const endIndex = startIndex + size;
+  // Slice the array to get only the items for the current page
+  const currentPageData = jewelryData.slice(startIndex, endIndex);
 
   const handleClose = () => {
     setShowModal(false);
     setIsUpdating(false);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setCurrentPage(newPage);
   };
 
   const handleShowAdd = () => {
@@ -99,7 +111,7 @@ function JewelryManagerPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {jewelryData.map((jewelry, index) => (
+                    {currentPageData.map((jewelry, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td>{jewelry.jewelryID}</td>
@@ -144,6 +156,13 @@ function JewelryManagerPage() {
                 </Table>
               </div>
             </Card.Body>
+            <Card.Footer>
+              <Pagination
+                count={Math.ceil(jewelryData.length / size)}
+                page={currentPage}
+                onChange={handleChangePage}
+              />
+            </Card.Footer>
           </Card>
         </Col>
       </Row>

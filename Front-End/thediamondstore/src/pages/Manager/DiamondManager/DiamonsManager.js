@@ -20,6 +20,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import Pagination from "@mui/material/Pagination";
 import "../ProductManager.css";
 
 function DiamondManagerPage() {
@@ -31,10 +32,21 @@ function DiamondManagerPage() {
   const [showCertificateModal, setShowCertificateModal] = useState(false);
   const [warrantyImg, setWarrantyImg] = useState(null);
   const [showWarrantityModal, setShowWarrantityModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const size = 8;
+  const startIndex = (currentPage - 1) * size;
+  const endIndex = startIndex + size;
+
+  // Slice the array to get only the items for the current page
+  const currentPageData = diamondData.slice(startIndex, endIndex);
 
   const handleClose = () => {
     setShowModal(false);
     setIsUpdating(false);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setCurrentPage(newPage);
   };
 
   const handleShowAdd = () => {
@@ -147,7 +159,7 @@ function DiamondManagerPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {diamondData.map((diamond, index) => (
+                    {currentPageData.map((diamond, index) => (
                       <tr key={index}>
                         <td>{index + 1}</td>
                         <td>{diamond.diamondID}</td>
@@ -218,6 +230,13 @@ function DiamondManagerPage() {
                 </Table>
               </div>
             </Card.Body>
+            <Card.Footer>
+              <Pagination
+                count={Math.ceil(diamondData.length / size)}
+                page={currentPage}
+                onChange={handleChangePage}
+              />
+            </Card.Footer>
           </Card>
         </Col>
       </Row>
