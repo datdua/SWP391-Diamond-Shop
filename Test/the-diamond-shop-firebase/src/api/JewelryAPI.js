@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function getAllJewelry() {
   const response = await axios.get(
-    "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io//api/jewelry"
+    "http://localhost:8080//api/jewelry"
   );
   if (!response.ok) {
     throw new Error("Failed to fetch jewelry data");
@@ -12,7 +12,7 @@ export async function getAllJewelry() {
 }
 export async function searchJewelryByName(name) {
   const response = await axios.get(
-    `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io//api/jewelry/searchName?name=${name}`
+    `http://localhost:8080//api/jewelry/searchName?name=${name}`
   );
   if (!response.ok) {
     throw new Error("Failed to search jewelry by name");
@@ -23,7 +23,7 @@ export async function searchJewelryByName(name) {
 export async function getJewelryById(jewelryId) {
   try {
     const response = await axios.get(
-      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io//api/jewelry/${jewelryId}`
+      `http://localhost:8080//api/jewelry/${jewelryId}`
     );
     return response.data;
   } catch (error) {
@@ -33,7 +33,7 @@ export async function getJewelryById(jewelryId) {
 export async function getPage(page = 1, size = 9) {
   try {
     const response = await axios.get(
-      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io//api/jewelry/paged?page=${page}&size=${size}`
+      `http://localhost:8080//api/jewelry/paged?page=${page}&size=${size}`
     );
     return response.data;
   } catch (error) {
@@ -43,7 +43,7 @@ export async function getPage(page = 1, size = 9) {
 export async function searchJewelryByGender(gender) {
   try {
     const response = await axios.get(
-      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io//api/jewelry/search/filter?gender=%20${encodeURIComponent(
+      `http://localhost:8080//api/jewelry/search/filter?gender=%20${encodeURIComponent(
         gender
       )}`
     );
@@ -55,7 +55,7 @@ export async function searchJewelryByGender(gender) {
 export async function searchJewelryBySize(size) {
   try {
     const response = await axios.get(
-      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io//api/jewelry/search/filter?size=${encodeURIComponent(
+      `http://localhost:8080//api/jewelry/search/filter?size=${encodeURIComponent(
         size
       )}`
     );

@@ -5,9 +5,6 @@ import { NavLink } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./LoginRegisterPage.css";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
-import BackToTop from "../../components/BackToTop";
 
 function LoginRegisterPage() {
     const [loginEmail, setLoginEmail] = useState("");
@@ -75,7 +72,7 @@ function LoginRegisterPage() {
 
     try {
       const response = await axios.post(
-        "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/accounts/register",
+        "http://localhost:8080/api/accounts/register",
         {
           accountName: registerName,
           email: registerEmail,
@@ -106,7 +103,6 @@ function LoginRegisterPage() {
 
   return (
     <div>
-      <Header/>
       <div id="wrapper" className="wrapper">
         <div
           className="tm-breadcrumb-area tm-padding-section bg-grey"
@@ -277,8 +273,6 @@ function LoginRegisterPage() {
           </div>
         </main>
       </div>
-      <BackToTop/>
-      <Footer/>
     </div>
   );
 }

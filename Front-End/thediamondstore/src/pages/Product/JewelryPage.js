@@ -197,6 +197,7 @@ function JewelryPage() {
                       <option value="trending">Trending</option>
                     </select>
                   </form>
+
                                     <div className="tm-shop-products">
                                         <div className="row mt-30-reverse">
                                             {loading ? (
