@@ -88,7 +88,7 @@ public class PaymentController {
         String vnp_CreateDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
 
-        cld.add(Calendar.MINUTE, 15);
+        cld.add(Calendar.HOUR, 24);
         String vnp_ExpireDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
@@ -133,7 +133,7 @@ public class PaymentController {
             @RequestParam(value = "vnp_BankCode") String bankCode,
             @RequestParam(value = "vnp_OrderInfo") Integer orderID,
             @RequestParam(value = "vnp_ResponseCode") String responseCode,
-            @RequestParam(value = "vnp_BankTranNo") Integer transactionNo
+            @RequestParam(value = "vnp_TransactionNo") Integer transactionNo
     ) {
         Order order = orderRepository.findByOrderID(orderID);
         OrderHistory orderHistory = orderhistoryRepository.findByOrderID(orderID);

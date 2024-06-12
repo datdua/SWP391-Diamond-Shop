@@ -48,6 +48,7 @@ function SideBarAdmin() {
           <NavLink
             to="https://sandbox.vnpayment.vn/merchantv2/Users/Login.htm"
             className="sidebar-nav-item"
+            activeClassName="active"
           >
             <CIcon customClassName="nav-icon" icon={cilBank} />
             Quản Lý Giao Dịch
@@ -107,7 +108,9 @@ function SideBarAdmin() {
           </CNavGroup>
         </CSidebarNav>
         <CSidebarHeader className="border-top">
-          <CSidebarToggler />
+          <NavLink to="/" className="sidebar-nav-item" activeClassName="active">
+            <CSidebarToggler style={{marginRight: "10px"}}/> LOG OUT
+          </NavLink>
         </CSidebarHeader>
       </CSidebar>
       <div

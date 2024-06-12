@@ -54,13 +54,14 @@ function LoginRegisterPage() {
         // Navigate based on role
         if (jwtDecode(data.jwt).role === "ROLE_ADMIN") {
           // Sử dụng role từ JWT token
-          navigate("/admin");
+          navigate("/admin/profile");
         } else {
           navigate("/trangchu");
+          window.location.reload();
+          window.scrollTo(0, 0);
         }
 
-        window.location.reload();
-        window.scrollTo(0, 0);
+        
       } else {
         console.error("Đăng nhập thất bại:", response);
         toast.error("Đăng nhập thất bại!");
