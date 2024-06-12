@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./Header.css";
 import NavDropdown from 'react-bootstrap/NavDropdown';
@@ -13,7 +13,8 @@ function Header() {
     const [isAccountDropdownOpen, setAccountDropdownOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
-    const accountId = localStorage.getItem('accountID')
+    const { id } = useParams();
+    localStorage.setItem("accountID", id);
     
 
     const toggleDropdown = () => {
@@ -65,8 +66,8 @@ function Header() {
                                             </button>
                                             {isAccountDropdownOpen && (
                                                 <ul className="tm-dropdown-menu">
-                                                    <li><Link to={`/account/${accountId}`}>My Account</Link></li>
-                                                    <li><Link to={`/cart/${accountId}`}>Shopping Cart</Link></li>
+                                                    <li><Link to={`/account/${id}`}>My Account</Link></li>
+                                                    <li><Link to={`/cart/${id}`}>Shopping Cart</Link></li>
                                                     <li><Link to="/wishlist">Wishlist</Link></li>
                                                     <li><Link to="/checkout">Checkout</Link></li>
                                                 </ul>

@@ -10,13 +10,13 @@ function CartPage() {
     const [cartItems, setCartItems] = useState([]);
     const [totalCart, setTotalCart] = useState(0);
     const { accountId } = useParams();
-
+    
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
                 if (accountId) {
                     const items = await getAllCartItems(accountId);
-                    setCartItems(items);
+                    setCartItems(Array.isArray(items) ? items : []);
                 } else {
                     console.error("Account ID is undefined");
                 }
@@ -41,7 +41,6 @@ function CartPage() {
         fetchCartItems();
         fetchTotalCart();
     }, [accountId]);
-
     const handleRemoveItem = async (cartID) => {
         try {
             await removeCartItem(cartID);
@@ -64,7 +63,7 @@ function CartPage() {
                 <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(assets/images/breadcrumb-bg.jpg)` }}>
                     <div className="container">
                         <div className="tm-breadcrumb">
-                            <h2>Shopping Cart</h2>
+                            <h2>Giỏ hàng</h2>
                             <ul>
                                 <li><Link to="/home">Home</Link></li>
                                 <li><Link to="/product">Shop</Link></li>
@@ -80,12 +79,12 @@ function CartPage() {
                                 <table className="table table-bordered mb-0">
                                     <thead>
                                         <tr>
-                                            <th className="tm-cart-col-image" scope="col">Image</th>
-                                            <th className="tm-cart-col-productname" scope="col">Product</th>
-                                            <th className="tm-cart-col-price" scope="col">Price</th>
-                                            <th className="tm-cart-col-quantity" scope="col">Quantity</th>
-                                            <th className="tm-cart-col-total" scope="col">Total</th>
-                                            <th className="tm-cart-col-remove" scope="col">Remove</th>
+                                            <th className="tm-cart-col-image" scope="col">Hình ảnh</th>
+                                            <th className="tm-cart-col-productname" scope="col">Sản phẩm</th>
+                                            <th className="tm-cart-col-price" scope="col">Giá</th>
+                                            <th className="tm-cart-col-quantity" scope="col">Số lượng</th>
+                                            <th className="tm-cart-col-total" scope="col">Tổng</th>
+                                            <th className="tm-cart-col-remove" scope="col">Hành Động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -136,24 +135,24 @@ function CartPage() {
                                 <div className="row">
                                     <div className="col-lg-8 col-md-6">
                                         <div className="tm-buttongroup">
-                                            <a href="/sanpham" className="tm-button">Continue Shopping</a>
-                                            <a href="#" className="tm-button">Update Cart</a>
+                                            <a href="/sanpham" className="tm-button">Tiếp tục mua sắm</a>
+                                            <a href="#" className="tm-button">Cập nhật giỏ hàng</a>
                                         </div>
                                     </div>
                                     <div className="col-lg-4 col-md-6">
                                         <div className="tm-cart-pricebox">
-                                            <h2>Cart Totals</h2>
+                                            <h2>Thanh toán giỏ hàng</h2>
                                             <div className="table-responsive">
                                                 <table className="table table-borderless">
                                                     <tbody>
                                                         <tr className="tm-cart-pricebox-total">
-                                                            <td>Total</td>
+                                                            <td>Tổng tiền</td>
                                                             <td>{totalCart ? totalCart.toLocaleString() : 0} VND</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <Link to={`/checkout/${accountId}`} className="tm-button">Proceed To Checkout</Link>
+                                            <Link to={`/checkout/${accountId}`} className="tm-button">Tiến hành tạo đơn hàng</Link>
                                         </div>
                                     </div>
                                 </div>

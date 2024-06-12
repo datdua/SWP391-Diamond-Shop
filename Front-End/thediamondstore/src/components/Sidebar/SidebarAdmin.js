@@ -16,7 +16,7 @@ import "../../components/Sidebar/SidebarAdmin.css";
 
 function SideBarAdmin() {
   return (
-    <div style={{ display: "flex" }}>
+    <div className="sidebar-admin" style={{ display: "flex" }}>
       <CSidebar className="sidebar-full-height border-end" colorScheme="dark">
         <CSidebarHeader className="border-bottom">
           <img

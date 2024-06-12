@@ -116,3 +116,14 @@ export const handleVnpayReturn = async (params) => {
         throw error;
     }
 };
+export const getPromotion = async (promotionCode) => {
+    try {
+        const response = await axios.get(`http://localhost:8080/api/promotion/{promotionCode}?${promotionCode}`, {
+            params: { promotionCode }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching promotion:', error);
+        throw error;
+    }
+};

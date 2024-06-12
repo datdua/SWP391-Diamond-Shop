@@ -85,31 +85,29 @@ function JewelryPage() {
     setLoading(true);
     try {
       let filtersToUse = { ...filters, page: 1 }; // Always start from page 1 when searching
-
-      // Remove 'All' gender filter if present
-      if (filtersToUse.gender === "All") {
-        delete filtersToUse.gender;
-      }
-
-      // Convert price filters to numbers
+  
+      // Convert price filters to numbers if they exist
       if (filtersToUse.minjewelryEntryPrice !== undefined) {
         filtersToUse.minjewelryEntryPrice = parseInt(
           filtersToUse.minjewelryEntryPrice
         );
-        delete filtersToUse.minJewelryPrice;
       }
-
+  
       if (filtersToUse.maxjewelryEntryPrice !== undefined) {
         filtersToUse.maxjewelryEntryPrice = parseInt(
           filtersToUse.maxjewelryEntryPrice
         );
-        delete filtersToUse.maxJewelryPrice;
       }
-
+  
+      // Remove 'All' gender filter if present
+      if (filtersToUse.gender === "All") {
+        delete filtersToUse.gender;
+      }
+  
       const data = await searchJewelry(filtersToUse);
       const totalPages = Math.ceil(data.length / resultsPerPage);
       setTotalPages(totalPages);
-
+  
       // Slice the results based on the current page
       const results = data.slice(
         (currentPage - 1) * resultsPerPage,
@@ -122,6 +120,7 @@ function JewelryPage() {
       setLoading(false);
     }
   };
+  
 
   const handlePageChange = async (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -146,7 +145,7 @@ function JewelryPage() {
   useEffect(() => {
     const checkLoginStatus = () => {
       const jwt = localStorage.getItem("jwt");
-      setIsLoggedIn(!!jwt); // Simplified way to set isLoggedIn based on jwt presence
+      setIsLoggedIn(!!jwt); 
     };
     checkLoginStatus();
   }, []);
@@ -198,7 +197,6 @@ function JewelryPage() {
                       <option value="trending">Trending</option>
                     </select>
                   </form>
-
                                     <div className="tm-shop-products">
                                         <div className="row mt-30-reverse">
                                             {loading ? (

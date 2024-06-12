@@ -66,5 +66,14 @@ export async function createAccount(account) {
     throw new Error("Failed to create account");
   }
 }
+export const getContactInfo = async (accountId) => {
+  try {
+      const response = await axios.get(`http://localhost:8080/api/accounts/contactInfo/${accountId}`);
+      return response.data;
+  } catch (error) {
+      console.error('Error fetching contact info:', error);
+      throw error;
+  }
+};
 
 

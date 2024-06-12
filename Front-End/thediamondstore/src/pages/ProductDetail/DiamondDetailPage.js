@@ -102,7 +102,7 @@ function DiamondDetailPage() {
                                                         <h4 className="tm-prodetails-title">{diamond.diamondName}</h4>
                                                         <span className="tm-prodetails-price">{diamond.diamondEntryPrice.toLocaleString()} VND</span>
                                                         <div className="tm-prodetails-infos">
-                                                            <div className="tm-prodetails-singleinfo">
+                                                            <div className="tm-prodetails-singleinfo" >
                                                                 <b>Carat Size : </b>
                                                                 {diamond.carat_size}
                                                             </div>
@@ -118,18 +118,18 @@ function DiamondDetailPage() {
                                                                 <b>Clarity : </b>
                                                                 {diamond.clarity}
                                                             <div/>
-                                                                <div className="tm-prodetails-singleinfo">
+                                                            <div className="tm-prodetails-singleinfo">
                                                                     <b>Cut : </b>
                                                                     {diamond.cut}
-                                                                </div>
-                                                                <div className="tm-prodetails-singleinfo">
+                                                            </div>
+                                                            <div className="tm-prodetails-singleinfo">
                                                                     <b>Shape : </b>
                                                                     {diamond.shape}
-                                                                </div>
-                                                                <div className="tm-prodetails-singleinfo">
+                                                            </div>
+                                                            <div className="tm-prodetails-singleinfo">
                                                                     <b>Origin : </b>
-                                                                    {diamond.origin}
-                                                                </div>
+                                                            {diamond.origin}
+                                                            </div>
                                                             </div>
                                                             <div className="tm-prodetails-quantitycart">
                                                                 <h6>Quantity :</h6>

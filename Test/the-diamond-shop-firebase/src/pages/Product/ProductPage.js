@@ -45,7 +45,7 @@ function ProductPage() {
       // If a product name is provided in the search query, fetch only the products with that name
       axios
         .get(
-          `http://localhost:8080/api/jewelry/searchName?name=${encodeURIComponent(
+          `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io//api/jewelry/searchName?name=${encodeURIComponent(
             productName
           )}`
         )
@@ -60,7 +60,9 @@ function ProductPage() {
     } else {
       // Fetch all products if no specific product name is provided in the search query
       axios
-        .get("http://localhost:8080/api/jewelry")
+        .get(
+          "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io//api/jewelry"
+        )
         .then((response) => {
           setJewelry(response.data);
           setLoading(false);
@@ -95,7 +97,7 @@ function ProductPage() {
     // Call API with filtered price range
     axios
       .get(
-        `http://localhost:8080/api/jewelry/search/filter?maxjewelryEntryPrice=${maxPrice}&minjewelryEntryPrice=${minPrice}`
+        `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io//api/jewelry/search/filter?maxjewelryEntryPrice=${maxPrice}&minjewelryEntryPrice=${minPrice}`
       )
       .then((response) => {
         setJewelry(response.data);
@@ -127,7 +129,9 @@ function ProductPage() {
   const handleGenderFilter = (gender) => {
     setLoading(true); // Set loading state while fetching data
     axios
-      .get(`http://localhost:8080/api/jewelry/search/filter?gender=${gender}`)
+      .get(
+        `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io//api/jewelry/search/filter?gender=${gender}`
+      )
       .then((response) => {
         setJewelry(response.data);
         setLoading(false); // Set loading state to false after data is fetched
@@ -141,7 +145,9 @@ function ProductPage() {
     if (size) {
       setLoading(true);
       axios
-        .get(`http://localhost:8080/api/jewelry/search/filter?size=${size}`)
+        .get(
+          `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io//api/jewelry/search/filter?size=${size}`
+        )
         .then((response) => {
           setJewelry(response.data);
           setLoading(false);

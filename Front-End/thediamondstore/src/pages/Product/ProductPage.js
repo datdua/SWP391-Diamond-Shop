@@ -49,7 +49,7 @@ function ProductPage() {
           id: item.jewelryID || item.diamondID,
           name: item.jewelryName || item.diamondName,
           imageUrl: item.jewelryImage || item.diamondImage,
-          price: item.jewelryEntryPrice || item.diamondPrice,
+          price: item.jewelryEntryPrice || item.diamondEntryPrice,
           type: item.jewelryID ? "jewelry" : "diamond",
         }));
 

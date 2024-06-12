@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getAllCartItems, getTotalCart } from "../../api/addToCart";
 import "./CheckoutPage.css";
-import { createOrder } from "../../api/OrderAPI";
+import { createOrder, getPromotion } from "../../api/OrderAPI";
 import { toast } from "react-toastify";
+import { getContactInfo } from "../../api/accountCrud";
 
 function CheckoutPage() {
     const [cartItems, setCartItems] = useState([]);
@@ -12,16 +13,17 @@ function CheckoutPage() {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [pointsToRedeem, setPointsToRedeem] = useState(0);
     const [promotionCode, setPromotionCode] = useState("");
+    const [promotionDescription, setPromotionDescription] = useState("");
+    const [discountAmount, setDiscountAmount] = useState(0);
     const { accountId } = useParams(); // Extract accountId from useParams
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCartItems = async () => {
             try {
-                
                 if (accountId) {
                     const items = await getAllCartItems(accountId);
-                    setCartItems(items);
+                    setCartItems(Array.isArray(items) ? items : []);
                 } else {
                     console.error("Account ID is undefined");
                 }
@@ -50,10 +52,45 @@ function CheckoutPage() {
     useEffect(() => {
         calculatePointsToRedeem();
     }, [totalCart]);
-    
+
     const calculatePointsToRedeem = () => {
         const points = Math.floor(totalCart / 100000); // Assuming 1 point = 100,000 VND
         setPointsToRedeem(points);
+    };
+
+    useEffect(() => {
+        const fetchContactInfo = async () => {
+            try {
+                if (accountId) {
+                    const contactInfo = await getContactInfo(accountId);
+                    setPhoneNumber(contactInfo.phoneNumber);
+                    setDeliveryAddress(contactInfo.addressAccount || '');
+                } else {
+                    console.error("Account ID is undefined");
+                }
+            } catch (error) {
+                console.error("Error fetching contact info:", error);
+            }
+        };
+
+        fetchContactInfo();
+    }, [accountId]);
+
+    const handleApplyPromotion = async (e) => {
+        e.preventDefault();
+        try {
+            const promotion = await getPromotion(promotionCode);
+            if (promotion) {
+                setPromotionDescription(promotion.description);
+                const discount = totalCart * promotion.discountAmount; // Calculate discount based on totalCart * discountAmount
+                setDiscountAmount(discount);
+                toast.success("Promotion applied successfully");
+            } else {
+                toast.error("Invalid promotion code");
+            }
+        } catch (error) {
+            toast.error("Failed to apply promotion");
+        }
     };
 
     const handlePlaceOrder = async () => {
@@ -70,6 +107,9 @@ function CheckoutPage() {
             toast.error("Failed to place order");
         }
     };
+
+    // Calculate final total including discounts
+    const finalTotal = totalCart - discountAmount;
 
     return (
         <div>
@@ -94,39 +134,40 @@ function CheckoutPage() {
                     {/* Checkout Area */}
                     <div className="tm-section tm-checkout-area bg-white tm-padding-section">
                         <div className="container">
-                            <form action="#" className="tm-form tm-checkout-form">
+                            <form action="#" className="tm-form tm-checkout-form" onSubmit={handleApplyPromotion}>
                                 <div className="row">
                                     <div className="col-lg-6">
-                                        <h4 className="small-title">BILLING INFORMATION</h4>
+                                        <h4 className="small-title">THÔNG TIN HOÁ ĐƠN</h4>
                                         {/* Billing Form */}
                                         <div className="tm-checkout-billingform">
                                             <div className="tm-form-inner">
                                                 <div className="tm-form-field">
-                                                    <label htmlFor="billingform-phone">Phone </label>
+                                                    <label htmlFor="billingform-phone">Số điện thoại </label>
                                                     <input type="text" id="billingform-phone" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
                                                 </div>
                                                 <div className="tm-form-field">
-                                                    <label htmlFor="billingform-address">Address</label>
+                                                    <label htmlFor="billingform-address">Địa chỉ</label>
                                                     <input type="text" id="billingform-address" value={deliveryAddress} onChange={(e) => setDeliveryAddress(e.target.value)} placeholder="Apartment, Street Address" />
                                                 </div>
                                             </div>
                                             <div className="tm-cart-coupon">
-                                                <label htmlFor="coupon-field">Have a coupon code?</label>
+                                                <label htmlFor="coupon-field">Có mã giảm giá?</label>
                                                 <input type="text" id="coupon-field" value={promotionCode} onChange={(e) => setPromotionCode(e.target.value)} placeholder="Enter coupon code" required />
-                                                <button type="submit" className="tm-button">Submit</button>
+                                                <button type="submit" className="tm-button">Áp dụng</button>
+
                                             </div>
                                         </div>
                                         {/* Different Address Form */}
                                     </div>
                                     <div className="col-lg-6">
                                         <div className="tm-checkout-orderinfo">
-                                            <h4 className="small-title">ORDER INFORMATION</h4>
+                                            <h4 className="small-title">THÔNG TIN ĐƠN HÀNG</h4>
                                             <div className="table-responsive">
                                                 <table className="table table-borderless tm-checkout-ordertable">
                                                     <thead>
                                                         <tr>
-                                                            <th>Product</th>
-                                                            <th>Total</th>
+                                                            <th>Sản phẩm</th>
+                                                            <th>Tổng</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -143,14 +184,29 @@ function CheckoutPage() {
                                                                 <td>{item.totalPrice.toLocaleString()} VND</td>
                                                             </tr>
                                                         ))}
+                                                        {promotionDescription && (
+                                                            <tr>
+                                                                <td colSpan="2">
+                                                                    <p className="promotion-description">{promotionDescription}</p>
+                                                                </td>
+                                                            </tr>
+                                                        )}
                                                     </tbody>
                                                     <tfoot>
-                                                        <tr className="tm-checkout-total">
-                                                            <td>Total</td>
-                                                            <td>{totalCart ? totalCart.toLocaleString() : 0} VND</td>
+                                                        <tr className="tm-checkout-totals">
+                                                            <td>Tổng</td>
+                                                            <td>{totalCart.toLocaleString()} VND</td>
+                                                        </tr>
+                                                        <tr className="tm-checkout-discount">
+                                                            <td>Giảm giá</td>
+                                                            <td>- {discountAmount.toLocaleString()} VND</td>
+                                                        </tr>
+                                                        <tr className="tm-checkout-final-total highlight"> {/* Add a CSS class to highlight the final total */}
+                                                            <td>TỔNG TIỀN THANH TOÁN</td>
+                                                            <td>{finalTotal.toLocaleString()} VND</td>
                                                         </tr>
                                                         <tr className="tm-checkout-points">
-                                                            <td>Points to Redeem</td>
+                                                            <td>Điểm tích luỹ</td>
                                                             <td>{pointsToRedeem}</td>
                                                         </tr>
                                                     </tfoot>
@@ -165,17 +221,14 @@ function CheckoutPage() {
                                                 </div>
                                             </div>
                                             <div className="tm-checkout-submit">
-                                                <p>Your personal data will be used to process your order, support your
-                                                    experience throughout this website, and for other purposes described in our
-                                                    privacy policy.</p>
+                                                <p>Dữ liệu cá nhân của bạn sẽ được sử dụng để xử lý đơn hàng của bạn, hỗ trợ trải nghiệm của bạn trên toàn bộ trang web này, và cho các mục đích khác được mô tả trong chính sách bảo mật của chúng tôi.</p>
                                                 <div className="tm-form-inner">
                                                     <div className="tm-form-field">
                                                         <input type="checkbox" name="checkout-read-terms" id="checkout-read-terms" />
-                                                        <label htmlFor="checkout-read-terms">I have read and agree to the website
-                                                            terms and conditions</label>
+                                                        <label htmlFor="checkout-read-terms">Tôi đã đọc và đồng ý với các chính sách và điều kiện của cửa hàng</label>
                                                     </div>
                                                     <div className="tm-form-field">
-                                                        <button type="button" className="tm-button tm-button-block" onClick={handlePlaceOrder}>Place Order</button>
+                                                        <button type="button" className="tm-button tm-button-block" onClick={handlePlaceOrder}>Đặt hàng</button>
                                                     </div>
                                                 </div>
                                             </div>
