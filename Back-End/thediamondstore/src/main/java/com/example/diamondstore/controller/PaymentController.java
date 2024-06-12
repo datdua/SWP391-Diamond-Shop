@@ -145,27 +145,14 @@ public class PaymentController {
             // Update order status
             order.setOrderStatus("Đã thanh toán");
             orderRepository.save(order);
-            // Update order history status
-            orderHistory.setOrderhistoryStatus("Đã thanh toán");
-            orderHistory.setTransactionNo(transactionNo);
-            orderhistoryRepository.save(orderHistory);
         } else {
-            if (transactionStatusDTO != null) {
-                transactionStatusDTO.setStatus("No");
-                transactionStatusDTO.setMessage("Thanh toán thất bại");
-                transactionStatusDTO.setData("");
-            }
+            transactionStatusDTO.setStatus("No");
+            transactionStatusDTO.setMessage("Thanh toán thất bại");
+            transactionStatusDTO.setData("");
+            // Update order status
+            order.setOrderStatus("Thanh toán thất bại");
+            orderRepository.save(order);
             
-            if (order != null && orderRepository != null) {
-                order.setOrderStatus("Thanh toán thất bại");
-                orderRepository.save(order);
-            }
-            
-            if (orderHistory != null && orderhistoryRepository != null) {
-                orderHistory.setOrderhistoryStatus("Thanh toán thất bại");
-                orderHistory.setTransactionNo(transactionNo);
-                orderhistoryRepository.save(orderHistory);
-            }
         }
         return ResponseEntity.status(HttpStatus.OK).body(transactionStatusDTO);
     }
