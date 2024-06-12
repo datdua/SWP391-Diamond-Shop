@@ -11,7 +11,6 @@
  * %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  */
 
-
 /*
 =>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>
     TABLE OF CONTENTS
@@ -60,47 +59,45 @@
 =>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>=>
 */
 
+@import "variables";
+@import "mixins";
 
+@import "basic/reset";
+@import "basic/animations";
+@import "basic/typography";
+@import "basic/utilities";
 
-@import 'variables';
-@import 'mixins';
+@import "elements/button";
+@import "elements/titles";
+@import "elements/feature";
+@import "elements/form";
+@import "elements/selectbox";
+@import "elements/tab";
+@import "elements/pagination";
+@import "elements/banner";
 
-@import 'basic/reset';
-@import 'basic/animations';
-@import 'basic/typography';
-@import 'basic/utilities';
+@import "sections/header";
+@import "sections/nav";
+@import "sections/heroslider";
+@import "sections/about";
+@import "sections/service";
+@import "sections/product";
+@import "sections/offer";
+@import "sections/instagram";
+@import "sections/newsletter";
+@import "sections/team";
+@import "sections/portfolio";
+@import "sections/blog";
+@import "sections/contact";
+@import "sections/brandlogo";
+@import "sections/shop";
+@import "sections/breadcrumb";
+@import "sections/widgets";
+@import "sections/comment";
+@import "sections/footer";
+@import "sections/overrides.scss";
 
-@import 'elements/button';
-@import 'elements/titles';
-@import 'elements/feature';
-@import 'elements/form';
-@import 'elements/selectbox';
-@import 'elements/tab';
-@import 'elements/pagination';
-@import 'elements/banner';
-
-@import 'sections/header';
-@import 'sections/nav';
-@import 'sections/heroslider';
-@import 'sections/about';
-@import 'sections/service';
-@import 'sections/product';
-@import 'sections/offer';
-@import 'sections/instagram';
-@import 'sections/newsletter';
-@import 'sections/team';
-@import 'sections/portfolio';
-@import 'sections/blog';
-@import 'sections/contact';
-@import 'sections/brandlogo';
-@import 'sections/shop';
-@import 'sections/breadcrumb';
-@import 'sections/widgets';
-@import 'sections/comment';
-@import 'sections/footer';
-
-
-@import 'pages/product-details';
-@import 'pages/cart';
-@import 'pages/checkout';
-@import 'pages/account';
+@import "pages/product-details";
+@import "pages/cart";
+@import "pages/checkout";
+@import "pages/account";
