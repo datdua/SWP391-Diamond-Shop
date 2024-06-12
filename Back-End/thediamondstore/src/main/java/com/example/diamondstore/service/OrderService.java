@@ -175,5 +175,14 @@ public class OrderService {
         return order.gettotalOrder();
     }
 
+    public String deleteOrder(int orderID) {
+        Order order = orderRepository.findByOrderID(orderID);
+        if (order == null) {
+            throw new IllegalArgumentException("Không tìm thấy Order");
+        }
+        orderRepository.delete(order);
+        return "Xóa Order thành công";
+    }
+
     
 }

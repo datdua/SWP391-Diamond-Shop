@@ -105,4 +105,28 @@ public class JewelryService {
         Specification<Jewelry> spec = JewelrySpecification.hasNameLike(name);
         return jewelryRepository.findAll(spec);
     }
+
+    public Page<Jewelry> searchJewelryWithFilters(
+            String jewelryName,
+            Float minjewelryEntryPrice,
+            Float maxjewelryEntryPrice,
+            String gender,
+            int page,
+            int size) {
+
+        Specification<Jewelry> spec = Specification.where(null);
+
+        if (jewelryName != null) {
+            spec = spec.and(JewelrySpecification.hasJewelryNameIgnoreCase(jewelryName));
+        }
+        if (minjewelryEntryPrice != null || maxjewelryEntryPrice != null) {
+            spec = spec.and(JewelrySpecification.hasPriceBetween(minjewelryEntryPrice, maxjewelryEntryPrice));
+        }
+        if (gender != null) {
+            spec = spec.and(JewelrySpecification.hasGender(gender));
+        }
+
+        Pageable pageable = PageRequest.of(page - 1, size);
+        return jewelryRepository.findAll(spec, pageable);
+    }
 }
