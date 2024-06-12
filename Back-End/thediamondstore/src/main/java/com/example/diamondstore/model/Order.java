@@ -58,20 +58,20 @@ public class Order {
     @Column(name = "warrantyImage")
     private String warrantyImage;
 
-    @ManyToOne
-    @JoinColumn(name = "promotionCode", referencedColumnName = "promotionCode", nullable = true)
-    private Promotion promotion;
+    @Column(name = "promotionCode")
+    private String promotionCode; // Chỉ lưu trữ promotionCode dưới dạng chuỗi
 
     @JsonIgnore
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Cart> cartItems;
 
+    // Constructors, getters, and setters
     public Order() {
     }
 
     public Order(Integer orderID, Account account, LocalDateTime startorderDate, String orderStatus, LocalDateTime deliveryDate,
-            BigDecimal totalOrder, String deliveryAddress, String phoneNumber, String certificateImage, String warrantyImage,
-            Promotion promotion, List<Cart> cartItems) {
+                 BigDecimal totalOrder, String deliveryAddress, String phoneNumber, String certificateImage, String warrantyImage,
+                 String promotionCode, List<Cart> cartItems) {
         this.orderID = orderID;
         this.account = account;
         this.startorderDate = startorderDate;
@@ -82,7 +82,7 @@ public class Order {
         this.phoneNumber = phoneNumber;
         this.certificateImage = certificateImage;
         this.warrantyImage = warrantyImage;
-        this.promotion = promotion;
+        this.promotionCode = promotionCode;
         this.cartItems = cartItems;
     }
 
@@ -166,12 +166,12 @@ public class Order {
         this.warrantyImage = warrantyImage;
     }
 
-    public Promotion getPromotion() {
-        return promotion;
+    public String getPromotionCode() {
+        return promotionCode;
     }
 
-    public void setPromotion(Promotion promotion) {
-        this.promotion = promotion;
+    public void setPromotionCode(String promotionCode) {
+        this.promotionCode = promotionCode;
     }
 
     public List<Cart> getCartItems() {
@@ -182,3 +182,4 @@ public class Order {
         this.cartItems = cartItems;
     }
 }
+
