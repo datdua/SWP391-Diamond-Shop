@@ -32,7 +32,7 @@ function SideBarAdmin() {
 
           <NavLink
             to="/admin/profile"
-            className="nav-item"
+            className="sidebar-nav-item"
             activeClassName="active"
           >
             <CIcon className="nav-icon" icon={cilUser} /> Thông tin cá nhân
@@ -40,14 +40,14 @@ function SideBarAdmin() {
 
           <NavLink
             to="/admin/dashboard"
-            className="nav-item"
+            className="sidebar-nav-item"
             activeClassName="active"
           >
             <CIcon customClassName="nav-icon" icon={cilSpeedometer} /> Dashboard
           </NavLink>
           <NavLink
             to="https://sandbox.vnpayment.vn/merchantv2/Users/Login.htm"
-            className="nav-item"
+            className="sidebar-nav-item"
           >
             <CIcon customClassName="nav-icon" icon={cilBank} />
             Quản Lý Giao Dịch
@@ -56,7 +56,7 @@ function SideBarAdmin() {
             toggler={
               <>
                 <CIcon
-                  className="nav-item"
+                  className="sidebar-nav-item"
                   customClassName="nav-icon"
                   icon={cilPuzzle}
                 />{" "}
@@ -66,7 +66,7 @@ function SideBarAdmin() {
           >
             <NavLink
               to="/admin/diamond-manager"
-              className="nav-item"
+              className="sidebar-nav-item"
               activeClassName="active"
             >
               <span className="nav-icon">
@@ -76,7 +76,7 @@ function SideBarAdmin() {
             </NavLink>
             <NavLink
               to="/admin/jewelry-manager"
-              className="nav-item"
+              className="sidebar-nav-item"
               activeClassName="active"
             >
               <span className="nav-icon">
@@ -86,7 +86,7 @@ function SideBarAdmin() {
             </NavLink>
             <NavLink
               to="/admin/account-manager"
-              className="nav-item"
+              className="sidebar-nav-item"
               activeClassName="active"
             >
               <span className="nav-icon">
@@ -96,7 +96,7 @@ function SideBarAdmin() {
             </NavLink>
             <NavLink
               to="/admin/order-manager"
-              className="nav-item"
+              className="sidebar-nav-item"
               activeClassName="active"
             >
               <span className="nav-icon">
