@@ -152,4 +152,65 @@ public class DiamondService {
 
         return diamondRepository.findAll(spec);
     }
+
+    public Page<Diamond> searchDiamondsWithFiltersPaged(
+            Float minDiamondEntryPrice,
+            Float maxDiamondEntryPrice,
+            String origin,
+            String cut,
+            String shape,
+            String color,
+            Float minCaratSize,
+            Float maxCaratSize,
+            Float minCaratWeight,
+            Float maxCaratWeight,
+            String clarity,
+            String diamondName,
+            int page,
+            int size) {
+
+        Specification<Diamond> spec = Specification.where(null);
+
+        if (minDiamondEntryPrice != null) {
+            spec = spec.and(DiamondSpecification.hasMinDiamondEntryPrice(minDiamondEntryPrice));
+        }
+        if (maxDiamondEntryPrice != null) {
+            spec = spec.and(DiamondSpecification.hasMaxDiamondEntryPrice(maxDiamondEntryPrice));
+        }
+        if (origin != null) {
+            spec = spec.and(DiamondSpecification.hasOrigin(origin));
+        }
+        if (cut != null) {
+            spec = spec.and(DiamondSpecification.hasCut(cut));
+        }
+        if (shape != null) {
+            spec = spec.and(DiamondSpecification.hasShape(shape));
+        }
+        if (color != null) {
+            spec = spec.and(DiamondSpecification.hasColor(color));
+        }
+        if (clarity != null) {
+            spec = spec.and(DiamondSpecification.hasClarity(clarity));
+        }
+        if (minCaratSize != null) {
+            spec = spec.and(DiamondSpecification.hasMinCaratSize(minCaratSize));
+        }
+        if (maxCaratSize != null) {
+            spec = spec.and(DiamondSpecification.hasMaxCaratSize(maxCaratSize));
+        }
+        if (minCaratWeight != null) {
+            spec = spec.and(DiamondSpecification.hasMinCaratWeight(minCaratWeight));
+        }
+        if (maxCaratWeight != null) {
+            spec = spec.and(DiamondSpecification.hasMaxCaratWeight(maxCaratWeight));
+        }
+        if (diamondName != null) {
+            spec = spec.and(DiamondSpecification.hasDiamondNameIgnoreCase(diamondName));
+        }
+
+        Pageable pageable = PageRequest.of(page -1, size);
+        return diamondRepository.findAll(spec, pageable);
+    }
+
+    
 }

@@ -30,21 +30,20 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
-
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword())
-            );
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(401).body(Collections.singletonMap("message", "Sai email hoặc mật khẩu"));
-        }
-
-        final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(authenticationRequest.getEmail());
-
-        final String jwt = jwtTokenUtil.generateToken(userDetails);
-
-        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+    try {
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword())
+        );
+    } catch (BadCredentialsException e) {
+        return ResponseEntity.status(401).body(Collections.singletonMap("message", "Sai email hoặc mật khẩu"));
     }
+
+    final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
+    final String jwt = jwtTokenUtil.generateToken(userDetails);
+    final String role = userDetails.getAuthorities().iterator().next().getAuthority(); // Lấy role từ UserDetails
+
+    return ResponseEntity.ok(new AuthenticationResponse(jwt));
+}
+
 }

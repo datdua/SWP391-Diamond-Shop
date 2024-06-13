@@ -18,6 +18,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { Pagination } from "@mui/material";
 import "./AccountManager.css";
 
 function AccountManager() {
@@ -26,17 +27,27 @@ function AccountManager() {
   const [selectedAccount, setSelectedAccount] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const size = 8;
+  const startIndex = (currentPage - 1) * size;
+  const endIndex = startIndex + size;
+  // Slice the array to get only the items for the current page
+  const currentPageData = accounts.slice(startIndex, endIndex);
+
+  const handleClose = () => {
+    setShowModal(false);
+    setIsUpdating(false);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setCurrentPage(newPage);
+  };
 
   useEffect(() => {
     getAllAccount().then((data) => {
       setAccounts(data);
     });
   }, []);
-
-  const handleClose = () => {
-    setShowModal(false);
-    setIsUpdating(false);
-  };
 
   const handleShowAdd = () => {
     setSelectedAccount(null);
@@ -74,20 +85,25 @@ function AccountManager() {
 
   return (
     <Container fluid>
-      <Navbar bg="light" expand="lg">
-        <Navbar.Brand href="#home">Account Manager</Navbar.Brand>
-      </Navbar>
       <Row>
         <Col md={12}>
           <Card>
             <Card.Header>
               <Card.Title as="h4">
                 Account List
-                <Button variant="link" onClick={refreshTable}>
-                  <RefreshIcon />
+                <Button
+                  variant="link"
+                  style={{ textDecoration: "none" }}
+                  onClick={refreshTable}
+                >
+                  <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> REFRESH
                 </Button>
-                <Button variant="link" onClick={handleShowAdd}>
-                  <AddIcon />
+                <Button
+                  variant="link"
+                  style={{ textDecoration: "none" }}
+                  onClick={handleShowAdd}
+                >
+                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> ADD
                 </Button>
               </Card.Title>
             </Card.Header>
@@ -106,7 +122,7 @@ function AccountManager() {
                     </tr>
                   </thead>
                   <tbody>
-                    {accounts.map((account) => (
+                    {currentPageData.map((account) => (
                       <tr key={account.accountID}>
                         <td>{account.accountID}</td>
                         <td>{account.email}</td>
@@ -136,6 +152,13 @@ function AccountManager() {
                 </Table>
               </div>
             </Card.Body>
+            <Card.Footer>
+              <Pagination
+                count={Math.ceil(accounts.length / size)}
+                page={currentPage}
+                onChange={handleChangePage}
+              />
+            </Card.Footer>
           </Card>
         </Col>
       </Row>

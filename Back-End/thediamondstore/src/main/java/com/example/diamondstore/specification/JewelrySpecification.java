@@ -22,6 +22,10 @@ public class JewelrySpecification {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("jewelryName"), "%" + name + "%");
     }
 
+    public static Specification<Jewelry> hasJewelryNameIgnoreCase(String jewelryName) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower(root.get("jewelryName")), "%" + jewelryName.toLowerCase() + "%");
+    }
+
 
     public static Specification<Jewelry> hasPriceBetween(Float minjewelryEntryPrice, Float maxjewelryEntryPrice) {
         return (root, query, criteriaBuilder) -> {

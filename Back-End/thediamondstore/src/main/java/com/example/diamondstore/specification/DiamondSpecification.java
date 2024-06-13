@@ -48,4 +48,14 @@ public class DiamondSpecification {
     public static Specification<Diamond> hasClarity(String clarity) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("clarity"), clarity);
     }
+
+    public static Specification<Diamond> hasDiamondNameLike(String diamondNameLike) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("diamondName"), "%" + diamondNameLike + "%");
+    }
+
+    public static Specification<Diamond> hasDiamondNameIgnoreCase(String diamondName) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower(root.get("diamondName")), "%" + diamondName.toLowerCase() + "%");
+    }
+
+    
 }

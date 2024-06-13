@@ -88,7 +88,7 @@ public class PaymentController {
         String vnp_CreateDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
 
-        cld.add(Calendar.MINUTE, 15);
+        cld.add(Calendar.HOUR, 24);
         String vnp_ExpireDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
@@ -133,7 +133,7 @@ public class PaymentController {
             @RequestParam(value = "vnp_BankCode") String bankCode,
             @RequestParam(value = "vnp_OrderInfo") Integer orderID,
             @RequestParam(value = "vnp_ResponseCode") String responseCode,
-            @RequestParam(value = "vnp_BankTranNo") Integer transactionNo
+            @RequestParam(value = "vnp_TransactionNo") Integer transactionNo
     ) {
         Order order = orderRepository.findByOrderID(orderID);
         OrderHistory orderHistory = orderhistoryRepository.findByOrderID(orderID);
@@ -145,27 +145,14 @@ public class PaymentController {
             // Update order status
             order.setOrderStatus("Đã thanh toán");
             orderRepository.save(order);
-            // Update order history status
-            orderHistory.setOrderhistoryStatus("Đã thanh toán");
-            orderHistory.setTransactionNo(transactionNo);
-            orderhistoryRepository.save(orderHistory);
         } else {
-            if (transactionStatusDTO != null) {
-                transactionStatusDTO.setStatus("No");
-                transactionStatusDTO.setMessage("Thanh toán thất bại");
-                transactionStatusDTO.setData("");
-            }
+            transactionStatusDTO.setStatus("No");
+            transactionStatusDTO.setMessage("Thanh toán thất bại");
+            transactionStatusDTO.setData("");
+            // Update order status
+            order.setOrderStatus("Thanh toán thất bại");
+            orderRepository.save(order);
             
-            if (order != null && orderRepository != null) {
-                order.setOrderStatus("Thanh toán thất bại");
-                orderRepository.save(order);
-            }
-            
-            if (orderHistory != null && orderhistoryRepository != null) {
-                orderHistory.setOrderhistoryStatus("Thanh toán thất bại");
-                orderHistory.setTransactionNo(transactionNo);
-                orderhistoryRepository.save(orderHistory);
-            }
         }
         return ResponseEntity.status(HttpStatus.OK).body(transactionStatusDTO);
     }

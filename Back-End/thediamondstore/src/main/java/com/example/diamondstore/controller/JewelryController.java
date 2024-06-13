@@ -93,4 +93,17 @@ public class JewelryController {
         List<Jewelry> jewelrys = jewelryService.searchJewelryByName(name);
         return ResponseEntity.ok(jewelrys);
     }
+
+    @GetMapping("/search/filter/paged")
+    public ResponseEntity<Page<Jewelry>> searchJewelryWithFilters(
+            @RequestParam(required = false) String jewelryName,
+            @RequestParam(required = false) Float minjewelryEntryPrice,
+            @RequestParam(required = false) Float maxjewelryEntryPrice,
+            @RequestParam(required = false) String gender,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Page<Jewelry> pageJewelrys = jewelryService.searchJewelryWithFilters(jewelryName, minjewelryEntryPrice, maxjewelryEntryPrice, gender, page, size);
+        return ResponseEntity.ok(pageJewelrys);
+    }
 }
