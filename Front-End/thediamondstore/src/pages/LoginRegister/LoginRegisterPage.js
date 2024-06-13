@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./LoginRegisterPage.css";
-
+import { jwtDecode } from 'jwt-decode';
 function LoginRegisterPage() {
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
@@ -19,7 +19,7 @@ function LoginRegisterPage() {
     const [termsAccepted, setTermsAccepted] = useState(false);
     const accountId = useParams();
     const navigate = useNavigate();
-
+    
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -38,30 +38,40 @@ function LoginRegisterPage() {
         }
       );
 
-            if (response.status === 200) {
-                const data = response.data;
-                localStorage.setItem("jwt", data.jwt);
-                localStorage.setItem("email", loginEmail);
-                localStorage.setItem("accountName", accountName);
-                localStorage.setItem("accountID", accountId);
-                console.log("Đăng nhập thành công:", data.jwt);
-                setIsLoggedIn(true);
-                toast.success("Đăng nhập thành công!");
-                navigate('/trangchu');
-                window.location.reload();
-                window.scrollTo(0, 0);
-            } else {
-                console.error("Đăng nhập thất bại:", response);
-                toast.error("Đăng nhập thất bại!");
-            }
-        } catch (error) {
-            console.error("Lỗi khi đăng nhập:", error);
-            toast.error("Lỗi khi đăng nhập!");
-        }
-    };
+      if (response.status === 200) {
+        const data = response.data;
+        console.log("Đăng nhập thành công:", data.jwt);
+        localStorage.setItem("jwt", data.jwt);
+        localStorage.setItem("email", loginEmail);
+        localStorage.setItem("accountName", accountName);
+        localStorage.setItem("accountID", accountId);
+        localStorage.setItem("role", jwtDecode(data.jwt).role); // Trích xuất và lưu trữ role từ JWT token
 
-    const handleRegister = async (e) => {
-        e.preventDefault();
+        setIsLoggedIn(true);
+        toast.success("Đăng nhập thành công!");
+
+        // Navigate based on role
+        if (jwtDecode(data.jwt).role === "ROLE_ADMIN") {
+          // Sử dụng role từ JWT token
+          navigate("/admin/profile");
+        } else {
+          navigate("/trangchu");
+          window.location.reload();
+          window.scrollTo(0, 0);
+        }
+
+        
+      } else {
+        console.error("Đăng nhập thất bại:", response);
+        toast.error("Đăng nhập thất bại!");
+      }
+    } catch (error) {
+      console.error("Lỗi khi đăng nhập:", error);
+      toast.error("Lỗi khi đăng nhập!");
+    }
+  };
+  const handleRegister = async (e) => {
+    e.preventDefault();
 
     if (!termsAccepted) {
       toast.error(
@@ -256,7 +266,7 @@ function LoginRegisterPage() {
                           />
                           <label htmlFor="register-terms">
                             Tôi đã đọc và đồng ý với các điều khoản và điều kiện
-                            của trang web <a href="#"></a>
+                            của trang web
                           </label>
                         </div>
                       </div>

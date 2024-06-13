@@ -99,4 +99,30 @@ public class DiamondController {
         
         return ResponseEntity.ok(diamonds);
     }
+
+    @GetMapping("/search/filter/paged")
+    public ResponseEntity<Page<Diamond>> searchDiamondsPaged(
+            @RequestParam(required = false) Float minDiamondPrice,
+            @RequestParam(required = false) Float maxDiamondPrice,
+            @RequestParam(required = false) String origin,
+            @RequestParam(required = false) String cut,
+            @RequestParam(required = false) String shape,
+            @RequestParam(required = false) String color,
+            @RequestParam(required = false) Float minCaratSize,
+            @RequestParam(required = false) Float maxCaratSize,
+            @RequestParam(required = false) Float minCaratWeight,
+            @RequestParam(required = false) Float maxCaratWeight,
+            @RequestParam(required = false) String clarity,
+            @RequestParam(required = false) String diamondName,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Page<Diamond> pageDiamonds = diamondService.searchDiamondsWithFiltersPaged(
+                minDiamondPrice, maxDiamondPrice, origin, cut, shape, color,
+                minCaratSize, maxCaratSize, minCaratWeight, maxCaratWeight, clarity, diamondName,
+                page, size);
+        
+        return ResponseEntity.ok(pageDiamonds);
+    }
+    
 }

@@ -127,3 +127,12 @@ export const getPromotion = async (promotionCode) => {
         throw error;
     }
 };
+export const fetchOrderDetail = async (orderID) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/orders/get/${orderID}`);
+      return response.data;
+    } catch (error) {
+      console.error("Failed to fetch order details:", error);
+      throw error;
+    }
+  };

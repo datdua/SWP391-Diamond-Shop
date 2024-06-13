@@ -201,7 +201,7 @@ function CheckoutPage() {
                                                             <td>Giảm giá</td>
                                                             <td>- {discountAmount.toLocaleString()} VND</td>
                                                         </tr>
-                                                        <tr className="tm-checkout-final-total highlight"> {/* Add a CSS class to highlight the final total */}
+                                                        <tr className="tm-checkout-final-total highlight"> 
                                                             <td>TỔNG TIỀN THANH TOÁN</td>
                                                             <td>{finalTotal.toLocaleString()} VND</td>
                                                         </tr>
