@@ -36,6 +36,7 @@ function HomePage() {
         window.scrollTo(0, 0);
     }, []);
     console.log('Token:', token)
+    console.log('Account ID:', localStorage.getItem('accountID'));
     
     return (
         <div>

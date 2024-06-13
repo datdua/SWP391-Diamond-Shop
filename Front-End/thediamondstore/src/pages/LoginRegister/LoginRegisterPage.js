@@ -44,7 +44,7 @@ function LoginRegisterPage() {
         localStorage.setItem("jwt", data.jwt);
         localStorage.setItem("email", loginEmail);
         localStorage.setItem("accountName", accountName);
-        localStorage.setItem("accountID", accountId);
+        localStorage.setItem('accountID', data.accountId);
         localStorage.setItem("role", jwtDecode(data.jwt).role); // Trích xuất và lưu trữ role từ JWT token
 
         setIsLoggedIn(true);

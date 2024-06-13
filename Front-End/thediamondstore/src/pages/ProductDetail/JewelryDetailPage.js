@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getJewelryById } from "../../api/JewelryAPI";
 import "./ProductDetailPage.css";
-import { addJewelryToCart, getAccountIDByEmail } from "../../api/addToCart";
+import { addJewelryToCart } from "../../api/addToCart";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SizeInstructionModal from "../../components/SizeInstructionModal/SizeInstructionModal";
+import { getAccountIDByEmail } from "../../api/accountCrud";
 
 function JewelryDetailPage() {
   const navigate = useNavigate();
@@ -74,7 +75,6 @@ function JewelryDetailPage() {
 
         const accountID = await getAccountIDByEmail(email);
         console.log("Account ID:", accountID);
-
         console.log("Size:", sizeJewelry);
         const response = await addJewelryToCart(
           accountID,

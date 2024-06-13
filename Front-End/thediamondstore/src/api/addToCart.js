@@ -1,22 +1,6 @@
 import axios from "axios";
 
-export const getAccountIDByEmail = async (email) => {
-  try {
-    const token = localStorage.getItem("jwt");
-    const response = await axios.get(
-      `http://localhost:8080/api/accounts/getByEmail/${email}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response.data.accountID; // Adjust this line according to your actual API response
-  } catch (error) {
-    console.error("Error fetching account ID:", error);
-    throw new Error("Failed to fetch account information: " + error.message);
-  }
-};
+
 
 export const addJewelryToCart = async (
   accountID,

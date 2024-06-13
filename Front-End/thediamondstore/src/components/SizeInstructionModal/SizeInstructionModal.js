@@ -25,6 +25,8 @@ function SizeInstructionModal(props) {
         <Row className="mb-3">
           <Col>
             1. Dùng chỉ hoặc giấy bản nhỏ đo quấn quanh khớp tay, đánh dấu vị trí cắt nhau
+            <br/>
+            <img src='https://firebasestorage.googleapis.com/v0/b/the-diamond-store-423602.appspot.com/o/img-other%2FHDDN-1.svg?alt=media&token=42f6373a-415a-4c57-9d8d-9bf42c9c0b3e'/>
           </Col>
         </Row>
 
@@ -32,6 +34,8 @@ function SizeInstructionModal(props) {
         <Row className="mb-3">
           <Col>
             2. Dùng thước đo chiều dài đoạn dây vừa đo được (đơn vị cm)
+            <br/>
+            <img src='https://firebasestorage.googleapis.com/v0/b/the-diamond-store-423602.appspot.com/o/img-other%2FHDDN-2.svg?alt=media&token=130dd236-5c4e-41de-b139-4e0cf00ba75f'/>
           </Col>
         </Row>
         <Row className="mb-3">
