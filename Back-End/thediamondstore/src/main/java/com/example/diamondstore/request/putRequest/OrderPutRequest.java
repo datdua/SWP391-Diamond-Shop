@@ -1,47 +1,43 @@
 package com.example.diamondstore.request.putRequest;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class OrderPutRequest {
 
-    private int accountID;
-    private int paymentID;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private Integer accountID;
     private LocalDateTime startorderDate;
     private String orderStatus;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime deliveryDate;
-    private String diamondID;
-    private String jewelryID;
+    private BigDecimal totalOrder;
+    private String deliveryAddress;
+    private String phoneNumber;
+    private String certificateImage;
+    private String warrantyImage;
+    private String promotionCode;
 
     public OrderPutRequest() {
     }
 
-    public OrderPutRequest(int accountID, int paymentID, LocalDateTime startorderDate, String orderStatus, LocalDateTime deliveryDate, String diamondID, String jewelryID) {
+    public OrderPutRequest(Integer accountID, String certificateImage, String deliveryAddress, LocalDateTime deliveryDate, String orderStatus, String phoneNumber, String promotionCode, LocalDateTime startorderDate, BigDecimal totalOrder, String warrantyImage) {
         this.accountID = accountID;
-        this.paymentID = paymentID;
-        this.startorderDate = startorderDate;
-        this.orderStatus = orderStatus;
+        this.certificateImage = certificateImage;
+        this.deliveryAddress = deliveryAddress;
         this.deliveryDate = deliveryDate;
-        this.diamondID = diamondID;
+        this.orderStatus = orderStatus;
+        this.phoneNumber = phoneNumber;
+        this.promotionCode = promotionCode;
+        this.startorderDate = startorderDate;
+        this.totalOrder = totalOrder;
+        this.warrantyImage = warrantyImage;
     }
 
-    public int getAccountID() {
+    public Integer getAccountID() {
         return accountID;
     }
 
-    public void setAccountID(int accountID) {
+    public void setAccountID(Integer accountID) {
         this.accountID = accountID;
-    }
-
-    public int getPaymentID() {
-        return paymentID;
-    }
-
-    public void setPaymentID(int paymentID) {
-        this.paymentID = paymentID;
     }
 
     public LocalDateTime getStartorderDate() {
@@ -68,21 +64,54 @@ public class OrderPutRequest {
         this.deliveryDate = deliveryDate;
     }
 
-    public String getDiamondID() {
-        return diamondID;
+    public BigDecimal getTotalOrder() {
+        return totalOrder;
     }
 
-    public void setDiamondID(String diamondID) {
-        this.diamondID = diamondID;
+    public void setTotalOrder(BigDecimal totalOrder) {
+        this.totalOrder = totalOrder;
     }
 
-    public String getJewelryID() {
-        return jewelryID;
+    public String getDeliveryAddress() {
+        return deliveryAddress;
     }
 
-    public void setJewelryID(String jewelryID) {
-        this.jewelryID = jewelryID;
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getCertificateImage() {
+        return certificateImage;
+    }
+
+    public void setCertificateImage(String certificateImage) {
+        this.certificateImage = certificateImage;
+    }
+
+    public String getWarrantyImage() {
+        return warrantyImage;
+    }
+
+    public void setWarrantyImage(String warrantyImage) {
+        this.warrantyImage = warrantyImage;
+    }
+
+    public String getPromotionCode() {
+        return promotionCode;
+    }
+
+    public void setPromotionCode(String promotionCode) {
+        this.promotionCode = promotionCode;
+    }
+
+    
 
 }

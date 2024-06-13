@@ -33,9 +33,11 @@ import com.example.diamondstore.DTO.PaymentResDTO;
 import com.example.diamondstore.DTO.TransactionStatusDTO;
 import com.example.diamondstore.config.PaymentConfig;
 import com.example.diamondstore.model.Account;
+import com.example.diamondstore.model.Cart;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.model.OrderHistory;
 import com.example.diamondstore.repository.AccountRepository;
+import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.OrderHistoryRepository;
 import com.example.diamondstore.repository.OrderRepository;
 
@@ -51,6 +53,9 @@ public class PaymentController {
 
     @Autowired
     private OrderHistoryRepository orderhistoryRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     @GetMapping("/createPayment")
     public ResponseEntity<?> createPayment(@RequestParam Integer orderID) throws UnsupportedEncodingException {
@@ -130,45 +135,46 @@ public class PaymentController {
 
     @GetMapping(value = "/vnpay_return")
     public ResponseEntity<TransactionStatusDTO> vnpayReturn(
-            @RequestParam(value = "vnp_BankCode") String bankCode,
-            @RequestParam(value = "vnp_OrderInfo") Integer orderID,
-            @RequestParam(value = "vnp_ResponseCode") String responseCode,
-            @RequestParam(value = "vnp_TransactionNo") Integer transactionNo
+    @RequestParam(value = "vnp_BankCode") String bankCode,
+    @RequestParam(value = "vnp_OrderInfo") Integer orderID,
+    @RequestParam(value = "vnp_ResponseCode") String responseCode,
+    @RequestParam(value = "vnp_TransactionNo") Integer transactionNo
     ) {
-        Order order = orderRepository.findByOrderID(orderID);
-        OrderHistory orderHistory = orderhistoryRepository.findByOrderID(orderID);
-        TransactionStatusDTO transactionStatusDTO = new TransactionStatusDTO();
-        if (responseCode.equals("00")) {
-            transactionStatusDTO.setStatus("Ok");
-            transactionStatusDTO.setMessage("Thanh toán thành công");
-            transactionStatusDTO.setData("");
-            // Update order status
-            order.setOrderStatus("Đã thanh toán");
-            orderRepository.save(order);
-            // Update order history status
-            orderHistory.setOrderhistoryStatus("Đã thanh toán");
-            orderHistory.setTransactionNo(transactionNo);
-            orderhistoryRepository.save(orderHistory);
-        } else {
-            if (transactionStatusDTO != null) {
-                transactionStatusDTO.setStatus("No");
-                transactionStatusDTO.setMessage("Thanh toán thất bại");
-                transactionStatusDTO.setData("");
-            }
-            
-            if (order != null && orderRepository != null) {
-                order.setOrderStatus("Thanh toán thất bại");
-                orderRepository.save(order);
-            }
-            
-            if (orderHistory != null && orderhistoryRepository != null) {
-                orderHistory.setOrderhistoryStatus("Thanh toán thất bại");
-                orderHistory.setTransactionNo(transactionNo);
-                orderhistoryRepository.save(orderHistory);
-            }
+    Order order = orderRepository.findByOrderID(orderID);
+    OrderHistory orderHistory = orderhistoryRepository.findByOrderID(orderID);
+    TransactionStatusDTO transactionStatusDTO = new TransactionStatusDTO();
+    if (responseCode.equals("00")) {
+        transactionStatusDTO.setStatus("Ok");
+        transactionStatusDTO.setMessage("Thanh toán thành công");
+        transactionStatusDTO.setData("");
+        // Update order status
+        order.setOrderStatus("Đã thanh toán");
+        orderRepository.save(order);
+        // Update order history status
+        orderHistory.setOrderhistoryStatus("Đã thanh toán");
+        orderHistory.setTransactionNo(transactionNo);
+        orderhistoryRepository.save(orderHistory);
+
+        // Remove cart items
+        List<Cart> cartItems = cartRepository.findByOrder(order);
+        for (Cart cart : cartItems) {
+            cartRepository.delete(cart);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(transactionStatusDTO);
+    } else {
+        transactionStatusDTO.setStatus("No");
+        transactionStatusDTO.setMessage("Thanh toán thất bại");
+        transactionStatusDTO.setData("");
+
+        order.setOrderStatus("Thanh toán thất bại");
+        orderRepository.save(order);
+
+        orderHistory.setOrderhistoryStatus("Thanh toán thất bại");
+        orderHistory.setTransactionNo(transactionNo);
+        orderhistoryRepository.save(orderHistory);
     }
+    return ResponseEntity.status(HttpStatus.OK).body(transactionStatusDTO);
+}
+
 
     @PostMapping("/refund")
     public ResponseEntity<?> refundTransaction(

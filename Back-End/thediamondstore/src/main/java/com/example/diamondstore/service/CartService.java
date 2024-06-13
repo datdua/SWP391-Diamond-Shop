@@ -15,6 +15,8 @@ import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.DiamondRepository;
 import com.example.diamondstore.repository.JewelryRepository;
 
+
+    //thêm sản phẩm vào giỏ hàng
 @Service
 public class CartService {
 
@@ -28,7 +30,7 @@ public class CartService {
     private JewelryRepository jewelryRepository;
 
     public List<Cart> getCartItems(Integer accountID) {
-        return cartRepository.findByAccountIDAndOrderIsNull(accountID);
+        return cartRepository.findByAccountID(accountID);
     }
 
     //thêm sản phẩm vào giỏ hàng
@@ -152,4 +154,17 @@ public class CartService {
         }
         return totalCart;
     }
+
+    public String updateCartQuantity(Integer cartID, Integer quantity) {
+        Cart cart = cartRepository.findById(cartID).orElse(null);
+        if (cart != null) {
+            cart.setQuantity(quantity);
+            calculateAndSetTotalPrice(cart);
+            cartRepository.save(cart);
+            return "Số lượng sản phẩm đã được cập nhật.";
+        } else {
+            return "Không tìm thấy sản phẩm trong giỏ hàng.";
+        }
+    }
 }
+

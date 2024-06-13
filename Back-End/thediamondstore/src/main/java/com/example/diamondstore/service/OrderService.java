@@ -2,7 +2,11 @@ package com.example.diamondstore.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -23,6 +27,7 @@ import com.example.diamondstore.repository.DiamondRepository;
 import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.repository.PromotionRepository;
 import com.example.diamondstore.repository.WarrantyRepository;
+import com.example.diamondstore.request.putRequest.OrderPutRequest;
 
 @Service
 public class OrderService {
@@ -51,89 +56,113 @@ public class OrderService {
     @Autowired
     private AccountRepository accountRepository;
 
-   public Order createOrder(int accountID, String deliveryAddress, String promotionCode, Integer pointsToRedeem, String phoneNumber) {
-    List<Cart> cartItems = cartRepository.findByAccountIDAndOrderIsNull(accountID);
 
-    if (cartItems.isEmpty()) {
-        throw new IllegalArgumentException("Giỏ hàng rỗng");
-    }
+    @Transactional
+    public Order createOrder(int accountID, String deliveryAddress, String promotionCode, Integer pointsToRedeem, String phoneNumber) {
+        List<Cart> cartItems = cartRepository.findByAccountIDAndOrderIsNull(accountID);
 
-    Account account = accountRepository.findById(accountID)
-            .orElseThrow(() -> new IllegalArgumentException("Invalid account ID: " + accountID));
+        if (cartItems.isEmpty()) {
+            throw new IllegalArgumentException("Giỏ hàng rỗng");
+        }
 
-    Order order = new Order();
-    order.setAccount(account);
-    order.setDeliveryAddress(deliveryAddress);
-    order.setPhoneNumber(phoneNumber);
-    order.setStartorderDate(LocalDateTime.now());
-    order.setDeliveryDate(LocalDateTime.now().plusDays(7));
-    order.setOrderStatus("Đang xử lý");
+        Account account = accountRepository.findById(accountID)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid account ID: " + accountID));
 
-    if (account.getPhoneNumber() == null) {
-        account.setPhoneNumber(phoneNumber);
-    }
-    if (account.getAddressAccount() == null) {
-        account.setAddressAccount(deliveryAddress);
-    }
-    accountRepository.save(account);
+        Order order = new Order();
+        order.setAccount(account);
+        order.setDeliveryAddress(deliveryAddress);
+        order.setPhoneNumber(phoneNumber);
+        order.setStartorderDate(LocalDateTime.now());
+        order.setDeliveryDate(LocalDateTime.now().plusDays(7));
+        order.setOrderStatus("Đang xử lý");
 
-    String diamondID = cartItems.get(0).getDiamondID();
-    if (diamondID != null) {
-        String certificateID = diamondRepository.findByDiamondID(diamondID).getCertificationID();
-        if (certificateID != null) {
-            Certificate certificate = certificateRepository.findByCertificateID(certificateID);
-            if (certificate != null) {
-                order.setCertificateImage(certificate.getcertificateImage());
+        if (account.getPhoneNumber() == null) {
+            account.setPhoneNumber(phoneNumber);
+        }
+        if (account.getAddressAccount() == null) {
+            account.setAddressAccount(deliveryAddress);
+        }
+        accountRepository.save(account);
+
+        // Lưu Order trước
+        order = orderRepository.save(order);
+
+        String diamondID = cartItems.get(0).getDiamondID();
+        if (diamondID != null) {
+            String certificateID = diamondRepository.findByDiamondID(diamondID).getCertificationID();
+            if (certificateID != null) {
+                Certificate certificate = certificateRepository.findByCertificateID(certificateID);
+                if (certificate != null) {
+                    order.setCertificateImage(certificate.getcertificateImage());
+                }
+            }
+
+            String warrantyID = diamondRepository.findByDiamondID(diamondID).getWarrantyID();
+            if (warrantyID != null) {
+                Warranty warranty = warrantyRepository.findByWarrantyID(warrantyID);
+                if (warranty != null) {
+                    order.setWarrantyImage(warranty.getwarrantyImage());
+                }
             }
         }
 
-        String warrantyID = diamondRepository.findByDiamondID(diamondID).getWarrantyID();
-        if (warrantyID != null) {
-            Warranty warranty = warrantyRepository.findByWarrantyID(warrantyID);
-            if (warranty != null) {
-                order.setWarrantyImage(warranty.getwarrantyImage());
-            }
+        BigDecimal totalOrder = BigDecimal.ZERO;
+        for (Cart cart : cartItems) {
+            totalOrder = totalOrder.add(cart.getGrossCartPrice());
+            cart.setOrder(order);  // Associate cart items with the order
+            cart.setCartStatus("Đang chờ thanh toán"); // New status to indicate pending payment
+            cartRepository.save(cart);
         }
-    }
 
-    BigDecimal totalOrder = BigDecimal.ZERO;
-    for (Cart cart : cartItems) {
-        totalOrder = totalOrder.add(cart.getGrossCartPrice());
-    }
+        Promotion promotion = promotionRepository.findByPromotionCode(promotionCode);
+        if (promotion != null) {
+            BigDecimal discountAmount = promotion.getDiscountAmount();
+            totalOrder = totalOrder.subtract(totalOrder.multiply(discountAmount));
+            order.setPromotionCode(promotionCode);
+        }
 
-    Promotion promotion = promotionRepository.findByPromotionCode(promotionCode);
-    if (promotion != null) {
-        BigDecimal discountAmount = promotion.getDiscountAmount();
-        totalOrder = totalOrder.subtract(totalOrder.multiply(discountAmount));
-        order.setPromotionCode(promotionCode);
-    }
+        if (pointsToRedeem != null && pointsToRedeem > 0) {
+            Customer customer = customerRepository.findById(accountID).orElseThrow(() -> new IllegalArgumentException("Khách hàng không tồn tại"));
+            int availablePoints = customer.getPoint();
+            if (pointsToRedeem > availablePoints) {
+                throw new IllegalArgumentException("Điểm không đủ");
+            }
+            BigDecimal discount = BigDecimal.valueOf(pointsToRedeem / 100.0);
+            totalOrder = totalOrder.subtract(discount.multiply(BigDecimal.valueOf(1000000)));
+            customer.setPoint(availablePoints - pointsToRedeem);
+            customerRepository.save(customer);
+        }
 
-    if (pointsToRedeem != null && pointsToRedeem > 0) {
+        order.settotalOrder(totalOrder);
+
+        // Lưu Order một lần nữa để cập nhật totalOrder
+        order = orderRepository.save(order);
+
         Customer customer = customerRepository.findById(accountID).orElseThrow(() -> new IllegalArgumentException("Khách hàng không tồn tại"));
-        int availablePoints = customer.getPoint();
-        if (pointsToRedeem > availablePoints) {
-            throw new IllegalArgumentException("Điểm không đủ");
-        }
-        BigDecimal discount = BigDecimal.valueOf(pointsToRedeem / 100.0);
-        totalOrder = totalOrder.subtract(discount.multiply(BigDecimal.valueOf(1000000)));
-        customer.setPoint(availablePoints - pointsToRedeem);
+        customer.setPoint(customer.getPoint() + 100);
         customerRepository.save(customer);
+
+        return order;
     }
 
-    order.settotalOrder(totalOrder);
-    order = orderRepository.save(order);
 
-    for (Cart cart : cartItems) {
-        cart.setOrder(order);
-        cartRepository.save(cart);
+    public void cancelOrder(int orderID) {
+        Order order = orderRepository.findById(orderID)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+
+        if (!order.getOrderStatus().equals("Đang xử lý")) {
+            throw new IllegalStateException("Chỉ Order có Status 'Đang xử lý' mới được xóa");
+        }
+
+        List<Cart> cartItems = cartRepository.findByOrder(order);
+        for (Cart cart : cartItems) {
+            cart.setOrder(null);
+            cart.setCartStatus("Kích hoạt");
+            cartRepository.save(cart);
+        }
+
+        orderRepository.delete(order);
     }
-
-    Customer customer = customerRepository.findById(accountID).orElseThrow(() -> new IllegalArgumentException("Khách hàng không tồn tại"));
-    customer.setPoint(customer.getPoint() + 100);
-    customerRepository.save(customer);
-
-    return order;
-}
 
 
     public Order getOrder(int orderID) {
@@ -141,6 +170,7 @@ public class OrderService {
         order.getCartItems().size(); // This will fetch the cartItems from the database
         return order;
     }
+
 
     public List<Order> getOrdersByAccountId(int accountID) {
         Account account = accountRepository.findById(accountID)
@@ -173,5 +203,24 @@ public class OrderService {
         return "Xóa Order thành công";
     }
 
+    public Map<String,String> updateOrder(int orderID, OrderPutRequest orderPutRequest) {
+    Order existingOrder = orderRepository.findByOrderID(orderID);
+    if (existingOrder == null) {
+        return Collections.singletonMap("message", "Không tìm thấy kim cương");
+    }
+    existingOrder.setAccount(accountRepository.findById(orderPutRequest.getAccountID())
+            .orElseThrow(() -> new IllegalArgumentException("AccountID không tồn tại")));
+    existingOrder.setPhoneNumber(orderPutRequest.getPhoneNumber());
+    existingOrder.setDeliveryAddress(orderPutRequest.getDeliveryAddress());
+    existingOrder.setOrderStatus(orderPutRequest.getOrderStatus());
+    existingOrder.setDeliveryDate(orderPutRequest.getDeliveryDate());
+    existingOrder.setStartorderDate(orderPutRequest.getStartorderDate());
+    existingOrder.settotalOrder(orderPutRequest.getTotalOrder());
+    existingOrder.setWarrantyImage(orderPutRequest.getWarrantyImage());
+    existingOrder.setCertificateImage(orderPutRequest.getCertificateImage());
+    existingOrder.setPromotionCode(orderPutRequest.getPromotionCode());
+    orderRepository.save(existingOrder);
+    return Collections.singletonMap("message", "Cập nhật thành công");
+}
     
 }
