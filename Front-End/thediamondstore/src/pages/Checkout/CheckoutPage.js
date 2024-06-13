@@ -181,7 +181,7 @@ function CheckoutPage() {
                                                                         <Link to={`/product-detail/jewelry/${item.jewelryID}`} className="tm-checkout-productlink">{item.jewelryName} * {item.quantity}</Link>
                                                                     )}
                                                                 </td>
-                                                                <td>{item.totalPrice.toLocaleString()} VND</td>
+                                                                {item.grossCartPrice !== null && item.grossCartPrice !== undefined ? item.grossCartPrice.toLocaleString() + ' VND' : ''}
                                                             </tr>
                                                         ))}
                                                         {promotionDescription && (

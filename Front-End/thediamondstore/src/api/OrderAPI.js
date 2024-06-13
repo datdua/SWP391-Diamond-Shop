@@ -35,7 +35,7 @@ export const createOrder = async (accountId, deliveryAddress, phoneNumber, point
 
 export async function fetchOrders(accountID) {
     if (!accountID) {
-        throw new Error('Invalid accountID. Please provide a valid accountID.');
+        throw new Error('Account ID is undefined');
     }
 
     const token = getAuthToken();

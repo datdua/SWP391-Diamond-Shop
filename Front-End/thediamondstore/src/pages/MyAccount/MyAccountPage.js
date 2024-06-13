@@ -22,22 +22,24 @@ function MyAccountPage() {
       setError("Account ID is missing");
       return;
     }
-
-    async function getOrders() {
-      setLoading(true);
-      try {
-        const fetchedOrders = await fetchOrders(accountId);
-        setOrders(fetchedOrders);
-      } catch (error) {
-        console.error("Failed to fetch orders:", error);
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    getOrders();
-  }, [accountId]);
+        const getOrders = async () => {
+          setLoading(true);
+          try {
+            if (accountId) {
+              const response = await fetchOrders(accountId);
+              setOrders(response);
+            } else {
+              console.error('accountId is undefined');
+            }
+        } catch (error) {
+            setError(error.toString());
+          } finally {
+            setLoading(false);
+          }
+        };
+      
+        getOrders();
+      }, [accountId]);
 
   const PaymentButton = ({ orderID }) => {
     const handlePayment = async () => {

@@ -41,6 +41,7 @@ function CartPage() {
         fetchCartItems();
         fetchTotalCart();
     }, [accountId]);
+
     const handleRemoveItem = async (cartID) => {
         try {
             await removeCartItem(cartID);
@@ -110,7 +111,7 @@ function CartPage() {
                                                         <Link to={`/product-detail/jewelry/${item.jewelryID}`} className="tm-cart-productname">{item.jewelryName}</Link>
                                                     )}
                                                 </td>
-                                                <td className="tm-cart-price">{item.price.toLocaleString()} VND</td>
+                                                <td className="tm-cart-price">{item.price ? item.price.toLocaleString() : 'N/A'} VND</td>
                                                 <td>
                                                     <div className="tm-quantitybox">
                                                         <div className="flex items-center">
@@ -119,7 +120,7 @@ function CartPage() {
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <span className="tm-cart-totalprice">{item.totalPrice.toLocaleString()} VND</span>
+                                                    <span className="tm-cart-totalprice">{item.grossCartPrice ? item.grossCartPrice.toLocaleString() : 'N/A'} VND</span>
                                                 </td>
                                                 <td>
                                                     <button className="tm-cart-removeproduct" onClick={() => handleRemoveItem(item.cartID)}>
