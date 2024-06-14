@@ -26,7 +26,7 @@ function LoginRegisterPage() {
 
     try {
       const response = await axios.post(
-        "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/login",
+        "http://localhost:8080/login",
         {
           email: loginEmail,
           password: loginPassword,
@@ -60,8 +60,6 @@ function LoginRegisterPage() {
           window.location.reload();
           window.scrollTo(0, 0);
         }
-
-        
       } else {
         console.error("Đăng nhập thất bại:", response);
         toast.error("Đăng nhập thất bại!");
@@ -83,7 +81,7 @@ function LoginRegisterPage() {
 
     try {
       const response = await axios.post(
-        "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/accounts/register",
+        "http://localhost:8080/api/accounts/register",
         {
           accountName: registerName,
           email: registerEmail,

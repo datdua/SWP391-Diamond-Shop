@@ -4,7 +4,7 @@ export const getAccountIDByEmail = async (email) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/accounts/getByEmail/${email}`,
+      `http://localhost:8080/api/accounts/getByEmail/${email}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -27,7 +27,7 @@ export const addJewelryToCart = async (
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.post(
-      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/cart/add?accountID=${accountID}&jewelryID=${jewelryId}&quantity=${quantity}&sizeJewelry=${size}`,
+      `http://localhost:8080/api/cart/add?accountID=${accountID}&jewelryID=${jewelryId}&quantity=${quantity}&sizeJewelry=${size}`,
       {},
       {
         headers: {
@@ -45,7 +45,7 @@ export const getAllCartItems = async (accountID) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/cart?accountID=${accountID}`,
+      `http://localhost:8080/api/cart?accountID=${accountID}`,
       {
         method: "GET",
         headers: {
@@ -63,7 +63,7 @@ export const getAllCartItems = async (accountID) => {
 export const removeCartItem = async (cartID) => {
   try {
     const response = await axios.delete(
-      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/cart/remove/${cartID}`
+      `http://localhost:8080/api/cart/remove/${cartID}`
     );
     console.log("Item removed successfully:", response.data.message);
     return response.data;
@@ -76,7 +76,7 @@ export const getTotalCart = async (accountID) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/cart/totalCart?accountID=${accountID}`,
+      `http://localhost:8080/api/cart/totalCart?accountID=${accountID}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
