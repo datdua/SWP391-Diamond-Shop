@@ -84,27 +84,27 @@ function CheckoutPage() {
                 setPromotionDescription(promotion.description);
                 const discount = totalCart * promotion.discountAmount; // Calculate discount based on totalCart * discountAmount
                 setDiscountAmount(discount);
-                toast.success("Promotion applied successfully");
+                toast.success("Áp dụng mã thành công");
             } else {
-                toast.error("Invalid promotion code");
+                toast.error("IMã giảm giá không hợp lệ");
             }
         } catch (error) {
-            toast.error("Failed to apply promotion");
+            toast.error("Áp dụng mã không thành công");
         }
     };
 
     const handlePlaceOrder = async () => {
         if (!deliveryAddress || !phoneNumber) {
-            toast.error("Please provide delivery address and phone number.");
+            toast.error("Xin cung cấp địa chỉ giao hàng và số điện thoại");
             return;
         }
 
         try {
             const orderData = await createOrder(accountId, deliveryAddress, phoneNumber, pointsToRedeem, promotionCode);
-            toast.success("Order placed successfully");
+            toast.success("Đặt hàng thành công");
             navigate(`/account/${accountId}`); // Redirect to order confirmation page or wherever you want
         } catch (error) {
-            toast.error("Failed to place order");
+            toast.error("Đặt hàng thất bại");
         }
     };
 

@@ -31,12 +31,16 @@ function OrderSidebar({ order, show, onHide }) {
             </div>
             <hr />
 
-            {/* Product Information */}
             <div className="order-section">
               <h5>Product Information</h5>
-              <p><span className="detail-title">Certificate Image:</span> <a href={order.certificateImage} target="_blank" rel="noopener noreferrer"><img src={order.certificateImage} alt="Certificate" className="certificate-image" /></a></p>
-              <p><span className="detail-title">Warranty Image:</span> <a href={order.warrantyImage} target="_blank" rel="noopener noreferrer"><img src={order.warrantyImage} alt="Warranty" className="warranty-image" /></a></p>
-              {order.promotionCode && <p><span className="detail-title">Promotion Code:</span> <span className="detail-info">{order.promotionCode}</span></p>}
+              {order.orderStatus === "Đã thanh toán" ? (
+                <>
+                  <p><span className="detail-title">Certificate Image:</span> <a href={order.certificateImage} target="_blank" rel="noopener noreferrer"><img src={order.certificateImage} alt="Certificate" className="certificate-image" /></a></p>
+                  <p><span className="detail-title">Warranty Image:</span> <a href={order.warrantyImage} target="_blank" rel="noopener noreferrer"><img src={order.warrantyImage} alt="Warranty" className="warranty-image" /></a></p>
+                </>
+              ) : (
+                <p>Giấy chứng nhận và phiếu bảo hành sẽ có sau khi thanh toán hoàn tất</p>
+              )}
             </div>
             <hr />
 
@@ -44,6 +48,7 @@ function OrderSidebar({ order, show, onHide }) {
             <div className="order-section">
               <h5>Total Amount Information</h5>
               <p><span className="detail-title">Total:</span> <span className="detail-info">{order.totalOrder?.toLocaleString() || 'N/A'}</span></p>
+              {order.promotionCode && <p><span className="detail-title">Promotion Code:</span> <span className="detail-info">{order.promotionCode}</span></p>}
             </div>
           </>
         ) : (

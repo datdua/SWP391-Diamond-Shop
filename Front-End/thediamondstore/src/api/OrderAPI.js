@@ -136,3 +136,20 @@ export const fetchOrderDetail = async (orderID) => {
       throw error;
     }
   };
+  const deleteOrder = async (orderId) => {
+    try {
+        const url = `http://localhost:8080/api/orders/delete/${orderId}`;
+        const response = await axios.delete(url);
+
+        if (response.status === 200) {
+            return response.data; // Return data if needed
+        } else {
+            throw new Error(`Failed to delete order with status ${response.status}`);
+        }
+    } catch (error) {
+        console.error('Error deleting order:', error.message);
+        throw error; // Throw error to handle it in the calling code
+    }
+};
+
+export default deleteOrder;

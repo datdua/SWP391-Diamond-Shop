@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./MyAccountPage.css";
-import { createPayment, fetchOrders, fetchOrderDetail } from "../../api/OrderAPI";
+import deleteOrder, { createPayment, fetchOrders, fetchOrderDetail } from "../../api/OrderAPI"; // Assuming you have a deleteOrder function in your API
 import { AuthContext } from "../../components/Auth/AuthContext";
 import OrderSidebar from "../../components/OrderSidebar/OrderSidebar";
+import { toast } from "react-toastify";
 
 function MyAccountPage() {
   const { accountName } = useContext(AuthContext);
@@ -22,26 +23,26 @@ function MyAccountPage() {
       setError("Account ID is missing");
       return;
     }
-        const getOrders = async () => {
-          setLoading(true);
-          try {
-            if (accountId) {
-              const response = await fetchOrders(accountId);
-              setOrders(response);
-            } else {
-              console.error('accountId is undefined');
-            }
-        } catch (error) {
-            setError(error.toString());
-          } finally {
-            setLoading(false);
-          }
-        };
-      
-        getOrders();
-      }, [accountId]);
+    const getOrders = async () => {
+      setLoading(true);
+      try {
+        if (accountId) {
+          const response = await fetchOrders(accountId);
+          setOrders(response);
+        } else {
+          console.error('accountId is undefined');
+        }
+      } catch (error) {
+        setError(error.toString());
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const PaymentButton = ({ orderID }) => {
+    getOrders();
+  }, [accountId]);
+
+  const PaymentButton = ({ orderID, orderStatus }) => {
     const handlePayment = async () => {
       try {
         const paymentUrl = await createPayment(orderID);
@@ -52,14 +53,13 @@ function MyAccountPage() {
     };
 
     return (
-      <button onClick={handlePayment} className="tm-button tm-button-small">
-        Pay
-      </button>
+      orderStatus !== "Đã thanh toán" && (
+        <button onClick={handlePayment} className="tm-button tm-button-small">
+          Pay
+        </button>
+      )
     );
   };
-
-  // Function to handle VNPay return
-  
 
   const handleViewOrder = async (orderID) => {
     try {
@@ -68,6 +68,17 @@ function MyAccountPage() {
       setShowSidebar(true);
     } catch (error) {
       console.error('Failed to fetch order details:', error);
+    }
+  };
+
+  const handleDeleteOrder = async (orderID) => {
+    try {
+      await deleteOrder(orderID); // Implement deleteOrder function in your API
+      setOrders(orders.filter(order => order.orderID !== orderID));
+      toast.success('Xoá đơn hàng thành công')
+    } catch (error) {
+      console.error('Failed to delete order:', error);
+      // Handle error, show error message, etc.
     }
   };
 
@@ -145,7 +156,10 @@ function MyAccountPage() {
                                 <td>{order.orderStatus}</td>
                                 <td>{order.totalOrder !== undefined && order.totalOrder !== null ? order.totalOrder.toLocaleString() : 'N/A'}</td>
                                 <td><button onClick={() => handleViewOrder(order.orderID)} className="tm-button tm-button-small">View</button></td>
-                                <td><PaymentButton orderID={order.orderID} /></td>
+                                <td>
+                                  <PaymentButton orderID={order.orderID} orderStatus={order.orderStatus} />
+                                  <button onClick={() => handleDeleteOrder(order.orderID)} className="tm-button tm-button-small">Delete</button>
+                                </td>
                               </tr>
                             ))
                           ) : (
