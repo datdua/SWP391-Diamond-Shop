@@ -91,8 +91,14 @@ public class CartService {
 
     @Transactional
     public void removeCartItem(Integer cartID) {
-        cartRepository.deleteById(cartID);
+    Cart cart = cartRepository.findById(cartID).orElse(null);
+    if (cart != null) {
+        cartRepository.delete(cart);
+    } else {
+        throw new IllegalArgumentException("Không tìm thấy sản phẩm trong giỏ hàng.");
     }
+}
+
 
     //tính tổng giá tiền
     private void calculateAndSetTotalPrice(Cart cart) {

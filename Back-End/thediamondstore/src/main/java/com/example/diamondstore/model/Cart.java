@@ -60,7 +60,7 @@ public class Cart {
 
 
     @ManyToOne
-    @JoinColumn(name = "orderID", nullable = true)
+    @JoinColumn(name = "orderID", nullable = true) // nullable = true nếu cart có thể không có order
     private Order order;
 
     public Cart() {

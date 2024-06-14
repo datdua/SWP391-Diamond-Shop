@@ -35,9 +35,11 @@ import com.example.diamondstore.config.PaymentConfig;
 import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.Cart;
 import com.example.diamondstore.model.Order;
+import com.example.diamondstore.model.OrderDetail;
 import com.example.diamondstore.model.OrderHistory;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.CartRepository;
+import com.example.diamondstore.repository.OrderDetailRepository;
 import com.example.diamondstore.repository.OrderHistoryRepository;
 import com.example.diamondstore.repository.OrderRepository;
 
@@ -56,6 +58,9 @@ public class PaymentController {
 
     @Autowired
     private CartRepository cartRepository;
+
+    @Autowired
+    private OrderDetailRepository orderDetailRepository;
 
     @GetMapping("/createPayment")
     public ResponseEntity<?> createPayment(@RequestParam Integer orderID) throws UnsupportedEncodingException {
@@ -135,45 +140,61 @@ public class PaymentController {
 
     @GetMapping(value = "/vnpay_return")
     public ResponseEntity<TransactionStatusDTO> vnpayReturn(
-    @RequestParam(value = "vnp_BankCode") String bankCode,
-    @RequestParam(value = "vnp_OrderInfo") Integer orderID,
-    @RequestParam(value = "vnp_ResponseCode") String responseCode,
-    @RequestParam(value = "vnp_TransactionNo") Integer transactionNo
+        @RequestParam(value = "vnp_BankCode") String bankCode,
+        @RequestParam(value = "vnp_OrderInfo") Integer orderID,
+        @RequestParam(value = "vnp_ResponseCode") String responseCode,
+        @RequestParam(value = "vnp_TransactionNo") Integer transactionNo
     ) {
-    Order order = orderRepository.findByOrderID(orderID);
-    OrderHistory orderHistory = orderhistoryRepository.findByOrderID(orderID);
-    TransactionStatusDTO transactionStatusDTO = new TransactionStatusDTO();
-    if (responseCode.equals("00")) {
-        transactionStatusDTO.setStatus("Ok");
-        transactionStatusDTO.setMessage("Thanh toán thành công");
-        transactionStatusDTO.setData("");
-        // Update order status
-        order.setOrderStatus("Đã thanh toán");
-        orderRepository.save(order);
-        // Update order history status
-        orderHistory.setOrderhistoryStatus("Đã thanh toán");
-        orderHistory.setTransactionNo(transactionNo);
-        orderhistoryRepository.save(orderHistory);
+        Order order = orderRepository.findByOrderID(orderID);
+        TransactionStatusDTO transactionStatusDTO = new TransactionStatusDTO();
 
-        // Remove cart items
-        List<Cart> cartItems = cartRepository.findByOrder(order);
-        for (Cart cart : cartItems) {
-            cartRepository.delete(cart);
+        if (responseCode.equals("00")) {
+            // Thanh toán thành công
+            transactionStatusDTO.setStatus("Ok");
+            transactionStatusDTO.setMessage("Thanh toán thành công");
+            transactionStatusDTO.setData("");
+
+            // Cập nhật trạng thái đơn hàng
+            order.setOrderStatus("Đã thanh toán");
+            orderRepository.save(order);
+
+            // Chuyển các mục giỏ hàng thành OrderDetail và lưu
+            List<Cart> cartItems = cartRepository.findByOrder(order);
+            for (Cart cart : cartItems) {
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setOrder(order);
+                orderDetail.setAccountID(order.getAccount().getAccountID());
+                orderDetail.setDiamondID(cart.getDiamondID());
+                orderDetail.setJewelryID(cart.getJewelryID());
+                orderDetail.setDiamondName(cart.getDiamondName());
+                orderDetail.setJewelryName(cart.getJewelryName());
+                orderDetail.setDiamondImage(cart.getDiamondImage());
+                orderDetail.setJewelryImage(cart.getJewelryImage());
+                orderDetail.setQuantity(cart.getQuantity());
+                orderDetail.setSizeJewelry(cart.getsizeJewelry());
+                orderDetail.setPrice(cart.getPrice());
+                orderDetail.setGrossCartPrice(cart.getGrossCartPrice());
+                // Lưu thông tin tổng giá
+                BigDecimal totalPrice = cart.getGrossCartPrice().multiply(BigDecimal.valueOf(cart.getQuantity()));
+                orderDetail.setTotalPrice(totalPrice);
+
+                orderDetailRepository.save(orderDetail);
+
+                // Xóa giỏ hàng
+                cartRepository.delete(cart);
+            }
+        } else {
+            // Thanh toán thất bại
+            transactionStatusDTO.setStatus("No");
+            transactionStatusDTO.setMessage("Thanh toán thất bại");
+            transactionStatusDTO.setData("");
+
+            order.setOrderStatus("Thanh toán thất bại");
+            orderRepository.save(order);
         }
-    } else {
-        transactionStatusDTO.setStatus("No");
-        transactionStatusDTO.setMessage("Thanh toán thất bại");
-        transactionStatusDTO.setData("");
 
-        order.setOrderStatus("Thanh toán thất bại");
-        orderRepository.save(order);
-
-        orderHistory.setOrderhistoryStatus("Thanh toán thất bại");
-        orderHistory.setTransactionNo(transactionNo);
-        orderhistoryRepository.save(orderHistory);
+        return ResponseEntity.status(HttpStatus.OK).body(transactionStatusDTO);
     }
-    return ResponseEntity.status(HttpStatus.OK).body(transactionStatusDTO);
-}
 
 
     @PostMapping("/refund")
