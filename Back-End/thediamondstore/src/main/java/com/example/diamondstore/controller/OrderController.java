@@ -88,16 +88,22 @@ public class OrderController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo đơn hàng thành công"));
     }
 
-    @DeleteMapping("/{orderID}")
-    public ResponseEntity<Void> cancelOrder(@PathVariable int orderID) {
+
+    @DeleteMapping(value ="/{orderID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> cancelOrder(@PathVariable int orderID) {
+    try {
         orderService.cancelOrder(orderID);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(Collections.singletonMap("message", "Hủy đơn hàng thành công"));
+    } catch (IllegalStateException e) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+    }
     }
 
-    @DeleteMapping(value = "/delete/{orderID}")
-    public ResponseEntity<?> deleteOrder(@PathVariable int orderID) {
-        return ResponseEntity.ok(orderService.deleteOrder(orderID));
-    }
+
+    // @DeleteMapping(value = "/delete/{orderID}")
+    // public ResponseEntity<?> deleteOrder(@PathVariable int orderID) {
+    //     return ResponseEntity.ok(orderService.deleteOrder(orderID));
+    // }
 
     @PutMapping(value = "/update/{orderID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> updateDiamond(@PathVariable Integer orderID, @RequestBody OrderPutRequest orderPutRequest) {

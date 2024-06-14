@@ -147,21 +147,21 @@ public class OrderService {
 
 
     public void cancelOrder(int orderID) {
-        Order order = orderRepository.findById(orderID)
-                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+    Order order = orderRepository.findById(orderID)
+            .orElseThrow(() -> new IllegalArgumentException("Order not found"));
 
-        if (!order.getOrderStatus().equals("Đang xử lý")) {
-            throw new IllegalStateException("Chỉ Order có Status 'Đang xử lý' mới được xóa");
-        }
+    if (!order.getOrderStatus().equals("Đang xử lý")) {
+        throw new IllegalStateException("Chỉ Order có Status 'Đang xử lý' mới được xóa");
+    }
 
-        List<Cart> cartItems = cartRepository.findByOrder(order);
-        for (Cart cart : cartItems) {
-            cart.setOrder(null);
-            cart.setCartStatus("Kích hoạt");
-            cartRepository.save(cart);
-        }
+    // Delete the Cart items associated with the Order
+    List<Cart> carts = order.getCartItems();
+    for (Cart cart : carts) {
+        cartRepository.delete(cart);
+    }
 
-        orderRepository.delete(order);
+    // Now delete the Order
+    orderRepository.delete(order);
     }
 
 
@@ -194,14 +194,14 @@ public class OrderService {
         return order.gettotalOrder();
     }
 
-    public String deleteOrder(int orderID) {
-        Order order = orderRepository.findByOrderID(orderID);
-        if (order == null) {
-            throw new IllegalArgumentException("Không tìm thấy Order");
-        }
-        orderRepository.delete(order);
-        return "Xóa Order thành công";
-    }
+    // public String deleteOrder(int orderID) {
+    //     Order order = orderRepository.findByOrderID(orderID);
+    //     if (order == null) {
+    //         throw new IllegalArgumentException("Không tìm thấy Order");
+    //     }
+    //     orderRepository.delete(order);
+    //     return "Xóa Order thành công";
+    // }
 
     public Map<String,String> updateOrder(int orderID, OrderPutRequest orderPutRequest) {
     Order existingOrder = orderRepository.findByOrderID(orderID);
