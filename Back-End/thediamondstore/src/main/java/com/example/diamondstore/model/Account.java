@@ -1,5 +1,7 @@
 package com.example.diamondstore.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -41,25 +44,79 @@ public class Account {
     @Column(name = "addressAccount", nullable = false)
     private String addressAccount;
 
+    @Column(name = "otp")
+    private String otp;
+
+    @Column(name = "otp_generated_time")
+    private LocalDateTime otp_generated_time;
+
+    @Column(name = "active")
+    private boolean active;
+
     @JsonBackReference
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     @PrimaryKeyJoinColumn
     private Customer customer;
 
+    @Transient
+    private String unencryptedPassword; // Transient field for unencrypted password
+
     public Account() {
     }
 
-    public Account(Integer accountID, String accountName, String password, String role, String phoneNumber, String email, String addressAccount) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String hashedPassword = passwordEncoder.encode(password);
-
+    public Account(Integer accountID, String accountName, String password, String role, String phoneNumber, String email, String addressAccount, 
+        String otp, LocalDateTime otp_generated_time, boolean active) {
+        // Hàm khởi tạo với các tham số
         this.accountID = accountID;
         this.accountName = accountName;
-        this.password = hashedPassword;
+        setPassword(password); // Set mật khẩu với phương thức setPassword
         this.role = role;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.addressAccount = addressAccount;
+        this.otp = otp;
+        this.otp_generated_time = otp_generated_time;
+        this.active = active;
+    }
+
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public String getOtp() {
+        return otp;
+    }
+
+    public void setOtp(String otp) {
+        this.otp = otp;
+    }
+
+    public LocalDateTime getOtpGeneratedTime() {
+        return otp_generated_time;
+    }
+
+    public void setOtpGeneratedTime(LocalDateTime otp_generated_time) {
+        this.otp_generated_time = otp_generated_time;
+    }
+
+    public void setPassword(String password) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        this.password = passwordEncoder.encode(password);
+        this.unencryptedPassword = password; // Store the unencrypted password temporarily
+    }
+
+    public boolean checkPassword(String plainPassword) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        return passwordEncoder.matches(plainPassword, this.password);
+    }
+
+    public String getUnencryptedPassword() {
+        return this.unencryptedPassword;
     }
 
     public String getAddressAccount() {
@@ -84,14 +141,6 @@ public class Account {
 
     public void setAccountName(String accountName) {
         this.accountName = accountName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getRole() {
