@@ -8,7 +8,6 @@ public class OrderPutRequest {
     private String orderStatus;
     private LocalDateTime deliveryDate;
     private String deliveryAddress;
-    private String phoneNumber;
     private String certificateImage;
     private String warrantyImage;
     private String promotionCode;
@@ -18,12 +17,11 @@ public class OrderPutRequest {
     public OrderPutRequest() {
     }
 
-    public OrderPutRequest(String certificateImage, String deliveryAddress, LocalDateTime deliveryDate, String orderStatus, String phoneNumber, String promotionCode, String warrantyImage, BigDecimal totalOrder) {
+    public OrderPutRequest(String certificateImage, String deliveryAddress, LocalDateTime deliveryDate, String orderStatus, String promotionCode, String warrantyImage, BigDecimal totalOrder) {
         this.certificateImage = certificateImage;
         this.deliveryAddress = deliveryAddress;
         this.deliveryDate = deliveryDate;
         this.orderStatus = orderStatus;
-        this.phoneNumber = phoneNumber;
         this.promotionCode = promotionCode;
         this.warrantyImage = warrantyImage;
         this.totalOrder = totalOrder;
@@ -55,13 +53,6 @@ public class OrderPutRequest {
         this.deliveryAddress = deliveryAddress;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
 
     public String getCertificateImage() {
         return certificateImage;

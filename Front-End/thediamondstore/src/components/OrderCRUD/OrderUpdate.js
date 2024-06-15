@@ -25,6 +25,33 @@ function UpdateOrderForm({ order }) {
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group>
+        <Form.Label>Order Status</Form.Label>
+        <Form.Control
+          type="text"
+          name="orderStatus"
+          value={updatedOrder.orderStatus}
+          onChange={handleChange}
+        />
+      </Form.Group>
+      <Form.Group>
+        <Form.Label>Delivery Date</Form.Label>
+        <Form.Control
+          type="date"
+          name="deliveryDate"
+          value={updatedOrder.deliveryDate}
+          onChange={handleChange}
+        />
+      </Form.Group>
+      <Form.Group>
+        <Form.Label>Delivery Address</Form.Label>
+        <Form.Control
+          type="text"
+          name="deliveryAddress"
+          value={updatedOrder.deliveryAddress}
+          onChange={handleChange}
+        />
+      </Form.Group>
+      <Form.Group>
         <Form.Label>Warrantity Image</Form.Label>
         <Form.Control
           type="text"
@@ -37,98 +64,17 @@ function UpdateOrderForm({ order }) {
         <Form.Label>Certification Image</Form.Label>
         <Form.Control
           type="text"
-          name="certificationImage"
-          value={updatedOrder.certificationqImage}
+          name="certificateImage"
+          value={updatedOrder.certificateImage}
           onChange={handleChange}
         />
       </Form.Group>
       <Form.Group>
-        <Form.Label>Order Name</Form.Label>
+        <Form.Label>Promotion Code</Form.Label>
         <Form.Control
           type="text"
-          name="orderName"
-          value={updatedOrder.orderName}
-          onChange={handleChange}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Order Entry Price</Form.Label>
-        <Form.Control
-          type="text"
-          name="orderEntryPrice"
-          value={updatedOrder.orderEntryPrice}
-          onChange={handleChange}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Order Image</Form.Label>
-        <Form.Control
-          type="text"
-          name="orderImage"
-          value={updatedOrder.orderImage}
-          onChange={handleChange}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Carat Weight</Form.Label>
-        <Form.Control
-          type="text"
-          name="carat_weight"
-          value={updatedOrder.carat_weight}
-          onChange={handleChange}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Carat Size</Form.Label>
-        <Form.Control
-          type="text"
-          name="carat_size"
-          value={updatedOrder.carat_size}
-          onChange={handleChange}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Color</Form.Label>
-        <Form.Control
-          type="text"
-          name="color"
-          value={updatedOrder.color}
-          onChange={handleChange}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Cut</Form.Label>
-        <Form.Control
-          type="text"
-          name="cut"
-          value={updatedOrder.cut}
-          onChange={handleChange}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Clarity</Form.Label>
-        <Form.Control
-          type="text"
-          name="clarity"
-          value={updatedOrder.clarity}
-          onChange={handleChange}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Shape</Form.Label>
-        <Form.Control
-          type="text"
-          name="shape"
-          value={updatedOrder.shape}
-          onChange={handleChange}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Origin</Form.Label>
-        <Form.Control
-          type="text"
-          name="origin"
-          value={updatedOrder.origin}
+          name="promotionCode"
+          value={updatedOrder.promotionCode}
           onChange={handleChange}
         />
       </Form.Group>
