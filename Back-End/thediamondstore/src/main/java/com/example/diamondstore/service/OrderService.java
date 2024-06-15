@@ -203,24 +203,57 @@ public class OrderService {
     //     return "Xóa Order thành công";
     // }
 
-    public Map<String,String> updateOrder(int orderID, OrderPutRequest orderPutRequest) {
-    Order existingOrder = orderRepository.findByOrderID(orderID);
-    if (existingOrder == null) {
-        return Collections.singletonMap("message", "Không tìm thấy kim cương");
+//     public Map<String,String> updateOrder(int orderID, OrderPutRequest orderPutRequest) {
+//     Order existingOrder = orderRepository.findByOrderID(orderID);
+//     if (existingOrder == null) {
+//         return Collections.singletonMap("message", "Không tìm thấy kim cương");
+//     }
+//     existingOrder.setAccount(accountRepository.findById(orderPutRequest.getAccountID())
+//             .orElseThrow(() -> new IllegalArgumentException("AccountID không tồn tại")));
+//     existingOrder.setPhoneNumber(orderPutRequest.getPhoneNumber());
+//     existingOrder.setDeliveryAddress(orderPutRequest.getDeliveryAddress());
+//     existingOrder.setOrderStatus(orderPutRequest.getOrderStatus());
+//     existingOrder.setDeliveryDate(orderPutRequest.getDeliveryDate());
+//     existingOrder.setStartorderDate(orderPutRequest.getStartorderDate());
+//     existingOrder.settotalOrder(orderPutRequest.getTotalOrder());
+//     existingOrder.setWarrantyImage(orderPutRequest.getWarrantyImage());
+//     existingOrder.setCertificateImage(orderPutRequest.getCertificateImage());
+//     existingOrder.setPromotionCode(orderPutRequest.getPromotionCode());
+//     orderRepository.save(existingOrder);
+//     return Collections.singletonMap("message", "Cập nhật thành công");
+// }
+    @Transactional
+    public Map<String, String> updateOrder(int orderID, OrderPutRequest orderPutRequest) {
+        try {
+            Order existingOrder = orderRepository.findById(orderID)
+                    .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+
+            existingOrder.setPhoneNumber(orderPutRequest.getPhoneNumber());
+            existingOrder.setDeliveryAddress(orderPutRequest.getDeliveryAddress());
+            existingOrder.setOrderStatus(orderPutRequest.getOrderStatus());
+            existingOrder.setDeliveryDate(orderPutRequest.getDeliveryDate());
+            existingOrder.setCertificateImage(orderPutRequest.getCertificateImage());
+            existingOrder.setWarrantyImage(orderPutRequest.getWarrantyImage());
+            
+            // Handle promotion code and totalOrder update
+            String newPromotionCode = orderPutRequest.getPromotionCode();
+            BigDecimal totalOrder = existingOrder.gettotalOrder();
+
+            if (newPromotionCode != null && !newPromotionCode.isEmpty()) {
+                Promotion promotion = promotionRepository.findByPromotionCode(newPromotionCode);
+                if (promotion != null) {
+                    BigDecimal discountAmount = promotion.getDiscountAmount();
+                    totalOrder = totalOrder.subtract(totalOrder.multiply(discountAmount));
+                    existingOrder.setPromotionCode(newPromotionCode);
+                }
+            }
+
+            existingOrder.settotalOrder(totalOrder);
+            orderRepository.save(existingOrder);
+            return Collections.singletonMap("message", "Cập nhật thành công");
+        } catch (Exception e) {
+            return Collections.singletonMap("message", "Cập nhật thất bại");
+        }
     }
-    existingOrder.setAccount(accountRepository.findById(orderPutRequest.getAccountID())
-            .orElseThrow(() -> new IllegalArgumentException("AccountID không tồn tại")));
-    existingOrder.setPhoneNumber(orderPutRequest.getPhoneNumber());
-    existingOrder.setDeliveryAddress(orderPutRequest.getDeliveryAddress());
-    existingOrder.setOrderStatus(orderPutRequest.getOrderStatus());
-    existingOrder.setDeliveryDate(orderPutRequest.getDeliveryDate());
-    existingOrder.setStartorderDate(orderPutRequest.getStartorderDate());
-    existingOrder.settotalOrder(orderPutRequest.getTotalOrder());
-    existingOrder.setWarrantyImage(orderPutRequest.getWarrantyImage());
-    existingOrder.setCertificateImage(orderPutRequest.getCertificateImage());
-    existingOrder.setPromotionCode(orderPutRequest.getPromotionCode());
-    orderRepository.save(existingOrder);
-    return Collections.singletonMap("message", "Cập nhật thành công");
 }
-    
-}
+

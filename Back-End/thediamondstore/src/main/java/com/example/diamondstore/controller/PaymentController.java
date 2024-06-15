@@ -36,11 +36,9 @@ import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.Cart;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.model.OrderDetail;
-import com.example.diamondstore.model.OrderHistory;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.OrderDetailRepository;
-import com.example.diamondstore.repository.OrderHistoryRepository;
 import com.example.diamondstore.repository.OrderRepository;
 
 @RestController
@@ -52,9 +50,6 @@ public class PaymentController {
 
     @Autowired
     private AccountRepository accountRepository;
-
-    @Autowired
-    private OrderHistoryRepository orderhistoryRepository;
 
     @Autowired
     private CartRepository cartRepository;
