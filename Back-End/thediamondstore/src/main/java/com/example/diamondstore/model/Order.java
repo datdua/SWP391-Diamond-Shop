@@ -62,9 +62,8 @@ public class Order {
     private String promotionCode; // Chỉ lưu trữ promotionCode dưới dạng chuỗi
 
     @JsonIgnore
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<Cart> cartItems;
-
     // Constructors, getters, and setters
     public Order() {
     }

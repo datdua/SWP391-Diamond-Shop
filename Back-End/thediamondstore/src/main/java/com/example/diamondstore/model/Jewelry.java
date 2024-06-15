@@ -30,17 +30,21 @@ public class Jewelry {
     @Column(name = "grossJewelryPrice", precision = 16, scale = 2)
     private BigDecimal grossJewelryPrice;
 
+    @Column(name = "warrantyID")
+    private String warrantyID;
+
     public Jewelry() {
     }
 
     public Jewelry(String jewelryID, String gender, BigDecimal jewelryEntryPrice,
-            String jewelryImage, String jewelryName, BigDecimal grossJewelryPrice) {
+            String jewelryImage, String jewelryName, BigDecimal grossJewelryPrice, String warrantyID) {
         this.jewelryID = jewelryID;
         this.gender = gender;
         this.jewelryImage = jewelryImage;
         this.jewelryEntryPrice = jewelryEntryPrice;
         this.jewelryName = jewelryName;
         this.grossJewelryPrice = grossJewelryPrice;
+        this.warrantyID = warrantyID;
     }
 
     public BigDecimal getGrossJewelryPrice() {
@@ -89,5 +93,13 @@ public class Jewelry {
 
     public void setJewelryName(String jewelryName) {
         this.jewelryName = jewelryName;
+    }
+
+    public String getWarrantyID() {
+        return warrantyID;
+    }
+
+    public void setWarrantyID(String warrantyID) {
+        this.warrantyID = warrantyID;
     }
 }

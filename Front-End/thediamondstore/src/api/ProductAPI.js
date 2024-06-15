@@ -10,7 +10,7 @@ export async function getAllProduct() {
         const token = getAuthToken();
         console.log('Token:', token); // Logging token for debugging
         const response = await axios.get(
-          "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/production/all",
+          "http://localhost:8080/api/production/all",
           {
             headers: {
               Authorization: `Bearer ${token}`, // Example of using Bearer token authentication
@@ -36,7 +36,7 @@ export async function getProductPage(pageNumber = 1, pageSize = 4) {
     try {
         const token = getAuthToken();
         const response = await axios.get(
-          `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/production/paged?page=${pageNumber}&size=${pageSize}`,
+          `http://localhost:8080/api/production/paged?page=${pageNumber}&size=${pageSize}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -56,7 +56,7 @@ export const searchProductionByName = async (diamondName, jewelryName) => {
     try {
         const token = getAuthToken();
         const response = await axios.get(
-          `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/production/search`,
+          `http://localhost:8080/api/production/search`,
           {
             params: {
               diamondName: diamondName,

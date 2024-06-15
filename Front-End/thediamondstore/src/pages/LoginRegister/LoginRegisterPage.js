@@ -3,30 +3,29 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import { jwtDecode } from "jwt-decode";
 import "react-toastify/dist/ReactToastify.css";
 import "./LoginRegisterPage.css";
-
+import { jwtDecode } from 'jwt-decode';
 function LoginRegisterPage() {
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
-  const [registerEmail, setRegisterEmail] = useState("");
-  const [accountName, setAccountName] = useState("");
-  const [registerPassword, setRegisterPassword] = useState("");
-  const [registerName, setRegisterName] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [showLoginPassword, setShowLoginPassword] = useState(false);
-  const [showRegisterPassword, setShowRegisterPassword] = useState(false);
-  const [termsAccepted, setTermsAccepted] = useState(false);
-  const accountID = useParams();
-  const navigate = useNavigate();
-
+    const [loginEmail, setLoginEmail] = useState("");
+    const [loginPassword, setLoginPassword] = useState("");
+    const [registerEmail, setRegisterEmail] = useState("");
+    const [accountName, setAccountName] = useState("");
+    const [registerPassword, setRegisterPassword] = useState("");
+    const [registerName, setRegisterName] = useState("");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [showLoginPassword, setShowLoginPassword] = useState(false);
+    const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+    const [termsAccepted, setTermsAccepted] = useState(false);
+    const accountId = useParams();
+    const navigate = useNavigate();
+    
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
       const response = await axios.post(
-        "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/login",
+        "http://localhost:8080/login",
         {
           email: loginEmail,
           password: loginPassword,
@@ -45,7 +44,7 @@ function LoginRegisterPage() {
         localStorage.setItem("jwt", data.jwt);
         localStorage.setItem("email", loginEmail);
         localStorage.setItem("accountName", accountName);
-        localStorage.setItem("accountID", accountID);
+        localStorage.setItem('accountID', data.accountId);
         localStorage.setItem("role", jwtDecode(data.jwt).role); // Trích xuất và lưu trữ role từ JWT token
 
         setIsLoggedIn(true);
@@ -83,7 +82,7 @@ function LoginRegisterPage() {
 
     try {
       const response = await axios.post(
-        "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/accounts/register",
+        "http://localhost:8080/api/accounts/register",
         {
           accountName: registerName,
           email: registerEmail,
@@ -267,7 +266,7 @@ function LoginRegisterPage() {
                           />
                           <label htmlFor="register-terms">
                             Tôi đã đọc và đồng ý với các điều khoản và điều kiện
-                            của trang web <a href="#"></a>
+                            của trang web
                           </label>
                         </div>
                       </div>

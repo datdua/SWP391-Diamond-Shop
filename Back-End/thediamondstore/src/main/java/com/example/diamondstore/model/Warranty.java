@@ -27,14 +27,18 @@ public class Warranty {
     @Column(name = "warrantyImage")
     private String warrantyImage;
 
+    @Column(name = "jewelryID", nullable = false)
+    private String jewelryID;
+
     public Warranty() {
     }
 
-    public Warranty(String warrantyID, String diamondID, LocalDateTime expirationDate, String warrantyImage) {
+    public Warranty(String warrantyID, String diamondID, LocalDateTime expirationDate, String warrantyImage, String jewelryID) {
         this.warrantyID = warrantyID;
         this.diamondID = diamondID;
         this.expirationDate = expirationDate;
         this.warrantyImage = warrantyImage;
+        this.jewelryID = jewelryID;
     }
 
     public String getWarrantyID() {
@@ -67,5 +71,13 @@ public class Warranty {
 
     public void setwarrantyImage(String warrantyImage) {
         this.warrantyImage = warrantyImage;
+    }
+
+    public String getJewelryID() {
+        return jewelryID;
+    }
+
+    public void setJewelryID(String jewelryID) {
+        this.jewelryID = jewelryID;
     }
 }
