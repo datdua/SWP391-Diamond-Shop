@@ -107,16 +107,10 @@ public class Account {
     public void setPassword(String password) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         this.password = passwordEncoder.encode(password);
-        this.unencryptedPassword = password; // Store the unencrypted password temporarily
     }
 
-    public boolean checkPassword(String plainPassword) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        return passwordEncoder.matches(plainPassword, this.password);
-    }
-
-    public String getUnencryptedPassword() {
-        return this.unencryptedPassword;
+    public String getPassword() {
+        return password;
     }
 
     public String getAddressAccount() {

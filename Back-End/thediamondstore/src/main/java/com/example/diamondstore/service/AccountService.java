@@ -56,7 +56,7 @@ public class AccountService implements UserDetailsService {
         List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(account.getRole()));
         return new org.springframework.security.core.userdetails.User(
             account.getEmail(), 
-            account.getUnencryptedPassword(), 
+            account.getPassword(), 
             authorities
         );
     }
