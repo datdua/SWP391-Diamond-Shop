@@ -59,7 +59,6 @@ public class OrderService {
     @Autowired
     private AccountRepository accountRepository;
 
-
     @Transactional
     public Order createOrder(int accountID, String deliveryAddress, String promotionCode, Integer pointsToRedeem, String phoneNumber) {
         List<Cart> cartItems = cartRepository.findByAccountIDAndOrderIsNull(accountID);
@@ -144,7 +143,6 @@ public class OrderService {
         Customer customer = customerRepository.findById(accountID).orElseThrow(() -> new IllegalArgumentException("Khách hàng không tồn tại"));
         customer.setPoint(customer.getPoint() + 100);
         customerRepository.save(customer);
-
         return order;
     }
 
@@ -166,7 +164,6 @@ public class OrderService {
     // Now delete the Order
     orderRepository.delete(order);
     }
-
 
     public Order getOrder(int orderID) {
         Order order = orderRepository.findByOrderID(orderID);
