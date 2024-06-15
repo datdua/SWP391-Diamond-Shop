@@ -228,7 +228,6 @@ public class OrderService {
             Order existingOrder = orderRepository.findById(orderID)
                     .orElseThrow(() -> new IllegalArgumentException("Order not found"));
 
-            existingOrder.setPhoneNumber(orderPutRequest.getPhoneNumber());
             existingOrder.setDeliveryAddress(orderPutRequest.getDeliveryAddress());
             existingOrder.setOrderStatus(orderPutRequest.getOrderStatus());
             existingOrder.setDeliveryDate(orderPutRequest.getDeliveryDate());
