@@ -9,6 +9,9 @@ import java.util.Map;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -253,6 +256,15 @@ public class OrderService {
         } catch (Exception e) {
             return Collections.singletonMap("message", "Cập nhật thất bại");
         }
+    }
+
+    public List<Order> getOrdersByStatus(String orderStatus) {
+        return orderRepository.findByOrderStatus(orderStatus);
+    }
+
+    public Page<Order> getAllOrdersPaged(int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        return orderRepository.findAll(pageable);
     }
 }
 

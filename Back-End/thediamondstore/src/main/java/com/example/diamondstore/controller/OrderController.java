@@ -102,5 +102,15 @@ public class OrderController {
     }
     return ResponseEntity.ok(response);
     }
+
+    @GetMapping(value = "/getByStatus/{orderStatus}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getOrdersByStatus(@PathVariable String orderStatus) {
+        return ResponseEntity.ok(orderService.getOrdersByStatus(orderStatus));
+    }
+
+    @GetMapping(value = "/getOrder/paged", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getOrdersPaged(@RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(orderService.getAllOrdersPaged(page, size));
+    }
 }
 
