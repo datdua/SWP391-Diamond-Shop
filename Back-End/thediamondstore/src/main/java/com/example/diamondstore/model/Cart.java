@@ -55,8 +55,12 @@ public class Cart {
     @Column(name = "grossCartPrice", precision = 8, scale = 2)
     private BigDecimal grossCartPrice;
 
+    @Column(name = "cartStatus")
+    private String cartStatus;
+
+
     @ManyToOne
-    @JoinColumn(name = "orderID", nullable = true)
+    @JoinColumn(name = "orderID", nullable = true) // nullable = true nếu cart có thể không có order
     private Order order;
 
     public Cart() {
@@ -64,7 +68,7 @@ public class Cart {
 
     public Cart(Integer accountID, Integer cartID, String diamondID, String jewelryID, Order order, Integer quantity, 
         BigDecimal totalPrice, Integer sizeJewelry, String diamondImage, String jewelryImage, String diamondName, 
-        String jewelryName, BigDecimal price, BigDecimal grossCartPrice) {
+        String jewelryName, BigDecimal price, BigDecimal grossCartPrice, String cartStatus) {
         this.accountID = accountID;
         this.cartID = cartID;
         this.diamondID = diamondID;
@@ -79,6 +83,7 @@ public class Cart {
         this.jewelryName = jewelryName;
         this.price = price;
         this.grossCartPrice = grossCartPrice;
+        this.cartStatus = cartStatus;
     }
 
     public BigDecimal getGrossCartPrice() {
@@ -191,5 +196,13 @@ public class Cart {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public String getCartStatus() {
+        return cartStatus;
+    }
+
+    public void setCartStatus(String cartStatus) {
+        this.cartStatus = cartStatus;
     }
 }

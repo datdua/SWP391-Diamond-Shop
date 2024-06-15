@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,13 +28,13 @@ public class CartController {
     private CartService cartService;
 
     //lấy câc sản phẩm trong giỏ hàng
-    @GetMapping()
-    public ResponseEntity<?> getCartItems(@RequestParam Integer accountID) {
+    @GetMapping
+    public ResponseEntity<List<Cart>> getCartItems(@RequestParam Integer accountID) {
         List<Cart> cartItems = cartService.getCartItems(accountID);
         if (cartItems.isEmpty()) {
-            return ResponseEntity.ok(Collections.singletonMap("message", "Giỏ hàng đang rỗng."));
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return ResponseEntity.ok(cartItems);
+        return new ResponseEntity<>(cartItems, HttpStatus.OK);
     }
 
     //thêm sản phầm vào giỏ hàng

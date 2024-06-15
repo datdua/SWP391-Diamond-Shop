@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.example.diamondstore.model.Cart;
+import com.example.diamondstore.model.Order;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Integer> {
@@ -19,4 +20,6 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
     Cart findByAccountIDAndDiamondID(Integer accountID, String diamondID);
 
     Cart findByAccountIDAndJewelryID(Integer accountID, String jewelryID);
+
+    List<Cart> findByOrder(Order order);
 }

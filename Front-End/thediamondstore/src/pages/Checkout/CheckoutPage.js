@@ -4,7 +4,7 @@ import { getAllCartItems, getTotalCart } from "../../api/addToCart";
 import "./CheckoutPage.css";
 import { createOrder, getPromotion } from "../../api/OrderAPI";
 import { toast } from "react-toastify";
-import { getContactInfo } from "../../api/accountCrud";
+import { getContactInfo, getCustomerPoints } from "../../api/accountCrud";
 
 function CheckoutPage() {
     const [cartItems, setCartItems] = useState([]);
@@ -12,10 +12,12 @@ function CheckoutPage() {
     const [deliveryAddress, setDeliveryAddress] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [pointsToRedeem, setPointsToRedeem] = useState(0);
+    const [totalAccumulatedPoints, setTotalAccumulatedPoints] = useState(0);
     const [promotionCode, setPromotionCode] = useState("");
     const [promotionDescription, setPromotionDescription] = useState("");
     const [discountAmount, setDiscountAmount] = useState(0);
-    const { accountId } = useParams(); // Extract accountId from useParams
+    const [usePoints, setUsePoints] = useState(false);
+    const { accountId } = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -50,12 +52,30 @@ function CheckoutPage() {
     }, [accountId]);
 
     useEffect(() => {
+        const fetchCustomerPoints = async () => {
+            try {
+                if (accountId) {
+                    const points = await getCustomerPoints(accountId);
+                    setTotalAccumulatedPoints(points);
+                } else {
+                    console.error("Account ID is undefined");
+                }
+            } catch (error) {
+                console.error("Error fetching customer points:", error);
+            }
+        };
+
+        fetchCustomerPoints();
+    }, [accountId]);
+
+    useEffect(() => {
         calculatePointsToRedeem();
     }, [totalCart]);
 
     const calculatePointsToRedeem = () => {
-        const points = Math.floor(totalCart / 100000); // Assuming 1 point = 100,000 VND
-        setPointsToRedeem(points);
+        // Here, you can adjust how pointsToRedeem is calculated
+        // For example, setPointsToRedeem(totalCart / 10) or any logic that suits your requirements
+        setPointsToRedeem(100); // For demonstration, setting a fixed value
     };
 
     useEffect(() => {
@@ -82,11 +102,11 @@ function CheckoutPage() {
             const promotion = await getPromotion(promotionCode);
             if (promotion) {
                 setPromotionDescription(promotion.description);
-                const discount = totalCart * promotion.discountAmount; // Calculate discount based on totalCart * discountAmount
+                const discount = totalCart * promotion.discountAmount;
                 setDiscountAmount(discount);
                 toast.success("Áp dụng mã thành công");
             } else {
-                toast.error("IMã giảm giá không hợp lệ");
+                toast.error("Mã giảm giá không hợp lệ");
             }
         } catch (error) {
             toast.error("Áp dụng mã không thành công");
@@ -100,45 +120,40 @@ function CheckoutPage() {
         }
 
         try {
+            let finalTotal = totalCart;
+            if (usePoints) {
+                const pointsDiscount = totalAccumulatedPoints * 10000;
+                finalTotal -= pointsDiscount;
+            }
+            finalTotal -= discountAmount;
+
             const orderData = await createOrder(accountId, deliveryAddress, phoneNumber, pointsToRedeem, promotionCode);
             toast.success("Đặt hàng thành công");
-            navigate(`/account/${accountId}`); // Redirect to order confirmation page or wherever you want
+            navigate(`/account/${accountId}`);
         } catch (error) {
             toast.error("Đặt hàng thất bại");
         }
     };
+    function handlePointsRedemption() {
+        if (totalPoints > totalCart) {
+          setPointsToRedeem(totalCart);
+        }
+      }
 
-    // Calculate final total including discounts
-    const finalTotal = totalCart - discountAmount;
+    const pointsDiscount = usePoints ? totalAccumulatedPoints * 10000 : 0;
+    const finalTotal = totalCart - discountAmount - (usePoints ? pointsDiscount : 0);
+    const totalPoints = totalAccumulatedPoints + pointsToRedeem;
 
     return (
         <div>
             <div id="wrapper" className="wrapper">
-                {/* Header */}
-
-                {/* Breadcrumb Area */}
-                <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(assets/images/breadcrumb-bg.jpg)` }}>
-                    <div className="container">
-                        <div className="tm-breadcrumb">
-                            <h2>Checkout</h2>
-                            <ul>
-                                <li><Link to="/home">Home</Link></li>
-                                <li><Link to="/product">Shop</Link></li>
-                                <li>Checkout</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                {/* Page Content */}
                 <main className="page-content">
-                    {/* Checkout Area */}
                     <div className="tm-section tm-checkout-area bg-white tm-padding-section">
                         <div className="container">
-                            <form action="#" className="tm-form tm-checkout-form" onSubmit={handleApplyPromotion}>
+                            <form className="tm-form tm-checkout-form" onSubmit={handleApplyPromotion}>
                                 <div className="row">
                                     <div className="col-lg-6">
                                         <h4 className="small-title">THÔNG TIN HOÁ ĐƠN</h4>
-                                        {/* Billing Form */}
                                         <div className="tm-checkout-billingform">
                                             <div className="tm-form-inner">
                                                 <div className="tm-form-field">
@@ -154,10 +169,8 @@ function CheckoutPage() {
                                                 <label htmlFor="coupon-field">Có mã giảm giá?</label>
                                                 <input type="text" id="coupon-field" value={promotionCode} onChange={(e) => setPromotionCode(e.target.value)} placeholder="Enter coupon code" required />
                                                 <button type="submit" className="tm-button">Áp dụng</button>
-
                                             </div>
                                         </div>
-                                        {/* Different Address Form */}
                                     </div>
                                     <div className="col-lg-6">
                                         <div className="tm-checkout-orderinfo">
@@ -181,7 +194,9 @@ function CheckoutPage() {
                                                                         <Link to={`/product-detail/jewelry/${item.jewelryID}`} className="tm-checkout-productlink">{item.jewelryName} * {item.quantity}</Link>
                                                                     )}
                                                                 </td>
-                                                                {item.grossCartPrice !== null && item.grossCartPrice !== undefined ? item.grossCartPrice.toLocaleString() + ' VND' : ''}
+                                                                <td>
+                                                                    {item.grossCartPrice !== null && item.grossCartPrice !== undefined ? item.grossCartPrice.toLocaleString() + ' VND' : ''}
+                                                                </td>
                                                             </tr>
                                                         ))}
                                                         {promotionDescription && (
@@ -201,31 +216,45 @@ function CheckoutPage() {
                                                             <td>Giảm giá</td>
                                                             <td>- {discountAmount.toLocaleString()} VND</td>
                                                         </tr>
-                                                        <tr className="tm-checkout-final-total highlight"> 
+                                                        <tr className="tm-checkout-points">
+                                                            <td>Điểm tích luỹ</td>
+                                                            <td>+ {pointsToRedeem}</td>
+                                                        </tr>
+                                                        {usePoints && (
+                                                            <tr className="tm-checkout-points-discount">
+                                                                <td>Giảm giá từ điểm</td>
+                                                                <td>- {pointsDiscount.toLocaleString()} VND</td>
+                                                            </tr>
+                                                        )}
+                                                        <tr className="tm-checkout-final-total highlight">
                                                             <td>TỔNG TIỀN THANH TOÁN</td>
                                                             <td>{finalTotal.toLocaleString()} VND</td>
                                                         </tr>
-                                                        <tr className="tm-checkout-points">
-                                                            <td>Điểm tích luỹ</td>
-                                                            <td>{pointsToRedeem}</td>
-                                                        </tr>
                                                     </tfoot>
                                                 </table>
+                                            </div>
+                                            <div className="tm-checkout-submit">
+                                                <div className="tm-form-inner">
+                                                    <div className="tm-form-field">
+                                                        <input
+                                                            type="checkbox"
+                                                            name="checkout-read-terms"
+                                                            id="checkout-read-terms"
+                                                            checked={usePoints}
+                                                            onChange={(e) => setUsePoints(e.target.checked)}
+                                                        />
+                                                        <label htmlFor="checkout-read-terms" onClick={handlePointsRedemption}>
+                                                            Sử dụng điểm tích luỹ để thanh toán: {totalPoints}
+                                                        </label>
+                                                    </div>
+                                                    <p>Dữ liệu cá nhân của bạn sẽ được sử dụng để xử lý đơn hàng của bạn, hỗ trợ trải nghiệm của bạn trên toàn bộ trang web này, và cho các mục đích khác được mô tả trong chính sách bảo mật của chúng tôi.</p>
+                                                </div>
                                             </div>
                                             <div className="tm-checkout-paymentmethods">
                                                 <div className="tm-form-inner">
                                                     <div className="tm-form-field">
                                                         <input type="radio" name="paymentmethod" id="paymentmethod-paypal" />
                                                         <label htmlFor="paymentmethod-paypal">VNPay</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="tm-checkout-submit">
-                                                <p>Dữ liệu cá nhân của bạn sẽ được sử dụng để xử lý đơn hàng của bạn, hỗ trợ trải nghiệm của bạn trên toàn bộ trang web này, và cho các mục đích khác được mô tả trong chính sách bảo mật của chúng tôi.</p>
-                                                <div className="tm-form-inner">
-                                                    <div className="tm-form-field">
-                                                        <input type="checkbox" name="checkout-read-terms" id="checkout-read-terms" />
-                                                        <label htmlFor="checkout-read-terms">Tôi đã đọc và đồng ý với các chính sách và điều kiện của cửa hàng</label>
                                                     </div>
                                                     <div className="tm-form-field">
                                                         <button type="button" className="tm-button tm-button-block" onClick={handlePlaceOrder}>Đặt hàng</button>
@@ -238,9 +267,9 @@ function CheckoutPage() {
                             </form>
                         </div>
                     </div>
-                </main>
-            </div>
-        </div>
+                </main >
+            </div >
+        </div >
     );
 }
 
