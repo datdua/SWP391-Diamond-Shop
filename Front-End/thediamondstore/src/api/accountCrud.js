@@ -66,3 +66,30 @@ export async function createAccount(account) {
     throw new Error("Failed to create account");
   }
 }
+export const getContactInfo = async (accountId) => {
+  try {
+      const response = await axios.get(`http://localhost:8080/api/accounts/contactInfo/${accountId}`);
+      return response.data;
+  } catch (error) {
+      console.error('Error fetching contact info:', error);
+      throw error;
+  }
+};
+export const getAccountIDByEmail = async (email) => {
+  try {
+    const token = localStorage.getItem("jwt");
+    const response = await axios.get(
+      `http://localhost:8080/api/accounts/getByEmail/${email}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data.accountID;
+  } catch (error) {
+    console.error("Error fetching account ID:", error);
+    throw new Error("Failed to fetch account information: " + error.message);
+  }
+};
+

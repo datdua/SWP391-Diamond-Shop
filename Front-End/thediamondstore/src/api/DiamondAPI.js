@@ -1,32 +1,26 @@
-import axios from "axios";
-
-// Cart API functions
-export const addToCart = async (accountId, diamondId, quantity) => {
-  const response = await axios.post(
-    `http://localhost:8080/api/cart/add?accountID=${accountId}&jewelryID=${diamondId}&quantity=${quantity}`
-  );
-  return response.data;
-};
+import axios from 'axios';
 
 // Diamond API functions
 export async function getAllDiamond() {
-  const response = await axios.get("http://localhost:8080/api/diamonds");
+  const response = await axios.get(
+    "http://localhost:8080/api/diamonds"
+  );
   if (response.status !== 200) {
     throw new Error("Failed to fetch diamond data");
   }
   return response.data;
 }
 
-export async function getDiamondByID(diamondID) {
-  try {
-    const response = await axios.get(
-      `http://localhost:8080/api/diamonds/${diamondID}`
-    );
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to fetch diamond by ID");
-  }
-}
+const BASE_URL = 'http://localhost:8080/api/diamonds/get';
+
+export const getDiamondById = async (diamondId) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/${diamondId}`);
+        return response.data;
+    } catch (error) {
+        throw new Error('Error fetching diamond data');
+    }
+};
 
 export async function getPage(page = 1, size = 9) {
   try {
@@ -38,6 +32,8 @@ export async function getPage(page = 1, size = 9) {
     throw new Error("Failed to fetch diamond by page");
   }
 }
+
+
 
 export async function createDiamond(diamond) {
   try {
@@ -133,3 +129,5 @@ export const searchDiamond = async (filters, page = 1) => {
     throw new Error("Failed to fetch diamonds");
   }
 };
+
+

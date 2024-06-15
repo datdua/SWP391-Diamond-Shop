@@ -2,7 +2,9 @@ import axios from "axios";
 
 // Jewelry API functions
 export async function getAllJewelry() {
-  const response = await axios.get("http://localhost:8080/api/jewelry");
+  const response = await axios.get(
+    "http://localhost:8080/api/jewelry"
+  );
   if (response.status !== 200) {
     throw new Error("Failed to fetch jewelry data");
   }

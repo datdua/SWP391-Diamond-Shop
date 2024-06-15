@@ -85,31 +85,29 @@ function JewelryPage() {
     setLoading(true);
     try {
       let filtersToUse = { ...filters, page: 1 }; // Always start from page 1 when searching
-
-      // Remove 'All' gender filter if present
-      if (filtersToUse.gender === "All") {
-        delete filtersToUse.gender;
-      }
-
-      // Convert price filters to numbers
+  
+      // Convert price filters to numbers if they exist
       if (filtersToUse.minjewelryEntryPrice !== undefined) {
         filtersToUse.minjewelryEntryPrice = parseInt(
           filtersToUse.minjewelryEntryPrice
         );
-        delete filtersToUse.minJewelryPrice;
       }
-
+  
       if (filtersToUse.maxjewelryEntryPrice !== undefined) {
         filtersToUse.maxjewelryEntryPrice = parseInt(
           filtersToUse.maxjewelryEntryPrice
         );
-        delete filtersToUse.maxJewelryPrice;
       }
-
+  
+      // Remove 'All' gender filter if present
+      if (filtersToUse.gender === "All") {
+        delete filtersToUse.gender;
+      }
+  
       const data = await searchJewelry(filtersToUse);
       const totalPages = Math.ceil(data.length / resultsPerPage);
       setTotalPages(totalPages);
-
+  
       // Slice the results based on the current page
       const results = data.slice(
         (currentPage - 1) * resultsPerPage,
@@ -122,6 +120,7 @@ function JewelryPage() {
       setLoading(false);
     }
   };
+  
 
   const handlePageChange = async (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -146,7 +145,7 @@ function JewelryPage() {
   useEffect(() => {
     const checkLoginStatus = () => {
       const jwt = localStorage.getItem("jwt");
-      setIsLoggedIn(!!jwt); // Simplified way to set isLoggedIn based on jwt presence
+      setIsLoggedIn(!!jwt); 
     };
     checkLoginStatus();
   }, []);
@@ -199,115 +198,56 @@ function JewelryPage() {
                     </select>
                   </form>
 
-                  <div className="tm-shop-products">
-                    <div className="row mt-30-reverse">
-                      {loading ? (
-                        <div>Loading...</div>
-                      ) : error ? (
-                        <div>Error: {error}</div>
-                      ) : (
-                        jewelry.map((item) => (
-                          <div
-                            key={item.jewelryID}
-                            className="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12 mt-50"
-                          >
-                            <div className="tm-product">
-                              <div className="tm-product-topside">
-                                <div className="tm-product-images">
-                                  <img
-                                    src={item.jewelryImage}
-                                    alt={item.jewelryName}
-                                  />
+                                    <div className="tm-shop-products">
+                                        <div className="row mt-30-reverse">
+                                            {loading ? (
+                                                <div>Loading...</div>
+                                            ) : error ? (
+                                                <div>Error: {error}</div>
+                                            ) : (
+                                                jewelry.map((item) => (
+                                                    <div key={item.jewelryID} className="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12 mt-50">
+                                                        <div className="tm-product">
+                                                            <div className="tm-product-topside">
+                                                                <div className="tm-product-images">
+                                                                    <img src={item.jewelryImage} alt={item.jewelryName} />
+                                                                </div>
+                                                                <ul className="tm-product-actions">
+                                                                    {isLoggedIn ? null : <p>Please log in to add items to the cart.</p>}
+                                                                    <li><Link to={`/product-detail/jewelry/${item.jewelryID}`}><i className="ion-android-cart"></i> Add to cart</Link></li>
+                                                                    <li><button onClick={() => openModal(item)} aria-label="Product Quickview"><i className="ion-eye"></i></button></li>
+                                                                    <li><a href="#"><i className="ion-heart"></i></a></li>
+                                                                </ul>
+                                                                <div className="tm-product-badges">
+                                                                    <span className="tm-product-badges-new">New</span>
+                                                                    <span className="tm-product-badges-sale">Sale</span>
+                                                                </div>
+                                                            </div>
+                                                            <div className="tm-product-bottomside">
+                                                                <h6 className="tm-product-title"><Link to={`/product-detail/jewelry/${item.jewelryID}`}>{item.jewelryName}</Link></h6>
+                                                                <div className="tm-ratingbox">
+                                                                    <span className="is-active"><i className="ion-android-star-outline"></i></span>
+                                                                    <span className="is-active"><i className="ion-android-star-outline"></i></span>
+                                                                    <span className="is-active"><i className="ion-android-star-outline"></i></span>
+                                                                    <span className="is-active"><i className="ion-android-star-outline"></i></span>
+                                                                    <span><i className="ion-android-star-outline"></i></span>
+                                                                </div>
+                                                                <span className="tm-product-price">{(item.jewelryEntryPrice).toLocaleString()} VND</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            )}
+                                        </div>
+                                        <div className="tm-pagination mt-50">
+                                            {Array.from({ length: totalPages }, (_, index) => (
+                                                <button key={index} onClick={() => handlePageChange(index + 1)} className={currentPage === index + 1 ? 'active' : ''}>
+                                                    {index + 1}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
-                                <ul className="tm-product-actions">
-                                  {isLoggedIn ? null : (
-                                    <p>
-                                      Please log in to add items to the cart.
-                                    </p>
-                                  )}
-                                  <li>
-                                    <Link
-                                      to={`/product-detail/${item.jewelryID}`}
-                                    >
-                                      <i className="ion-android-cart"></i> Add
-                                      to cart
-                                    </Link>
-                                  </li>
-                                  <li>
-                                    <button
-                                      onClick={() => openModal(item)}
-                                      aria-label="Product Quickview"
-                                    >
-                                      <i className="ion-eye"></i>
-                                    </button>
-                                  </li>
-                                  <li>
-                                    <a href="#">
-                                      <i className="ion-heart"></i>
-                                    </a>
-                                  </li>
-                                </ul>
-                                <div className="tm-product-badges">
-                                  <span className="tm-product-badges-new">
-                                    New
-                                  </span>
-                                  <span className="tm-product-badges-sale">
-                                    Sale
-                                  </span>
-                                </div>
-                              </div>
-                              <div className="tm-product-bottomside">
-                                <h6 className="tm-product-title">
-                                  <Link
-                                    to={`/product-detail/${
-                                      item.jewelryID || item.diamondID
-                                    }`}
-                                  >
-                                    {item.jewelryName || item.diamondName}
-                                  </Link>
-                                </h6>
-                                <div className="tm-ratingbox">
-                                  <span className="is-active">
-                                    <i className="ion-android-star-outline"></i>
-                                  </span>
-                                  <span className="is-active">
-                                    <i className="ion-android-star-outline"></i>
-                                  </span>
-                                  <span className="is-active">
-                                    <i className="ion-android-star-outline"></i>
-                                  </span>
-                                  <span className="is-active">
-                                    <i className="ion-android-star-outline"></i>
-                                  </span>
-                                  <span>
-                                    <i className="ion-android-star-outline"></i>
-                                  </span>
-                                </div>
-                                <span className="tm-product-price">
-                                  {(
-                                    item.jewelryEntryPrice || item.diamondPrice
-                                  ).toLocaleString()}{" "}
-                                  VND
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                    <div className="tm-pagination mt-50">
-                      {Array.from({ length: totalPages }, (_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => handlePageChange(index + 1)}
-                          className={currentPage === index + 1 ? "active" : ""}
-                        >
-                          {index + 1}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
 
                 <div className="col-lg-3 col-12">
                   <div className="widgets">

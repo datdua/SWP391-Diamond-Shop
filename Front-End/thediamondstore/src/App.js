@@ -20,12 +20,14 @@ import BackToTop from "./components/BackToTop";
 import DiamondPage from "./pages/Product/DiamondPage";
 import JewelryDetailPage from "./pages/ProductDetail/JewelryDetailPage";
 import { AuthProvider } from "./components/Auth/AuthProvider";
+import DiamondDetailPage from "./pages/ProductDetail/DiamondDetailPage";
 
 import Dashboard from "./pages/DashBoard/DashBoard";
 import SideBarAdmin from "./components/Sidebar/SidebarAdmin";
 import ProductManagerPage from "./pages/Manager/DiamondManager/DiamonsManager";
 import AccountManager from "./pages/Manager/AccountManager/AccountManager";
 import JewelryManagerPage from "./pages/Manager/JewelryManager/JewelryManagerPage";
+import PaymentConfirm from "./pages/PaymentConfirm/PaymentConfirm";
 
 
 function App() {
@@ -64,7 +66,20 @@ function App() {
               </>
             }
           />
-          <Route path="/dangnhap" element={<LoginRegisterPage />} />
+          <Route path="/dangnhap" element={
+            <>
+            <Header/>
+            <LoginRegisterPage />
+            <Footer/>
+            <BackToTop/>
+            </>} />
+            <Route path="/xacthucthanhtoan" element={
+            <>
+            <Header/>
+            <PaymentConfirm/>
+            <Footer/>
+            <BackToTop/>
+            </>} />
           <Route
             path="/trangchu"
             element={
@@ -143,7 +158,7 @@ function App() {
             }
           />
           <Route
-            path="/product-detail/:jewelryId"
+            path="/product-detail/jewelry/:jewelryId"
             element={
               <>
                 <Header />
@@ -153,6 +168,17 @@ function App() {
               </>
             }
           />
+          <Route
+            path="/product-detail/diamond/:diamondId"
+            element={
+              <>
+                <Header />
+                <DiamondDetailPage />
+                <Footer />
+                <BackToTop />
+              </>
+            }
+            />
           <Route
             path="/account/:accountId"
             element={
