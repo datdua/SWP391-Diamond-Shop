@@ -102,11 +102,11 @@ function CheckoutPage() {
             const promotion = await getPromotion(promotionCode);
             if (promotion) {
                 setPromotionDescription(promotion.description);
-                const discount = totalCart * promotion.discountAmount;
+                const discount = totalCart * promotion.discountAmount; // Calculate discount based on totalCart * discountAmount
                 setDiscountAmount(discount);
                 toast.success("Áp dụng mã thành công");
             } else {
-                toast.error("Mã giảm giá không hợp lệ");
+                toast.error("IMã giảm giá không hợp lệ");
             }
         } catch (error) {
             toast.error("Áp dụng mã không thành công");

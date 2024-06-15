@@ -61,7 +61,7 @@ function ProductPage() {
       // Fetch all products if no specific product name is provided in the search query
       axios
         .get(
-          "http://localhost:8080//api/jewelry"
+          "http://localhost:8080/api/jewelry"
         )
         .then((response) => {
           setJewelry(response.data);
@@ -130,7 +130,7 @@ function ProductPage() {
     setLoading(true); // Set loading state while fetching data
     axios
       .get(
-        `http://localhost:8080//api/jewelry/search/filter?gender=${gender}`
+        `http://localhost:8080/api/jewelry/search/filter?gender=${gender}`
       )
       .then((response) => {
         setJewelry(response.data);
@@ -146,7 +146,7 @@ function ProductPage() {
       setLoading(true);
       axios
         .get(
-          `http://localhost:8080//api/jewelry/search/filter?size=${size}`
+          `http://localhost:8080/api/jewelry/search/filter?size=${size}`
         )
         .then((response) => {
           setJewelry(response.data);

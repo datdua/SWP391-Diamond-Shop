@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function getAllJewelry() {
   const response = await axios.get(
-    "http://localhost:8080//api/jewelry"
+    "http://localhost:8080/api/jewelry"
   );
   if (!response.ok) {
     throw new Error("Failed to fetch jewelry data");

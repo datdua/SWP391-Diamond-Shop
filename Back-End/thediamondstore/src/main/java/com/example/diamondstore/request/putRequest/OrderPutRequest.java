@@ -5,48 +5,28 @@ import java.time.LocalDateTime;
 
 public class OrderPutRequest {
 
-    private Integer accountID;
-    private LocalDateTime startorderDate;
     private String orderStatus;
     private LocalDateTime deliveryDate;
-    private BigDecimal totalOrder;
     private String deliveryAddress;
-    private String phoneNumber;
     private String certificateImage;
     private String warrantyImage;
     private String promotionCode;
+    private BigDecimal totalOrder;
+    
 
     public OrderPutRequest() {
     }
 
-    public OrderPutRequest(Integer accountID, String certificateImage, String deliveryAddress, LocalDateTime deliveryDate, String orderStatus, String phoneNumber, String promotionCode, LocalDateTime startorderDate, BigDecimal totalOrder, String warrantyImage) {
-        this.accountID = accountID;
+    public OrderPutRequest(String certificateImage, String deliveryAddress, LocalDateTime deliveryDate, String orderStatus, String promotionCode, String warrantyImage, BigDecimal totalOrder) {
         this.certificateImage = certificateImage;
         this.deliveryAddress = deliveryAddress;
         this.deliveryDate = deliveryDate;
         this.orderStatus = orderStatus;
-        this.phoneNumber = phoneNumber;
         this.promotionCode = promotionCode;
-        this.startorderDate = startorderDate;
-        this.totalOrder = totalOrder;
         this.warrantyImage = warrantyImage;
+        this.totalOrder = totalOrder;
     }
 
-    public Integer getAccountID() {
-        return accountID;
-    }
-
-    public void setAccountID(Integer accountID) {
-        this.accountID = accountID;
-    }
-
-    public LocalDateTime getStartorderDate() {
-        return startorderDate;
-    }
-
-    public void setStartorderDate(LocalDateTime startorderDate) {
-        this.startorderDate = startorderDate;
-    }
 
     public String getOrderStatus() {
         return orderStatus;
@@ -64,13 +44,6 @@ public class OrderPutRequest {
         this.deliveryDate = deliveryDate;
     }
 
-    public BigDecimal getTotalOrder() {
-        return totalOrder;
-    }
-
-    public void setTotalOrder(BigDecimal totalOrder) {
-        this.totalOrder = totalOrder;
-    }
 
     public String getDeliveryAddress() {
         return deliveryAddress;
@@ -80,13 +53,6 @@ public class OrderPutRequest {
         this.deliveryAddress = deliveryAddress;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
 
     public String getCertificateImage() {
         return certificateImage;
@@ -112,6 +78,13 @@ public class OrderPutRequest {
         this.promotionCode = promotionCode;
     }
 
+    public BigDecimal getTotalOrder() {
+        return totalOrder;
+    }
+
+    public void setTotalOrder(BigDecimal totalOrder) {
+        this.totalOrder = totalOrder;
+    }
     
 
 }

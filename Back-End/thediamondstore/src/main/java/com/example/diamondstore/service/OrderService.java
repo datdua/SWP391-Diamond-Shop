@@ -9,6 +9,9 @@ import java.util.Map;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +58,6 @@ public class OrderService {
 
     @Autowired
     private AccountRepository accountRepository;
-
 
     @Transactional
     public Order createOrder(int accountID, String deliveryAddress, String promotionCode, Integer pointsToRedeem, String phoneNumber) {
@@ -141,29 +143,27 @@ public class OrderService {
         Customer customer = customerRepository.findById(accountID).orElseThrow(() -> new IllegalArgumentException("Khách hàng không tồn tại"));
         customer.setPoint(customer.getPoint() + 100);
         customerRepository.save(customer);
-
         return order;
     }
 
 
     public void cancelOrder(int orderID) {
-        Order order = orderRepository.findById(orderID)
-                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+    Order order = orderRepository.findById(orderID)
+            .orElseThrow(() -> new IllegalArgumentException("Order not found"));
 
-        if (!order.getOrderStatus().equals("Đang xử lý")) {
-            throw new IllegalStateException("Chỉ Order có Status 'Đang xử lý' mới được xóa");
-        }
-
-        List<Cart> cartItems = cartRepository.findByOrder(order);
-        for (Cart cart : cartItems) {
-            cart.setOrder(null);
-            cart.setCartStatus("Kích hoạt");
-            cartRepository.save(cart);
-        }
-
-        orderRepository.delete(order);
+    if (!order.getOrderStatus().equals("Đang xử lý")) {
+        throw new IllegalStateException("Chỉ Order có Status 'Đang xử lý' mới được xóa");
     }
 
+    // Delete the Cart items associated with the Order
+    List<Cart> carts = order.getCartItems();
+    for (Cart cart : carts) {
+        cartRepository.delete(cart);
+    }
+
+    // Now delete the Order
+    orderRepository.delete(order);
+    }
 
     public Order getOrder(int orderID) {
         Order order = orderRepository.findByOrderID(orderID);
@@ -194,33 +194,74 @@ public class OrderService {
         return order.gettotalOrder();
     }
 
-    public String deleteOrder(int orderID) {
-        Order order = orderRepository.findByOrderID(orderID);
-        if (order == null) {
-            throw new IllegalArgumentException("Không tìm thấy Order");
+    // public String deleteOrder(int orderID) {
+    //     Order order = orderRepository.findByOrderID(orderID);
+    //     if (order == null) {
+    //         throw new IllegalArgumentException("Không tìm thấy Order");
+    //     }
+    //     orderRepository.delete(order);
+    //     return "Xóa Order thành công";
+    // }
+
+//     public Map<String,String> updateOrder(int orderID, OrderPutRequest orderPutRequest) {
+//     Order existingOrder = orderRepository.findByOrderID(orderID);
+//     if (existingOrder == null) {
+//         return Collections.singletonMap("message", "Không tìm thấy kim cương");
+//     }
+//     existingOrder.setAccount(accountRepository.findById(orderPutRequest.getAccountID())
+//             .orElseThrow(() -> new IllegalArgumentException("AccountID không tồn tại")));
+//     existingOrder.setPhoneNumber(orderPutRequest.getPhoneNumber());
+//     existingOrder.setDeliveryAddress(orderPutRequest.getDeliveryAddress());
+//     existingOrder.setOrderStatus(orderPutRequest.getOrderStatus());
+//     existingOrder.setDeliveryDate(orderPutRequest.getDeliveryDate());
+//     existingOrder.setStartorderDate(orderPutRequest.getStartorderDate());
+//     existingOrder.settotalOrder(orderPutRequest.getTotalOrder());
+//     existingOrder.setWarrantyImage(orderPutRequest.getWarrantyImage());
+//     existingOrder.setCertificateImage(orderPutRequest.getCertificateImage());
+//     existingOrder.setPromotionCode(orderPutRequest.getPromotionCode());
+//     orderRepository.save(existingOrder);
+//     return Collections.singletonMap("message", "Cập nhật thành công");
+// }
+    @Transactional
+    public Map<String, String> updateOrder(int orderID, OrderPutRequest orderPutRequest) {
+        try {
+            Order existingOrder = orderRepository.findById(orderID)
+                    .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+
+            existingOrder.setDeliveryAddress(orderPutRequest.getDeliveryAddress());
+            existingOrder.setOrderStatus(orderPutRequest.getOrderStatus());
+            existingOrder.setDeliveryDate(orderPutRequest.getDeliveryDate());
+            existingOrder.setCertificateImage(orderPutRequest.getCertificateImage());
+            existingOrder.setWarrantyImage(orderPutRequest.getWarrantyImage());
+            
+            // Handle promotion code and totalOrder update
+            String newPromotionCode = orderPutRequest.getPromotionCode();
+            BigDecimal totalOrder = existingOrder.gettotalOrder();
+
+            if (newPromotionCode != null && !newPromotionCode.isEmpty()) {
+                Promotion promotion = promotionRepository.findByPromotionCode(newPromotionCode);
+                if (promotion != null) {
+                    BigDecimal discountAmount = promotion.getDiscountAmount();
+                    totalOrder = totalOrder.subtract(totalOrder.multiply(discountAmount));
+                    existingOrder.setPromotionCode(newPromotionCode);
+                }
+            }
+
+            existingOrder.settotalOrder(totalOrder);
+            orderRepository.save(existingOrder);
+            return Collections.singletonMap("message", "Cập nhật thành công");
+        } catch (Exception e) {
+            return Collections.singletonMap("message", "Cập nhật thất bại");
         }
-        orderRepository.delete(order);
-        return "Xóa Order thành công";
     }
 
-    public Map<String,String> updateOrder(int orderID, OrderPutRequest orderPutRequest) {
-    Order existingOrder = orderRepository.findByOrderID(orderID);
-    if (existingOrder == null) {
-        return Collections.singletonMap("message", "Không tìm thấy kim cương");
+    public List<Order> getOrdersByStatus(String orderStatus) {
+        return orderRepository.findByOrderStatus(orderStatus);
     }
-    existingOrder.setAccount(accountRepository.findById(orderPutRequest.getAccountID())
-            .orElseThrow(() -> new IllegalArgumentException("AccountID không tồn tại")));
-    existingOrder.setPhoneNumber(orderPutRequest.getPhoneNumber());
-    existingOrder.setDeliveryAddress(orderPutRequest.getDeliveryAddress());
-    existingOrder.setOrderStatus(orderPutRequest.getOrderStatus());
-    existingOrder.setDeliveryDate(orderPutRequest.getDeliveryDate());
-    existingOrder.setStartorderDate(orderPutRequest.getStartorderDate());
-    existingOrder.settotalOrder(orderPutRequest.getTotalOrder());
-    existingOrder.setWarrantyImage(orderPutRequest.getWarrantyImage());
-    existingOrder.setCertificateImage(orderPutRequest.getCertificateImage());
-    existingOrder.setPromotionCode(orderPutRequest.getPromotionCode());
-    orderRepository.save(existingOrder);
-    return Collections.singletonMap("message", "Cập nhật thành công");
+
+    public Page<Order> getAllOrdersPaged(int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        return orderRepository.findAll(pageable);
+    }
 }
-    
-}
+

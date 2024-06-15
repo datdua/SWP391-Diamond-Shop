@@ -8,16 +8,18 @@ public class JewelryPutRequest {
     private String gender;
     private String jewelryImage;
     private BigDecimal jewelryEntryPrice;
+    private String warrantyID;
 
     // Add your getters and setters here
     public JewelryPutRequest() {
     }
 
-    public JewelryPutRequest(String jewelryName, String gender, String jewelryImage, BigDecimal jewelryEntryPrice) {
+    public JewelryPutRequest(String jewelryName, String gender, String jewelryImage, BigDecimal jewelryEntryPrice, String warrantyID) {
         this.jewelryName = jewelryName;
         this.gender = gender;
         this.jewelryImage = jewelryImage;
         this.jewelryEntryPrice = jewelryEntryPrice;
+        this.warrantyID = warrantyID;
     }
 
     // getters and setters...
@@ -51,5 +53,13 @@ public class JewelryPutRequest {
 
     public void setJewelryEntryPrice(BigDecimal jewelryEntryPrice) {
         this.jewelryEntryPrice = jewelryEntryPrice;
+    }
+
+    public String getWarrantyID() {
+        return warrantyID;
+    }
+
+    public void setWarrantyID(String warrantyID) {
+        this.warrantyID = warrantyID;
     }
 }
