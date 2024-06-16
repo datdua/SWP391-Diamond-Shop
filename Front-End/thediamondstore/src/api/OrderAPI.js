@@ -133,24 +133,39 @@ export const getPromotion = async (promotionCode) => {
         throw error;
     }
 };
-export const fetchOrderDetail = async (orderID) => {
+
+export async function fetchOrderDetail(orderID) {
+    const token = getAuthToken();
     try {
-      const response = await axios.get(`http://localhost:8080/api/orders/get/${orderID}`);
-      return response.data;
+      const response = await axios.get(`http://localhost:8080/api/orderDetail/getOrderDetail/${orderID}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+  
+      if (response.status !== 200) {
+        throw new Error('Failed to fetch order details');
+      }
+  
+      const orderDetails = response.data;
+      console.log('Fetched order details:', orderDetails);
+      return orderDetails;
     } catch (error) {
-      console.error("Failed to fetch order details:", error);
+      console.error('Error fetching order details:', error);
       throw error;
     }
-  };
+}
+
   const deleteOrder = async (orderId) => {
     try {
-        const url = `http://localhost:8080/api/orders/delete/${orderId}`;
+        const url = `http://localhost:8080/api/orders/cancel/${orderId}`;
         const response = await axios.delete(url);
 
         if (response.status === 200) {
             return response.data; // Return data if needed
         } else {
             throw new Error(`Failed to delete order with status ${response.status}`);
+            
         }
     } catch (error) {
         console.error('Error deleting order:', error.message);
@@ -159,3 +174,22 @@ export const fetchOrderDetail = async (orderID) => {
 };
 
 export default deleteOrder;
+export const getTotalOrderMoney = async (orderId) => {
+    try {
+      const token = getAuthToken();
+      const response = await axios.get(`http://localhost:8080/api/orders/totalOrder/${orderId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+  
+      if (response.status === 200) {
+        return response.data.totalMoney;
+      } else {
+        throw new Error('Failed to fetch total order money');
+      }
+    } catch (error) {
+      console.error('Error fetching total order money:', error);
+      throw error;
+    }
+  };

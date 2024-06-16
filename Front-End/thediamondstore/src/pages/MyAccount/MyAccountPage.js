@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./MyAccountPage.css";
-import deleteOrder, { createPayment, fetchOrders, fetchOrderDetail } from "../../api/OrderAPI"; // Assuming you have a deleteOrder function in your API
+import deleteOrder, { createPayment, fetchOrders, fetchOrderDetail, getTotalOrderMoney } from "../../api/OrderAPI";
 import { AuthContext } from "../../components/Auth/AuthContext";
 import OrderSidebar from "../../components/OrderSidebar/OrderSidebar";
 import { toast } from "react-toastify";
@@ -26,12 +26,14 @@ function MyAccountPage() {
     const getOrders = async () => {
       setLoading(true);
       try {
-        if (accountId) {
-          const response = await fetchOrders(accountId);
-          setOrders(response);
-        } else {
-          console.error('accountId is undefined');
-        }
+        const response = await fetchOrders(accountId);
+        
+        const ordersWithTotal = await Promise.all(response.map(async order => {
+          const totalMoney = await getTotalOrderMoney(order.orderID);
+          return { ...order, totalMoney };
+        }));
+
+        setOrders(ordersWithTotal);
       } catch (error) {
         setError(error.toString());
       } finally {
@@ -64,23 +66,37 @@ function MyAccountPage() {
   const handleViewOrder = async (orderID) => {
     try {
       const orderDetails = await fetchOrderDetail(orderID);
-      setSelectedOrder(orderDetails);
-      setShowSidebar(true);
+      console.log('Fetched order details:', orderDetails);
+      if (orderDetails) {
+        setSelectedOrder(orderDetails);
+        setShowSidebar(true);
+      } else {
+        console.error('Failed to fetch order details: orderDetails is null');
+      }
     } catch (error) {
       console.error('Failed to fetch order details:', error);
     }
   };
+  
 
   const handleDeleteOrder = async (orderID) => {
     try {
-      await deleteOrder(orderID); // Implement deleteOrder function in your API
+      const orderToDelete = orders.find(order => order.orderID === orderID);
+  
+      if (orderToDelete.orderStatus !== "Đang xử lý") {
+        toast.error('Chỉ có thể xoá đơn hàng với trạng thái Đang xử lý');
+        return;
+      }
+  
+      await deleteOrder(orderID);
       setOrders(orders.filter(order => order.orderID !== orderID));
-      toast.success('Xoá đơn hàng thành công')
+      toast.success('Xoá đơn hàng thành công');
     } catch (error) {
       console.error('Failed to delete order:', error);
-      // Handle error, show error message, etc.
+      toast.error('Không thể xoá đơn hàng');
     }
   };
+  
 
   const handleCloseSidebar = () => {
     setShowSidebar(false);
@@ -203,6 +219,10 @@ function MyAccountPage() {
                         </div>
                         <div className="tm-form-field">
                           <label htmlFor="acdetails-confirmpass">Confirm password</label>
+                          <input type="password" id="acdetails-newpassword" />
+                        </div>
+                        <div className="tm-form-field">
+                          <label htmlFor="acdetails-confirmpass">Confirm password</label>
                           <input type="password" id="acdetails-confirmpass" />
                         </div>
                         <div className="tm-form-field">
@@ -224,7 +244,7 @@ function MyAccountPage() {
 
       {selectedOrder && (
         <OrderSidebar
-          name="Order Details"
+          orderID={selectedOrder.orderID} 
           order={selectedOrder}
           show={showSidebar}
           onHide={handleCloseSidebar}

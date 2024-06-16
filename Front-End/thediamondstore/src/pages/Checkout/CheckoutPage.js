@@ -11,8 +11,8 @@ function CheckoutPage() {
     const [totalCart, setTotalCart] = useState(0);
     const [deliveryAddress, setDeliveryAddress] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
-    const [pointsToRedeem, setPointsToRedeem] = useState(0);
-    const [totalAccumulatedPoints, setTotalAccumulatedPoints] = useState(0);
+    const [pointsToRedeem, setPointsToRedeem] = useState(0); // Value to be redeemed
+    const [totalAccumulatedPoints, setTotalAccumulatedPoints] = useState(100); // Static value
     const [promotionCode, setPromotionCode] = useState("");
     const [promotionDescription, setPromotionDescription] = useState("");
     const [discountAmount, setDiscountAmount] = useState(0);
@@ -56,7 +56,7 @@ function CheckoutPage() {
             try {
                 if (accountId) {
                     const points = await getCustomerPoints(accountId);
-                    setTotalAccumulatedPoints(points);
+                    setPointsToRedeem(points); // Set pointsToRedeem to fetched points
                 } else {
                     console.error("Account ID is undefined");
                 }
@@ -67,16 +67,6 @@ function CheckoutPage() {
 
         fetchCustomerPoints();
     }, [accountId]);
-
-    useEffect(() => {
-        calculatePointsToRedeem();
-    }, [totalCart]);
-
-    const calculatePointsToRedeem = () => {
-        // Here, you can adjust how pointsToRedeem is calculated
-        // For example, setPointsToRedeem(totalCart / 10) or any logic that suits your requirements
-        setPointsToRedeem(100); // For demonstration, setting a fixed value
-    };
 
     useEffect(() => {
         const fetchContactInfo = async () => {
@@ -106,7 +96,7 @@ function CheckoutPage() {
                 setDiscountAmount(discount);
                 toast.success("Áp dụng mã thành công");
             } else {
-                toast.error("IMã giảm giá không hợp lệ");
+                toast.error("Mã giảm giá không hợp lệ");
             }
         } catch (error) {
             toast.error("Áp dụng mã không thành công");
@@ -118,15 +108,16 @@ function CheckoutPage() {
             toast.error("Xin cung cấp địa chỉ giao hàng và số điện thoại");
             return;
         }
-
+    
         try {
-            let finalTotal = totalCart;
-            if (usePoints) {
-                const pointsDiscount = totalAccumulatedPoints * 10000;
-                finalTotal -= pointsDiscount;
+            // Only add totalAccumulatedPoints to pointsToRedeem if usePoints is false
+            if (!usePoints) {
+                setPointsToRedeem(pointsToRedeem + totalAccumulatedPoints);
             }
+    
+            let finalTotal = totalCart;
             finalTotal -= discountAmount;
-
+    
             const orderData = await createOrder(accountId, deliveryAddress, phoneNumber, pointsToRedeem, promotionCode);
             toast.success("Đặt hàng thành công");
             navigate(`/account/${accountId}`);
@@ -134,15 +125,12 @@ function CheckoutPage() {
             toast.error("Đặt hàng thất bại");
         }
     };
-    function handlePointsRedemption() {
-        if (totalPoints > totalCart) {
-          setPointsToRedeem(totalCart);
-        }
-      }
-
-    const pointsDiscount = usePoints ? totalAccumulatedPoints * 10000 : 0;
-    const finalTotal = totalCart - discountAmount - (usePoints ? pointsDiscount : 0);
-    const totalPoints = totalAccumulatedPoints + pointsToRedeem;
+    const handleUsePoints = () => {
+        setUsePoints(true);
+        finalTotal = totalCart - discountAmount - pointsDiscount;
+    };
+    const pointsDiscount = usePoints ? pointsToRedeem * 10000 : 0; // Adjust pointsToRedeem calculation
+    const finalTotal = totalCart - discountAmount;
 
     return (
         <div>
@@ -218,7 +206,7 @@ function CheckoutPage() {
                                                         </tr>
                                                         <tr className="tm-checkout-points">
                                                             <td>Điểm tích luỹ</td>
-                                                            <td>+ {pointsToRedeem}</td>
+                                                            <td>+ {totalAccumulatedPoints}</td>
                                                         </tr>
                                                         {usePoints && (
                                                             <tr className="tm-checkout-points-discount">
@@ -228,7 +216,7 @@ function CheckoutPage() {
                                                         )}
                                                         <tr className="tm-checkout-final-total highlight">
                                                             <td>TỔNG TIỀN THANH TOÁN</td>
-                                                            <td>{finalTotal.toLocaleString()} VND</td>
+                                                            <td>{finalTotal.toLocaleString()} VND                                                         </td>
                                                         </tr>
                                                     </tfoot>
                                                 </table>
@@ -243,11 +231,13 @@ function CheckoutPage() {
                                                             checked={usePoints}
                                                             onChange={(e) => setUsePoints(e.target.checked)}
                                                         />
-                                                        <label htmlFor="checkout-read-terms" onClick={handlePointsRedemption}>
-                                                            Sử dụng điểm tích luỹ để thanh toán: {totalPoints}
-                                                        </label>
+                                                        <button onClick={handleUsePoints}>
+                                                            Sử dụng điểm tích luỹ để thanh toán: {pointsToRedeem}
+                                                        </button>
                                                     </div>
-                                                    <p>Dữ liệu cá nhân của bạn sẽ được sử dụng để xử lý đơn hàng của bạn, hỗ trợ trải nghiệm của bạn trên toàn bộ trang web này, và cho các mục đích khác được mô tả trong chính sách bảo mật của chúng tôi.</p>
+                                                    <p>
+                                                        Dữ liệu cá nhân của bạn sẽ được sử dụng để xử lý đơn hàng của bạn, hỗ trợ trải nghiệm của bạn trên toàn bộ trang web này, và cho các mục đích khác được mô tả trong chính sách bảo mật của chúng tôi.
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div className="tm-checkout-paymentmethods">
@@ -267,9 +257,9 @@ function CheckoutPage() {
                             </form>
                         </div>
                     </div>
-                </main >
-            </div >
-        </div >
+                </main>
+            </div>
+        </div>
     );
 }
 
