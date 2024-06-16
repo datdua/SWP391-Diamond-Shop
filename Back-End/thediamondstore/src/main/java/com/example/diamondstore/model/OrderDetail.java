@@ -9,8 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "OrderDetail")
 public class OrderDetail {
 
     @Id
@@ -61,7 +63,6 @@ public class OrderDetail {
     public OrderDetail() {
     }
 
-
     public OrderDetail(Integer orderDetailID, Order order, Integer accountID, String diamondID, String jewelryID,
             String diamondName, String jewelryName, String diamondImage, String jewelryImage, Integer quantity,
             Integer sizeJewelry, BigDecimal price, BigDecimal grossCartPrice, BigDecimal totalPrice) {
@@ -80,8 +81,6 @@ public class OrderDetail {
         this.grossCartPrice = grossCartPrice;
         this.totalPrice = totalPrice;
     }
-
-
 
     public Integer getOrderDetailID() {
         return orderDetailID;
@@ -194,7 +193,4 @@ public class OrderDetail {
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
-
-    
-    // Getters and setters
 }
