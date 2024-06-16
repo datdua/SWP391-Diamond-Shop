@@ -20,7 +20,7 @@ public class OrderDetailController {
         return ResponseEntity.ok(orderDetailService.getAllOrderDetail());
     }
 
-    @GetMapping("/getOrderDetail/{orderID}")
+    @GetMapping("/getOrderDetail")
     public ResponseEntity<?> getOrderDetailByOrderID(Integer orderID) {
         return ResponseEntity.ok(orderDetailService.getOrderDetailByOrderID(orderID));
     }
