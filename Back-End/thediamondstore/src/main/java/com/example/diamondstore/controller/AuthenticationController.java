@@ -38,7 +38,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
-public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
     try {
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword())
