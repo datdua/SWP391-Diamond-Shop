@@ -137,8 +137,6 @@ public class CartService {
             grossCartPrice = totalPrice.multiply(BigDecimal.valueOf(1.1));
         }
         cart.setGrossCartPrice(grossCartPrice);
-        //totalPrice = grossCartPrice
-        cart.setTotalPrice(grossCartPrice);
     }
 
     public Cart getCartByCartID(Integer cartID) {
