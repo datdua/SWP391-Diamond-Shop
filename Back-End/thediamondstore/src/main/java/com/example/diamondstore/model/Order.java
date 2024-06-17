@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -61,6 +60,9 @@ public class Order {
     @Column(name = "promotionCode")
     private String promotionCode; // Chỉ lưu trữ promotionCode dưới dạng chuỗi
 
+    @Column(name = "transactionNo")
+    private int transactionNo;
+
     @JsonIgnore
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<Cart> cartItems;
@@ -70,7 +72,7 @@ public class Order {
 
     public Order(Integer orderID, Account account, LocalDateTime startorderDate, String orderStatus, LocalDateTime deliveryDate,
                  BigDecimal totalOrder, String deliveryAddress, String phoneNumber, String certificateImage, String warrantyImage,
-                 String promotionCode, List<Cart> cartItems) {
+                 String promotionCode, List<Cart> cartItems, int transactionNo) {
         this.orderID = orderID;
         this.account = account;
         this.startorderDate = startorderDate;
@@ -83,6 +85,15 @@ public class Order {
         this.warrantyImage = warrantyImage;
         this.promotionCode = promotionCode;
         this.cartItems = cartItems;
+        this.transactionNo = transactionNo;
+    }
+
+    public int getTransactionNo() {
+        return transactionNo;
+    }
+
+    public void setTransactionNo(int transactionNo) {
+        this.transactionNo = transactionNo;
     }
 
     public Integer getOrderID() {
