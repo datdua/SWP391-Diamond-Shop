@@ -151,6 +151,7 @@ public class PaymentController {
 
             // Cập nhật trạng thái đơn hàng
             order.setOrderStatus("Đã thanh toán");
+            order.setTransactionNo(transactionNo);
             orderRepository.save(order);
 
             // Chuyển các mục giỏ hàng thành OrderDetail và lưu
@@ -184,7 +185,9 @@ public class PaymentController {
             transactionStatusDTO.setMessage("Thanh toán thất bại");
             transactionStatusDTO.setData("");
 
+            // Cập nhật trạng thái đơn hàng
             order.setOrderStatus("Thanh toán thất bại");
+            order.setTransactionNo(transactionNo);
             orderRepository.save(order);
         }
 
