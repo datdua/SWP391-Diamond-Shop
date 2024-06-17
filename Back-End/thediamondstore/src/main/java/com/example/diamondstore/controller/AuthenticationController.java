@@ -30,7 +30,7 @@ public class AuthenticationController {
 
     @Autowired
     private JwtUtil jwtTokenUtil;
-    
+       
     public AuthenticationController(AuthenticationManager authenticationManager, AccountService accountService, JwtUtil jwtTokenUtil) {
         this.authenticationManager = authenticationManager;
         this.accountService = accountService;
@@ -39,23 +39,23 @@ public class AuthenticationController {
 
     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
-    try {
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword())
-        );
-    } catch (BadCredentialsException e) {
-        return ResponseEntity.status(401).body(Collections.singletonMap("message", "Sai email hoặc mật khẩu"));
-    }
+        try {
+            authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword())
+            );
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(401).body(Collections.singletonMap("message", "Sai email hoặc mật khẩu"));
+        }
 
         final UserDetails userDetails = accountService.loadUserByUsername(authenticationRequest.getEmail());
-        final String jwt = jwtTokenUtil.generateToken(userDetails);
-
-        // Check if the account is active
-        Account account = accountService.findByEmail(authenticationRequest.getEmail());
+        final Account account = accountService.findByEmail(authenticationRequest.getEmail());
+        
         if (account == null || !account.isActive()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(Collections.singletonMap("message", "Tài khoản chưa được kích hoạt. Vui lòng kiểm tra email để kích hoạt tài khoản."));
+                .body(Collections.singletonMap("message", "Tài khoản chưa được kích hoạt. Vui lòng kiểm tra email để kích hoạt tài khoản."));
         }
+
+        final String jwt = jwtTokenUtil.generateToken(account);
 
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }

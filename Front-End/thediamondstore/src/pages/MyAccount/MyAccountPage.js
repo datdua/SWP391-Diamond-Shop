@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./MyAccountPage.css";
-import deleteOrder, { createPayment, fetchOrders, fetchOrderDetail } from "../../api/OrderAPI"; // Assuming you have a deleteOrder function in your API
+import { deleteOrder, createPayment, fetchOrders, fetchOrderDetail } from "../../api/OrderAPI"; // Assuming you have a deleteOrder function in your API
 import { AuthContext } from "../../components/Auth/AuthContext";
 import OrderSidebar from "../../components/OrderSidebar/OrderSidebar";
 import { toast } from "react-toastify";

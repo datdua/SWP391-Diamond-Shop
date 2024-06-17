@@ -105,11 +105,21 @@ function SideBarAdmin() {
               </span>{" "}
               Đơn hàng
             </NavLink>
+            <NavLink
+              to="/admin/price-manager"
+              className="sidebar-nav-item"
+              activeClassName="active"
+            >
+              <span className="nav-icon">
+                <span className="nav-icon-bullet"></span>
+              </span>{" "}
+              Giá sản phẩm
+            </NavLink>
           </CNavGroup>
         </CSidebarNav>
         <CSidebarHeader className="border-top">
           <NavLink to="/" className="sidebar-nav-item" activeClassName="active">
-            <CSidebarToggler style={{marginRight: "10px"}}/> LOG OUT
+            <CSidebarToggler style={{ marginRight: "10px" }} /> LOG OUT
           </NavLink>
         </CSidebarHeader>
       </CSidebar>
