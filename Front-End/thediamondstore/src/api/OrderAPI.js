@@ -200,4 +200,14 @@ export const updateOrder = async (orderId, updatedOrder) => {
   }
 };
 
-export default deleteOrder;
+export const fetchOrderByPaged = async (page, size) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/orders/paged/orders?page=${page}&size=${size}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch orders by page:", error);
+    throw error;
+  }
+}
