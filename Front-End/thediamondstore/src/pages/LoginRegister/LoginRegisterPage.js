@@ -71,14 +71,20 @@ function LoginRegisterPage() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
+  
     if (!termsAccepted) {
       toast.error(
         "Bạn phải đồng ý với các điều khoản và điều kiện của trang web"
       );
       return;
     }
-
+  
+    // Check if required fields are filled
+    if (!registerName || !registerEmail || !registerPassword) {
+      toast.error("Vui lòng điền đầy đủ thông tin đăng ký.");
+      return;
+    }
+  
     try {
       const response = await axios.post(
         "http://localhost:8080/api/accounts/register",
@@ -94,7 +100,7 @@ function LoginRegisterPage() {
           },
         }
       );
-
+  
       if (response.status === 200 || response.status === 201) {
         const data = response.data;
         console.log("Đăng ký thành công:", data.message);
@@ -105,10 +111,11 @@ function LoginRegisterPage() {
         toast.error("Đăng ký thất bại!");
       }
     } catch (error) {
-      console.error("Lỗi khi đăng ký:", error);
+      // Log more details about the error
+      console.error("Lỗi khi đăng ký:", error.response);
       toast.error("Lỗi khi đăng ký!");
     }
-  };
+  };  
 
   return (
     <div>
