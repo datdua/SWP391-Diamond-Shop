@@ -20,4 +20,5 @@ public class GoldPrice {
     private Integer goldpriceID;
 
     
+
 }

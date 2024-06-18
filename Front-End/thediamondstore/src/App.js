@@ -30,6 +30,8 @@ import JewelryManagerPage from "./pages/Manager/JewelryManager/JewelryManagerPag
 import PaymentConfirm from "./pages/PaymentConfirm/PaymentConfirm";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import GoldPriceManager from "./pages/Manager/PriceProductManager/GolPriceManager";
+import OrderManagerPage from "./pages/Manager/OrderManager/OrderManagePager";
+import TransactionManagerPage from "./pages/Manager/TransactionManager/TransactionManagerPage";
 
 function App() {
   const handleLogout = (logoutCallback) => {
@@ -239,8 +241,12 @@ function App() {
             <Route path="diamond-manager" element={<ProductManagerPage />} />
             <Route path="account-manager" element={<AccountManager />} />
             <Route path="jewelry-manager" element={<JewelryManagerPage />} />
-            <Route path="order-manager" element={<Dashboard />} />
+            <Route path="order-manager" element={<OrderManagerPage />} />
             <Route path="price-manager" element={<GoldPriceManager />} />
+            <Route
+              path="transaction-manager"
+              element={<TransactionManagerPage />}
+            />
           </Route>
         </Routes>
       </AuthProvider>

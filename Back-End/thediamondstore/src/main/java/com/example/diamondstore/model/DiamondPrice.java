@@ -15,8 +15,8 @@ public class DiamondPrice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "diamondpriceID")
-    private Integer diamondpriceID;
+    @Column(name = "diamondPriceID")
+    private Integer diamondPriceID;
 
     @Column(name = "diamondID")
     private String diamondID;
@@ -36,9 +36,9 @@ public class DiamondPrice {
     public DiamondPrice() {
     }
 
-    public DiamondPrice(Integer diamondpriceID, String diamondID, BigDecimal diamondEntryPrice, String clarity,
+    public DiamondPrice(Integer diamondPriceID, String diamondID, BigDecimal diamondEntryPrice, String clarity,
             String color, Float carat_size) {
-        this.diamondpriceID = diamondpriceID;
+        this.diamondPriceID = diamondPriceID;
         this.diamondID = diamondID;
         this.diamondEntryPrice = diamondEntryPrice;
         this.clarity = clarity;
@@ -47,11 +47,11 @@ public class DiamondPrice {
     }
 
     public Integer getDiamondpriceID() {
-        return diamondpriceID;
+        return diamondPriceID;
     }
 
-    public void setDiamondpriceID(Integer diamondpriceID) {
-        this.diamondpriceID = diamondpriceID;
+    public void setDiamondpriceID(Integer diamondPriceID) {
+        this.diamondPriceID = diamondPriceID;
     }
 
     public String getDiamondID() {

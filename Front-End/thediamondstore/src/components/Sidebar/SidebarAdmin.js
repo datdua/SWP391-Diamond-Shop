@@ -46,7 +46,7 @@ function SideBarAdmin() {
             <CIcon customClassName="nav-icon" icon={cilSpeedometer} /> Dashboard
           </NavLink>
           <NavLink
-            to="https://sandbox.vnpayment.vn/merchantv2/Users/Login.htm"
+            to="/admin/transaction-manager"
             className="sidebar-nav-item"
             activeClassName="active"
           >

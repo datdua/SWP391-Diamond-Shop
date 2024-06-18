@@ -176,19 +176,21 @@ export const deleteOrder = async (orderId) => {
 export const updateOrder = async (orderId, updatedOrder) => {
   try {
     const token = getAuthToken();
-    const data = new URLSearchParams();
-    data.append("orderID", orderId);
-    for (const key in updatedOrder) {
-      data.append(key, updatedOrder[key]);
+
+    // Ensure deliveryDate is in the correct format
+    if (updatedOrder.deliveryDate) {
+      updatedOrder.deliveryDate = new Date(
+        updatedOrder.deliveryDate
+      ).toISOString();
     }
 
     const response = await axios.put(
       `http://localhost:8080/api/orders/update/${orderId}`,
-      data,
+      updatedOrder,
       {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type": "application/json",
         },
       }
     );
@@ -203,11 +205,19 @@ export const updateOrder = async (orderId, updatedOrder) => {
 export const fetchOrderByPaged = async (page, size) => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/orders/paged/orders?page=${page}&size=${size}`
+      `http://localhost:8080/api/orders/getOrder/paged?page=${page}&size=${size}`
     );
     return response.data;
   } catch (error) {
     console.error("Failed to fetch orders by page:", error);
     throw error;
   }
+};
+
+export async function getAllOrder() {
+  const response = await axios.get("http://localhost:8080/api/orders/getAll");
+  if (response.status !== 200) {
+    throw new Error("Failed to fetch jewelry data");
+  }
+  return response.data;
 }

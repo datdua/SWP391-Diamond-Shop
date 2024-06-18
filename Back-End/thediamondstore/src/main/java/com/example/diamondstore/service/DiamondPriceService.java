@@ -1,17 +1,16 @@
 package com.example.diamondstore.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import com.example.diamondstore.model.Diamond;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
 import com.example.diamondstore.model.DiamondPrice;
 import com.example.diamondstore.repository.DiamondPriceRepository;
+import com.example.diamondstore.request.putRequest.DiamondPricePutRequest;
 
 @Service
 public class DiamondPriceService {
@@ -27,13 +26,20 @@ public class DiamondPriceService {
         return diamondPriceRepository.findAll();
     }
 
-    public DiamondPrice update(Integer diamondpriceID, BigDecimal diamondEntryPrice, String color, Float carat_size, String clarity) {
-        DiamondPrice diamondPrice = diamondPriceRepository.findById(diamondpriceID).orElseThrow(() -> new RuntimeException("DiamondPrice not found"));
-        diamondPrice.setDiamondEntryPrice(diamondEntryPrice);
-        diamondPrice.setColor(color);
-        diamondPrice.setCarat_size(carat_size);
-        diamondPrice.setClarity(clarity);
-        return diamondPriceRepository.save(diamondPrice);
+    public ResponseEntity<Map<String, String>> update(Integer diamondpriceID, DiamondPricePutRequest diamondPricePutRequest) {
+        DiamondPrice existingDiamondPrice = diamondPriceRepository.findById(diamondpriceID).orElse(null);
+        if (existingDiamondPrice == null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy giá kim cương"));
+        }
+
+        existingDiamondPrice.setDiamondID(diamondPricePutRequest.getDiamondID());
+        existingDiamondPrice.setClarity(diamondPricePutRequest.getClarity());
+        existingDiamondPrice.setColor(diamondPricePutRequest.getColor());
+        existingDiamondPrice.setCarat_size(diamondPricePutRequest.getCarat_size());
+        existingDiamondPrice.setDiamondEntryPrice(diamondPricePutRequest.getDiamondEntryPrice());
+
+        diamondPriceRepository.save(existingDiamondPrice);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }
 
     public ResponseEntity<Map<String, String>> createDiamondPrice(DiamondPrice diamondPrice) {
