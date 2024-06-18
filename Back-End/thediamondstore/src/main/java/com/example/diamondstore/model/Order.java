@@ -61,6 +61,10 @@ public class Order {
     @Column(name = "promotionCode")
     private String promotionCode; // Chỉ lưu trữ promotionCode dưới dạng chuỗi
 
+    @Column(name = "transactionNo")
+    private Integer transactionNo;
+
+
     @JsonIgnore
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<Cart> cartItems;
@@ -70,7 +74,7 @@ public class Order {
 
     public Order(Integer orderID, Account account, LocalDateTime startorderDate, String orderStatus, LocalDateTime deliveryDate,
                  BigDecimal totalOrder, String deliveryAddress, String phoneNumber, String certificateImage, String warrantyImage,
-                 String promotionCode, List<Cart> cartItems) {
+                 String promotionCode, List<Cart> cartItems, Integer transactionNo) {
         this.orderID = orderID;
         this.account = account;
         this.startorderDate = startorderDate;
@@ -83,6 +87,7 @@ public class Order {
         this.warrantyImage = warrantyImage;
         this.promotionCode = promotionCode;
         this.cartItems = cartItems;
+        this.transactionNo = transactionNo;
     }
 
     public Integer getOrderID() {
@@ -179,6 +184,14 @@ public class Order {
 
     public void setCartItems(List<Cart> cartItems) {
         this.cartItems = cartItems;
+    }
+
+    public Integer getTransactionNo() {
+        return transactionNo;
+    }
+
+    public void setTransactionNo(Integer transactionNo) {
+        this.transactionNo = transactionNo;
     }
 }
 

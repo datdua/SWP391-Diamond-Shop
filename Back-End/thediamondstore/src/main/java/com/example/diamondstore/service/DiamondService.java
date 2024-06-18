@@ -32,7 +32,7 @@ public class DiamondService {
         return diamondRepository.findByDiamondID(diamondID);
     }
 
-     public ResponseEntity<Map<String, String>> createDiamond(Diamond diamond) {
+    public ResponseEntity<Map<String, String>> createDiamond(Diamond diamond) {
         Diamond existingDiamond = diamondRepository.findByDiamondID(diamond.getDiamondID());
         if (existingDiamond != null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Kim cương đã tồn tại"));

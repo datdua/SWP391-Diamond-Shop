@@ -117,6 +117,8 @@ function AccountManager() {
                       <th>Account Name</th>
                       <th>Password</th>
                       <th>Phone Number</th>
+                      <th>Address</th>
+                      <th>Active</th>
                       <th>Role</th>
                       <th>Actions</th>
                     </tr>
@@ -129,6 +131,8 @@ function AccountManager() {
                         <td>{account.accountName}</td>
                         <td className="password-cell">{account.password}</td>
                         <td>{account.phoneNumber}</td>
+                        <td>{account.addressAccount}</td>
+                        <td>{account.active ? "Yes" : "No" }</td>
                         <td>{account.role}</td>
                         <td>
                           <Button
@@ -143,7 +147,7 @@ function AccountManager() {
                             size="sm"
                             onClick={() => handleShowDeleteModal(account)}
                           >
-                            <DeleteIcon />
+                            <DeleteIcon style={{color: "red"}}/>
                           </Button>
                         </td>
                       </tr>

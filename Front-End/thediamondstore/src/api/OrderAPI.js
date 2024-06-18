@@ -136,15 +136,23 @@ export const getPromotion = async (promotionCode) => {
 
 export async function fetchOrderDetail(orderID) {
     const token = getAuthToken();
-    try {
-      const response = await axios.get(`http://localhost:8080/api/orderDetail/getOrderDetail?orderID=${orderID}`, {
+
+    // Ensure deliveryDate is in the correct format
+    if (updatedOrder.deliveryDate) {
+      updatedOrder.deliveryDate = new Date(
+        updatedOrder.deliveryDate
+      ).toISOString();
+    }
+
+    const response = await axios.put(
+      `http://localhost:8080/api/orders/update/${orderId}`,
+      updatedOrder,
+      {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-  
-      if (response.status !== 200) {
-        throw new Error('Failed to fetch order details');
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+
       }
   
       const orderDetails = response.data;
@@ -173,23 +181,23 @@ export async function fetchOrderDetail(orderID) {
     }
 };
 
-export default deleteOrder;
-export const getTotalOrderMoney = async (orderId) => {
-    try {
-      const token = getAuthToken();
-      const response = await axios.get(`http://localhost:8080/api/orders/totalOrder/${orderId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-  
-      if (response.status === 200) {
-        return response.data.totalMoney;
-      } else {
-        throw new Error('Failed to fetch total order money');
-      }
-    } catch (error) {
-      console.error('Error fetching total order money:', error);
-      throw error;
-    }
-  };
+export const fetchOrderByPaged = async (page, size) => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/orders/getOrder/paged?page=${page}&size=${size}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch orders by page:", error);
+    throw error;
+  }
+};
+
+export async function getAllOrder() {
+  const response = await axios.get("http://localhost:8080/api/orders/getAll");
+  if (response.status !== 200) {
+    throw new Error("Failed to fetch jewelry data");
+  }
+  return response.data;
+}
+
