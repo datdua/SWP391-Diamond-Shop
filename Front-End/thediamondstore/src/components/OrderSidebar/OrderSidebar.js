@@ -4,19 +4,29 @@ import './OrderSidebar.css';
 import { fetchOrderDetail } from '../../api/OrderAPI';
 
 function OrderSidebar({ orderID, show, onHide }) {
-  const [order, setOrder] = useState(null); // State to hold order data
+  const [orderDetails, setOrderDetails] = useState([]); // State to hold order details array
   const [loading, setLoading] = useState(true); // State to manage loading state
+  const [error, setError] = useState(null); // State to manage error state
 
   useEffect(() => {
-    console.log(order);
     const fetchOrder = async () => {
       try {
-        
+        console.log('Fetching order details for orderID:', orderID);
         const response = await fetchOrderDetail(orderID); // Call your API function with orderID
-        setOrder(response); // Set the fetched order data to state
+        console.log('API response:', response);
+
+        if (response && response.length > 0) {
+          console.log('Setting order details:', response);
+          setOrderDetails(response); // Set order details array from the response
+        } else {
+          console.warn('Order details not found in response:', response);
+          setOrderDetails([]);
+        }
+
         setLoading(false); // Update loading state to false
       } catch (error) {
         console.error('Error fetching order details:', error);
+        setError(error); // Set error state
         setLoading(false); // Update loading state to false in case of error
       }
     };
@@ -26,15 +36,48 @@ function OrderSidebar({ orderID, show, onHide }) {
     }
   }, [orderID]); // Dependency on orderID ensures it refetches when orderID changes
 
+  console.log('Rendering OrderSidebar:', { loading, error, orderDetails });
+
   if (loading) {
-    return <p>Loading...</p>; // Render loading state while fetching data
+    return (
+      <Offcanvas show={show} onHide={onHide}>
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title className="order-detail">Order Details</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <p>Loading...</p>
+        </Offcanvas.Body>
+      </Offcanvas>
+    );
   }
 
-  if (!order) {
-    return <p>No order found.</p>; // Render message if order is not fetched properly
+  if (error) {
+    return (
+      <Offcanvas show={show} onHide={onHide}>
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title className="order-detail">Order Details</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <p>Error fetching order details: {error.message}</p>
+        </Offcanvas.Body>
+      </Offcanvas>
+    );
   }
 
-   // Check the structure in the console
+  if (orderDetails.length === 0) {
+    return (
+      <Offcanvas show={show} onHide={onHide}>
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title className="order-detail">Order Details</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <p>Order not found.</p>
+        </Offcanvas.Body>
+      </Offcanvas>
+    );
+  }
+
+  const order = orderDetails[0].order; // Assuming all order details have the same order info
 
   return (
     <Offcanvas show={show} onHide={onHide}>
@@ -45,10 +88,10 @@ function OrderSidebar({ orderID, show, onHide }) {
         {/* Account Information */}
         <div className="order-section">
           <h5>Account Information</h5>
-          <p><span className="detail-title">Account Name:</span> <span className="detail-info">{order.account?.accountName || 'N/A'}</span></p>
-          <p><span className="detail-title">Phone Number:</span> <span className="detail-info">{order.account?.phoneNumber || 'N/A'}</span></p>
-          <p><span className="detail-title">Email:</span> <span className="detail-info">{order.account?.email || 'N/A'}</span></p>
-          <p><span className="detail-title">Address:</span> <span className="detail-info">{order.account?.addressAccount || 'N/A'}</span></p>
+          <p><span className="detail-title">Account Name:</span> <span className="detail-info">{order.account.accountName}</span></p>
+          <p><span className="detail-title">Phone Number:</span> <span className="detail-info">{order.account.phoneNumber}</span></p>
+          <p><span className="detail-title">Email:</span> <span className="detail-info">{order.account.email}</span></p>
+          <p><span className="detail-title">Address:</span> <span className="detail-info">{order.account.addressAccount}</span></p>
         </div>
         <hr />
 
@@ -66,23 +109,46 @@ function OrderSidebar({ orderID, show, onHide }) {
         {/* Product Information */}
         <div className="order-section">
           <h5>Product Information</h5>
-          {order.orderStatus === "Đã thanh toán" ? (
-            <>
-              <p><span className="detail-title">Certificate Image:</span> <a href={order.certificateImage} target="_blank" rel="noopener noreferrer"><img src={order.certificateImage} alt="Certificate" className="certificate-image" /></a></p>
-              <p><span className="detail-title">Warranty Image:</span> <a href={order.warrantyImage} target="_blank" rel="noopener noreferrer"><img src={order.warrantyImage} alt="Warranty" className="warranty-image" /></a></p>
-            </>
-          ) : (
-            <p>Giấy chứng nhận và phiếu bảo hành sẽ có sau khi thanh toán hoàn tất</p>
-          )}
+          {orderDetails.map(detail => (
+            <div key={detail.orderDetailID} className="product-detail">
+              <p><span className="detail-title">Product Name:</span> <span className="detail-info">{detail.diamondName || detail.jewelryName}</span></p>
+              <p><span className="detail-title">Quantity:</span> <span className="detail-info">{detail.quantity}</span></p>
+              <p><span className="detail-title">Price:</span> <span className="detail-info">{detail.price.toLocaleString()}</span></p>
+              <p><span className="detail-title">Total Price:</span> <span className="detail-info">{detail.totalPrice.toLocaleString()}</span></p>
+              {detail.diamondImage && (
+                <p>
+                  <span className="detail-title">Diamond Image:</span>
+                  <img src={detail.diamondImage} alt={detail.diamondName} className="product-image" />
+                </p>
+              )}
+              {detail.jewelryImage && (
+                <p>
+                  <span className="detail-title">Jewelry Image:</span>
+                  <img src={detail.jewelryImage} alt={detail.jewelryName} className="product-image" />
+                </p>
+              )}
+            </div>
+          ))}
         </div>
         <hr />
 
         {/* Total Amount Information */}
         <div className="order-section">
           <h5>Total Amount Information</h5>
-          <p><span className="detail-title">Total:</span> <span className="detail-info">{order.totalOrder?.toLocaleString() || 'N/A'}</span></p>
+          <p><span className="detail-title">Total:</span> <span className="detail-info">{order.totalOrder.toLocaleString()}</span></p>
           {order.promotionCode && <p><span className="detail-title">Promotion Code:</span> <span className="detail-info">{order.promotionCode}</span></p>}
         </div>
+
+        {/* Certificate and Warranty Images */}
+        {order.orderStatus === "Đã thanh toán" ? (
+          <div className="order-section">
+            <h5>Certificate and Warranty</h5>
+            <p><span className="detail-title">Certificate Image:</span> <a href={order.certificateImage} target="_blank" rel="noopener noreferrer"><img src={order.certificateImage} alt="Certificate" className="certificate-image" /></a></p>
+            <p><span className="detail-title">Warranty Image:</span> <a href={order.warrantyImage} target="_blank" rel="noopener noreferrer"><img src={order.warrantyImage} alt="Warranty" className="warranty-image" /></a></p>
+          </div>
+        ) : (
+          <p>Certificate and warranty images will be available after payment is completed.</p>
+        )}
       </Offcanvas.Body>
     </Offcanvas>
   );

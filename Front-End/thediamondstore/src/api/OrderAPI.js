@@ -137,7 +137,7 @@ export const getPromotion = async (promotionCode) => {
 export async function fetchOrderDetail(orderID) {
     const token = getAuthToken();
     try {
-      const response = await axios.get(`http://localhost:8080/api/orderDetail/getOrderDetail/${orderID}`, {
+      const response = await axios.get(`http://localhost:8080/api/orderDetail/getOrderDetail?orderID=${orderID}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

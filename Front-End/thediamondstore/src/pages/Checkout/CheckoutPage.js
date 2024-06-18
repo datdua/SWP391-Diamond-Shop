@@ -110,27 +110,27 @@ function CheckoutPage() {
         }
     
         try {
-            // Only add totalAccumulatedPoints to pointsToRedeem if usePoints is false
+            let pointsToUse = usePoints ? pointsToRedeem : 0;
+            let finalTotal = totalCart - discountAmount - (pointsToUse * 10000);
+    
             if (!usePoints) {
                 setPointsToRedeem(pointsToRedeem + totalAccumulatedPoints);
             }
     
-            let finalTotal = totalCart;
-            finalTotal -= discountAmount;
-    
-            const orderData = await createOrder(accountId, deliveryAddress, phoneNumber, pointsToRedeem, promotionCode);
+            const orderData = await createOrder(accountId, deliveryAddress, phoneNumber, pointsToUse, promotionCode);
             toast.success("Đặt hàng thành công");
             navigate(`/account/${accountId}`);
         } catch (error) {
             toast.error("Đặt hàng thất bại");
         }
     };
+
     const handleUsePoints = () => {
         setUsePoints(true);
-        finalTotal = totalCart - discountAmount - pointsDiscount;
     };
+
     const pointsDiscount = usePoints ? pointsToRedeem * 10000 : 0; // Adjust pointsToRedeem calculation
-    const finalTotal = totalCart - discountAmount;
+    const finalTotal = totalCart - discountAmount - pointsDiscount;
 
     return (
         <div>
@@ -216,7 +216,7 @@ function CheckoutPage() {
                                                         )}
                                                         <tr className="tm-checkout-final-total highlight">
                                                             <td>TỔNG TIỀN THANH TOÁN</td>
-                                                            <td>{finalTotal.toLocaleString()} VND                                                         </td>
+                                                            <td>{finalTotal.toLocaleString()} VND</td>
                                                         </tr>
                                                     </tfoot>
                                                 </table>
