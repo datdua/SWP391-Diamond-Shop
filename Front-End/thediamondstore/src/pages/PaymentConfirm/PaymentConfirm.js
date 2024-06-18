@@ -60,8 +60,6 @@ function PaymentConfirm() {
             // Handle the error here
             console.error('Error:', error);
         });
-    } else {
-        navigate(`/account/${accountId}`);
     }
 }, [apiUrl, navigate, accountId]);
 
