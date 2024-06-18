@@ -95,8 +95,10 @@ function TransactionManagerPage() {
                 <Button
                   variant="primary"
                   onClick={() =>
-                    (window.location.href =
-                      "https://sandbox.vnpayment.vn/merchantv2/Users/Login.htm")
+                    window.open(
+                      "https://sandbox.vnpayment.vn/merchantv2/Users/Login.htm",
+                      "_blank"
+                    )
                   }
                 >
                   Quản lí giao dịch VNPay
@@ -109,13 +111,13 @@ function TransactionManagerPage() {
                   <thead>
                     <tr>
                       <th>#</th>
+                      <th>Transaction No</th>
                       <th>Order ID</th>
                       <th>Account ID</th>
                       <th>Start Order Date</th>
                       <th>Order Status</th>
                       <th>Delivery Date</th>
                       <th>Total Order</th>
-                      <th>Transaction No</th>
                       <th>Delivery Address</th>
                       <th>Phone Number</th>
                       <th>Certificate Image</th>
@@ -128,6 +130,19 @@ function TransactionManagerPage() {
                     {currentPageData.map((order, index) => (
                       <tr key={index}>
                         <td>{startIndex + index + 1}</td>
+                        <td>
+                          <a
+                            href={`https://sandbox.vnpayment.vn/merchantv2/Transaction/PaymentDetail/${order.transactionNo}.htm`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              color: "blue",
+                              textDecoration: "underline",
+                            }}
+                          >
+                            {order.transactionNo}
+                          </a>
+                        </td>
                         <td>{order.orderID}</td>
                         <td>{order.account.accountID}</td>
                         <td>{order.startorderDate}</td>
@@ -138,7 +153,6 @@ function TransactionManagerPage() {
                             ? order.totalOrder.toLocaleString() + " VNĐ"
                             : "N/A"}
                         </td>
-                        <td>{order.transactionNo}</td>
                         <td>{order.deliveryAddress}</td>
                         <td>{order.phoneNumber}</td>
                         <td>

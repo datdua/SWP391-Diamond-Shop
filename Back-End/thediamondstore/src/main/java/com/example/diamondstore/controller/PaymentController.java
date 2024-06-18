@@ -149,8 +149,9 @@ public class PaymentController {
             transactionStatusDTO.setMessage("Thanh toán thành công");
             transactionStatusDTO.setData("");
 
-            // Cập nhật trạng thái đơn hàng
+             // Cập nhật trạng thái đơn hàng
             order.setOrderStatus("Đã thanh toán");
+            order.setTransactionNo(transactionNo);
             orderRepository.save(order);
 
             // Chuyển các mục giỏ hàng thành OrderDetail và lưu
