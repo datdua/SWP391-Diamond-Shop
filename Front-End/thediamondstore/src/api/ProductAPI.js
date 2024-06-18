@@ -34,14 +34,10 @@ export async function getAllProduct() {
 // In ProductAPI.js
 export async function getProductPage(pageNumber = 1, pageSize = 4) {
     try {
-        const token = getAuthToken();
+        
         const response = await axios.get(
           `http://localhost:8080/api/production/paged?page=${pageNumber}&size=${pageSize}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          
         );
       if (response.status !== 200) {
         throw new Error(`HTTP error! Status: ${response.status}`);

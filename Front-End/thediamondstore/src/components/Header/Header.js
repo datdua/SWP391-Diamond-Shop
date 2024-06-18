@@ -87,10 +87,10 @@ function Header() {
                                     <>
                                         <div className="flex">
                                             <button onClick={handleAccountClick} className="tm-header-links">
-                                                My Account
+                                                Tài Khoản 
                                             </button>
                                             <button onClick={handleCartClick} className="tm-header-links">
-                                                Shopping Cart
+                                                Giỏ Hàng
                                             </button>
                                             <button onClick={onLogout} className="tm-logout-button">Đăng xuất</button>
                                         </div>

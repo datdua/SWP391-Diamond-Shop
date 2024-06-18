@@ -92,4 +92,17 @@ export const getAccountIDByEmail = async (email) => {
     throw new Error("Failed to fetch account information: " + error.message);
   }
 };
+export const getCustomerPoints = async (accountId) => {
+  try {
+      const response = await axios.get(`http://localhost:8080/api/customers/${accountId}`);
+      if (response.status === 200) {
+          return response.data.point;
+      } else {
+          throw new Error('Failed to fetch customer points');
+      }
+  } catch (error) {
+      console.error('Error fetching customer points:', error);
+      throw error;
+  }
+};
 
