@@ -151,7 +151,7 @@ public class CartService {
 
     // Lấy totalCart từ CartService và trả về api
     public BigDecimal getTotalCart(Integer accountID) {
-        List<Cart> cartItems = cartRepository.findByAccountIDAndOrderIsNull(accountID);
+        List<Cart> cartItems = cartRepository.findByAccountID(accountID);
         BigDecimal totalCart = BigDecimal.ZERO;
         for (Cart cart : cartItems) {
             totalCart = totalCart.add(cart.getGrossCartPrice());

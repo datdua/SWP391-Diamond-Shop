@@ -20,12 +20,15 @@ import com.example.diamondstore.model.Order;
 import com.example.diamondstore.request.putRequest.OrderPutRequest;
 import com.example.diamondstore.service.OrderService;
 
+
+
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
 
     @GetMapping(value = "/get/{orderID}")
     public ResponseEntity<Order> getOrder(@PathVariable int orderID) {
@@ -74,27 +77,30 @@ public class OrderController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo đơn hàng thành công"));
     }
 
-    @DeleteMapping(value = "/cancel/{orderID}", produces = "application/json;charset=UTF-8")
+
+    @DeleteMapping(value ="/cancel/{orderID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> cancelOrder(@PathVariable int orderID) {
-        try {
-            orderService.cancelOrder(orderID);
-            return ResponseEntity.ok(Collections.singletonMap("message", "Hủy đơn hàng thành công"));
-        } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
-        }
+    try {
+        orderService.cancelOrder(orderID);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Hủy đơn hàng thành công"));
+    } catch (IllegalStateException e) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
     }
+    }
+
 
     // @DeleteMapping(value = "/delete/{orderID}")
     // public ResponseEntity<?> deleteOrder(@PathVariable int orderID) {
     //     return ResponseEntity.ok(orderService.deleteOrder(orderID));
     // }
+
     @PutMapping(value = "/update/{orderID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> updateOrder(@PathVariable Integer orderID, @RequestBody OrderPutRequest orderPutRequest) {
-        Map<String, String> response = orderService.updateOrder(orderID, orderPutRequest);
-        if (response.get("message").equals("Cập nhật thất bại")) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
-        return ResponseEntity.ok(response);
+    Map<String, String> response = orderService.updateOrder(orderID, orderPutRequest);
+    if (response.get("message").equals("Cập nhật thất bại")) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+    return ResponseEntity.ok(response);
     }
 
     @GetMapping(value = "/getByStatus/{orderStatus}", produces = "application/json;charset=UTF-8")
@@ -107,3 +113,4 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getAllOrdersPaged(page, size));
     }
 }
+

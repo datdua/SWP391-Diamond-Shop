@@ -11,7 +11,7 @@ import com.example.diamondstore.service.OrderDetailService;
 @RestController
 @RequestMapping("/api/orderDetail")
 public class OrderDetailController {
-
+    
     @Autowired
     private OrderDetailService orderDetailService;
 
@@ -29,4 +29,5 @@ public class OrderDetailController {
     public ResponseEntity<?> getOrderDetail(Integer orderDetailID) {
         return ResponseEntity.ok(orderDetailService.getOrderDetail(orderDetailID));
     }
+
 }

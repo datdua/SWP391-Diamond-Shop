@@ -93,7 +93,7 @@ public class PaymentController {
         String vnp_CreateDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
 
-        cld.add(Calendar.HOUR, 24);
+        cld.add(Calendar.HOUR, 2);
         String vnp_ExpireDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
@@ -151,7 +151,6 @@ public class PaymentController {
 
             // Cập nhật trạng thái đơn hàng
             order.setOrderStatus("Đã thanh toán");
-            order.setTransactionNo(transactionNo);
             orderRepository.save(order);
 
             // Chuyển các mục giỏ hàng thành OrderDetail và lưu
@@ -185,9 +184,7 @@ public class PaymentController {
             transactionStatusDTO.setMessage("Thanh toán thất bại");
             transactionStatusDTO.setData("");
 
-            // Cập nhật trạng thái đơn hàng
             order.setOrderStatus("Thanh toán thất bại");
-            order.setTransactionNo(transactionNo);
             orderRepository.save(order);
         }
 
