@@ -99,7 +99,7 @@ function TransactionManagerPage() {
                       "https://sandbox.vnpayment.vn/merchantv2/Users/Login.htm")
                   }
                 >
-                  Go to VN Payment
+                  Quản lí giao dịch VNPay
                 </Button>
               </Card.Title>
             </Card.Header>

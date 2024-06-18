@@ -66,6 +66,16 @@ function SideBarAdmin() {
             }
           >
             <NavLink
+              to="/admin/account-manager"
+              className="sidebar-nav-item"
+              activeClassName="active"
+            >
+              <span className="nav-icon">
+                <span className="nav-icon-bullet"></span>
+              </span>{" "}
+              Tài khoản
+            </NavLink>
+            <NavLink
               to="/admin/diamond-manager"
               className="sidebar-nav-item"
               activeClassName="active"
@@ -86,14 +96,14 @@ function SideBarAdmin() {
               Trang sức
             </NavLink>
             <NavLink
-              to="/admin/account-manager"
+              to="/admin/certificate-manager"
               className="sidebar-nav-item"
               activeClassName="active"
             >
               <span className="nav-icon">
                 <span className="nav-icon-bullet"></span>
               </span>{" "}
-              Tài khoản
+              Chứng chỉ kim cương
             </NavLink>
             <NavLink
               to="/admin/order-manager"

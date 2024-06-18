@@ -32,6 +32,7 @@ import ProfilePage from "./pages/Profile/ProfilePage";
 import GoldPriceManager from "./pages/Manager/PriceProductManager/GolPriceManager";
 import OrderManagerPage from "./pages/Manager/OrderManager/OrderManagePager";
 import TransactionManagerPage from "./pages/Manager/TransactionManager/TransactionManagerPage";
+import CertificateManagerPage from "./pages/Manager/CertificateManager/CertificateManagerPage";
 
 function App() {
   const handleLogout = (logoutCallback) => {
@@ -246,6 +247,10 @@ function App() {
             <Route
               path="transaction-manager"
               element={<TransactionManagerPage />}
+            />
+            <Route
+              path="certificate-manager"
+              element={<CertificateManagerPage />}
             />
           </Route>
         </Routes>
