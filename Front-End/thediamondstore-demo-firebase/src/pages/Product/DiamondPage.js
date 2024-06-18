@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Modal from "react-modal";
+<<<<<<< HEAD:Front-End/thediamondstore-demo-firebase/src/pages/Product/DiamondPage.js
 import { getAllDiamond, getPage, searchDiamondByColor } from "../../api/DiamondAPI";
 import "./ProductPage.css";
 
 Modal.setAppElement('#root'); // Ensure this matches your app's root element
+=======
+
+import { getAllDiamond, getPage, searchDiamond } from "../../api/DiamondAPI";
+
+Modal.setAppElement('#root');
+>>>>>>> main:Front-End/thediamondstore/src/pages/Product/DiamondPage.js
 
 const customModalStyles = {
     content: {
@@ -14,11 +21,19 @@ const customModalStyles = {
         bottom: 'auto',
         marginRight: '-50%',
         transform: 'translate(-50%, -50%)',
+<<<<<<< HEAD:Front-End/thediamondstore-demo-firebase/src/pages/Product/DiamondPage.js
         zIndex: '1000', // Ensure the modal appears on top
     },
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.75)', // Dim background
         zIndex: '1000', // Ensure the overlay appears on top
+=======
+        zIndex: '1000',
+    },
+    overlay: {
+        backgroundColor: 'rgba(0, 0, 0, 0.75)',
+        zIndex: '1000',
+>>>>>>> main:Front-End/thediamondstore/src/pages/Product/DiamondPage.js
     },
 };
 
@@ -31,10 +46,22 @@ function DiamondPage() {
     const [modalIsOpen, setIsOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+<<<<<<< HEAD:Front-End/thediamondstore-demo-firebase/src/pages/Product/DiamondPage.js
     const [searchColor, setSearchColor] = useState('');
     const location = useLocation();
     const [searchResults, setSearchResults] = useState([]);
     const colors = ['All', 'E', 'J', 'F', 'D'];
+=======
+    const [filters, setFilters] = useState({});
+    const location = useLocation();
+    const [searchResults, setSearchResults] = useState([]);
+    const colors = ['All', 'E', 'J', 'F', 'D'];
+    const cuts = ['All', 'Excellent'];
+    const clarities = ['All', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2', 'I1', 'I2', 'I3'];
+    const shapes = ['All', 'Radiant', 'Around', 'Pear'];
+    const origins = ['All', 'GIA']
+
+>>>>>>> main:Front-End/thediamondstore/src/pages/Product/DiamondPage.js
     function openModal(item) {
         setSelectedItem(item);
         setIsOpen(true);
@@ -66,6 +93,7 @@ function DiamondPage() {
         setCurrentPage(pageNumber);
         setLoading(true);
         try {
+<<<<<<< HEAD:Front-End/thediamondstore-demo-firebase/src/pages/Product/DiamondPage.js
           let data;
           if (searchColor === 'All') {
             data = await getAllDiamond();
@@ -81,6 +109,19 @@ function DiamondPage() {
           setLoading(false);
         }
       };
+=======
+            const data = filters.color === 'All' && filters.cut === 'All' && filters.shape === 'All' && filters.clarity === 'All' && filters.origin === 'All'
+                ? await getAllDiamond()
+                : await searchDiamond(filters);
+            const results = data.slice((pageNumber - 1) * resultsPerPage, pageNumber * resultsPerPage);
+            setDiamonds(results);
+            setLoading(false);
+        } catch (error) {
+            setError(error.message);
+            setLoading(false);
+        }
+    };
+>>>>>>> main:Front-End/thediamondstore/src/pages/Product/DiamondPage.js
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -88,6 +129,7 @@ function DiamondPage() {
         if (results) {
             setSearchResults(JSON.parse(results));
         } else {
+<<<<<<< HEAD:Front-End/thediamondstore-demo-firebase/src/pages/Product/DiamondPage.js
             setSearchResults([]); // Reset search results when no search is performed
         }
     }, [location]);
@@ -106,6 +148,37 @@ function DiamondPage() {
             const totalPages = Math.ceil(data.length / resultsPerPage);
             setTotalPages(totalPages);
             // Get the results for the current page
+=======
+            setSearchResults([]);
+        }
+    }, [location]);
+
+    const resultsPerPage = 9;
+
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const filtersToUse = { ...filters };
+            if (filters.cut === 'All') {
+                delete filtersToUse.cut;
+            }
+            if (filters.color === 'All') {
+                delete filtersToUse.color;
+            }
+            if (filters.clarity === 'All') {
+                delete filtersToUse.clarity;
+            }
+            if (filters.shape === 'All') {
+                delete filtersToUse.shape;
+            }
+            if (filters.origin === 'All') {
+                delete filtersToUse.origin;
+            }
+            const data = await searchDiamond(filtersToUse);
+            const totalPages = Math.ceil(data.length / resultsPerPage);
+            setTotalPages(totalPages);
+>>>>>>> main:Front-End/thediamondstore/src/pages/Product/DiamondPage.js
             const results = data.slice((currentPage - 1) * resultsPerPage, currentPage * resultsPerPage);
             setDiamonds(results);
             setLoading(false);
@@ -132,7 +205,11 @@ function DiamondPage() {
                 <main className="page-content">
                     <div className="tm-products-area tm-section tm-padding-section bg-white">
                         <div className="container">
+<<<<<<< HEAD:Front-End/thediamondstore-demo-firebase/src/pages/Product/DiamondPage.js
                             <div className="row" style={{marginRight:"-308px"}}>
+=======
+                            <div className="row">
+>>>>>>> main:Front-End/thediamondstore/src/pages/Product/DiamondPage.js
                                 <div className="col-lg-9 col-12">
                                     <form action="#" className="tm-shop-header">
                                         <div className="tm-shop-productview">
@@ -166,6 +243,10 @@ function DiamondPage() {
                                                                 </div>
                                                                 <ul className="tm-product-actions">
                                                                     {showNotification && <p>Please log in to add items to the cart.</p>}
+<<<<<<< HEAD:Front-End/thediamondstore-demo-firebase/src/pages/Product/DiamondPage.js
+=======
+                                                                    <li><Link to={`/product-detail/diamond/${item.diamondID}`}><i className="ion-android-cart"></i> Add to cart</Link></li>
+>>>>>>> main:Front-End/thediamondstore/src/pages/Product/DiamondPage.js
                                                                     <li><button onClick={() => openModal(item)} aria-label="Product Quickview"><i className="ion-eye"></i></button></li>
                                                                     <li><a href="#"><i className="ion-heart"></i></a></li>
                                                                 </ul>
@@ -175,15 +256,24 @@ function DiamondPage() {
                                                                 </div>
                                                             </div>
                                                             <div className="tm-product-bottomside">
+<<<<<<< HEAD:Front-End/thediamondstore-demo-firebase/src/pages/Product/DiamondPage.js
                                                                 <h6 className="tm-product-title"><Link to={`/product-detail/${item.diamondID}`}>{item.diamondName}</Link></h6>
                                                                 <div className="tm-ratingbox">
+=======
+                                                                <h6 className="tm-product-title"><Link to={`/product-detail/diamond/${item.diamondID}`}>{item.diamondName}</Link></h6>
+                                                                <div className="tm-rating">
+>>>>>>> main:Front-End/thediamondstore/src/pages/Product/DiamondPage.js
                                                                     <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                                     <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                                     <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                                     <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                                     <span><i className="ion-android-star-outline"></i></span>
                                                                 </div>
+<<<<<<< HEAD:Front-End/thediamondstore-demo-firebase/src/pages/Product/DiamondPage.js
                                                                 <span className="tm-product-price">{item.diamondPrice.toLocaleString()} VND</span>
+=======
+                                                                <span className="tm-product-price">{item.diamondEntryPrice ? item.diamondEntryPrice.toLocaleString() : 'N/A'} VND</span>
+>>>>>>> main:Front-End/thediamondstore/src/pages/Product/DiamondPage.js
                                                             </div>
                                                         </div>
                                                     </div>
@@ -199,6 +289,7 @@ function DiamondPage() {
                                         ))}
                                     </div>
                                 </div>
+<<<<<<< HEAD:Front-End/thediamondstore-demo-firebase/src/pages/Product/DiamondPage.js
                             </div>
                             <div className="col-lg-3 col-12">
                                 <div className="widgets">
@@ -223,6 +314,146 @@ function DiamondPage() {
                                                     </option>
                                                 ))}
                                             </select>
+=======
+                                <div className="col-lg-3 col-12">
+                                    <div className="widgets">
+                                        <div className="single-widget widget-categories">
+                                            <h6 className="widget-title">Categories</h6>
+                                            <ul>
+                                                <li><Link to="/trangsuc">Trang Sức</Link></li>
+                                                <li><Link to="/kimcuong">Kim Cương</Link></li>
+                                            </ul>
+                                        </div>
+                                        <form onSubmit={handleSearch}>
+                                            <div className="single-widget widget-colorfilter">
+                                                <h6 className="widget-title">Filter by Color
+                                                </h6>
+                                                <select
+                                                    id="colorSearch"
+                                                    value={filters.color || 'All'}
+                                                    onChange={(e) => setFilters({ ...filters, color: e.target.value })}
+                                                >
+                                                    {colors.map((color) => (
+                                                        <option key={color} value={color}>
+                                                            {color}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <div className="single-widget widget-cutfilter">
+                                                <h6 className="widget-title">Filter by Cut</h6>
+                                                <select
+                                                    id="cutSearch"
+                                                    value={filters.cut || 'All'}
+                                                    onChange={(e) => setFilters({ ...filters, cut: e.target.value })}
+                                                >
+                                                    {cuts.map((cut) => (
+                                                        <option key={cut} value={cut}>
+                                                            {cut}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <div className="single-widget widget-pricefilter">
+                                                <h6 className="widget-title">Filter by Price</h6>
+                                                <div>
+                                                    <label>Min Diamond Price:</label>
+                                                    <input
+                                                        type="number"
+                                                        value={filters.minDiamondPrice || ''}
+                                                        onChange={(e) => setFilters({ ...filters, minDiamondPrice: e.target.value })}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label>Max Diamond Price:</label>
+                                                    <input
+                                                        type="number"
+                                                        value={filters.maxDiamondPrice || ''}
+                                                        onChange={(e) => setFilters({ ...filters, maxDiamondPrice: e.target.value })}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="single-widget widget-caratsizefilter">
+                                                <h6 className="widget-title">Filter by Carat Size</h6>
+                                                <div>
+                                                    <label>Min Carat Size:</label>
+                                                    <input
+                                                        type="number"
+                                                        value={filters.minCaratSize || ''}
+                                                        onChange={(e) => setFilters({ ...filters, minCaratSize: e.target.value })}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label>Max Carat Size:</label>
+                                                    <input
+                                                        type="number"
+                                                        value={filters.maxCaratSize || ''}
+                                                        onChange={(e) => setFilters({ ...filters, maxCaratSize: e.target.value })}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="single-widget widget-caratweightfilter">
+                                                <h6 className="widget-title">Filter by Carat Weight</h6>
+                                                <div>
+                                                    <label>Min Carat Weight:</label>
+                                                    <input
+                                                        type="number"
+                                                        value={filters.minCaratWeight || ''}
+                                                        onChange={(e) => setFilters({ ...filters, minCaratWeight: e.target.value })}
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label>Max Carat Weight:</label>
+                                                    <input
+                                                        type="number"
+                                                        value={filters.maxCaratWeight || ''}
+                                                        onChange={(e) => setFilters({ ...filters, maxCaratWeight: e.target.value })}
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="single-widget widget-clarityfilter">
+                                                <h6 className="widget-title">Filter by Clarity</h6>
+                                                <select
+                                                    id="claritySearch"
+                                                    value={filters.clarity || 'All'}
+                                                    onChange={(e) => setFilters({ ...filters, clarity: e.target.value })}
+                                                >
+                                                    {clarities.map((clarity) => (
+                                                        <option key={clarity} value={clarity}>
+                                                            {clarity}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <div className="single-widget widget-shapefilter">
+                                                <h6 className="widget-title">Filter by Shape</h6>
+                                                <select
+                                                    id="shapeSearch"
+                                                    value={filters.shape || 'All'}
+                                                    onChange={(e) => setFilters({ ...filters, shape: e.target.value })}
+                                                >
+                                                    {shapes.map((shape) => (
+                                                        <option key={shape} value={shape}>
+                                                            {shape}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            <div className="single-widget widget-originfilter">
+                                                <h6 className="widget-title">Filter by Origin</h6>
+                                                <select
+                                                    id="originSearch"
+                                                    value={filters.origin || 'All'}
+                                                    onChange={(e) => setFilters({ ...filters, origin: e.target.value })}
+                                                >
+                                                    {origins.map((origin) => (
+                                                        <option key={origin} value={origin}>
+                                                            {origin}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+>>>>>>> main:Front-End/thediamondstore/src/pages/Product/DiamondPage.js
                                             <button type="submit">Search</button>
                                         </form>
                                     </div>
@@ -232,6 +463,7 @@ function DiamondPage() {
                     </div>
                 </main>
             </div>
+<<<<<<< HEAD:Front-End/thediamondstore-demo-firebase/src/pages/Product/DiamondPage.js
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
@@ -253,9 +485,43 @@ function DiamondPage() {
                     </div>
                 )}
             </Modal>
+=======
+            <div id="tm-product-quickview">
+                {selectedItem && (
+                    <Modal
+                        isOpen={modalIsOpen}
+                        onRequestClose={closeModal}
+                        style={customModalStyles}
+                        contentLabel="Product Modal"
+                    >
+                        <div className="modal-content">
+                            <div className="img-container">
+                                <img src={selectedItem.diamondImage} alt={selectedItem.diamondName} />
+                            </div>
+                            <button className="close-button" onClick={closeModal}>Close</button>
+                            <div className="content-container">
+                                <h2>{selectedItem.diamondName}</h2>
+                                <p>Price: {selectedItem.diamondEntryPrice ? selectedItem.diamondEntryPrice.toLocaleString() : 'N/A'} VND</p>
+                                <p>Carat Size: {selectedItem.carat_size}</p>
+                                <p>Color: {selectedItem.color}</p>
+                                <p>Cut: {selectedItem.cut}</p>
+                                <p>Clarity: {selectedItem.clarity}</p>
+                                <p>Shape: {selectedItem.shape}</p>
+                                <p>Origin: {selectedItem.origin}</p>
+                            </div>
+                        </div>
+                    </Modal>
+                )}
+
+            </div>
+>>>>>>> main:Front-End/thediamondstore/src/pages/Product/DiamondPage.js
         </div>
     );
 }
 
+<<<<<<< HEAD:Front-End/thediamondstore-demo-firebase/src/pages/Product/DiamondPage.js
 
 export default DiamondPage;
+=======
+export default DiamondPage;
+>>>>>>> main:Front-End/thediamondstore/src/pages/Product/DiamondPage.js

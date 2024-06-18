@@ -1,41 +1,40 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import axios from "axios";
-import "./ProductPage.css";
+import { Link, useLocation, useParams } from "react-router-dom";
 import Modal from "react-modal";
+<<<<<<< HEAD:Front-End/thediamondstore-demo-firebase/src/pages/Product/ProductPage.js
 import { fetchJewelryPage, getPage } from "../../api/JewelryAPI"; // Import the functions
+=======
+import { getAllProduct, getProductPage } from "../../api/ProductAPI"; // Ensure this API call is correct
+>>>>>>> main:Front-End/thediamondstore/src/pages/Product/ProductPage.js
 
-// Set the app element for accessibility
-Modal.setAppElement('#root'); // Ensure this matches your app's root element
+Modal.setAppElement("#root"); // Ensure this matches your app's root element
 
 const customModalStyles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)',
-        zIndex: '1000', // Ensure the modal appears on top
-    },
-    overlay: {
-        backgroundColor: 'rgba(0, 0, 0, 0.75)', // Dim background
-        zIndex: '1000', // Ensure the overlay appears on top
-    },
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+    zIndex: "1000",
+  },
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.75)",
+    zIndex: "1000",
+  },
 };
 
 function ProductPage() {
     const location = useLocation();
-    const [jewelry, setJewelry] = useState([]);
+    const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [modalIsOpen, setIsOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
-    const [minPrice, setMinPrice] = useState(0);
-    const [maxPrice, setMaxPrice] = useState(10000000);
-    const [jewelryPage, setJewelryPage] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+<<<<<<< HEAD:Front-End/thediamondstore-demo-firebase/src/pages/Product/ProductPage.js
     const itemsPerPage = 9; 
 
     const fetchJewelryPage = async (page, gender) => {
@@ -130,10 +129,67 @@ function ProductPage() {
                 setLoading(false);
             });
     };
+=======
+    const itemsPerPage = 4;
+
+    useEffect(() => {
+        const fetchProductPage = async () => {
+            try {
+                const response = await getProductPage(currentPage, itemsPerPage);
+                console.log('API Response:', response);  // Log the entire response object
+
+        if (!response || (!response.diamonds && !response.jewelry)) {
+          throw new Error("Invalid API response: Missing or invalid data");
+        }
+
+        const combinedProducts = [
+          ...response.diamonds,
+          ...response.jewelry,
+        ].map((item) => ({
+          id: item.jewelryID || item.diamondID,
+          name: item.jewelryName || item.diamondName,
+          imageUrl: item.jewelryImage || item.diamondImage,
+          price: item.jewelryEntryPrice || item.diamondEntryPrice,
+          type: item.jewelryID ? "jewelry" : "diamond",
+        }));
+
+        setProducts(combinedProducts);
+        setTotalPages(
+          Math.ceil(
+            (response.diamondsTotalElements + response.jewelryTotalElements) /
+              itemsPerPage
+          )
+        );
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        setError("Failed to fetch products");
+        setLoading(false);
+      }
+    };
+
+        fetchProductPage();
+    }, [currentPage]);
+
+  function openModal(item) {
+    setSelectedItem(item);
+    setIsOpen(true);
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+    setSelectedItem(null);
+  }
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+>>>>>>> main:Front-End/thediamondstore/src/pages/Product/ProductPage.js
     return (
         <div>
             <div id="wrapper" className="wrapper">
-                <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(assets/images/breadcrumb-bg.jpg)` }}>
+                <div className="tm-breadcrumb-area tm-padding-section bg-grey">
                     <div className="container">
                         <div className="tm-breadcrumb">
                             <h2>Products</h2>
@@ -155,7 +211,9 @@ function ProductPage() {
                                             <button data-view="grid" className="active" aria-label="Grid View"><i className="ion-android-apps"></i></button>
                                             <button data-view="list" aria-label="List View"><i className="ion-android-menu"></i></button>
                                         </div>
-                                        <p className="tm-shop-countview">Showing 1 to 9 of {jewelry.length} </p>
+                                        <p className="tm-shop-countview">
+                                            Showing {((currentPage - 1) * itemsPerPage * 2) + 1} to {Math.min(currentPage * itemsPerPage * 2, products.length)} of {products.length} products
+                                        </p>
                                         <label htmlFor="mySelect">My Select:</label>
                                         <select id="mySelect">
                                             <option value="default">Default Sorting</option>
@@ -172,13 +230,15 @@ function ProductPage() {
                                                 <div>Loading...</div>
                                             ) : error ? (
                                                 <div>Error: {error}</div>
+                                            ) : products.length === 0 ? (
+                                                <div>No products available</div>
                                             ) : (
-                                                jewelry.map((item) => (
-                                                    <div key={item.jewelryID} className="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-12 mt-50">
+                                                products.map((item) => (
+                                                    <div className="col-lg-4 col-md-6 col-12" key={item.id}>
                                                         <div className="tm-product">
                                                             <div className="tm-product-topside">
                                                                 <div className="tm-product-images">
-                                                                    <img src={item.jewelryImage} alt={item.jewelryName} />
+                                                                    <img src={item.imageUrl} alt={item.name} />
                                                                 </div>
                                                                 <ul className="tm-product-actions">
                                                                     <li><button onClick={() => openModal(item)} aria-label="Product Quickview"><i className="ion-eye"></i></button></li>
@@ -190,7 +250,17 @@ function ProductPage() {
                                                                 </div>
                                                             </div>
                                                             <div className="tm-product-bottomside">
-                                                                <h6 className="tm-product-title"><Link to={`/product-detail/${item.jewelryID}`}>{item.jewelryName}</Link></h6>
+                                                                <h6 className="tm-product-title">
+                                                                    <Link
+                                                                        to={
+                                                                            item.type === 'jewelry'
+                                                                                ? `/product-detail/jewelry/${item.id}`
+                                                                                : `/product-detail/diamond/${item.id}`
+                                                                        }
+                                                                    >
+                                                                        {item.name}
+                                                                    </Link>
+                                                                </h6>
                                                                 <div className="tm-ratingbox">
                                                                     <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                                     <span className="is-active"><i className="ion-android-star-outline"></i></span>
@@ -198,13 +268,17 @@ function ProductPage() {
                                                                     <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                                     <span><i className="ion-android-star-outline"></i></span>
                                                                 </div>
-                                                                <span className="tm-product-price">{item.jewelryPrice.toLocaleString()} VND</span>
+                                                                <span className="tm-product-price">{item.price ? item.price.toLocaleString() : 'N/A'} VND</span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 ))
                                             )}
                                         </div>
+<<<<<<< HEAD:Front-End/thediamondstore-demo-firebase/src/pages/Product/ProductPage.js
+=======
+                                        {/* Pagination */}
+>>>>>>> main:Front-End/thediamondstore/src/pages/Product/ProductPage.js
                                         <div className="tm-pagination mt-50">
                                             {Array.from({ length: totalPages }, (_, index) => (
                                                 <button key={index} onClick={() => handlePageChange(index + 1)} className={currentPage === index + 1 ? 'active' : ''}>
@@ -215,6 +289,7 @@ function ProductPage() {
                                     </div>
                                 </div>
 
+<<<<<<< HEAD:Front-End/thediamondstore-demo-firebase/src/pages/Product/ProductPage.js
                                 <div className="col-lg-3 col-12">
                                     <div className="widgets">
                                         <div className="single-widget widget-categories">
@@ -284,11 +359,59 @@ function ProductPage() {
                             </div>
                         </Modal>
                     )}
+=======
+                <div className="col-lg-3 col-12">
+                  {/* Sidebar Widgets */}
+                  <div className="widgets">
+                    <div className="single-widget widget-categories">
+                      <h6 className="widget-title">Categories</h6>
+                      <ul>
+                        <li>
+                          <Link to="/trangsuc">Trang Sức</Link>
+                        </li>
+                        <li>
+                          <Link to="/kimcuong">Kim Cương</Link>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+>>>>>>> main:Front-End/thediamondstore/src/pages/Product/ProductPage.js
                 </div>
-                {/*<Footer />*/}
+              </div>
             </div>
+          </div>
+        </main>
+        {/* Modal for Product Quickview */}
+        <div id="tm-product-quickview">
+          {selectedItem && (
+            <Modal
+              isOpen={modalIsOpen}
+              onRequestClose={closeModal}
+              style={customModalStyles}
+              contentLabel="Product Quickview"
+            >
+              <div className="modal-content">
+                <div className="img-container">
+                  <img src={selectedItem.imageUrl} alt={selectedItem.name} />
+                </div>
+                <button className="close-button" onClick={closeModal}>
+                  Close
+                </button>
+                <div className="content-container">
+                  <h2>{selectedItem.name}</h2>
+                  <p>{selectedItem.description}</p>
+                  <p>Product ID: {selectedItem.id}</p>
+                  {/* Assuming selectedItem has category and price */}
+                  <p>Category: {selectedItem.category}</p>
+                  <span>{selectedItem.price.toLocaleString()} VND</span>
+                </div>
+              </div>
+            </Modal>
+          )}
         </div>
-    );
+      </div>
+    </div>
+  );
 }
 
 export default ProductPage;

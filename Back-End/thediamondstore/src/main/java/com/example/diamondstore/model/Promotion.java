@@ -1,5 +1,6 @@
 package com.example.diamondstore.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -14,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "Promotion")
-public class Promotion {
+public class Promotion implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -97,5 +98,4 @@ public class Promotion {
     public void setDescription(String description) {
         this.description = description;
     }
-
 }

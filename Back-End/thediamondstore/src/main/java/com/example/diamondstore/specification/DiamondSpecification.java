@@ -37,15 +37,25 @@ public class DiamondSpecification {
         return (root, query, builder) -> builder.lessThanOrEqualTo(root.get("carat_weight"), maxCaratWeight);
     }
 
-    public static Specification<Diamond> hasMinDiamondPrice(Float minDiamondPrice) {
-        return (root, query, builder) -> builder.greaterThanOrEqualTo(root.get("diamondPrice"), minDiamondPrice);
+    public static Specification<Diamond> hasMinDiamondEntryPrice(Float mindiamondEntryPrice) {
+        return (root, query, builder) -> builder.greaterThanOrEqualTo(root.get("diamondEntryPrice"), mindiamondEntryPrice);
     }
 
-    public static Specification<Diamond> hasMaxDiamondPrice(Float maxDiamondPrice) {
-        return (root, query, builder) -> builder.lessThanOrEqualTo(root.get("diamondPrice"), maxDiamondPrice);
+    public static Specification<Diamond> hasMaxDiamondEntryPrice(Float maxdiamondEntryPrice) {
+        return (root, query, builder) -> builder.lessThanOrEqualTo(root.get("diamondEntryPrice"), maxdiamondEntryPrice);
     }
 
     public static Specification<Diamond> hasClarity(String clarity) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("clarity"), clarity);
     }
+
+    public static Specification<Diamond> hasDiamondNameLike(String diamondNameLike) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("diamondName"), "%" + diamondNameLike + "%");
+    }
+
+    public static Specification<Diamond> hasDiamondNameIgnoreCase(String diamondName) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower(root.get("diamondName")), "%" + diamondName.toLowerCase() + "%");
+    }
+
+    
 }

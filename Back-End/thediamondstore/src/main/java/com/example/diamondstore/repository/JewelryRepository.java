@@ -1,5 +1,8 @@
 package com.example.diamondstore.repository;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -11,4 +14,7 @@ public interface JewelryRepository extends JpaRepository<Jewelry, String>, JpaSp
 
     Jewelry findByJewelryID(String jewelryID);
 
+    List<Jewelry> findByJewelryNameLike(String jewelryNamePattern);
+
+    List<Jewelry> findByJewelryEntryPriceBetween(BigDecimal minjewelryEntryPrice, BigDecimal maxjewelryEntryPrice);
 }

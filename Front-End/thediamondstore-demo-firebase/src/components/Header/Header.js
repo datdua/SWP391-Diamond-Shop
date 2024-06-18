@@ -1,3 +1,4 @@
+<<<<<<< HEAD:Front-End/thediamondstore-demo-firebase/src/components/Header/Header.js
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
@@ -9,10 +10,24 @@ import { AuthContext } from "../Auth/AuthContext";
 
 function Header() {
     const navigate = useNavigate();
+=======
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import "./Header.css";
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import { searchJewelryByName } from "../../api/JewelryAPI";
+import { searchDiamondByName } from "../../api/DiamondAPI";
+import { AuthContext } from "../Auth/AuthContext";
+import { toast } from "react-toastify";
+import { searchProductionByName } from "../../api/ProductAPI";
+import { getAccountIDByEmail } from "../../api/accountCrud";
+
+function Header() {
+    const { isLoggedIn, accountName, onLogout } = useContext(AuthContext);
+>>>>>>> main:Front-End/thediamondstore/src/components/Header/Header.js
     const [isAccountDropdownOpen, setAccountDropdownOpen] = useState(false);
-    const [isCurrencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
-    const [isLanguageDropdownOpen, setLanguageDropdownOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+<<<<<<< HEAD:Front-End/thediamondstore-demo-firebase/src/components/Header/Header.js
     const { isLoggedIn, accountName, onLogout } = useContext(AuthContext);
     
 
@@ -43,6 +58,58 @@ function Header() {
                 navigate(`/kimcuong?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(diamondResults))}`);
             } else if (jewelryResults.length > 0) {
                 navigate(`/trangsuc?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(jewelryResults))}`);
+=======
+    const navigate = useNavigate();
+    const accountId = localStorage.getItem('accountID')
+
+
+    const toggleDropdown = () => {
+        setAccountDropdownOpen(!isAccountDropdownOpen);
+    };
+    const handleCartClick = async () => {
+        const email = localStorage.getItem("email");
+        const accountId = await getAccountIDByEmail(email);
+        if (accountId) {
+            // Redirect to the user's cart
+            window.location.href = `http://localhost:3000/cart/${accountId}`;
+        } else {
+            // Handle the case when accountId is null
+            // For example, redirect to the login page
+            window.location.href = 'http://localhost:3000/dangnhap';
+        }
+    };
+    const handleAccountClick = async () => {
+        const email = localStorage.getItem("email");
+        const accountId = await getAccountIDByEmail(email)
+        if (accountId) {
+            // Redirect to the user's cart
+            window.location.href = `http://localhost:3000/account/${accountId}`;
+        } else {
+            // Handle the case when accountId is null
+            // For example, redirect to the login page
+            window.location.href = 'http://localhost:3000/login';
+        }
+    };
+
+
+    const handleSearch = async () => {
+        try {
+            const [jewelryResults, diamondResults, productResults] = await Promise.all([
+                searchJewelryByName(searchTerm),
+                searchDiamondByName(searchTerm),
+                searchProductionByName(searchTerm)
+            ]);
+
+            if (productResults.length > 0) {
+                navigate(`/sanpham?search=${encodeURIComponent(searchTerm)}&jewelryResults=${encodeURIComponent(JSON.stringify(jewelryResults))}&diamondResults=${encodeURIComponent(JSON.stringify(diamondResults))}`);
+            } else if (diamondResults.length > 0) {
+                navigate(`/kimcuong?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(diamondResults))}`);
+            } else if (jewelryResults.length > 0) {
+                navigate(`/trangsuc?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(jewelryResults))}`);
+            } else {
+                console.log('No search results found');
+                toast.error('Không tìm thấy kết quả tìm kiếm!');
+>>>>>>> main:Front-End/thediamondstore/src/components/Header/Header.js
             }
         } catch (error) {
             console.error('Error searching for jewelry and diamonds:', error);
@@ -54,17 +121,18 @@ function Header() {
             <div className="tm-header-toparea bg-black">
                 <div className="container">
                     <div className="row justify-between items-center">
-                        <div className="col-lg-8 col-12">
+                        <div className="col-lg-6 col-12">
                             <ul className="tm-header-info">
                                 <li><a href="tel:18883456789"><i className="ion-ios-telephone"></i>02.873.005.588</a></li>
                                 <li><a href="mailto:contact@example.com"><i className="ion-android-mail"></i>thediamondstore.info@gmail.com</a></li>
                                 {accountName && <li>Welcome, {accountName}!</li>}
                             </ul>
                         </div>
-                        <div className="col-lg-4 col-12">
+                        <div className="col-lg-6 col-12">
                             <div className="tm-header-options">
                                 {isLoggedIn ? (
                                     <>
+<<<<<<< HEAD:Front-End/thediamondstore-demo-firebase/src/components/Header/Header.js
                                         <div className="relative">
                                             <button onClick={() => toggleDropdown("account")} className="tm-dropdown-button tm-header-links">
                                                 Tài Khoản <i className={`ml-1 fas ${isAccountDropdownOpen ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i>
@@ -79,6 +147,17 @@ function Header() {
                                             )}
                                         </div>
                                         <button onClick={onLogout} className="tm-logout-button">Đăng xuất</button>
+=======
+                                        <div className="flex">
+                                            <button onClick={handleAccountClick} className="tm-header-links">
+                                                My Account
+                                            </button>
+                                            <button onClick={handleCartClick} className="tm-header-links">
+                                                Shopping Cart
+                                            </button>
+                                            <button onClick={onLogout} className="tm-logout-button">Đăng xuất</button>
+                                        </div>
+>>>>>>> main:Front-End/thediamondstore/src/components/Header/Header.js
                                     </>
                                 ) : (
                                     <button onClick={() => navigate('/dangnhap')} className="tm-login-button">Đăng nhập/Đăng ký</button>

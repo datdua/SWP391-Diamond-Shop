@@ -15,8 +15,8 @@ public class Diamond {
     @Column(name = "diamondID")
     private String diamondID;
 
-    @Column(name = "warrantityID")
-    private String warrantityID;
+    @Column(name = "warrantyID")
+    private String warrantyID;
 
     @Column(name = "certificationID")
     private String certificationID;
@@ -24,8 +24,11 @@ public class Diamond {
     @Column(name = "carat_size")
     private Float carat_size;
 
-    @Column(name = "diamondPrice", precision=8, scale=2)
-    private BigDecimal diamondPrice;
+    @Column(name = "diamondEntryPrice", precision = 16, scale = 2)
+    private BigDecimal diamondEntryPrice;
+
+    @Column(name = "grossDiamondPrice", precision = 16, scale = 2)
+    private BigDecimal grossDiamondPrice;
 
     @Column(name = "carat_weight")
     private Float carat_weight;
@@ -51,27 +54,33 @@ public class Diamond {
     @Column(name = "origin")
     private String origin;
 
-    // Add your getters and setters here
     public Diamond() {
     }
 
-    public Diamond(Float carat_size, Float carat_weight, String certificationID, String clarity, String color, String cut, String diamondID, String diamondImage, String diamondName, BigDecimal diamondPrice, String origin, String shape, String warrantityID) {
-        this.carat_size = carat_size;
-        this.carat_weight = carat_weight;
+    public Diamond(String diamondID, String warrantyID, String certificationID, Float carat_size, BigDecimal diamondEntryPrice, Float carat_weight, String color, String cut, String clarity, String diamondImage, String shape, String diamondName, String origin, BigDecimal grossDiamondPrice) {
+        this.diamondID = diamondID;
+        this.warrantyID = warrantyID;
         this.certificationID = certificationID;
-        this.clarity = clarity;
+        this.carat_size = carat_size;
+        this.diamondEntryPrice = diamondEntryPrice;
+        this.carat_weight = carat_weight;
         this.color = color;
         this.cut = cut;
-        this.diamondID = diamondID;
+        this.clarity = clarity;
         this.diamondImage = diamondImage;
-        this.diamondName = diamondName;
-        this.diamondPrice = diamondPrice;
-        this.origin = origin;
         this.shape = shape;
-        this.warrantityID = warrantityID;
+        this.diamondName = diamondName;
+        this.origin = origin;
+        this.grossDiamondPrice = grossDiamondPrice;
     }
 
-    
+    public BigDecimal getGrossDiamondPrice() {
+        return grossDiamondPrice;
+    }
+
+    public void setGrossDiamondPrice(BigDecimal grossDiamondPrice) {
+        this.grossDiamondPrice = grossDiamondPrice;
+    }
 
     public String getDiamondID() {
         return diamondID;
@@ -81,12 +90,12 @@ public class Diamond {
         this.diamondID = diamondID;
     }
 
-    public String getWarrantityID() {
-        return warrantityID;
+    public String getWarrantyID() {
+        return warrantyID;
     }
 
-    public void setWarrantityID(String warrantityID) {
-        this.warrantityID = warrantityID;
+    public void setWarrantyID(String warrantyID) {
+        this.warrantyID = warrantyID;
     }
 
     public String getCertificationID() {
@@ -105,12 +114,12 @@ public class Diamond {
         this.carat_size = carat_size;
     }
 
-    public BigDecimal getDiamondPrice() {
-        return diamondPrice;
+    public BigDecimal getDiamondEntryPrice() {
+        return diamondEntryPrice;
     }
 
-    public void setDiamondPrice(BigDecimal diamondPrice) {
-        this.diamondPrice = diamondPrice;
+    public void setDiamondEntryPrice(BigDecimal diamondEntryPrice) {
+        this.diamondEntryPrice = diamondEntryPrice;
     }
 
     public Float getCarat_weight() {
@@ -149,7 +158,7 @@ public class Diamond {
         return diamondImage;
     }
 
-    public void setImage(String diamondImage) {
+    public void setDiamondImage(String diamondImage) {
         this.diamondImage = diamondImage;
     }
 
@@ -176,5 +185,4 @@ public class Diamond {
     public void setOrigin(String origin) {
         this.origin = origin;
     }
-
 }

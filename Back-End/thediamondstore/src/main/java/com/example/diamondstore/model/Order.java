@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "Orders")
@@ -25,10 +25,11 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "orderID")
-    private int orderID;
+    private Integer orderID;
 
-    @Column(name = "accountID", nullable = false)
-    private int accountID;
+    @ManyToOne
+    @JoinColumn(name = "accountID", nullable = false)
+    private Account account;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "startorderDate", nullable = false)
@@ -41,49 +42,74 @@ public class Order {
     @Column(name = "deliveryDate", nullable = false)
     private LocalDateTime deliveryDate;
 
-    @Column(name = "totalAmount", precision = 18, scale = 2)
-    private BigDecimal totalAmount;
+    @Column(name = "totalOrder", precision = 18, scale = 2)
+    private BigDecimal totalOrder;
 
     @Column(name = "deliveryAddress")
     private String deliveryAddress;
 
-    @ManyToOne
-    @JoinColumn(name = "promotionID", referencedColumnName = "promotionID", nullable = true)
-    private Promotion promotion;
+    @Column(name = "phoneNumber")
+    private String phoneNumber;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Column(name = "certificateImage")
+    private String certificateImage;
+
+    @Column(name = "warrantyImage")
+    private String warrantyImage;
+
+    @Column(name = "promotionCode")
+    private String promotionCode; // Chỉ lưu trữ promotionCode dưới dạng chuỗi
+
+    @Column(name = "transactionNo")
+    private int transactionNo;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<Cart> cartItems;
-
-    // getters and setters
+    // Constructors, getters, and setters
     public Order() {
     }
 
-    public Order(int accountID, List<Cart> cartItems, String deliveryAddress, LocalDateTime deliveryDate, int orderID, String orderStatus, Promotion promotion, LocalDateTime startorderDate, BigDecimal totalAmount) {
-        this.accountID = accountID;
-        this.cartItems = cartItems;
-        this.deliveryAddress = deliveryAddress;
-        this.deliveryDate = deliveryDate;
+    public Order(Integer orderID, Account account, LocalDateTime startorderDate, String orderStatus, LocalDateTime deliveryDate,
+                 BigDecimal totalOrder, String deliveryAddress, String phoneNumber, String certificateImage, String warrantyImage,
+                 String promotionCode, List<Cart> cartItems, int transactionNo) {
         this.orderID = orderID;
-        this.orderStatus = orderStatus;
-        this.promotion = promotion;
+        this.account = account;
         this.startorderDate = startorderDate;
-        this.totalAmount = totalAmount;
+        this.orderStatus = orderStatus;
+        this.deliveryDate = deliveryDate;
+        this.totalOrder = totalOrder;
+        this.deliveryAddress = deliveryAddress;
+        this.phoneNumber = phoneNumber;
+        this.certificateImage = certificateImage;
+        this.warrantyImage = warrantyImage;
+        this.promotionCode = promotionCode;
+        this.cartItems = cartItems;
+        this.transactionNo = transactionNo;
     }
 
-    public int getOrderID() {
+    public int getTransactionNo() {
+        return transactionNo;
+    }
+
+    public void setTransactionNo(int transactionNo) {
+        this.transactionNo = transactionNo;
+    }
+
+    public Integer getOrderID() {
         return orderID;
     }
 
-    public void setOrderID(int orderID) {
+    public void setOrderID(Integer orderID) {
         this.orderID = orderID;
     }
 
-    public int getAccountID() {
-        return accountID;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setAccountID(int accountID) {
-        this.accountID = accountID;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public LocalDateTime getStartorderDate() {
@@ -110,12 +136,12 @@ public class Order {
         this.deliveryDate = deliveryDate;
     }
 
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
+    public BigDecimal gettotalOrder() {
+        return totalOrder;
     }
 
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
+    public void settotalOrder(BigDecimal totalOrder) {
+        this.totalOrder = totalOrder;
     }
 
     public String getDeliveryAddress() {
@@ -126,12 +152,36 @@ public class Order {
         this.deliveryAddress = deliveryAddress;
     }
 
-    public Promotion getPromotion() {
-        return promotion;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPromotion(Promotion promotion) {
-        this.promotion = promotion;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getCertificateImage() {
+        return certificateImage;
+    }
+
+    public void setCertificateImage(String certificateImage) {
+        this.certificateImage = certificateImage;
+    }
+
+    public String getWarrantyImage() {
+        return warrantyImage;
+    }
+
+    public void setWarrantyImage(String warrantyImage) {
+        this.warrantyImage = warrantyImage;
+    }
+
+    public String getPromotionCode() {
+        return promotionCode;
+    }
+
+    public void setPromotionCode(String promotionCode) {
+        this.promotionCode = promotionCode;
     }
 
     public List<Cart> getCartItems() {
@@ -141,5 +191,5 @@ public class Order {
     public void setCartItems(List<Cart> cartItems) {
         this.cartItems = cartItems;
     }
-
 }
+

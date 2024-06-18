@@ -34,15 +34,41 @@ public class Cart {
     @Column(name = "totalPrice", nullable = false, precision = 8, scale = 2)
     private BigDecimal totalPrice;
 
+    @Column(name = "sizeJewelry", nullable = false)
+    private Integer sizeJewelry;
+
+    @Column(name = "diamondImage")
+    private String diamondImage;
+
+    @Column(name = "jewelryImage")
+    private String jewelryImage;
+
+    @Column(name = "diamondName")
+    private String diamondName;
+
+    @Column(name = "jewelryName")
+    private String jewelryName;
+
+    @Column(name = "price", nullable = false, precision = 8, scale = 2)
+    private BigDecimal price;
+
+    @Column(name = "grossCartPrice", precision = 8, scale = 2)
+    private BigDecimal grossCartPrice;
+
+    @Column(name = "cartStatus")
+    private String cartStatus;
+
+
     @ManyToOne
-    @JoinColumn(name = "orderID", nullable = true)
+    @JoinColumn(name = "orderID", nullable = true) // nullable = true nếu cart có thể không có order
     private Order order;
 
-    // getters and setters
     public Cart() {
     }
 
-    public Cart(Integer accountID, Integer cartID, String diamondID, String jewelryID, Order order, Integer quantity, BigDecimal totalPrice) {
+    public Cart(Integer accountID, Integer cartID, String diamondID, String jewelryID, Order order, Integer quantity, 
+        BigDecimal totalPrice, Integer sizeJewelry, String diamondImage, String jewelryImage, String diamondName, 
+        String jewelryName, BigDecimal price, BigDecimal grossCartPrice, String cartStatus) {
         this.accountID = accountID;
         this.cartID = cartID;
         this.diamondID = diamondID;
@@ -50,6 +76,30 @@ public class Cart {
         this.order = order;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
+        this.sizeJewelry = sizeJewelry;
+        this.diamondImage = diamondImage;
+        this.jewelryImage = jewelryImage;
+        this.diamondName = diamondName;
+        this.jewelryName = jewelryName;
+        this.price = price;
+        this.grossCartPrice = grossCartPrice;
+        this.cartStatus = cartStatus;
+    }
+
+    public BigDecimal getGrossCartPrice() {
+        return grossCartPrice;
+    }
+
+    public void setGrossCartPrice(BigDecimal grossCartPrice) {
+        this.grossCartPrice = grossCartPrice;
+    }
+
+    public Integer getsizeJewelry() {
+        return sizeJewelry;
+    }
+
+    public void setsizeJewelry(Integer sizeJewelry) {
+        this.sizeJewelry = sizeJewelry;
     }
 
     public Integer getCartID() {
@@ -108,4 +158,51 @@ public class Cart {
         this.order = order;
     }
 
+    public String getDiamondImage() {
+        return diamondImage;
+    }
+
+    public void setDiamondImage(String diamondImage) {
+        this.diamondImage = diamondImage;
+    }
+
+    public String getJewelryImage() {
+        return jewelryImage;
+    }
+
+    public void setJewelryImage(String jewelryImage) {
+        this.jewelryImage = jewelryImage;
+    }
+
+    public String getDiamondName() {
+        return diamondName;
+    }
+
+    public void setDiamondName(String diamondName) {
+        this.diamondName = diamondName;
+    }
+
+    public String getJewelryName() {
+        return jewelryName;
+    }
+
+    public void setJewelryName(String jewelryName) {
+        this.jewelryName = jewelryName;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public String getCartStatus() {
+        return cartStatus;
+    }
+
+    public void setCartStatus(String cartStatus) {
+        this.cartStatus = cartStatus;
+    }
 }

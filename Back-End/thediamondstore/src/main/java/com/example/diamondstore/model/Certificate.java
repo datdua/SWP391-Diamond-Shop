@@ -27,7 +27,6 @@ public class Certificate {
     @Column(name = "certificateImage")
     private String certificateImage;
 
-    // Add your getters and setters here
     public Certificate() {
     }
 
@@ -69,5 +68,4 @@ public class Certificate {
     public void setcertificateImage(String certificateImage) {
         this.certificateImage = certificateImage;
     }
-
 }

@@ -3,7 +3,6 @@ package com.example.diamondstore.controller;
 import java.util.Collections;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +16,6 @@ import com.example.diamondstore.model.Customer;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.CustomerRepository;
 import com.example.diamondstore.request.CustomerRequest;
-import com.example.diamondstore.service.CustomerService;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -46,7 +44,7 @@ public class CustomerController {
         }
     }
 
-    @PutMapping(value="/update/{accountID}", produces = "application/json;charset=UTF-8")
+    @PutMapping(value = "/update/{accountID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> updateCustomer(@PathVariable Integer accountID, @RequestBody CustomerRequest updatedCustomerRequest) {
         Optional<Account> optionalAccount = accountRepository.findById(accountID);
         if (optionalAccount.isPresent()) {
@@ -67,8 +65,4 @@ public class CustomerController {
             return ResponseEntity.notFound().build();
         }
     }
-
-    @Autowired
-    private CustomerService customerService;
-
 }

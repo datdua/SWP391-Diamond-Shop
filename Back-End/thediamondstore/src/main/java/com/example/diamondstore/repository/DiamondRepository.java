@@ -1,5 +1,6 @@
 package com.example.diamondstore.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +18,5 @@ public interface DiamondRepository extends JpaRepository<Diamond, String>, JpaSp
 
     List<Diamond> findByDiamondNameLike(String diamondNamePattern);
 
+    List<Diamond> findBydiamondEntryPriceBetween(BigDecimal minDiamondPrice, BigDecimal maxDiamondPrice);
 }

@@ -8,7 +8,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "Collection")
 public class Collection {
-    
+
     @Id
     @Column(name = "collectionID")
     private int collectionID;
@@ -75,6 +75,4 @@ public class Collection {
     public void setJewelryImage(String jewelryImage) {
         this.jewelryImage = jewelryImage;
     }
-
-    
 }

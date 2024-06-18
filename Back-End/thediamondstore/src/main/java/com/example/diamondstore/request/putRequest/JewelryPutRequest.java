@@ -1,52 +1,34 @@
 package com.example.diamondstore.request.putRequest;
 
+import java.math.BigDecimal;
 
 public class JewelryPutRequest {
 
-    private String diamondID;
     private String jewelryName;
-    private String size;
     private String gender;
     private String jewelryImage;
+    private BigDecimal jewelryEntryPrice;
+    private String warrantyID;
 
     // Add your getters and setters here
-
     public JewelryPutRequest() {
     }
 
-    public JewelryPutRequest(String diamondID, String jewelryName, String size, String gender, String jewelryImage) {
-        this.diamondID = diamondID;
+    public JewelryPutRequest(String jewelryName, String gender, String jewelryImage, BigDecimal jewelryEntryPrice, String warrantyID) {
         this.jewelryName = jewelryName;
-        this.size = size;
         this.gender = gender;
         this.jewelryImage = jewelryImage;
+        this.jewelryEntryPrice = jewelryEntryPrice;
+        this.warrantyID = warrantyID;
     }
 
-    
     // getters and setters...
-
-    public String getDiamondID() {
-        return diamondID;
-    }
-
-    public void setDiamondID(String diamondID) {
-        this.diamondID = diamondID;
-    }
-
     public String getJewelryName() {
         return jewelryName;
     }
 
     public void setJewelryName(String jewelryName) {
         this.jewelryName = jewelryName;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
     }
 
     public String getGender() {
@@ -63,5 +45,21 @@ public class JewelryPutRequest {
 
     public void setJewelryImage(String jewelryImage) {
         this.jewelryImage = jewelryImage;
+    }
+
+    public BigDecimal getJewelryEntryPrice() {
+        return jewelryEntryPrice;
+    }
+
+    public void setJewelryEntryPrice(BigDecimal jewelryEntryPrice) {
+        this.jewelryEntryPrice = jewelryEntryPrice;
+    }
+
+    public String getWarrantyID() {
+        return warrantyID;
+    }
+
+    public void setWarrantyID(String warrantyID) {
+        this.warrantyID = warrantyID;
     }
 }

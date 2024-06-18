@@ -47,7 +47,7 @@ public class CertificateController {
     }
 
     @GetMapping("/paged")
-        public ResponseEntity<Page<Certificate>> getAllDiamondsPaged(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<Page<Certificate>> getAllDiamondsPaged(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Certificate> pageCertificates = certificateRepository.findAll(pageable);
         return ResponseEntity.ok(pageCertificates);
@@ -84,5 +84,14 @@ public class CertificateController {
         }
         certificateRepository.delete(existingCertificate);
         return ResponseEntity.ok(Collections.singletonMap("message", "Xóa thành công"));
+    }
+
+    @GetMapping(value = "/get/certificateImg/{certificateID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getCertificateImg(@PathVariable String certificateID) {
+        Certificate certificate = certificateRepository.findByCertificateID(certificateID);
+        if (certificate == null) {
+            return new ResponseEntity<>(Collections.singletonMap("message", "ID không tồn tại"), HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(Collections.singletonMap("certificateImage", certificate.getcertificateImage()));
     }
 }
