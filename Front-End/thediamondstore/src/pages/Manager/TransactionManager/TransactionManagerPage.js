@@ -9,9 +9,8 @@ import {
   Col,
 } from "react-bootstrap";
 import {
-  getOrdersHaveTransactionNoPaged,
+  getOrdersHaveTransactionNo,
   deleteOrder,
-  getAllOrder,
 } from "../../../api/OrderAPI";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
@@ -57,16 +56,16 @@ function TransactionManagerPage() {
   };
 
   const refreshTable = () => {
-    getAllOrder().then((data) => {
+    getOrdersHaveTransactionNo().then((data) => {
       setOrderData(data);
     });
   };
 
   useEffect(() => {
-    getOrdersHaveTransactionNoPaged(currentPage, size)
+    getOrdersHaveTransactionNo()
       .then((data) => setOrderData(data))
       .catch((error) => console.error("Failed to fetch order data:", error));
-  }, [currentPage, size]);
+  }, []);
 
   return (
     <Container fluid>
@@ -179,7 +178,7 @@ function TransactionManagerPage() {
                           </Button>
                           <DeleteOrderForm
                             orderID={order.orderID}
-                            onDelete={handleDelete}
+                            onDelete={() => handleDelete(order.orderID)}
                           />
                         </td>
                       </tr>

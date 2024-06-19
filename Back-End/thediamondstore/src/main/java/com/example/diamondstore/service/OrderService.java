@@ -236,9 +236,8 @@ public class OrderService {
         return orderRepository.findAll(pageable);
     }
 
-    public Page<Order> getOrdersHaveTransactionNoPaged(int page, int size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
-        return orderRepository.findByTransactionNoNotNull(pageable);
+    public List<Order> getOrdersHaveTransactionNo(){
+        return orderRepository.findByTransactionNoNotNull();
     }
 
     

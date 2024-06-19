@@ -9,4 +9,5 @@ public interface GoldPriceRepository extends JpaRepository<GoldPrice, Integer>{
     GoldPrice findByGoldPriceID(Integer goldPriceID);
 
     GoldPrice findByJewelryID(String jewelryID);
+
 }

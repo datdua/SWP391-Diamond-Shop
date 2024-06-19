@@ -65,10 +65,11 @@ public class OrderController {
         }
     }
 
-    @GetMapping(value = "/getOrderHaveTransactionNo/paged", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> getOrderHaveTransactionNoPaged(@RequestParam int page, @RequestParam int size) {
-        return ResponseEntity.ok(orderService.getOrdersHaveTransactionNoPaged(page, size));
+    @GetMapping(value = "/getOrderHaveTransactionNo", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getOrdersHaveTransactionNo() {
+        return ResponseEntity.ok(orderService.getOrdersHaveTransactionNo());
     }
+    
 
     @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> createOrder(

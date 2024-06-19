@@ -69,6 +69,11 @@ public class DiamondPriceService {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy Diamond với ID này"));
         }
 
+        DiamondPrice existingDiamondPrice = diamondPriceRepository.findByDiamondID(diamondPriceRequest.getDiamondID());
+        if (existingDiamondPrice != null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Giá Diamond này đã tồn tại"));
+        }
+
         DiamondPrice diamondPrice = new DiamondPrice();
         diamondPrice.setDiamondID(diamondPriceRequest.getDiamondID());
         diamondPrice.setClarity(diamondPriceRequest.getClarity());

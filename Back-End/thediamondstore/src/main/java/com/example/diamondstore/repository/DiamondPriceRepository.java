@@ -7,6 +7,7 @@ import com.example.diamondstore.model.DiamondPrice;
 
 public interface  DiamondPriceRepository extends  JpaRepository<DiamondPrice, Integer>{
 
-    DiamondPrice findByDiamondID(String string);
+    DiamondPrice findByDiamondPriceID(Integer diamondPriceID);
     
+    DiamondPrice findByDiamondID(String diamondID);
 }

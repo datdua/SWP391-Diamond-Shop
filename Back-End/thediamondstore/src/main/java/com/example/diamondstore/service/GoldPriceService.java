@@ -52,6 +52,10 @@ public class GoldPriceService {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy Jewelry với ID này"));
         }
 
+        GoldPrice existingGoldPrice = goldPriceRepository.findByJewelryID(goldPriceRequest.getJewelryID());
+        if (existingGoldPrice != null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Giá vàng cho Jewelry này đã tồn tại"));
+        }
         GoldPrice goldPrice = new GoldPrice();
         goldPrice.setGoldPrice(goldPriceRequest.getGoldPrice());
         goldPrice.setJewelryID(goldPriceRequest.getJewelryID());
