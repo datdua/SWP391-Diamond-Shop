@@ -65,6 +65,11 @@ public class OrderController {
         }
     }
 
+    @GetMapping(value = "/getOrderHaveTransactionNo/paged", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getOrderHaveTransactionNoPaged(@RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(orderService.getOrdersHaveTransactionNoPaged(page, size));
+    }
+
     @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> createOrder(
             @RequestParam Integer accountID,
@@ -89,10 +94,6 @@ public class OrderController {
     }
 
 
-    // @DeleteMapping(value = "/delete/{orderID}")
-    // public ResponseEntity<?> deleteOrder(@PathVariable int orderID) {
-    //     return ResponseEntity.ok(orderService.deleteOrder(orderID));
-    // }
 
     @PutMapping(value = "/update/{orderID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> updateOrder(@PathVariable Integer orderID, @RequestBody OrderPutRequest orderPutRequest) {

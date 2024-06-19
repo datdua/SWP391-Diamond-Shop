@@ -9,7 +9,7 @@ import {
   Col,
 } from "react-bootstrap";
 import {
-  fetchOrderByPaged,
+  getOrdersHaveTransactionNoPaged,
   deleteOrder,
   getAllOrder,
 } from "../../../api/OrderAPI";
@@ -63,10 +63,10 @@ function TransactionManagerPage() {
   };
 
   useEffect(() => {
-    getAllOrder()
+    getOrdersHaveTransactionNoPaged(currentPage, size)
       .then((data) => setOrderData(data))
       .catch((error) => console.error("Failed to fetch order data:", error));
-  }, []);
+  }, [currentPage, size]);
 
   return (
     <Container fluid>
