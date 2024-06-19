@@ -26,18 +26,11 @@ public class JewelrySpecification {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower(root.get("jewelryName")), "%" + jewelryName.toLowerCase() + "%");
     }
 
+    public static Specification<Jewelry> hasMaxJewelryEntryPrice(Float maxJewelryEntryPrice) {
+        return (root, query, builder) -> builder.lessThanOrEqualTo(root.get("jewelryEntryPrice"), maxJewelryEntryPrice);
+    }
 
-    public static Specification<Jewelry> hasPriceBetween(Float minjewelryEntryPrice, Float maxjewelryEntryPrice) {
-        return (root, query, criteriaBuilder) -> {
-            if (minjewelryEntryPrice != null && maxjewelryEntryPrice != null) {
-                return criteriaBuilder.between(root.get("jewelryEntryPrice"), minjewelryEntryPrice, maxjewelryEntryPrice);
-            } else if (minjewelryEntryPrice != null) {
-                return criteriaBuilder.greaterThanOrEqualTo(root.get("jewelryEntryPrice"), maxjewelryEntryPrice);
-            } else if (minjewelryEntryPrice != null) {
-                return criteriaBuilder.lessThanOrEqualTo(root.get("jewelryEntryPrice"), maxjewelryEntryPrice);
-            } else {
-                return criteriaBuilder.conjunction();
-            }
-        };
+    public static Specification<Jewelry> hasMinJewelryEntryPrice(Float minJewelryEntryPrice) {
+        return (root, query, builder) -> builder.greaterThanOrEqualTo(root.get("jewelryEntryPrice"), minJewelryEntryPrice);
     }
 }
