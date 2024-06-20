@@ -115,16 +115,38 @@ function SideBarAdmin() {
               </span>{" "}
               Đơn hàng
             </NavLink>
-            <NavLink
-              to="/admin/price-manager"
-              className="sidebar-nav-item"
-              activeClassName="active"
+            <CNavGroup
+              toggler={
+                <>
+                  <CIcon
+                    className="sidebar-nav-item"
+                    customClassName="nav-icon"
+                  />{" "}
+                  Giá
+                </>
+              }
             >
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>{" "}
-              Giá sản phẩm
-            </NavLink>
+              <NavLink
+                to="/admin/price/diamond-price-manager"
+                className="sidebar-nav-item"
+                activeClassName="active"
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>{" "}
+                Giá kim cương
+              </NavLink>
+              <NavLink
+                to="/admin/price/gold-price-manager"
+                className="sidebar-nav-item"
+                activeClassName="active"
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>{" "}
+                Giá vàng
+              </NavLink>
+            </CNavGroup>
           </CNavGroup>
         </CSidebarNav>
         <CSidebarHeader className="border-top">

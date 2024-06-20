@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,6 @@ import com.example.diamondstore.model.DiamondPrice;
 import com.example.diamondstore.repository.DiamondPriceRepository;
 import com.example.diamondstore.repository.DiamondRepository;
 import com.example.diamondstore.request.DiamondPriceRequest;
-import com.example.diamondstore.request.putRequest.DiamondPricePutRequest;
 
 @Service
 public class DiamondPriceService {
@@ -52,6 +50,10 @@ public class DiamondPriceService {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy Diamond với ID này"));
         }
 
+        DiamondPrice diamondPriceWithDiamondID = diamondPriceRepository.findByDiamondID(diamondPriceRequest.getDiamondID());
+        if (diamondPriceWithDiamondID != null && !diamondPriceWithDiamondID.getDiamondpriceID().equals(existingDiamondPrice.getDiamondpriceID())) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Kim cương này đã có giá"));
+        }
         // Update the diamondEntryPrice and grossDiamondPrice
         diamond.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
         // Assuming the grossDiamondPrice is calculated as some function of the diamondEntryPrice
@@ -71,7 +73,7 @@ public class DiamondPriceService {
 
         DiamondPrice existingDiamondPrice = diamondPriceRepository.findByDiamondID(diamondPriceRequest.getDiamondID());
         if (existingDiamondPrice != null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Giá Diamond này đã tồn tại"));
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Giá kim cương này đã tồn tại"));
         }
 
         DiamondPrice diamondPrice = new DiamondPrice();

@@ -8,27 +8,27 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
-import { getAllGoldPrice } from "../../../api/GoldPriceAPI.js";
+import { getAllDiamondPrice } from "../../../api/DiamondPriceAPI.js";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import AddGoldPriceForm from "../../../components/GoldPriceCRUD/AddGoldPriceForm";
-import UpdateGoldPriceForm from "../../../components/GoldPriceCRUD/UpdateGoldPriceForm";
-import DeleteGoldPriceForm from "../../../components/GoldPriceCRUD/DeleteGoldPriceForm";
+import AddDiamondPriceForm from "../../../components/DiamondPriceCRUD/AddDiamondPriceForm.js";
+import UpdateDiamondPriceForm from "../../../components/DiamondPriceCRUD/UpdateDiamondPriceForm.js";
+import DeleteDiamondPriceForm from "../../../components/DiamondPriceCRUD/DeleteDiamondPriceForm.js";
 import { Pagination } from "@mui/material";
 import "../ProductManager.css";
 
-function GoldPriceManager() {
-  const [goldPriceData, setGoldPriceData] = useState([]);
+function DiamondPriceManager() {
+  const [diamondPriceData, setDiamondPriceData] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [selectedGoldPrice, setSelectedGoldPrice] = useState(null);
+  const [selectedDiamondPrice, setSelectedDiamondPrice] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const size = 8;
   const startIndex = (currentPage - 1) * size;
   const endIndex = startIndex + size;
-  const currentPageData = goldPriceData.slice(startIndex, endIndex);
+  const currentPageData = diamondPriceData.slice(startIndex, endIndex);
 
   const handleClose = () => {
     setShowModal(false);
@@ -40,32 +40,34 @@ function GoldPriceManager() {
   };
 
   const handleShowAdd = () => {
-    setSelectedGoldPrice(null);
+    setSelectedDiamondPrice(null);
     setIsUpdating(false);
     setShowModal(true);
   };
 
   const handleShowUpdate = (item) => {
-    setSelectedGoldPrice(item);
+    setSelectedDiamondPrice(item);
     setIsUpdating(true);
     setShowModal(true);
   };
 
-  const handleDelete = (goldPriceID) => {
-    setGoldPriceData(
-      goldPriceData.filter((goldPrice) => goldPrice.goldPriceID !== goldPriceID)
+  const handleDelete = (diamondPriceID) => {
+    setDiamondPriceData(
+      diamondPriceData.filter(
+        (diamondPrice) => diamondPrice.diamondPriceID !== diamondPriceID
+      )
     );
   };
 
   const refreshTable = () => {
-    getAllGoldPrice().then((data) => {
-      setGoldPriceData(data);
+    getAllDiamondPrice().then((data) => {
+      setDiamondPriceData(data);
     });
   };
 
   useEffect(() => {
-    getAllGoldPrice()
-      .then((data) => setGoldPriceData(data))
+    getAllDiamondPrice()
+      .then((data) => setDiamondPriceData(data))
       .catch((error) => console.error(error));
   }, []);
 
@@ -76,7 +78,7 @@ function GoldPriceManager() {
           <Card>
             <Card.Header>
               <Card.Title as="h4">
-                Gold Price Manager
+                Diamond Price Manager
                 <Button
                   variant="link"
                   style={{ textDecoration: "none" }}
@@ -98,32 +100,40 @@ function GoldPriceManager() {
                 <Table striped bordered hover className="account-table">
                   <thead>
                     <tr>
-                      <th>Jewelry ID</th>
-                      <th>Gold Price</th>
-                      <th>Gold Age</th>
+                      <th>Diamond Price ID</th>
+                      <th>Diamond ID</th>
+                      <th>Diamond Price</th>
+                      <th>Clarity</th>
+                      <th>Color</th>
+                      <th>Carat Size</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {goldPriceData.length > 0 ? (
-                      currentPageData.map((goldPrice) => (
-                        <tr key={goldPrice.goldPriceID}>
-                          <td>{goldPrice.jewelryID}</td>
+                    {diamondPriceData.length > 0 ? (
+                      currentPageData.map((diamondPrice) => (
+                        <tr key={diamondPrice.diamondPriceID}>
+                          <td>{diamondPrice.diamondpriceID}</td>
+                          <td>{diamondPrice.diamondID}</td>
                           <td>
-                            {goldPrice.goldPrice
-                              ? goldPrice.goldPrice.toLocaleString() + " VNĐ"
+                            {diamondPrice.diamondEntryPrice
+                              ? diamondPrice.diamondEntryPrice.toLocaleString() +
+                                " VNĐ"
                               : "N/a"}
                           </td>
-                          <td>{goldPrice.goldAge}</td>
+                          <td>{diamondPrice.clarity}</td>
+                          <td>{diamondPrice.color}</td>
+                          <td>{diamondPrice.carat_size}</td>
                           <td>
                             <Button
                               variant="link"
-                              onClick={() => handleShowUpdate(goldPrice)}
+                              onClick={() => handleShowUpdate(diamondPrice)}
                             >
-                              <EditIcon />Edit
+                              <EditIcon />
+                              Edit
                             </Button>
-                            <DeleteGoldPriceForm
-                              goldPriceID={goldPrice.goldPriceID}
+                            <DeleteDiamondPriceForm
+                              diamondPriceID={diamondPrice.diamondPriceID}
                               onDelete={handleDelete}
                             />
                           </td>
@@ -140,7 +150,7 @@ function GoldPriceManager() {
                 </Table>
               </div>
               <Pagination
-                count={Math.ceil(goldPriceData.length / size)}
+                count={Math.ceil(diamondPriceData.length / size)}
                 page={currentPage}
                 onChange={handleChangePage}
               />
@@ -167,9 +177,9 @@ function GoldPriceManager() {
         </Modal.Header>
         <Modal.Body>
           {isUpdating ? (
-            <UpdateGoldPriceForm goldPrice={selectedGoldPrice} />
+            <UpdateDiamondPriceForm diamondPrice={selectedDiamondPrice} />
           ) : (
-            <AddGoldPriceForm />
+            <AddDiamondPriceForm />
           )}
         </Modal.Body>
       </Modal>
@@ -177,4 +187,4 @@ function GoldPriceManager() {
   );
 }
 
-export default GoldPriceManager;
+export default DiamondPriceManager;
