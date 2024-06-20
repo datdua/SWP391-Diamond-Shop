@@ -28,6 +28,7 @@ import ProductManagerPage from "./pages/Manager/DiamondManager/DiamonsManager";
 import AccountManager from "./pages/Manager/AccountManager/AccountManager";
 import JewelryManagerPage from "./pages/Manager/JewelryManager/JewelryManagerPage";
 import PaymentConfirm from "./pages/PaymentConfirm/PaymentConfirm";
+import Knowledge from "./pages/Knowledge/Knowledge";
 
 
 function App() {
@@ -223,6 +224,18 @@ function App() {
               </>
             }
           />
+          <Route
+          path="/kienthuckimcuong"
+          element={
+            <>
+            <Header/>
+            <Knowledge/>
+            <Footer/>
+            <BackToTop/>
+            </>
+          }>
+
+          </Route>
 
           <Route path="/admin/*" element={<SideBarAdmin />}>
             <Route path="profile" element={<Dashboard />} />

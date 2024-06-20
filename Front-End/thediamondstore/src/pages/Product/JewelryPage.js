@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import Modal from "react-modal";
 import { getAllJewelry, getPage, searchJewelry } from "../../api/JewelryAPI"; // Import the functions
+import { Pagination } from "@mui/material";
 
 // Set the app element for accessibility
 Modal.setAppElement("#root"); // Ensure this matches your app's root element
@@ -115,6 +116,7 @@ function JewelryPage() {
       );
       setJewelry(results);
       setLoading(false);
+      window.scrollTo(0, 0);
     } catch (error) {
       setError(error.message);
       setLoading(false);
@@ -122,8 +124,8 @@ function JewelryPage() {
   };
   
 
-  const handlePageChange = async (pageNumber) => {
-    setCurrentPage(pageNumber);
+  const handlePageChange = async (event, page) => {
+    setCurrentPage(page);
     setLoading(true);
     try {
       const data =
@@ -131,8 +133,8 @@ function JewelryPage() {
           ? await getAllJewelry()
           : await searchJewelry(filters);
       const results = data.slice(
-        (pageNumber - 1) * resultsPerPage,
-        pageNumber * resultsPerPage
+        (page - 1) * resultsPerPage,
+        page * resultsPerPage
       );
       setJewelry(results);
       setLoading(false);
@@ -240,15 +242,10 @@ function JewelryPage() {
                                             )}
                                         </div>
                                         <div className="tm-pagination mt-50">
-                                            {Array.from({ length: totalPages }, (_, index) => (
-                                                <button key={index} onClick={() => handlePageChange(index + 1)} className={currentPage === index + 1 ? 'active' : ''}>
-                                                    {index + 1}
-                                                </button>
-                                            ))}
+                                            <Pagination count={totalPages} page={currentPage} onChange={(event, page) => handlePageChange(page)} />
                                         </div>
                                     </div>
                                 </div>
-
                 <div className="col-lg-3 col-12">
                   <div className="widgets">
                     <div className="single-widget widget-categories">
