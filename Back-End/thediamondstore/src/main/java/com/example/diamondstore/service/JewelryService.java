@@ -91,8 +91,11 @@ public class JewelryService {
         if (jewelryName != null) {
             spec = spec.and(JewelrySpecification.hasNameLike(jewelryName));
         }
-        if (minjewelryEntryPrice != null || maxjewelryEntryPrice != null) {
-            spec = spec.and(JewelrySpecification.hasPriceBetween(minjewelryEntryPrice, maxjewelryEntryPrice));
+        if (minjewelryEntryPrice != null ) {
+            spec = spec.and(JewelrySpecification.hasMinJewelryEntryPrice(minjewelryEntryPrice));
+        }
+        if (maxjewelryEntryPrice != null) {
+            spec = spec.and(JewelrySpecification.hasMaxJewelryEntryPrice(maxjewelryEntryPrice));
         }
         if (gender != null) {
             spec = spec.and(JewelrySpecification.hasGender(gender));
@@ -119,8 +122,11 @@ public class JewelryService {
         if (jewelryName != null) {
             spec = spec.and(JewelrySpecification.hasJewelryNameIgnoreCase(jewelryName));
         }
-        if (minjewelryEntryPrice != null || maxjewelryEntryPrice != null) {
-            spec = spec.and(JewelrySpecification.hasPriceBetween(minjewelryEntryPrice, maxjewelryEntryPrice));
+        if (minjewelryEntryPrice != null ) {
+            spec = spec.and(JewelrySpecification.hasMinJewelryEntryPrice(minjewelryEntryPrice));
+        }
+        if (maxjewelryEntryPrice != null) {
+            spec = spec.and(JewelrySpecification.hasMaxJewelryEntryPrice(maxjewelryEntryPrice));
         }
         if (gender != null) {
             spec = spec.and(JewelrySpecification.hasGender(gender));

@@ -97,7 +97,7 @@ export async function getWarrantityImage(warrantyID) {
 export async function searchDiamondByName(name) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/diamonds/search/filter?diamondNameLike=${name}`
+      `http://localhost:8080/api/diamonds/search/filter?diamondName=${name}`
     );
     if (response.status !== 200) {
       throw new Error("Failed to search diamonds by name");

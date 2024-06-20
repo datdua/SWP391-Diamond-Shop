@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,8 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.DTO.AccountContactInfoDTO;
 import com.example.diamondstore.model.Account;
-import com.example.diamondstore.model.Customer;
-import com.example.diamondstore.model.Order;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.CustomerRepository;
 import com.example.diamondstore.repository.OrderRepository;
@@ -104,26 +101,14 @@ public class AccountController {
 
     @DeleteMapping(value = "/delete/{accountID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> delete(@PathVariable Integer accountID) {
-        Account account = accountRepository.findById(accountID).orElse(null);
-        if (account == null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
+    try {
+        Map<String, String> response = accountService.deleteAccount(accountID);
+        return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+        return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
-
-        // Xóa các Order liên quan trước khi xóa Account
-        List<Order> orders = orderRepository.findByAccount(account);
-        for (Order order : orders) {
-            orderRepository.delete(order);
-        }
-
-        // Xóa Customer liên quan trước khi xóa Account
-        Customer customer = account.getCustomer();
-        if (customer != null) {
-            customerRepository.delete(customer);
-        }
-
-        accountRepository.delete(account);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa thành công"));
     }
+
 
     @PostMapping("/create")
     public ResponseEntity<Map<String, String>> createAccount(@RequestBody AccountRequest accountRequest) {
@@ -137,44 +122,15 @@ public class AccountController {
 
     @PutMapping(value = "/update/{accountID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> update(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
-        Account existingAccount = accountRepository.findById(accountID).orElse(null);
-        if (existingAccount == null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
-        }
-
-        // Update account fields from request
-        existingAccount.setAccountName(accountRequest.getAccountName());
-        existingAccount.setEmail(accountRequest.getEmail());
-        existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
-        existingAccount.setRole(accountRequest.getRole());
-
-        // Update password if provided and different from the current one
-        if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty()) {
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String encodedPassword = passwordEncoder.encode(accountRequest.getPassword());
-            existingAccount.setPassword(encodedPassword);
-        }
-
-        accountRepository.save(existingAccount);
-
+    try {
+        Account updatedAccount = accountService.updateAccount(accountID, accountRequest);
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
+        } catch (RuntimeException e) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+        }
     }
 
-    // //forget password
-    // @PutMapping(value = "/forgetPassword/{email}", produces = "application/json;charset=UTF-8")
-    // public ResponseEntity<Map<String, String>> forgetPassword(@PathVariable String email, @RequestBody Account account) {
-    //     Account existingAccount = accountRepository.findByEmail(email);
-    //     if (existingAccount == null) {
-    //         return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Sai Email"));
-    //     }
-    //     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    //     if (!passwordEncoder.matches(account.getPassword(), existingAccount.getPassword())) {
-    //         existingAccount.setPassword(passwordEncoder.encode(account.getPassword()));
-    //     }
-    //     accountRepository.save(existingAccount);
-    //     accountRepository.save(existingAccount);
-    //     return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật mật khẩu thành công"));
-    // }
+    
     @PostMapping(value = "/forget-password", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> forgetPassword(@RequestParam String email) {
         try {

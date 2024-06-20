@@ -35,7 +35,7 @@ public class SecurityConfig {
         "/api/test/**", "/authenticate"};
     private static final String[] COMMON_URL = {"/login", "/api/accounts/register", "/api/diamonds/**", "/api/certificates/**", "/api/jewelry/**", "/api/customers/**", 
     "/api/accounts/forgetPassword/**", "/api/promotion/**", "/api/warranties/**", "/api/orders/**", "/api/cart/**", "/api/accounts/**", 
-    "/api/accounts", "/api/cart", "api/collections/**", "/api/collections", "/api/production/**", "/api/production"};
+    "/api/accounts", "/api/cart", "api/collections/**", "/api/collections", "/api/production/**", "/api/production", "/api/diamondprices", "/api/diamondprices/**", "/api/goldPrices", "/api/goldPrices/**"};
 
     @Autowired
     private final AccountService UserService;

@@ -88,21 +88,16 @@ function JewelryPage() {
       let filtersToUse = { ...filters, page: 1 }; // Always start from page 1 when searching
   
       // Convert price filters to numbers if they exist
-      if (filtersToUse.minjewelryEntryPrice !== undefined) {
-        filtersToUse.minjewelryEntryPrice = parseInt(
-          filtersToUse.minjewelryEntryPrice
-        );
+      if (filtersToUse.minjewelryEntryPrice !== undefined && filtersToUse.minjewelryEntryPrice !== '') {
+        filtersToUse.minjewelryEntryPrice = parseInt(filtersToUse.minjewelryEntryPrice);
+      } else {
+        delete filtersToUse.minjewelryEntryPrice;
       }
   
-      if (filtersToUse.maxjewelryEntryPrice !== undefined) {
-        filtersToUse.maxjewelryEntryPrice = parseInt(
-          filtersToUse.maxjewelryEntryPrice
-        );
-      }
-  
-      // Remove 'All' gender filter if present
-      if (filtersToUse.gender === "All") {
-        delete filtersToUse.gender;
+      if (filtersToUse.maxjewelryEntryPrice !== undefined && filtersToUse.maxjewelryEntryPrice !== '') {
+        filtersToUse.maxjewelryEntryPrice = parseInt(filtersToUse.maxjewelryEntryPrice);
+      } else {
+        delete filtersToUse.maxjewelryEntryPrice;
       }
   
       const data = await searchJewelry(filtersToUse);
@@ -130,7 +125,7 @@ function JewelryPage() {
     try {
       const data =
         filters.gender === "All"
-          ? await getAllJewelry()
+          ? await getPage(page)
           : await searchJewelry(filters);
       const results = data.slice(
         (page - 1) * resultsPerPage,
@@ -138,6 +133,7 @@ function JewelryPage() {
       );
       setJewelry(results);
       setLoading(false);
+      window.scrollTo(0, 0);
     } catch (error) {
       setError(error.message);
       setLoading(false);
@@ -242,7 +238,7 @@ function JewelryPage() {
                                             )}
                                         </div>
                                         <div className="tm-pagination mt-50">
-                                            <Pagination count={totalPages} page={currentPage} onChange={(event, page) => handlePageChange(page)} />
+                                        <Pagination count={totalPages} page={currentPage} onChange={handlePageChange} />
                                         </div>
                                     </div>
                                 </div>
@@ -336,7 +332,6 @@ function JewelryPage() {
                 <div className="content-container">
                   <h2>{selectedItem.jewelryName}</h2>
                   <p>{selectedItem.jewelryDescription}</p>
-                  <p>Diamond ID: {selectedItem.diamondID}</p>
                   <p>Gender: {selectedItem.gender}</p>
                   <span>
                     {selectedItem.jewelryEntryPrice.toLocaleString()} VND
