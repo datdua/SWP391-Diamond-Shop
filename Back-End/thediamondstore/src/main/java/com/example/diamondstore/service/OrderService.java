@@ -194,34 +194,6 @@ public class OrderService {
         return order.gettotalOrder();
     }
 
-    // public String deleteOrder(int orderID) {
-    //     Order order = orderRepository.findByOrderID(orderID);
-    //     if (order == null) {
-    //         throw new IllegalArgumentException("Không tìm thấy Order");
-    //     }
-    //     orderRepository.delete(order);
-    //     return "Xóa Order thành công";
-    // }
-
-//     public Map<String,String> updateOrder(int orderID, OrderPutRequest orderPutRequest) {
-//     Order existingOrder = orderRepository.findByOrderID(orderID);
-//     if (existingOrder == null) {
-//         return Collections.singletonMap("message", "Không tìm thấy kim cương");
-//     }
-//     existingOrder.setAccount(accountRepository.findById(orderPutRequest.getAccountID())
-//             .orElseThrow(() -> new IllegalArgumentException("AccountID không tồn tại")));
-//     existingOrder.setPhoneNumber(orderPutRequest.getPhoneNumber());
-//     existingOrder.setDeliveryAddress(orderPutRequest.getDeliveryAddress());
-//     existingOrder.setOrderStatus(orderPutRequest.getOrderStatus());
-//     existingOrder.setDeliveryDate(orderPutRequest.getDeliveryDate());
-//     existingOrder.setStartorderDate(orderPutRequest.getStartorderDate());
-//     existingOrder.settotalOrder(orderPutRequest.getTotalOrder());
-//     existingOrder.setWarrantyImage(orderPutRequest.getWarrantyImage());
-//     existingOrder.setCertificateImage(orderPutRequest.getCertificateImage());
-//     existingOrder.setPromotionCode(orderPutRequest.getPromotionCode());
-//     orderRepository.save(existingOrder);
-//     return Collections.singletonMap("message", "Cập nhật thành công");
-// }
     @Transactional
     public Map<String, String> updateOrder(int orderID, OrderPutRequest orderPutRequest) {
         try {
@@ -263,5 +235,11 @@ public class OrderService {
         Pageable pageable = PageRequest.of(page - 1, size);
         return orderRepository.findAll(pageable);
     }
+
+    public List<Order> getOrdersHaveTransactionNo(){
+        return orderRepository.findByTransactionNoNotNull();
+    }
+
+    
 }
 

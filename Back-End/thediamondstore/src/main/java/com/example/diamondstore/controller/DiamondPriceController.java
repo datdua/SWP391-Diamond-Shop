@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.model.DiamondPrice;
+import com.example.diamondstore.request.DiamondPriceRequest;
 import com.example.diamondstore.request.putRequest.DiamondPricePutRequest;
 import com.example.diamondstore.service.DiamondPriceService;
 
@@ -35,18 +36,18 @@ public class DiamondPriceController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<Map<String, String>> createDiamondPrice(@RequestBody DiamondPrice diamondPrice) {
-        return diamondPriceService.createDiamondPrice(diamondPrice);
+    public ResponseEntity<?> addDiamondPrice(@RequestBody DiamondPriceRequest diamondPriceRequest) {
+        return diamondPriceService.addDiamondPrice(diamondPriceRequest);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Map<String, String>> update(@PathVariable Integer diamondpriceID, @RequestBody DiamondPricePutRequest diamondPricePutRequest) {
-        return diamondPriceService.update(diamondpriceID, diamondPricePutRequest);
+    @PutMapping("/{diamondpriceID}")
+    public ResponseEntity<Map<String, String>> updateDiamondPrice(@PathVariable Integer diamondpriceID, @RequestBody DiamondPriceRequest diamondPriceRequest) {
+        return diamondPriceService.updateDiamondPrice(diamondpriceID, diamondPriceRequest);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteDiamondPrice(@PathVariable Integer diamondpriceID) {
-        diamondPriceService.deleteDiamondPrice(diamondpriceID);
+    @DeleteMapping("/{diamondpriceID}")
+    public ResponseEntity<?> deleteDiamondPrice(@PathVariable Integer diamondpriceID) {
+        return diamondPriceService.deleteDiamondPrice(diamondpriceID);
     }
 
     @GetMapping("/{diamondpriceID}")

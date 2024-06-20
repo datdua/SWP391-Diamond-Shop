@@ -10,18 +10,22 @@ import java.util.Optional;
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.Customer;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.CustomerRepository;
+import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.request.AccountRequest;
 import com.example.diamondstore.request.RegisterRequest;
 import com.example.diamondstore.utils.EmailUtil;
@@ -35,6 +39,9 @@ public class AccountService implements UserDetailsService {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     @Autowired
     private OtpUtil otpUtil;
@@ -214,4 +221,33 @@ public class AccountService implements UserDetailsService {
         accountRepository.save(account);
         return Collections.singletonMap("message", "Mật khẩu đã được thiết lập. Vui lòng đăng nhập.");
     }
+
+    public Map<String, String> deleteAccount(Integer accountID) {
+        Account account = accountRepository.findById(accountID)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy tài khoản"));
+        accountRepository.delete(account);
+        return Collections.singletonMap("message", "Xóa tài khoản thành công");
+    }
+    
+    public Account updateAccount(Integer accountID, AccountRequest accountRequest) {
+    Account existingAccount = accountRepository.findById(accountID).orElse(null);
+    if (existingAccount == null) {
+        throw new RuntimeException("Không tìm thấy tài khoản");
+    }
+
+    // Update account fields from request
+    existingAccount.setAccountName(accountRequest.getAccountName());
+    existingAccount.setEmail(accountRequest.getEmail());
+    existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
+    existingAccount.setRole(accountRequest.getRole());
+
+    // Update password if provided and different from the current one
+    if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty()) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(accountRequest.getPassword());
+        existingAccount.setPassword(encodedPassword);
+    }
+
+    return accountRepository.save(existingAccount);
+}
 }

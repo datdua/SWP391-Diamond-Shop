@@ -28,6 +28,7 @@ import ProductManagerPage from "./pages/Manager/DiamondManager/DiamondManager";
 import AccountManager from "./pages/Manager/AccountManager/AccountManager";
 import JewelryManagerPage from "./pages/Manager/JewelryManager/JewelryManagerPage";
 import PaymentConfirm from "./pages/PaymentConfirm/PaymentConfirm";
+import Knowledge from "./pages/Knowledge/Knowledge";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import GoldPriceManager from "./pages/Manager/PriceProductManager/GolPriceManager";
 import OrderManagerPage from "./pages/Manager/OrderManager/OrderManagePager";
@@ -235,6 +236,18 @@ function App() {
               </>
             }
           />
+          <Route
+          path="/kienthuckimcuong"
+          element={
+            <>
+            <Header/>
+            <Knowledge/>
+            <Footer/>
+            <BackToTop/>
+            </>
+          }>
+
+          </Route>
 
           <Route path="/admin/*" element={<SideBarAdmin />}>
             <Route path="profile" element={<ProfilePage />} />

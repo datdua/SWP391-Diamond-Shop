@@ -158,7 +158,7 @@ function MyAccountPage() {
                                 <td><button onClick={() => handleViewOrder(order.orderID)} className="tm-button tm-button-small">View</button></td>
                                 <td>
                                   <PaymentButton orderID={order.orderID} orderStatus={order.orderStatus} />
-                                  <button onClick={() => handleDeleteOrder(order.orderID)} className="tm-button tm-button-small">Delete</button>
+                                  {order.orderStatus === "Đang xử lý" && <button onClick={() => handleDeleteOrder(order.orderID)} className="tm-button tm-button-small">Delete</button>}
                                 </td>
                               </tr>
                             ))
