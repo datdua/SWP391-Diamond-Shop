@@ -63,6 +63,12 @@ function JewelryDetailPage() {
     console.log("Add to Cart clicked");
     console.log("Item to be added:", item);
 
+    if (!sizeJewelry) {
+      console.log("Size not selected");
+      toast.error("Vui lòng chọn kích thước trước khi thêm sản phẩm vào giỏ hàng");
+      return;
+    }
+
     if (!isLoggedIn) {
       console.log("Người dùng chưa đăng nhập");
       toast.error("Vui lòng đăng nhập trước khi thêm sản phẩm vào giỏ hàng");
@@ -179,10 +185,10 @@ function JewelryDetailPage() {
                               </div>
                             </div>
                             <p>{jewelry.description}</p>
-                            <div className="tm-prodetails-quantitycart">
+                            <div className="tm-prodetails-quantitycart" >
                               <h6>Quantity :</h6>
-                              <div className="tm-quantitybox">
-                                <input type="text" value={quantity} readOnly />
+                              
+                                <input type="text" value={quantity} readOnly style={{maxWidth:"50px"}}/>
                                 <div className="quantity-buttons">
                                   <button
                                     className="increase-button"
@@ -196,7 +202,7 @@ function JewelryDetailPage() {
                                   >
                                     -
                                   </button>
-                                </div>
+                                
                               </div>
                               <button
                                 onClick={() => handleAddToCart(jewelry)}

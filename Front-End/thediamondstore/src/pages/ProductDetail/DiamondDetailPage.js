@@ -99,7 +99,7 @@ function DiamondDetailPage() {
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-6 col-md-6 col-12">
-                                                    <div className="tm-prodetails-content">
+                                                    <div className="tm-prodetails-content" >
                                                         <h4 className="tm-prodetails-title">{diamond.diamondName}</h4>
                                                         <span className="tm-prodetails-price">{diamond.diamondEntryPrice.toLocaleString()} VND</span>
                                                         <div className="tm-prodetails-infos">
@@ -134,13 +134,13 @@ function DiamondDetailPage() {
                                                             </div>
                                                             <div className="tm-prodetails-quantitycart">
                                                                 <h6>Quantity :</h6>
-                                                                <div className="tm-quantitybox">
-                                                                    <input type="text" value={quantity} readOnly />
+                                                                
+                                                                    <input type="text" value={quantity} readOnly style={{maxWidth:"50px"}} />
                                                                     <div className="quantity-buttons">
                                                                         <button className="increase-button" onClick={increaseQuantity}>+</button>
                                                                         <button className="decrease-button" onClick={decreaseQuantity}>-</button>
                                                                     </div>
-                                                                </div>
+                                                                
                                                                 <button onClick={() => handleAddToCart(diamond)} href="/cart">Add to cart</button>
                                                             </div>
                                                         </div>
