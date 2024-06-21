@@ -26,6 +26,7 @@ import com.example.diamondstore.specification.JewelrySpecification;
 public class ProductionController {
 
     private final DiamondRepository diamondRepository;
+    
     private final JewelryRepository jewelryRepository;
 
     @Autowired

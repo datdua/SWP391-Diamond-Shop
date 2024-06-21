@@ -38,7 +38,9 @@ import com.example.diamondstore.service.AccountService;
 public class AccountController {
 
     private final AccountRepository accountRepository;
+
     private final CustomerRepository customerRepository;
+
     private final OrderRepository orderRepository;
 
     public AccountController(AccountRepository accountRepository, CustomerRepository customerRepository, OrderRepository orderRepository) {
@@ -160,21 +162,6 @@ public class AccountController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }
 
-    // //forget password
-    // @PutMapping(value = "/forgetPassword/{email}", produces = "application/json;charset=UTF-8")
-    // public ResponseEntity<Map<String, String>> forgetPassword(@PathVariable String email, @RequestBody Account account) {
-    //     Account existingAccount = accountRepository.findByEmail(email);
-    //     if (existingAccount == null) {
-    //         return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Sai Email"));
-    //     }
-    //     BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    //     if (!passwordEncoder.matches(account.getPassword(), existingAccount.getPassword())) {
-    //         existingAccount.setPassword(passwordEncoder.encode(account.getPassword()));
-    //     }
-    //     accountRepository.save(existingAccount);
-    //     accountRepository.save(existingAccount);
-    //     return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật mật khẩu thành công"));
-    // }
     @PostMapping(value = "/forget-password", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> forgetPassword(@RequestParam String email) {
         try {
