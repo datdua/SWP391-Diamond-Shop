@@ -57,8 +57,11 @@ public class DiamondService {
         return Collections.singletonMap("message", "Không tìm thấy kim cương");
     }
 
+    existingDiamond.setWarrantyID(diamondPutRequest.getWarrantyID());
+    existingDiamond.setCertificationID(diamondPutRequest.getCertificationID());
     existingDiamond.setDiamondName(diamondPutRequest.getDiamondName());
     existingDiamond.setDiamondEntryPrice(diamondPutRequest.getDiamondEntryPrice());
+    existingDiamond.setDiamondImage(diamondPutRequest.getDiamondImage());
     existingDiamond.setOrigin(diamondPutRequest.getOrigin());
     existingDiamond.setCut(diamondPutRequest.getCut());
     existingDiamond.setShape(diamondPutRequest.getShape());
