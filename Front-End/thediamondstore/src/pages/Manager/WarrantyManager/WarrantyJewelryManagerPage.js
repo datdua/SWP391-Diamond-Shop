@@ -8,7 +8,10 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
-import { getAllWarranties } from "../../../api/WarrantyAPI";
+import {
+  getAllWarranties,
+  getWarrantyDiamondIDIsNull,
+} from "../../../api/WarrantyAPI";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -53,13 +56,13 @@ function WarrantyManagerPage() {
   };
 
   const refreshTable = () => {
-    getAllWarranties().then((data) => {
+    getWarrantyDiamondIDIsNull().then((data) => {
       setWarrantyData(data);
     });
   };
 
   useEffect(() => {
-    getAllWarranties()
+    getWarrantyDiamondIDIsNull()
       .then((data) => {
         setWarrantyData(data);
       })

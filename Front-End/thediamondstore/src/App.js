@@ -36,7 +36,8 @@ import SideBarAdmin from "./components/Sidebar/SidebarAdmin";
 import TransactionManagerPage from "./pages/Manager/TransactionManager/TransactionManagerPage";
 import CertificateManagerPage from "./pages/Manager/CertificateManager/CertificateManagerPage";
 import DiamondPriceManager from "./pages/Manager/PriceProductManager/DiamondPriceManagerPage";
-import WarrantyManagerPage from "./pages/Manager/WarrantyManager/WarrantyManagerPage";
+import WarrantyDiamondManagerPage from "./pages/Manager/WarrantyManager/WarrantyDiamondManagerPage";
+import WarrantyJewelryManagerPage from "./pages/Manager/WarrantyManager/WarrantyDiamondManagerPage";
 import PromotionManagerPage from "./pages/Manager/PromotionManager/PromotionManagerPage";
 import { AuthProvider } from "./components/Auth/AuthProvider";
 
@@ -90,16 +91,17 @@ function App() {
           <Route path="/admin/*" element={<SideBarAdmin />}>
             <Route path="profile" element={<ProfilePage />} />
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="diamond-manager" element={<ProductManagerPage />} />
-            <Route path="warranty-manager" element={<WarrantyManagerPage />} />
+            <Route path="diamond/diamond-manager" element={<ProductManagerPage />} />
+            <Route path="diamond/warranty-manager" element={<WarrantyDiamondManagerPage />} />
+            <Route path="jewelry/warranty-manager" element={<WarrantyJewelryManagerPage />} />
             <Route path="account-manager" element={<AccountManager />} />
-            <Route path="jewelry-manager" element={<JewelryManagerPage />} />
+            <Route path="jewelry/jewelry-manager" element={<JewelryManagerPage />} />
             <Route path="promotion-manager" element={<PromotionManagerPage />} />
             <Route path="order-manager" element={<OrderManagerPage />} />
-            <Route path="price/gold-price-manager" element={<GoldPriceManager />} />
-            <Route path="price/diamond-price-manager" element={<DiamondPriceManager />} />
+            <Route path="jewelry/price/gold-price-manager" element={<GoldPriceManager />} />
+            <Route path="diamond/price/diamond-price-manager" element={<DiamondPriceManager />} />
             <Route path="transaction-manager" element={<TransactionManagerPage />} />
-            <Route path="certificate-manager" element={<CertificateManagerPage />} />
+            <Route path="diamond/certificate-manager" element={<CertificateManagerPage />} />
           </Route>
           {/* actor: //Admin */}
 

@@ -65,6 +65,129 @@ function SideBarAdmin() {
               </>
             }
           >
+            <CNavGroup
+              toggler={
+                <>
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>{" "}
+                  Sản phẩm
+                </>
+              }
+            >
+              <CNavGroup
+                toggler={
+                  <>
+                    <span className="nav-icon">
+                      <span className="nav-icon-bullet"></span>
+                    </span>{" "}
+                    Kim cương
+                  </>
+                }
+              >
+                <NavLink
+                  to="/admin/diamond/diamond-manager"
+                  className="sidebar-nav-item"
+                  activeClassName="active"
+                >
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>{" "}
+                  Kim cương
+                </NavLink>
+                <NavLink
+                  to="/admin/diamond/certificate-manager"
+                  className="sidebar-nav-item"
+                  activeClassName="active"
+                >
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>{" "}
+                  Chứng chỉ kim cương
+                </NavLink>
+                <NavLink
+                  to="/admin/diamond/price/diamond-price-manager"
+                  className="sidebar-nav-item"
+                  activeClassName="active"
+                >
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>{" "}
+                  Giá kim cương
+                </NavLink>
+                <NavLink
+                  to="/admin/diamond/warranty-manager"
+                  className="sidebar-nav-item"
+                  activeClassName="active"
+                >
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>{" "}
+                  Giấy bảo hành kim cương
+                </NavLink>
+              </CNavGroup>
+              <CNavGroup
+                toggler={
+                  <>
+                    <span className="nav-icon">
+                      <span className="nav-icon-bullet"></span>
+                    </span>{" "}
+                    Trang sức
+                  </>
+                }
+              >
+                <NavLink
+                  to="/admin/jewelry/jewelry-manager"
+                  className="sidebar-nav-item"
+                  activeClassName="active"
+                >
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>{" "}
+                  Trang sức
+                </NavLink>
+                <NavLink
+                  to="/admin/jewelry/warranty-manager"
+                  className="sidebar-nav-item"
+                  activeClassName="active"
+                >
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>{" "}
+                  Giấy bảo hành trang sức
+                </NavLink>
+                <NavLink
+                  to="/admin/jewelry/price/gold-price-manager"
+                  className="sidebar-nav-item"
+                  activeClassName="active"
+                >
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>{" "}
+                  Giá vàng
+                </NavLink>
+              </CNavGroup>
+              <NavLink
+                to="/admin/price/diamond-price-manager"
+                className="sidebar-nav-item"
+                activeClassName="active"
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>{" "}
+                Giá kim cương
+              </NavLink>
+              <NavLink
+                to="/admin/price/gold-price-manager"
+                className="sidebar-nav-item"
+                activeClassName="active"
+              >
+                <span className="nav-icon">
+                  <span className="nav-icon-bullet"></span>
+                </span>{" "}
+                Giá vàng
+              </NavLink>
+            </CNavGroup>
             <NavLink
               to="/admin/account-manager"
               className="sidebar-nav-item"
@@ -75,36 +198,7 @@ function SideBarAdmin() {
               </span>{" "}
               Tài khoản
             </NavLink>
-            <NavLink
-              to="/admin/diamond-manager"
-              className="sidebar-nav-item"
-              activeClassName="active"
-            >
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>{" "}
-              Kim cương
-            </NavLink>
-            <NavLink
-              to="/admin/jewelry-manager"
-              className="sidebar-nav-item"
-              activeClassName="active"
-            >
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>{" "}
-              Trang sức
-            </NavLink>
-            <NavLink
-              to="/admin/certificate-manager"
-              className="sidebar-nav-item"
-              activeClassName="active"
-            >
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>{" "}
-              Chứng chỉ kim cương
-            </NavLink>
+
             <NavLink
               to="/admin/warranty-manager"
               className="sidebar-nav-item"
@@ -144,28 +238,7 @@ function SideBarAdmin() {
                   Giá
                 </>
               }
-            >
-              <NavLink
-                to="/admin/price/diamond-price-manager"
-                className="sidebar-nav-item"
-                activeClassName="active"
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>{" "}
-                Giá kim cương
-              </NavLink>
-              <NavLink
-                to="/admin/price/gold-price-manager"
-                className="sidebar-nav-item"
-                activeClassName="active"
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>{" "}
-                Giá vàng
-              </NavLink>
-            </CNavGroup>
+            ></CNavGroup>
           </CNavGroup>
         </CSidebarNav>
         <CSidebarHeader className="border-top">

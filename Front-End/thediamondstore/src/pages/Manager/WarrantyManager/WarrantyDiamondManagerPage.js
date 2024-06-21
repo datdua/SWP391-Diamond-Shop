@@ -8,43 +8,46 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
-import { getAllPromotions } from "../../../api/PromotionAPI";
+import {
+  getAllWarranties,
+  getWarrantyJewelryIDIsNull,
+} from "../../../api/WarrantyAPI";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import AddPromotionForm from "../../../components/PromotionCRUD/AddPromotionForm";
-import UpdatePromotionForm from "../../../components/PromotionCRUD/UpdatePromotionForm";
-import DeletePromotionForm from "../../../components/PromotionCRUD/DeletePromotionForm";
+import AddWarrantyForm from "../../../components/WarrantyCRUD/AddWarrantyForm";
+import UpdateWarrantyForm from "../../../components/WarrantyCRUD/UpdateWarrantyForm";
+import DeleteWarrantyForm from "../../../components/WarrantyCRUD/DeleteWarrantyForm";
 import { Pagination } from "@mui/material";
 import "../ProductManager.css";
 
-function PromotionManagerPage() {
-  const [promotionData, setPromotionData] = useState([]);
+function WarrantyManagerPage() {
+  const [warrantyData, setWarrantyData] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [selectedPromotion, setSelectedPromotion] = useState(null);
+  const [selectedWarranty, setSelectedWarranty] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const size = 8;
 
   const startIndex = (currentPage - 1) * size;
   const endIndex = startIndex + size;
-  const currentPageData = promotionData.slice(startIndex, endIndex);
+  const currentPageData = warrantyData.slice(startIndex, endIndex);
 
   const handleClose = () => {
     setShowModal(false);
     setIsUpdating(false);
   };
 
-  const handleShowUpdate = (promotion) => {
-    setSelectedPromotion(promotion);
+  const handleShowUpdate = (warranty) => {
+    setSelectedWarranty(warranty);
     setIsUpdating(true);
     setShowModal(true);
   };
 
-  const handleDelete = async (promotionID) => {
-    setPromotionData(
-      promotionData.filter((promotion) => promotion.promotionID !== promotionID)
+  const handleDelete = async (warrantyID) => {
+    setWarrantyData(
+      warrantyData.filter((warranty) => warranty.warrantyID !== warrantyID)
     );
   };
 
@@ -53,18 +56,18 @@ function PromotionManagerPage() {
   };
 
   const refreshTable = () => {
-    getAllPromotions().then((data) => {
-      setPromotionData(data);
+    getWarrantyJewelryIDIsNull().then((data) => {
+      setWarrantyData(data);
     });
   };
 
   useEffect(() => {
-    getAllPromotions()
+    getWarrantyJewelryIDIsNull()
       .then((data) => {
-        setPromotionData(data);
+        setWarrantyData(data);
       })
       .catch((error) => {
-        console.error("Error fetching promotion data:", error);
+        console.error("Error fetching warranty data:", error);
       });
   }, []);
 
@@ -75,7 +78,7 @@ function PromotionManagerPage() {
           <Card>
             <Card.Header>
               <Card.Title as="h4">
-                Promotion List
+                Warranty List
                 <Button
                   variant="link"
                   style={{ textDecoration: "none" }}
@@ -98,38 +101,40 @@ function PromotionManagerPage() {
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Promotion ID</th>
-                      <th>Promotion Code</th>
-                      <th>Start Date</th>
-                      <th>End Date</th>
-                      <th>Discount Amount</th>
-                      <th>Description</th>
+                      <th>Warranty ID</th>
+                      <th>Diamond ID</th>
+                      <th>Expiration Date</th>
+                      <th>Warranty Image</th>
                       <th>Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPageData.map((promotion, index) => (
+                    {currentPageData.map((warranty, index) => (
                       <tr key={index}>
                         <td>{startIndex + index + 1}</td>
-                        <td>{promotion.promotionID}</td>
-                        <td>{promotion.promotionCode}</td>
-                        <td>{promotion.startDate}</td>
-                        <td>{promotion.endDate}</td>
-                        <td>{promotion.discountAmount}</td>
-                        <td>{promotion.description}</td>
+                        <td>{warranty.warrantyID}</td>
+                        <td>{warranty.diamondID || "N/A"}</td>
+                        <td>{warranty.expirationDate}</td>
+                        <td>
+                          <img
+                            src={warranty.warrantyImage}
+                            alt="Warranty"
+                            style={{ width: "50px", height: "50px" }}
+                          />
+                        </td>
                         <td>
                           <Button
                             variant="link"
-                            onClick={() => handleShowUpdate(promotion)}
+                            onClick={() => handleShowUpdate(warranty)}
                           >
                             <EditIcon />
                           </Button>
-                          <DeletePromotionForm
-                            promotionID={promotion.promotionID}
-                            onDelete={() => handleDelete(promotion.promotionID)}
+                          <DeleteWarrantyForm
+                            warrantyID={warranty.warrantyID}
+                            onDelete={() => handleDelete(warranty.warrantyID)}
                           >
                             <DeleteIcon />
-                          </DeletePromotionForm>
+                          </DeleteWarrantyForm>
                         </td>
                       </tr>
                     ))}
@@ -139,7 +144,7 @@ function PromotionManagerPage() {
             </Card.Body>
             <Card.Footer>
               <Pagination
-                count={Math.ceil(promotionData.length / size)}
+                count={Math.ceil(warrantyData.length / size)}
                 page={currentPage}
                 onChange={handleChangePage}
               />
@@ -151,17 +156,17 @@ function PromotionManagerPage() {
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {isUpdating ? "Update Promotion" : "Add Promotion"}
+            {isUpdating ? "Update Warranty" : "Add Warranty"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {isUpdating ? (
-            <UpdatePromotionForm
-              promotion={selectedPromotion}
+            <UpdateWarrantyForm
+              warranty={selectedWarranty}
               onClose={handleClose}
             />
           ) : (
-            <AddPromotionForm onClose={handleClose} />
+            <AddWarrantyForm onClose={handleClose} />
           )}
         </Modal.Body>
       </Modal>
@@ -169,4 +174,4 @@ function PromotionManagerPage() {
   );
 }
 
-export default PromotionManagerPage;
+export default WarrantyManagerPage;

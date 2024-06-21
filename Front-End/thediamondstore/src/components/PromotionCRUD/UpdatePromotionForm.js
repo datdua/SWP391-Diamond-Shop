@@ -4,15 +4,13 @@ import { Form, Button } from "react-bootstrap";
 
 function UpdatePromotionForm({ promotion }) {
   const [updatedPromotion, setUpdatedPromotion] = useState({
-    diamondID: promotion.diamondID,
-    promotionCode: promotion.promotionCode || "",
-    startDate: promotion.startDate || "",
-    startTime: promotion.startTime || "",
-    endDate: promotion.endDate || "",
-    endTime: promotion.endTime || "",
-    discountAmount: promotion.discountAmount || "",
-    description: promotion.description || "",
-    promotionImage: promotion.promotionImage,
+    promotionCode: promotion.promotionCode,
+    startDate: promotion.startDate.split(" ")[0],
+    startTime: promotion.startDate.split(" ")[1].slice(0, 5),
+    endDate: promotion.endDate.split(" ")[0],
+    endTime: promotion.endDate.split(" ")[1].slice(0, 5),
+    discountAmount: promotion.discountAmount,
+    description: promotion.description,
   });
 
   const handleChange = (event) => {
@@ -31,15 +29,14 @@ function UpdatePromotionForm({ promotion }) {
         endDate: `${updatedPromotion.endDate} ${updatedPromotion.endTime}:00`,
       };
       await updatePromotion(promotion.promotionID, dateTimePromotion);
-      alert("Cập nhật thông tin Chứng Chỉ thành công");
+      alert("Cập nhật thông tin Giấy Bảo Hành thành công");
     } catch (error) {
-      alert("Cập nhật thông tin Chứng Chỉ thất bại");
+      alert("Cập nhật thông tin Giấy Bảo Hành thất bại");
     }
   };
 
   return (
     <Form onSubmit={handleSubmit}>
-      {/* ...existing form fields... */}
       <Form.Group>
         <Form.Label>Promotion Code</Form.Label>
         <Form.Control
