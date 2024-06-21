@@ -58,7 +58,6 @@ public class Cart {
     @Column(name = "cartStatus")
     private String cartStatus;
 
-
     @ManyToOne
     @JoinColumn(name = "orderID", nullable = true) // nullable = true nếu cart có thể không có order
     private Order order;
@@ -66,9 +65,9 @@ public class Cart {
     public Cart() {
     }
 
-    public Cart(Integer accountID, Integer cartID, String diamondID, String jewelryID, Order order, Integer quantity, 
-        BigDecimal totalPrice, Integer sizeJewelry, String diamondImage, String jewelryImage, String diamondName, 
-        String jewelryName, BigDecimal price, BigDecimal grossCartPrice, String cartStatus) {
+    public Cart(Integer accountID, Integer cartID, String diamondID, String jewelryID, Order order, Integer quantity,
+            BigDecimal totalPrice, Integer sizeJewelry, String diamondImage, String jewelryImage, String diamondName,
+            String jewelryName, BigDecimal price, BigDecimal grossCartPrice, String cartStatus) {
         this.accountID = accountID;
         this.cartID = cartID;
         this.diamondID = diamondID;

@@ -64,8 +64,8 @@ public class Account {
     public Account() {
     }
 
-    public Account(Integer accountID, String accountName, String password, String role, String phoneNumber, String email, String addressAccount, 
-        String otp, LocalDateTime otp_generated_time, boolean active) {
+    public Account(Integer accountID, String accountName, String password, String role, String phoneNumber, String email, String addressAccount,
+            String otp, LocalDateTime otp_generated_time, boolean active) {
         // Hàm khởi tạo với các tham số
         this.accountID = accountID;
         this.accountName = accountName;
@@ -78,7 +78,6 @@ public class Account {
         this.otp_generated_time = otp_generated_time;
         this.active = active;
     }
-
 
     public boolean isActive() {
         return active;

@@ -1,6 +1,7 @@
 package com.example.diamondstore.DTO;
 
 public class AccountContactInfoDTO {
+    
     private String phoneNumber;
     private String addressAccount;
 
