@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export async function getAllDiamond() {
-  const response = await axios.get("http://localhost:8080//api/diamonds");
+  const response = await axios.get("http://localhost:8080/api/diamonds");
   if (response.status !== 200) {
     throw new Error("Failed to fetch diamond data");
   }

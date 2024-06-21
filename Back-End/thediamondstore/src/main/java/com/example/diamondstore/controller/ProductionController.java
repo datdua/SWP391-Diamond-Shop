@@ -76,7 +76,10 @@ public class ProductionController {
             jewelrySpec = jewelrySpec.and(JewelrySpecification.hasJewelryNameIgnoreCase(name));
         }
         if (minPrice != null) {
-            jewelrySpec = jewelrySpec.and(JewelrySpecification.hasPriceBetween(minPrice, maxPrice));
+            jewelrySpec = jewelrySpec.and(JewelrySpecification.hasMinJewelryEntryPrice(minPrice));
+        }
+        if (maxPrice != null) {
+            jewelrySpec = jewelrySpec.and(JewelrySpecification.hasMaxJewelryEntryPrice(maxPrice));
         }
         Page<Jewelry> jewelryPage = jewelryRepository.findAll(jewelrySpec, pageable);
 

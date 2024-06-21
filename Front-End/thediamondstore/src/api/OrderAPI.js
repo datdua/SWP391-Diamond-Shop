@@ -146,17 +146,48 @@ export const getPromotion = async (promotionCode) => {
     throw error;
   }
 };
-export const fetchOrderDetail = async (orderID) => {
+
+export async function fetchOrderDetail(orderID) {
+  const token = getAuthToken();
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/orders/get/${orderID}`
+      `http://localhost:8080/api/orderDetail/getOrderDetail?orderID=${orderID}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
-    return response.data;
+
+    if (response.status !== 200) {
+      throw new Error("Failed to fetch order details");
+    }
+
+    const orderDetails = response.data;
+    console.log("Fetched order details:", orderDetails);
+    return orderDetails;
   } catch (error) {
-    console.error("Failed to fetch order details:", error);
+    console.error("Error fetching order details:", error);
     throw error;
   }
-};
+}
+
+export async function updateOrder(orderId, updatedOrder) {
+  try {
+    const url = `http://localhost:8080/api/orders/update/${orderId}`;
+    const response = await axios.put(url, updatedOrder);
+
+    if (response.status === 200) {
+      return response.data; // Return data if needed
+    } else {
+      throw new Error(`Failed to update order with status ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error updating order:", error.message);
+    throw error; // Throw error to handle it in the calling code
+  }
+}
+
 export const deleteOrder = async (orderId) => {
   try {
     const url = `http://localhost:8080/api/orders/cancel/${orderId}`;
@@ -173,31 +204,32 @@ export const deleteOrder = async (orderId) => {
   }
 };
 
-export const updateOrder = async (orderId, updatedOrder) => {
+export const fetchOrderByPaged = async (page, size) => {
   try {
-    const token = getAuthToken();
-    const data = new URLSearchParams();
-    data.append("orderID", orderId);
-    for (const key in updatedOrder) {
-      data.append(key, updatedOrder[key]);
-    }
-
-    const response = await axios.put(
-      `http://localhost:8080/api/orders/update/${orderId}`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-      }
+    const response = await axios.get(
+      `http://localhost:8080/api/orders/getOrder/paged?page=${page}&size=${size}`
     );
-
     return response.data;
   } catch (error) {
-    console.error("Error updating order:", error);
+    console.error("Failed to fetch orders by page:", error);
     throw error;
   }
 };
 
-export default deleteOrder;
+export async function getAllOrder() {
+  const response = await axios.get("http://localhost:8080/api/orders/getAll");
+  if (response.status !== 200) {
+    throw new Error("Failed to fetch jewelry data");
+  }
+  return response.data;
+}
+
+export async function getOrdersHaveTransactionNo() {
+  const response = await axios.get(
+    "http://localhost:8080/api/orders/getOrderHaveTransactionNo"
+  );
+  if (response.status !== 200) {
+    throw new Error("Failed to fetch order data");
+  }
+  return response.data;
+}
