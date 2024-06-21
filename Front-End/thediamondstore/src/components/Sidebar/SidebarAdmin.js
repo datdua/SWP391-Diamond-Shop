@@ -68,9 +68,6 @@ function SideBarAdmin() {
             <CNavGroup
               toggler={
                 <>
-                  <span className="nav-icon">
-                    <span className="nav-icon-bullet"></span>
-                  </span>{" "}
                   Sản phẩm
                 </>
               }
@@ -229,16 +226,6 @@ function SideBarAdmin() {
               </span>{" "}
               Đơn hàng
             </NavLink>
-            <CNavGroup
-              toggler={
-                <>
-                  <span className="nav-icon">
-                    <span className="nav-icon-bullet"></span>
-                  </span>{" "}
-                  Giá
-                </>
-              }
-            ></CNavGroup>
           </CNavGroup>
         </CSidebarNav>
         <CSidebarHeader className="border-top">

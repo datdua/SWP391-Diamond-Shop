@@ -114,5 +114,11 @@ public class OrderController {
     public ResponseEntity<?> getOrdersPaged(@RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(orderService.getAllOrdersPaged(page, size));
     }
+
+    @GetMapping("/total")
+    public ResponseEntity<Long> getTotalOrders() {
+        long totalOrders = orderService.countOrders();
+        return new ResponseEntity<>(totalOrders, HttpStatus.OK);
+    }
 }
 
