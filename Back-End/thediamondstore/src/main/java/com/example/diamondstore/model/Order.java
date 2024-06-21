@@ -66,13 +66,13 @@ public class Order {
     @JsonIgnore
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<Cart> cartItems;
-    // Constructors, getters, and setters
+
     public Order() {
     }
 
     public Order(Integer orderID, Account account, LocalDateTime startorderDate, String orderStatus, LocalDateTime deliveryDate,
-                 BigDecimal totalOrder, String deliveryAddress, String phoneNumber, String certificateImage, String warrantyImage,
-                 String promotionCode, List<Cart> cartItems, Integer transactionNo) {
+            BigDecimal totalOrder, String deliveryAddress, String phoneNumber, String certificateImage, String warrantyImage,
+            String promotionCode, List<Cart> cartItems, Integer transactionNo) {
         this.orderID = orderID;
         this.account = account;
         this.startorderDate = startorderDate;
@@ -192,4 +192,3 @@ public class Order {
         this.cartItems = cartItems;
     }
 }
-
