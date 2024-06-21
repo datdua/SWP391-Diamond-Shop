@@ -29,10 +29,10 @@ function AddPromotionForm() {
       };
       const response = await createPromotion(dateTimePromotion);
       console.log(response);
-      setMessage("Tạo mới Chứng Chỉ thành công");
+      setMessage("Tạo mới Mã Giảm Giá thành công");
     } catch (error) {
       console.error(error);
-      setMessage("Tạo mới Chứng Chỉ thất bại");
+      setMessage("Tạo mới Mã Giảm Giá thất bại");
     }
   };
 

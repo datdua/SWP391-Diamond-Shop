@@ -16,6 +16,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import AddDiamondPriceForm from "../../../components/DiamondPriceCRUD/AddDiamondPriceForm.js";
 import UpdateDiamondPriceForm from "../../../components/DiamondPriceCRUD/UpdateDiamondPriceForm.js";
 import DeleteDiamondPriceForm from "../../../components/DiamondPriceCRUD/DeleteDiamondPriceForm.js";
+import CalculatorForm from "../../../components/Calculator/CalculatorForm.js";
 import { Pagination } from "@mui/material";
 import "../ProductManager.css";
 
@@ -94,6 +95,7 @@ function DiamondPriceManager() {
                   <AddIcon style={{ margin: "0 5px 5px 0" }} /> ADD
                 </Button>
               </Card.Title>
+              <CalculatorForm />
             </Card.Header>
             <Card.Body>
               <div className="table-responsive">
@@ -159,20 +161,25 @@ function DiamondPriceManager() {
         </Col>
         <Col md={6}>
           <div className="iframe-container">
-            <iframe
-              title="Gold Price"
-              srcDoc={`<script type="text/javascript" src="https://tygiausd.org/GiavangFullScript/dat-gia-vang/Widgets"></script>
-                        <noscript> Vui lòng bật javascript để xem <a href="https://tygiausd.org/giavang/gia-vang-hom-nay">giá vàng</a></noscript>`}
-              style={{ width: "100%", height: "1000px", border: "none" }}
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/the-diamond-store-423602.appspot.com/o/RAPAPORT%2FRAPAPORT-1.png?alt=media&token=29c7a608-be53-45fe-a812-b6d4abfc1105"
+              alt="Diamond Price Report"
+              style={{ width: "100%", height: "800px" }}
+            />
+            <img
+              src="https://firebasestorage.googleapis.com/v0/b/the-diamond-store-423602.appspot.com/o/RAPAPORT%2FRAPAPORT-2.png?alt=media&token=13824855-df40-433b-aa32-29aa27eff7d7"
+              alt="Diamond Price Report"
+              style={{ width: "100%", height: "800px" }}
             />
           </div>
         </Col>
       </Row>
 
+
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {isUpdating ? "Update Gold Price" : "Add Gold Price"}
+            {isUpdating ? "Update Diamond Price" : "Add Diamond Price"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

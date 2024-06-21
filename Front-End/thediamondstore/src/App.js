@@ -28,16 +28,17 @@ import JewelryManagerPage from "./pages/Manager/JewelryManager/JewelryManagerPag
 import PaymentConfirm from "./pages/PaymentConfirm/PaymentConfirm";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import GoldPriceManager from "./pages/Manager/PriceProductManager/GolPriceManagerPage";
+import Dashboard from "./pages/DashBoard/DashBoard";
+import Knowledge from "./pages/Knowledge/Knowledge";
 import OrderManagerPage from "./pages/Manager/OrderManager/OrderManagePager";
-import PaymentConfirm from "./pages/PaymentConfirm/PaymentConfirm";
 import ProductManagerPage from "./pages/Manager/DiamondManager/DiamondManager";
-import ProfilePage from "./pages/Profile/ProfilePage";
 import SideBarAdmin from "./components/Sidebar/SidebarAdmin";
 import TransactionManagerPage from "./pages/Manager/TransactionManager/TransactionManagerPage";
 import CertificateManagerPage from "./pages/Manager/CertificateManager/CertificateManagerPage";
 import DiamondPriceManager from "./pages/Manager/PriceProductManager/DiamondPriceManagerPage";
 import WarrantyManagerPage from "./pages/Manager/WarrantyManager/WarrantyManagerPage";
 import PromotionManagerPage from "./pages/Manager/PromotionManager/PromotionManagerPage";
+import { AuthProvider } from "./components/Auth/AuthProvider";
 
 function App() {
   const handleLogout = (logoutCallback) => {

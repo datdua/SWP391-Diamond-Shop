@@ -35,11 +35,11 @@ public class DiamondPutRequest {
         this.warrantyID = warrantyID;
     }
 
-    public String getWarrantityID() {
+    public String getWarrantyID() {
         return warrantyID;
     }
 
-    public void setWarrantityID(String warrantyID) {
+    public void setWarrantyID(String warrantyID) {
         this.warrantyID = warrantyID;
     }
 
