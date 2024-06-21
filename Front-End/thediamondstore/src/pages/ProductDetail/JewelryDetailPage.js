@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import SizeInstructionModal from "../../components/SizeInstructionModal/SizeInstructionModal";
 import { getAccountIDByEmail } from "../../api/accountCrud";
 
+
 function JewelryDetailPage() {
   const navigate = useNavigate();
   const [jewelry, setJewelry] = useState(null);
@@ -163,6 +164,7 @@ function JewelryDetailPage() {
                                 <select
                                   value={sizeJewelry}
                                   onChange={handleSizeChange}
+                                  style={{ maxWidth: "150px" }}
                                 >
                                   {[
                                     'Select Size', 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
@@ -175,6 +177,7 @@ function JewelryDetailPage() {
                                 </select>
                                 <button
                                   onClick={() => setModalShow(true)}
+                                  style={{ marginLeft: "10px" }}
                                 >Hướng dẫn đo ni</button>
                               </div>
                               <div className="tm-prodetails-singleinfo">
@@ -187,26 +190,25 @@ function JewelryDetailPage() {
                             <p>{jewelry.description}</p>
                             <div className="tm-prodetails-quantitycart" >
                               <h6>Quantity :</h6>
-                              
-                                <input type="text" value={quantity} readOnly style={{maxWidth:"50px"}}/>
-                                <div className="quantity-buttons">
-                                  <button
-                                    className="increase-button"
-                                    onClick={increaseQuantity}
-                                  >
-                                    +
-                                  </button>
-                                  <button
-                                    className="decrease-button"
-                                    onClick={decreaseQuantity}
-                                  >
-                                    -
-                                  </button>
-                                
+                              <div className="input-group">
+                                <button
+                                  className="decrease-button"
+                                  onClick={decreaseQuantity}
+                                >
+                                  -
+                                </button>
+                                <input type="text" value={quantity} readOnly style={{ maxWidth: "80px", textAlign: "center" }} />
+                                <button
+                                  className="increase-button"
+                                  onClick={increaseQuantity}
+                                >
+                                  +
+                                </button>
                               </div>
                               <button
                                 onClick={() => handleAddToCart(jewelry)}
                                 href="/cart"
+                                style={{ marginLeft: "10px" }}
                               >
                                 Add to cart
                               </button>

@@ -36,6 +36,8 @@ import SideBarAdmin from "./components/Sidebar/SidebarAdmin";
 import TransactionManagerPage from "./pages/Manager/TransactionManager/TransactionManagerPage";
 import JewelryManagerPage from "./pages/Manager/JewelryManager/JewelryManagerPage";
 import { AuthProvider } from "./components/Auth/AuthProvider";
+import ScrollToTop from "./components/ScrollToTop";
+import EmailConfirm from "./pages/EmailConfirm/EmailConfirm";
 
 
 
@@ -63,6 +65,7 @@ function App() {
         pauseOnHover
       />
       <AuthProvider logoutCallback={() => handleLogout(handleLogout)}>
+        <ScrollToTop/>
         <Routes>
           {/* actor: Customer */}
           <Route path="/" element={<> <Header /> <HomePage /> <Footer /> <BackToTop /> </>} />
@@ -70,7 +73,7 @@ function App() {
           <Route path="/xacthucthanhtoan" element={<> <Header /> <PaymentConfirm /> <Footer /> <BackToTop /> </>} />
           <Route path="/trangchu" element={<> <Header /> <HomePage /> <Footer /> <BackToTop /> </>} />
           <Route path="/gioithieu" element={<> <Header /> <AboutPage /> <Footer /> <BackToTop /> </>} />
-          <Route path="/lienhe" lement={<> <Header /> <ContactPage /> <Footer /> <BackToTop /> </>} />
+          <Route path="/lienhe" element={<> <Header /> <ContactPage /> <Footer /> <BackToTop /> </>} />
           <Route path="/sanpham" element={<> <Header /> <ProductPage /> <Footer /> <BackToTop /> </>} />
           <Route path="/trangsuc" element={<> <Header /> <JewelryPage /> <Footer /> <BackToTop /> </>} />
           <Route path="/kimcuong" element={<> <Header /> <DiamondPage /> <Footer /> <BackToTop /> </>} />
@@ -81,8 +84,9 @@ function App() {
           <Route path="/checkout/:accountId" element={<> <Header /> <CheckoutPage /> <Footer /> <BackToTop /> </>} />
           <Route path="/wishlist" element={<> <Header /> <WishlistPage /> <Footer /> <BackToTop /> </>} />
           <Route path="/portfolio" element={<> <Header /> <PortfolioPage /> <Footer /> <BackToTop /> </>} />
-          <Route path="/kienthuckimcuong" element={<> <Header /> <Knowledge /> <Footer /> <BackToTop />  </> }>
-          </Route>
+          <Route path="/kienthuckimcuong" element={<> <Header /> <Knowledge /> <Footer /> <BackToTop />  </> }/>
+          <Route path="/xacthucemail" element={<><Header/><EmailConfirm/><Footer/></>}/>
+          
           {/* actor: //Customer */}
 
           {/* actor: Admin */}
@@ -98,8 +102,6 @@ function App() {
             <Route path="certificate-manager" element={<CertificateManagerPage />} />
           </Route>
           {/* actor: //Admin */}
-
-
         </Routes>
       </AuthProvider>
     </BrowserRouter>
