@@ -22,7 +22,6 @@ import com.example.diamondstore.request.CustomerRequest;
 public class CustomerController {
 
     private final CustomerRepository customerRepository;
-
     private final AccountRepository accountRepository;
 
     public CustomerController(AccountRepository accountRepository, CustomerRepository customerRepository) {

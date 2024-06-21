@@ -25,8 +25,7 @@ import com.example.diamondstore.specification.JewelrySpecification;
 @RequestMapping("/api/production")
 public class ProductionController {
 
-    private final DiamondRepository diamondRepository;
-    
+    private final DiamondRepository diamondRepository;    
     private final JewelryRepository jewelryRepository;
 
     @Autowired

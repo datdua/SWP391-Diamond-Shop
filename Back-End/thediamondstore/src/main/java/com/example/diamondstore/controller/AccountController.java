@@ -38,9 +38,7 @@ import com.example.diamondstore.service.AccountService;
 public class AccountController {
 
     private final AccountRepository accountRepository;
-
     private final CustomerRepository customerRepository;
-
     private final OrderRepository orderRepository;
 
     public AccountController(AccountRepository accountRepository, CustomerRepository customerRepository, OrderRepository orderRepository) {
