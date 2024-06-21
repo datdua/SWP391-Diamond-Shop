@@ -33,9 +33,10 @@ public class SecurityConfig {
         "/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**", "/configuration/ui",
         "/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html", "/api/auth/**",
         "/api/test/**", "/authenticate"};
-    private static final String[] COMMON_URL = {"/login", "/api/accounts/register", "/api/diamonds/**", "/api/certificates/**", "/api/jewelry/**", "/api/customers/**", 
-    "/api/accounts/forgetPassword/**", "/api/promotion/**", "/api/warranties/**", "/api/orders/**", "/api/cart/**", "/api/accounts/**", 
-    "/api/accounts", "/api/cart", "api/collections/**", "/api/collections", "/api/production/**", "/api/production"};
+        
+    private static final String[] COMMON_URL = {"/login", "/api/accounts/register", "/api/diamonds/**", "/api/certificates/**", "/api/jewelry/**", "/api/customers/**",
+        "/api/accounts/forgetPassword/**", "/api/promotion/**", "/api/warranties/**", "/api/orders/**", "/api/cart/**", "/api/accounts/**",
+        "/api/accounts", "/api/cart", "api/collections/**", "/api/collections", "/api/production/**", "/api/production"};
 
     @Autowired
     private final AccountService UserService;
