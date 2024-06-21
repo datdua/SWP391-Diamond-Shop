@@ -93,27 +93,12 @@ function App() {
             <Route path="warranty-manager" element={<WarrantyManagerPage />} />
             <Route path="account-manager" element={<AccountManager />} />
             <Route path="jewelry-manager" element={<JewelryManagerPage />} />
-            <Route
-              path="promotion-manager"
-              element={<PromotionManagerPage />}
-            />
+            <Route path="promotion-manager" element={<PromotionManagerPage />} />
             <Route path="order-manager" element={<OrderManagerPage />} />
-            <Route
-              path="price/gold-price-manager"
-              element={<GoldPriceManager />}
-            />
-            <Route
-              path="price/diamond-price-manager"
-              element={<DiamondPriceManager />}
-            />
-            <Route
-              path="transaction-manager"
-              element={<TransactionManagerPage />}
-            />
-            <Route
-              path="certificate-manager"
-              element={<CertificateManagerPage />}
-            />
+            <Route path="price/gold-price-manager" element={<GoldPriceManager />} />
+            <Route path="price/diamond-price-manager" element={<DiamondPriceManager />} />
+            <Route path="transaction-manager" element={<TransactionManagerPage />} />
+            <Route path="certificate-manager" element={<CertificateManagerPage />} />
           </Route>
           {/* actor: //Admin */}
 
