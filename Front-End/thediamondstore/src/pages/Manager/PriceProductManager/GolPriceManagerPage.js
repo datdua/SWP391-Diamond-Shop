@@ -116,7 +116,7 @@ function GoldPriceManager() {
                               ? goldPrice.goldPrice.toLocaleString() + " VNĐ"
                               : "N/a"}
                           </td>
-                          <td>{goldPrice.goldAge}</td>
+                          <td>{goldPrice.goldAge + "K"}</td>
                           <td>
                             <Button
                               variant="link"

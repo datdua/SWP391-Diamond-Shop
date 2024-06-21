@@ -106,6 +106,26 @@ function SideBarAdmin() {
               Chứng chỉ kim cương
             </NavLink>
             <NavLink
+              to="/admin/warranty-manager"
+              className="sidebar-nav-item"
+              activeClassName="active"
+            >
+              <span className="nav-icon">
+                <span className="nav-icon-bullet"></span>
+              </span>{" "}
+              Giấy bảo hành
+            </NavLink>
+            <NavLink
+              to="/admin/promotion-manager"
+              className="sidebar-nav-item"
+              activeClassName="active"
+            >
+              <span className="nav-icon">
+                <span className="nav-icon-bullet"></span>
+              </span>{" "}
+              Mã Giảm Giá
+            </NavLink>
+            <NavLink
               to="/admin/order-manager"
               className="sidebar-nav-item"
               activeClassName="active"
@@ -118,10 +138,9 @@ function SideBarAdmin() {
             <CNavGroup
               toggler={
                 <>
-                  <CIcon
-                    className="sidebar-nav-item"
-                    customClassName="nav-icon"
-                  />{" "}
+                  <span className="nav-icon">
+                    <span className="nav-icon-bullet"></span>
+                  </span>{" "}
                   Giá
                 </>
               }
@@ -151,7 +170,7 @@ function SideBarAdmin() {
         </CSidebarNav>
         <CSidebarHeader className="border-top">
           <NavLink to="/" className="sidebar-nav-item" activeClassName="active">
-            <CSidebarToggler style={{ marginRight: "10px" }} /> LOG OUT
+            <CSidebarToggler style={{ marginRight: "10px" }} /> Đăng xuất
           </NavLink>
         </CSidebarHeader>
       </CSidebar>

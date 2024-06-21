@@ -34,6 +34,8 @@ import OrderManagerPage from "./pages/Manager/OrderManager/OrderManagePager";
 import TransactionManagerPage from "./pages/Manager/TransactionManager/TransactionManagerPage";
 import CertificateManagerPage from "./pages/Manager/CertificateManager/CertificateManagerPage";
 import DiamondPriceManager from "./pages/Manager/PriceProductManager/DiamondPriceManagerPage";
+import WarrantyManagerPage from "./pages/Manager/WarrantyManager/WarrantyManagerPage";
+import PromotionManagerPage from "./pages/Manager/PromotionManager/PromotionManagerPage";
 
 function App() {
   const handleLogout = (logoutCallback) => {
@@ -241,8 +243,13 @@ function App() {
             <Route path="profile" element={<ProfilePage />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="diamond-manager" element={<ProductManagerPage />} />
+            <Route path="warranty-manager" element={<WarrantyManagerPage />} />
             <Route path="account-manager" element={<AccountManager />} />
             <Route path="jewelry-manager" element={<JewelryManagerPage />} />
+            <Route
+              path="promotion-manager"
+              element={<PromotionManagerPage />}
+            />
             <Route path="order-manager" element={<OrderManagerPage />} />
             <Route
               path="price/gold-price-manager"

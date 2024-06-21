@@ -1,43 +1,45 @@
 import React, { useState } from "react";
-import { createWarranty } from "../../api/WarrantyAPI.js";
+import { createPromotion } from "../../api/PromotionAPI.js";
 import { Form, Button } from "react-bootstrap";
 
-function AddWarrantyForm() {
-  const [warranty, setWarranty] = useState({
-    warrantyID: "",
-    diamondID: "",
-    jewelryID: "",
-    expirationDate: "",
-    expirationTime: "",
-    warrantyImage: "",
+function AddPromotionForm() {
+  const [promotion, setPromotion] = useState({
+    promotionCode: "",
+    startDate: "",
+    startTime: "",
+    endDate: "",
+    endTime: "",
+    discountAmount: "",
+    description: "",
   });
 
   const [message, setMessage] = useState("");
 
   const handleChange = (event) => {
-    setWarranty({ ...warranty, [event.target.name]: event.target.value });
+    setPromotion({ ...promotion, [event.target.name]: event.target.value });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const dateTimeWarranty = {
-        ...warranty,
-        expirationDate: `${warranty.expirationDate} ${warranty.expirationTime}:00`,
+      const dateTimePromotion = {
+        ...promotion,
+        startDate: `${promotion.startDate} ${promotion.startTime}:00`,
+        endDate: `${promotion.endDate} ${promotion.endTime}:00`,
       };
-      const response = await createWarranty(dateTimeWarranty);
+      const response = await createPromotion(dateTimePromotion);
       console.log(response);
-      setMessage("Tạo mới Giấy Bảo Hành thành công");
+      setMessage("Tạo mới Chứng Chỉ thành công");
     } catch (error) {
       console.error(error);
-      setMessage("Tạo mới Giấy Bảo Hành thất bại");
+      setMessage("Tạo mới Chứng Chỉ thất bại");
     }
   };
 
   return (
     <div>
       <Form onSubmit={handleSubmit}>
-        {Object.keys(warranty).map((key) => (
+        {Object.keys(promotion).map((key) => (
           <Form.Group controlId={key} key={key}>
             <Form.Label>{key}</Form.Label>
             <Form.Control
@@ -49,14 +51,14 @@ function AddWarrantyForm() {
                   : "text"
               }
               name={key}
-              value={warranty[key]}
+              value={promotion[key]}
               onChange={handleChange}
               placeholder={key}
             />
           </Form.Group>
         ))}
         <Button variant="primary" type="submit">
-          Create warranty
+          Tạo Mã Giảm Giá
         </Button>
       </Form>
       {message && <p>{message}</p>}
@@ -64,4 +66,4 @@ function AddWarrantyForm() {
   );
 }
 
-export default AddWarrantyForm;
+export default AddPromotionForm;
