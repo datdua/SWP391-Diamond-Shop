@@ -130,5 +130,4 @@ public class DiamondPutRequest {
     public void setOrigin(String origin) {
         this.origin = origin;
     }
-
 }

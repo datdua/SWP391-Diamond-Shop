@@ -1,4 +1,3 @@
-// CertificateRepository.java
 package com.example.diamondstore.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;

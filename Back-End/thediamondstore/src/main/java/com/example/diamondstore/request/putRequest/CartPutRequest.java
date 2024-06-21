@@ -54,7 +54,4 @@ public class CartPutRequest {
     public void setTotalPrice(float totalPrice) {
         this.totalPrice = totalPrice;
     }
-
-
-    
 }
