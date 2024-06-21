@@ -19,7 +19,7 @@ public class EmailUtil {
         mimeMessageHelper.setTo(email);
         mimeMessageHelper.setSubject("Verify OTP");
         String emailContent = "<div>" +
-        "<a href=\"http://localhost:3000/verify-account?email=" + email + "&otp=" + otp + "\">Click here to verify OTP</a>" +
+        "<a href=\"http://localhost:3000/xacthucemail?email=" + email + "&otp=" + otp + "\">Click here to verify OTP</a>" +
         "</div>";
         mimeMessageHelper.setText(emailContent, true);
 
