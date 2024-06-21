@@ -67,7 +67,31 @@ export const getWarrantyByPage = async (page, size) => {
     );
     return response.data;
   } catch (error) {
-    console.error("Error fetc0hing warranty by page:", error);
+    console.error("Error fetching warranty by page:", error);
+    throw error;
+  }
+};
+
+export const getWarrantyDiamondIDIsNull = async () => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/warranties/diamondIDIsNull`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching warranty by diamondID is null:", error);
+    throw error;
+  }
+};
+
+export const getWarrantyJewelryIDIsNull = async () => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/warranties/jewelryIDIsNull`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching warranty by diamondID is null:", error);
     throw error;
   }
 };

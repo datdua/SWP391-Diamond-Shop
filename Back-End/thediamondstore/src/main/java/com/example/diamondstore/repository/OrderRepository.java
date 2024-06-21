@@ -21,5 +21,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     List<Order> findByTransactionNoNotNull();
 
+    long count();
     
 }
