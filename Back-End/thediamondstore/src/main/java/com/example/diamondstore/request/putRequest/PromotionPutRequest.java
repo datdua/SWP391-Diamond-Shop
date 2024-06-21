@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class PromotionPutRequest {
+
     private String promotionCode;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
@@ -13,8 +14,6 @@ public class PromotionPutRequest {
     private LocalDateTime endDate;
     private BigDecimal discountAmount;
     private String description;
-
-    // Add your getters and setters here
 
     public PromotionPutRequest() {
     }
@@ -66,6 +65,4 @@ public class PromotionPutRequest {
     public void setDescription(String description) {
         this.description = description;
     }
-
-
 }

@@ -10,7 +10,6 @@ public class JewelryPutRequest {
     private BigDecimal jewelryEntryPrice;
     private String warrantyID;
 
-    // Add your getters and setters here
     public JewelryPutRequest() {
     }
 
@@ -22,7 +21,6 @@ public class JewelryPutRequest {
         this.warrantyID = warrantyID;
     }
 
-    // getters and setters...
     public String getJewelryName() {
         return jewelryName;
     }
