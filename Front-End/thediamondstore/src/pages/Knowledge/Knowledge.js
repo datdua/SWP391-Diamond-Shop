@@ -13,8 +13,8 @@ function Knowledge() {
                         <div className="tm-breadcrumb">
                             <h2>Kiến Thức Kim Cương</h2>
                             <ul className="add-back">
-                                <li><Link to="/trang">Trang chủ</Link></li>
-                                <li>Đăng Nhập & Đăng Ký</li>
+                                <li><Link to="/trangchu">Trang chủ</Link></li>
+                                <li>Kiến Thức Kim Cương</li>
                             </ul>
                         </div>
                     </div>
