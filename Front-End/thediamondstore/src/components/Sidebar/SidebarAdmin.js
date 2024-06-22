@@ -11,7 +11,15 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { NavLink, Outlet } from "react-router-dom";
-import { cilSpeedometer, cilPuzzle, cilUser, cilBank } from "@coreui/icons";
+import {
+  cilSpeedometer,
+  cilPuzzle,
+  cilUser,
+  cilBank,
+  cilCart,
+  cilAddressBook,
+  cilStrikethrough,
+} from "@coreui/icons";
 import "../../components/Sidebar/SidebarAdmin.css";
 
 function SideBarAdmin() {
@@ -164,9 +172,7 @@ function SideBarAdmin() {
               className="sidebar-nav-item"
               activeClassName="active"
             >
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>{" "}
+              <CIcon customClassName="nav-icon" icon={cilAddressBook} />
               Tài khoản
             </NavLink>
             <NavLink
@@ -174,9 +180,7 @@ function SideBarAdmin() {
               className="sidebar-nav-item"
               activeClassName="active"
             >
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>{" "}
+              <CIcon customClassName="nav-icon" icon={cilStrikethrough} />
               Mã Giảm Giá
             </NavLink>
             <NavLink
@@ -184,9 +188,7 @@ function SideBarAdmin() {
               className="sidebar-nav-item"
               activeClassName="active"
             >
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>{" "}
+              <CIcon className="nav-icon" icon={cilCart} />
               Đơn hàng
             </NavLink>
           </CNavGroup>
