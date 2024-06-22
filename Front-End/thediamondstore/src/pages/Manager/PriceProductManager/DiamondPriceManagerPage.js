@@ -175,7 +175,6 @@ function DiamondPriceManager() {
         </Col>
       </Row>
 
-
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
