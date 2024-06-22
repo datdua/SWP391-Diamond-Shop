@@ -204,7 +204,7 @@ function CertificateManagerPage() {
           <img
             src={selectedImage}
             alt="Certificate"
-            style={{ width: "100%" }}
+            style={{ width: "100%", height: "500px"}}
           />
         </Modal.Body>
       </Modal>
