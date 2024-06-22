@@ -103,6 +103,7 @@ function PromotionManagerPage() {
                       <th>Start Date</th>
                       <th>End Date</th>
                       <th>Discount Amount</th>
+                      <th>Status</th>
                       <th>Description</th>
                       <th>Action</th>
                     </tr>
@@ -116,6 +117,7 @@ function PromotionManagerPage() {
                         <td>{promotion.startDate}</td>
                         <td>{promotion.endDate}</td>
                         <td>{promotion.discountAmount}</td>
+                        <td>{promotion.promotionStatus}</td>
                         <td>{promotion.description}</td>
                         <td>
                           <Button

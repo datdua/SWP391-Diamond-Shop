@@ -34,15 +34,6 @@ function UpdateWarrantyForm({ warranty }) {
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group>
-        <Form.Label>Diamond ID</Form.Label>
-        <Form.Control
-          type="text"
-          name="diamondID"
-          value={updatedWarranty.diamondID}
-          onChange={handleChange}
-        />
-      </Form.Group>
-      <Form.Group>
         <Form.Label>Jewelry ID</Form.Label>
         <Form.Control
           type="text"

@@ -65,13 +65,7 @@ function SideBarAdmin() {
               </>
             }
           >
-            <CNavGroup
-              toggler={
-                <>
-                  Sản phẩm
-                </>
-              }
-            >
+            <CNavGroup toggler={<>Sản phẩm</>}>
               <CNavGroup
                 toggler={
                   <>
@@ -164,26 +158,6 @@ function SideBarAdmin() {
                   Giá vàng
                 </NavLink>
               </CNavGroup>
-              <NavLink
-                to="/admin/price/diamond-price-manager"
-                className="sidebar-nav-item"
-                activeClassName="active"
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>{" "}
-                Giá kim cương
-              </NavLink>
-              <NavLink
-                to="/admin/price/gold-price-manager"
-                className="sidebar-nav-item"
-                activeClassName="active"
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>{" "}
-                Giá vàng
-              </NavLink>
             </CNavGroup>
             <NavLink
               to="/admin/account-manager"
@@ -194,17 +168,6 @@ function SideBarAdmin() {
                 <span className="nav-icon-bullet"></span>
               </span>{" "}
               Tài khoản
-            </NavLink>
-
-            <NavLink
-              to="/admin/warranty-manager"
-              className="sidebar-nav-item"
-              activeClassName="active"
-            >
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>{" "}
-              Giấy bảo hành
             </NavLink>
             <NavLink
               to="/admin/promotion-manager"

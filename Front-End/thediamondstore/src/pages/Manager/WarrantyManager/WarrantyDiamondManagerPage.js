@@ -17,7 +17,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddWarrantyForm from "../../../components/WarrantyCRUD/AddWarrantyForm";
-import UpdateWarrantyForm from "../../../components/WarrantyCRUD/UpdateWarrantyForm";
+import UpdateWarrantyDiamondForm from "../../../components/WarrantyCRUD/UpdateWarrantyDiamondForm";
 import DeleteWarrantyForm from "../../../components/WarrantyCRUD/DeleteWarrantyForm";
 import { Pagination } from "@mui/material";
 import "../ProductManager.css";
@@ -105,6 +105,7 @@ function WarrantyManagerPage() {
                       <th>Diamond ID</th>
                       <th>Expiration Date</th>
                       <th>Warranty Image</th>
+                      <th>Status</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -122,6 +123,7 @@ function WarrantyManagerPage() {
                             style={{ width: "50px", height: "50px" }}
                           />
                         </td>
+                        <td>{warranty.warrantyStatus}</td>
                         <td>
                           <Button
                             variant="link"
@@ -161,7 +163,7 @@ function WarrantyManagerPage() {
         </Modal.Header>
         <Modal.Body>
           {isUpdating ? (
-            <UpdateWarrantyForm
+            <UpdateWarrantyDiamondForm
               warranty={selectedWarranty}
               onClose={handleClose}
             />
