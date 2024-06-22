@@ -52,6 +52,7 @@ public class PromotionService {
         existingPromotion.setStartDate(promotionPutRequest.getStartDate());
         existingPromotion.setEndDate(promotionPutRequest.getEndDate());
         existingPromotion.setDiscountAmount(promotionPutRequest.getDiscountAmount());
+        existingPromotion.setDescription(promotionPutRequest.getDescription());
         promotionRepository.save(existingPromotion);
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }
