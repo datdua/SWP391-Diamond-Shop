@@ -17,7 +17,7 @@ import AddDiamondPriceForm from "../../../components/DiamondPriceCRUD/AddDiamond
 import UpdateDiamondPriceForm from "../../../components/DiamondPriceCRUD/UpdateDiamondPriceForm.js";
 import DeleteDiamondPriceForm from "../../../components/DiamondPriceCRUD/DeleteDiamondPriceForm.js";
 import CalculatorForm from "../../../components/Calculator/CalculatorForm.js";
-import { Pagination } from "@mui/material";
+import { Pagination, Tooltip } from "@mui/material";
 import "../ProductManager.css";
 
 function DiamondPriceManager() {
@@ -127,13 +127,18 @@ function DiamondPriceManager() {
                           <td>{diamondPrice.color}</td>
                           <td>{diamondPrice.carat_size}</td>
                           <td>
-                            <Button
-                              variant="link"
-                              onClick={() => handleShowUpdate(diamondPrice)}
+                            <Tooltip
+                              describeChild
+                              title="Cập nhật thông tin"
+                              arrow placement="top"
                             >
-                              <EditIcon />
-                              Edit
-                            </Button>
+                              <Button
+                                variant="link"
+                                onClick={() => handleShowUpdate(diamondPrice)}
+                              >
+                                <EditIcon />
+                              </Button>
+                            </Tooltip>
                             <DeleteDiamondPriceForm
                               diamondPriceID={diamondPrice.diamondPriceID}
                               onDelete={handleDelete}
@@ -174,7 +179,6 @@ function DiamondPriceManager() {
           </div>
         </Col>
       </Row>
-
 
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>

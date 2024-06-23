@@ -21,6 +21,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Pagination from "@mui/material/Pagination";
+import { Tooltip } from "@mui/material";
 import "../ProductManager.css";
 
 function DiamondManagerPage() {
@@ -230,12 +231,19 @@ function DiamondManagerPage() {
                         <td>{diamond.shape}</td>
                         <td>{diamond.origin}</td>
                         <td>
-                          <Button
-                            variant="link"
-                            onClick={() => handleShowUpdate(diamond)}
+                          <Tooltip
+                            describeChild
+                            title="Cập nhật thông tin"
+                            arrow
+                            placement="top"
                           >
-                            <EditIcon />
-                          </Button>
+                            <Button
+                              variant="link"
+                              onClick={() => handleShowUpdate(diamond)}
+                            >
+                              <EditIcon />
+                            </Button>
+                          </Tooltip>
                           <DeleteDiamondButton
                             diamondID={diamond.diamondID}
                             onDelete={() => handleDelete(diamond.diamondID)}

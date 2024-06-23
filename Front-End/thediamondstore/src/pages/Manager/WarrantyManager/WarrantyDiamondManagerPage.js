@@ -19,7 +19,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddWarrantyForm from "../../../components/WarrantyCRUD/AddWarrantyForm";
 import UpdateWarrantyDiamondForm from "../../../components/WarrantyCRUD/UpdateWarrantyDiamondForm";
 import DeleteWarrantyForm from "../../../components/WarrantyCRUD/DeleteWarrantyForm";
-import { Pagination } from "@mui/material";
+import { Pagination, Tooltip } from "@mui/material";
 import "../ProductManager.css";
 
 function WarrantyManagerPage() {
@@ -72,7 +72,7 @@ function WarrantyManagerPage() {
     setShowImageModal(false);
     setSelectedImage("");
   };
-  
+
   useEffect(() => {
     getWarrantyJewelryIDIsNull()
       .then((data) => {
@@ -144,12 +144,19 @@ function WarrantyManagerPage() {
                         </td>
                         <td>{warranty.warrantyStatus}</td>
                         <td>
-                          <Button
-                            variant="link"
-                            onClick={() => handleShowUpdate(warranty)}
+                          <Tooltip
+                            describeChild
+                            title="Cập nhật thông tin"
+                            arrow
+                            placement="top"
                           >
-                            <EditIcon />
-                          </Button>
+                            <Button
+                              variant="link"
+                              onClick={() => handleShowUpdate(warranty)}
+                            >
+                              <EditIcon />
+                            </Button>
+                          </Tooltip>
                           <DeleteWarrantyForm
                             warrantyID={warranty.warrantyID}
                             onDelete={() => handleDelete(warranty.warrantyID)}

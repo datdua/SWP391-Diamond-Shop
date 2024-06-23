@@ -20,7 +20,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddCertificateForm from "../../../components/CertificateCRUD/AddCertificateForm";
 import UpdateCertificateForm from "../../../components/CertificateCRUD/UpdateCertificateForm";
 import DeleteCertificateForm from "../../../components/CertificateCRUD/DeleteCertificateForm";
-import { Pagination } from "@mui/material";
+import { Pagination, Tooltip } from "@mui/material";
 import "../ProductManager.css";
 
 function CertificateManagerPage() {
@@ -146,12 +146,19 @@ function CertificateManagerPage() {
                         </td>
                         <td>{certificate.certificateStatus}</td>
                         <td>
-                          <Button
-                            variant="link"
-                            onClick={() => handleShowUpdate(certificate)}
+                          <Tooltip
+                            describeChild
+                            title="Cập nhật thông tin"
+                            arrow
+                            placement="top"
                           >
-                            <EditIcon />
-                          </Button>
+                            <Button
+                              variant="link"
+                              onClick={() => handleShowUpdate(certificate)}
+                            >
+                              <EditIcon />
+                            </Button>
+                          </Tooltip>
                           <DeleteCertificateForm
                             certificateID={certificate.certificateID}
                             onDelete={() =>
@@ -204,7 +211,7 @@ function CertificateManagerPage() {
           <img
             src={selectedImage}
             alt="Certificate"
-            style={{ width: "100%", height: "500px"}}
+            style={{ width: "100%", height: "500px" }}
           />
         </Modal.Body>
       </Modal>
