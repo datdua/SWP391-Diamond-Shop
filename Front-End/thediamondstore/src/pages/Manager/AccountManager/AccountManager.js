@@ -119,7 +119,13 @@ function AccountManager() {
                         <td className="password-cell">{account.password}</td>
                         <td>{account.phoneNumber}</td>
                         <td>{account.addressAccount}</td>
-                        <td>{account.active ? "Yes" : "No"}</td>
+                        <td
+                          className={
+                            account.active ? "active-status" : "inactive-status"
+                          }
+                        >
+                          {account.active ? "Đã kích hoạt" : "Chưa kích hoạt"}
+                        </td>
                         <td>{account.role}</td>
                         <td>
                           <Tooltip

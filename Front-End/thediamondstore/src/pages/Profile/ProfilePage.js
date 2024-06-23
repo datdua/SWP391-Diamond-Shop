@@ -15,10 +15,9 @@ import { getAccountByID, updateAccount } from "../../api/accountCrud";
 
 const ProfilePage = () => {
   const [account, setAccount] = useState(null);
-  const [originalAccount, setOriginalAccount] = useState(null);
   const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const accountID = localStorage.getItem("accountID");
 
   useEffect(() => {
@@ -31,7 +30,6 @@ const ProfilePage = () => {
       try {
         const accountData = await getAccountByID(accountID);
         setAccount(accountData);
-        setOriginalAccount(accountData); // Lưu lại thông tin gốc
       } catch (error) {
         setError("Failed to fetch account");
         console.error("Failed to fetch account", error);
@@ -53,21 +51,15 @@ const ProfilePage = () => {
     try {
       await updateAccount(accountID, account);
       setIsEditing(false);
-      setSuccess(true); // Hiển thị thông báo thành công
-      setOriginalAccount(account); // Cập nhật thông tin gốc sau khi lưu
+      setOpenSnackbar(true);
     } catch (error) {
       setError("Failed to update account");
       console.error("Failed to update account", error);
     }
   };
 
-  const handleCancel = () => {
-    setAccount(originalAccount); // Khôi phục lại thông tin gốc
-    setIsEditing(false);
-  };
-
   const handleCloseSnackbar = () => {
-    setSuccess(false);
+    setOpenSnackbar(false);
   };
 
   if (error) {
@@ -160,6 +152,20 @@ const ProfilePage = () => {
             )}
           </Grid>
           <Grid item xs={12} sm={6}>
+            <Typography variant="h6">Password</Typography>
+            {isEditing ? (
+              <TextField
+                name="password"
+                type="password"
+                value={account.password}
+                onChange={handleChange}
+                fullWidth
+              />
+            ) : (
+              <Typography>{account.password ? "********" : "N/A"}</Typography>
+            )}
+          </Grid>
+          <Grid item xs={12} sm={6}>
             <Typography variant="h6">Active</Typography>
             <Typography>{account.active ? "Yes" : "No"}</Typography>
           </Grid>
@@ -173,7 +179,7 @@ const ProfilePage = () => {
               <Button
                 variant="contained"
                 color="secondary"
-                onClick={handleCancel}
+                onClick={() => setIsEditing(false)}
                 sx={{ marginLeft: 2 }}
               >
                 Cancel
@@ -191,22 +197,12 @@ const ProfilePage = () => {
         </Box>
       </Paper>
       <Snackbar
-        open={success}
+        open={openSnackbar}
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
       >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity="success"
-          sx={{
-            width: "auto",
-            position: "fixed",
-            top: 0, 
-            right: 0, 
-            margin: 1, 
-          }}
-        >
-          Thông tin cập nhật thành công!
+        <Alert onClose={handleCloseSnackbar} severity="success">
+          Cập nhật thông tin thành công!
         </Alert>
       </Snackbar>
     </Container>
@@ -214,4 +210,3 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
-

@@ -69,6 +69,15 @@ function UpdateAccountForm({ account }) {
           onChange={handleChange}
         />
       </Form.Group>
+      <Form.Group>
+        <Form.Label>Account Address</Form.Label>
+        <Form.Control
+          type="text"
+          name="addressAccount"
+          value={updatedAccount.addressAccount}
+          onChange={handleChange}
+        />
+      </Form.Group>
       <Button variant="primary" type="submit">
         Update
       </Button>

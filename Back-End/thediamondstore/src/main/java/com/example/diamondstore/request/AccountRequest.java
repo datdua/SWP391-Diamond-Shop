@@ -1,7 +1,5 @@
 package com.example.diamondstore.request;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 public class AccountRequest {
     
     private String accountName;
@@ -9,19 +7,22 @@ public class AccountRequest {
     private String role;
     private String phoneNumber;
     private String email;
+    private String addressAccount;
 
     public AccountRequest() {
     }
 
-    public AccountRequest(String accountName, String password, String role, String phoneNumber, String email) {
-
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    public AccountRequest(String accountName, String password, String role, String phoneNumber, String email, String addressAccount) {
         this.accountName = accountName;
-        this.password = passwordEncoder.encode(password);
+        this.password = password; // Không mã hóa mật khẩu tại đây
         this.role = role;
         this.phoneNumber = phoneNumber;
         this.email = email;
+        this.addressAccount = addressAccount;
     }
+
+    // Getters và setters
+    // Không thay đổi gì tại đây
 
     public String getAccountName() {
         return accountName;
@@ -61,5 +62,13 @@ public class AccountRequest {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAddressAccount() {
+        return addressAccount;
+    }
+
+    public void setAddressAccount(String addressAccount) {
+        this.addressAccount = addressAccount;
     }
 }
