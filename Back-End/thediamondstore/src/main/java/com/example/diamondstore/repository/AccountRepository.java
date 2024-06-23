@@ -19,5 +19,5 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
 
     List<Account> findByRoleNot(String role);
 
-
+    Account findByUsername(String username);
 }

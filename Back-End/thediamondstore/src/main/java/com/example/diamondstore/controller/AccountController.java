@@ -101,14 +101,13 @@ public class AccountController {
 
     @DeleteMapping(value = "/delete/{accountID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> delete(@PathVariable Integer accountID) {
-    try {
-        Map<String, String> response = accountService.deleteAccount(accountID);
-        return ResponseEntity.ok(response);
+        try {
+            Map<String, String> response = accountService.deleteAccount(accountID);
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-        return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
     }
-
 
     @PostMapping("/create")
     public ResponseEntity<Map<String, String>> createAccount(@RequestBody AccountRequest accountRequest) {
@@ -122,15 +121,25 @@ public class AccountController {
 
     @PutMapping(value = "/update/{accountID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> update(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
-    try {
-        Account updatedAccount = accountService.updateAccount(accountID, accountRequest);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
+        try {
+            // Lấy username hiện tại
+            String currentUsername = accountService.getCurrentUsername();
+            Account currentAccount = accountService.findByUsername(currentUsername);
+
+            // Kiểm tra nếu người dùng hiện tại đang cố gắng thay đổi chính mình
+            if (currentAccount.getAccountID().equals(accountID)) {
+                if (accountRequest.getRole() != null && !accountRequest.getRole().equals(currentAccount.getRole())) {
+                    return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Bạn không thể thay đổi role của chính mình"));
+                }
+            }
+
+            Account updatedAccount = accountService.updateAccount(accountID, accountRequest);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
         } catch (RuntimeException e) {
-        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
         }
     }
 
-    
     @PostMapping(value = "/forget-password", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> forgetPassword(@RequestParam String email) {
         try {
