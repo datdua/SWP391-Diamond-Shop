@@ -240,6 +240,9 @@ public class OrderService {
         return orderRepository.findByTransactionNoNotNull();
     }
 
+    public long countOrders() {
+        return orderRepository.count();
+    }
     
 }
 

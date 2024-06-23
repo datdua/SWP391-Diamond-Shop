@@ -161,7 +161,7 @@ function DiamondManagerPage() {
                   <tbody>
                     {currentPageData.map((diamond, index) => (
                       <tr key={index}>
-                        <td>{index + 1}</td>
+                        <td>{startIndex + index + 1}</td>
                         <td>{diamond.diamondID}</td>
                         <td>
                           <a

@@ -52,13 +52,15 @@ function PaymentConfirm() {
         })
         .then(data => {
             // Handle the response data here
-            console.log(data);
-            // Redirect to the account page
-            navigate(`/account/${accountId}`);
+            console.log(data);          
         })
         .catch(error => {
             // Handle the error here
             console.error('Error:', error);
+        })
+        .finally(() => {
+            // Redirect to the account page
+            navigate(`/account/${accountId}`);
         });
     }
 }, [apiUrl, navigate, accountId]);

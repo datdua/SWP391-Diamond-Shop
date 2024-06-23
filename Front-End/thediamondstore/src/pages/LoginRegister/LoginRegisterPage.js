@@ -105,7 +105,6 @@ function LoginRegisterPage() {
         const data = response.data;
         console.log("Đăng ký thành công:", data.message);
         toast.success("Đăng ký thành công!");
-        navigate("/trangchu");
       } else {
         console.error("Đăng ký thất bại:", response);
         toast.error("Đăng ký thất bại!");
@@ -129,7 +128,7 @@ function LoginRegisterPage() {
               <h2>Đăng Nhập & Đăng Ký</h2>
               <ul className="add-back">
                 <li>
-                  <NavLink to="/home">Trang chủ</NavLink>
+                <NavLink to="/trangchu">Trang chủ</NavLink>
                 </li>
                 <li>Đăng Nhập & Đăng Ký</li>
               </ul>

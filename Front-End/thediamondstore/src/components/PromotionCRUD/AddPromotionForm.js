@@ -1,46 +1,45 @@
 import React, { useState } from "react";
-import { createGoldPrice } from "../../api/GoldPriceAPI.js";
+import { createPromotion } from "../../api/PromotionAPI.js";
 import { Form, Button } from "react-bootstrap";
 
-function AddGoldPriceForm() {
-  const [goldPrice, setGoldPrice] = useState({
-    jewelryID: "",
-    goldPrice: "",
-    goldAge: "",
+function AddPromotionForm() {
+  const [promotion, setPromotion] = useState({
+    promotionCode: "",
+    startDate: "",
+    startTime: "",
+    endDate: "",
+    endTime: "",
+    discountAmount: "",
+    description: "",
   });
 
   const [message, setMessage] = useState("");
 
   const handleChange = (event) => {
-    setGoldPrice({
-      ...goldPrice,
-      [event.target.name]: event.target.value,
-    });
+    setPromotion({ ...promotion, [event.target.name]: event.target.value });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await createGoldPrice(goldPrice);
+      const dateTimePromotion = {
+        ...promotion,
+        startDate: `${promotion.startDate} ${promotion.startTime}:00`,
+        endDate: `${promotion.endDate} ${promotion.endTime}:00`,
+      };
+      const response = await createPromotion(dateTimePromotion);
       console.log(response);
-      alert("Tạo mới Giá Vàng cho Trang Sức thành công"); // Set the message on success
+      setMessage("Tạo mới Mã Giảm Giá thành công");
     } catch (error) {
       console.error(error);
-      if (
-        error.response &&
-        error.response.data.message === "Giá vàng cho trang sức này đã tồn tại"
-      ) {
-        alert("Giá vàng cho trang sức này đã tồn tại"); // Set the message if gold price already exists
-      } else {
-        alert("Tạo mới Giá Vàng cho Trang Sức thất bại"); // Set the message on failure
-      }
+      setMessage("Tạo mới Mã Giảm Giá thất bại");
     }
   };
 
   return (
     <div>
       <Form onSubmit={handleSubmit}>
-        {Object.keys(goldPrice).map((key) => (
+        {Object.keys(promotion).map((key) => (
           <Form.Group controlId={key} key={key}>
             <Form.Label>{key}</Form.Label>
             <Form.Control
@@ -52,14 +51,14 @@ function AddGoldPriceForm() {
                   : "text"
               }
               name={key}
-              value={goldPrice[key]}
+              value={promotion[key]}
               onChange={handleChange}
               placeholder={key}
             />
           </Form.Group>
         ))}
         <Button variant="primary" type="submit">
-          Create goldPrice
+          Tạo Mã Giảm Giá
         </Button>
       </Form>
       {message && <p>{message}</p>}
@@ -67,4 +66,4 @@ function AddGoldPriceForm() {
   );
 }
 
-export default AddGoldPriceForm;
+export default AddPromotionForm;

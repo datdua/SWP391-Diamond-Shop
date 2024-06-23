@@ -3,7 +3,6 @@ package com.example.diamondstore.service;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -49,12 +48,12 @@ public class GoldPriceService {
     public ResponseEntity<?> addGoldPrice(GoldPriceRequest goldPriceRequest) {
         Jewelry jewelry = jewelryRepository.findById(goldPriceRequest.getJewelryID()).orElse(null);
         if (jewelry == null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy Jewelry với ID này"));
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy trang sức với ID này"));
         }
 
         GoldPrice existingGoldPrice = goldPriceRepository.findByJewelryID(goldPriceRequest.getJewelryID());
         if (existingGoldPrice != null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Giá vàng cho Jewelry này đã tồn tại"));
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Giá vàng cho trang sức này đã tồn tại"));
         }
         GoldPrice goldPrice = new GoldPrice();
         goldPrice.setGoldPrice(goldPriceRequest.getGoldPrice());
@@ -74,6 +73,10 @@ public class GoldPriceService {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy giá vàng"));
         }
 
+        GoldPrice goldPriceWithNewJewelryID = goldPriceRepository.findByJewelryID(goldPriceRequest.getJewelryID());
+        if (goldPriceWithNewJewelryID != null && !goldPriceWithNewJewelryID.getGoldpriceID().equals(goldPriceID)) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Giá vàng này đã tồn tại"));
+        }
         existingGoldPrice.setGoldPrice(goldPriceRequest.getGoldPrice());
         existingGoldPrice.setGoldAge(goldPriceRequest.getGoldAge());
         existingGoldPrice.setJewelryID(goldPriceRequest.getJewelryID());

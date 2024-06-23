@@ -1,14 +1,14 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import { deleteWarranty } from "../../api/WarrantyAPI";
+import { deletePromotion } from "../../api/PromotionAPI";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-function DeleteWarrantyForm({ warrantyID, onDelete }) {
+function DeletePromotionForm({ promotionID, onDelete }) {
   const handleDelete = async () => {
-    if (window.confirm("Bạn có chắc muốn XÓA warranty này ?")) {
+    if (window.confirm("Bạn có chắc muốn XÓA promotion này ?")) {
       try {
-        await deleteWarranty(warrantyID);
-        onDelete(warrantyID);
+        await deletePromotion(promotionID);
+        onDelete(promotionID);
         alert("Xóa thành công");
       } catch (error) {
         alert("Xóa thất bại");
@@ -19,7 +19,8 @@ function DeleteWarrantyForm({ warrantyID, onDelete }) {
   return (
     <Button variant="link" onClick={handleDelete} style={{ color: "red" }}>
       <DeleteIcon />
+      Delete
     </Button>
   );
 }
-export default DeleteWarrantyForm;
+export default DeletePromotionForm;
