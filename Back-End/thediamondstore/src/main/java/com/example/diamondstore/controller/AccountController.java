@@ -101,14 +101,13 @@ public class AccountController {
 
     @DeleteMapping(value = "/delete/{accountID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> delete(@PathVariable Integer accountID) {
-    try {
-        Map<String, String> response = accountService.deleteAccount(accountID);
-        return ResponseEntity.ok(response);
+        try {
+            Map<String, String> response = accountService.deleteAccount(accountID);
+            return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
-        return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
     }
-
 
     @PostMapping("/create")
     public ResponseEntity<Map<String, String>> createAccount(@RequestBody AccountRequest accountRequest) {
@@ -130,7 +129,6 @@ public class AccountController {
         }
     }
 
-    
     @PostMapping(value = "/forget-password", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> forgetPassword(@RequestParam String email) {
         try {
