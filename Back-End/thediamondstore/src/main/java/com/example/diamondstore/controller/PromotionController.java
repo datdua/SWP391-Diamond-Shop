@@ -1,5 +1,6 @@
 package com.example.diamondstore.controller;
 
+import java.util.Collections;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.model.Promotion;
+import com.example.diamondstore.request.PromotionRequest;
 import com.example.diamondstore.request.putRequest.PromotionPutRequest;
 import com.example.diamondstore.service.PromotionService;
 
@@ -62,7 +64,13 @@ public class PromotionController {
     }
 
     @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> createPromotion(@RequestBody Promotion promotion) {
-        return promotionService.createPromotion(promotion);
+    public ResponseEntity<Map<String, String>> createPromotion(@RequestBody PromotionRequest promotionRequest) {
+        return promotionService.createPromotion(promotionRequest);
+    }
+
+    @PostMapping("/update-statuses")
+    public ResponseEntity<Map<String, String>> updatePromotionStatusesAuto() {
+        promotionService.updatePromotionStatusesAuto();
+        return ResponseEntity.ok(Collections.singletonMap("message", "Trạng thái khuyến mãi đã được cập nhật"));
     }
 }

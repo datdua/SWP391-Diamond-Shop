@@ -27,14 +27,18 @@ public class Certificate {
     @Column(name = "certificateImage")
     private String certificateImage;
 
+    @Column(name = "certificateStatus")
+    private String certificateStatus;
+
     public Certificate() {
     }
 
-    public Certificate(String certificateID, String diamondID, LocalDateTime expirationDate, String certificateImage) {
+    public Certificate(String certificateID, String diamondID, LocalDateTime expirationDate, String certificateImage, String certificateStatus) {
         this.certificateID = certificateID;
         this.diamondID = diamondID;
         this.expirationDate = expirationDate;
         this.certificateImage = certificateImage;
+        this.certificateStatus = certificateStatus;
     }
 
     public String getCertificateID() {
@@ -67,5 +71,13 @@ public class Certificate {
 
     public void setcertificateImage(String certificateImage) {
         this.certificateImage = certificateImage;
+    }
+
+    public String getCertificateStatus() {
+        return certificateStatus;
+    }
+
+    public void setCertificateStatus(String certificateStatus) {
+        this.certificateStatus = certificateStatus;
     }
 }

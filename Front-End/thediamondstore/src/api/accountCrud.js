@@ -106,3 +106,38 @@ export const getCustomerPoints = async (accountId) => {
   }
 };
 
+export const resetPassword = async (email) => {
+  try {
+      const response = await axios.post(`http://localhost:8080/api/accounts/forget-password?email=${email}`,
+      );
+      return response.data;
+  } catch (error) {
+      console.error('Error resetting password:', error);
+      throw error; // Throw the error for higher level handling
+  }
+};
+
+
+
+export const setPassword = async (email, newPassword) => {
+  try {
+    const response = await axios.put(`http://localhost:8080/api/accounts/set-password?email=${encodeURIComponent(email)}`, {}, {
+      headers: {
+        'Content-Type': 'application/json',
+        'newPassword': newPassword, // Add newPassword to the headers
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data.message || 'Error setting password');
+    } else if (error.request) {
+      throw new Error('No response from server');
+    } else {
+      throw new Error(error.message);
+    }
+  }
+};
+
+
+

@@ -53,7 +53,6 @@ function ProductPage() {
           price: item.jewelryEntryPrice || item.diamondEntryPrice,
           type: item.jewelryID ? "jewelry" : "diamond",
         }));
-
         setProducts(combinedProducts);
         setTotalPages(
           Math.ceil(
@@ -114,7 +113,7 @@ function ProductPage() {
                       <button data-view="list" aria-label="List View"><i className="ion-android-menu"></i></button>
                     </div>
                     <p className="tm-shop-countview">
-                      Showing {((currentPage - 1) * itemsPerPage * 2) + 1} to {Math.min(currentPage * itemsPerPage * 2, products.length)} of {products.length} products
+                      Showing {((currentPage - 1) * itemsPerPage * 2) + 1} to {((currentPage * 2) * (itemsPerPage))} of {products.length} products
                     </p>
                     <label htmlFor="mySelect">My Select:</label>
                     <select id="mySelect">

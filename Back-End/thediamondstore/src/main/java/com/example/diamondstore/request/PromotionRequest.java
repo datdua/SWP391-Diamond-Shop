@@ -1,12 +1,11 @@
-package com.example.diamondstore.request.putRequest;
+package com.example.diamondstore.request;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class PromotionPutRequest {
-
+public class PromotionRequest {
     private String promotionCode;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
@@ -15,10 +14,12 @@ public class PromotionPutRequest {
     private BigDecimal discountAmount;
     private String description;
 
-    public PromotionPutRequest() {
+    // Add your getters and setters here
+
+    public PromotionRequest() {
     }
 
-    public PromotionPutRequest(String promotionCode, LocalDateTime startDate, LocalDateTime endDate, BigDecimal discountAmount, String description) {
+    public PromotionRequest(String promotionCode, LocalDateTime startDate, LocalDateTime endDate, BigDecimal discountAmount, String description) {
         this.promotionCode = promotionCode;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -65,5 +66,4 @@ public class PromotionPutRequest {
     public void setDescription(String description) {
         this.description = description;
     }
-  
 }
