@@ -1,15 +1,20 @@
 package com.example.diamondstore.service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.example.diamondstore.model.Promotion;
 import com.example.diamondstore.repository.PromotionRepository;
+import com.example.diamondstore.request.PromotionRequest;
 import com.example.diamondstore.request.putRequest.PromotionPutRequest;
 
 @Service
@@ -34,12 +39,19 @@ public class PromotionService {
         return promotionRepository.findByPromotionCode(promotionCode);
     }
 
-    public ResponseEntity<Map<String, String>> createPromotion(Promotion promotion) {
-        Promotion existingPromotion = promotionRepository.findByPromotionID(promotion.getPromotionID());
+    public ResponseEntity<Map<String, String>> createPromotion(PromotionRequest promotionRequest) {
+        Promotion existingPromotion = promotionRepository.findByPromotionCode(promotionRequest.getPromotionCode());
         if (existingPromotion != null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Khuyến mãi đã tồn tại"));
         }
-        promotionRepository.save(promotion);
+        Promotion newPromotion = new Promotion();
+        newPromotion.setPromotionCode(promotionRequest.getPromotionCode());
+        newPromotion.setStartDate(promotionRequest.getStartDate());
+        newPromotion.setEndDate(promotionRequest.getEndDate());
+        newPromotion.setDiscountAmount(promotionRequest.getDiscountAmount());
+        newPromotion.setDescription(promotionRequest.getDescription());
+        updatePromotionStatus(newPromotion); // Cập nhật trạng thái trước khi lưu
+        promotionRepository.save(newPromotion);
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công"));
     }
 
@@ -52,6 +64,8 @@ public class PromotionService {
         existingPromotion.setStartDate(promotionPutRequest.getStartDate());
         existingPromotion.setEndDate(promotionPutRequest.getEndDate());
         existingPromotion.setDiscountAmount(promotionPutRequest.getDiscountAmount());
+        existingPromotion.setDescription(promotionPutRequest.getDescription());
+        updatePromotionStatus(existingPromotion);
         promotionRepository.save(existingPromotion);
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }
@@ -64,4 +78,34 @@ public class PromotionService {
         promotionRepository.delete(promotion);
         return ResponseEntity.ok(Collections.singletonMap("message", "Xóa thành công"));
     }
+
+    @PostConstruct
+    public void updatePromotionStatusesOnStartup() {
+        updatePromotionStatusesAuto();
+    }
+
+    @Scheduled(cron = "0 0 * * * *") // Chạy mỗi giờ
+    public void updatePromotionStatusesAuto() {
+        List<Promotion> promotions = promotionRepository.findAll();
+        LocalDateTime now = LocalDateTime.now();
+
+        for (Promotion promotion : promotions) {
+            if (promotion.getEndDate().isBefore(now)) {
+                promotion.setPromotionStatus("Hết Hạn");
+            } else {
+                promotion.setPromotionStatus("Còn Hạn");
+            }
+            promotionRepository.save(promotion);
+        }
+    }
+
+     private void updatePromotionStatus(Promotion promotion) {
+        LocalDateTime now = LocalDateTime.now();
+        if (promotion.getEndDate().isBefore(now)) {
+            promotion.setPromotionStatus("Hết Hạn");
+        } else {
+            promotion.setPromotionStatus("Còn Hạn");
+        }
+    }
+
 }

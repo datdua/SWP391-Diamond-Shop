@@ -37,7 +37,7 @@ import TransactionManagerPage from "./pages/Manager/TransactionManager/Transacti
 import CertificateManagerPage from "./pages/Manager/CertificateManager/CertificateManagerPage";
 import DiamondPriceManager from "./pages/Manager/PriceProductManager/DiamondPriceManagerPage";
 import WarrantyDiamondManagerPage from "./pages/Manager/WarrantyManager/WarrantyDiamondManagerPage";
-import WarrantyJewelryManagerPage from "./pages/Manager/WarrantyManager/WarrantyDiamondManagerPage";
+import WarrantyJewelryManagerPage from "./pages/Manager/WarrantyManager/WarrantyJewelryManagerPage";
 import PromotionManagerPage from "./pages/Manager/PromotionManager/PromotionManagerPage";
 import { AuthProvider } from "./components/Auth/AuthProvider";
 import ScrollToTop from "./components/ScrollToTop";

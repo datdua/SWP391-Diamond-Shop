@@ -16,7 +16,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import AddGoldPriceForm from "../../../components/GoldPriceCRUD/AddGoldPriceForm.js";
 import UpdateGoldPriceForm from "../../../components/GoldPriceCRUD/UpdateGoldPriceForm.js";
 import DeleteGoldPriceForm from "../../../components/GoldPriceCRUD/DeleteGoldPriceForm.js";
-import { Pagination } from "@mui/material";
+import { Pagination, Tooltip } from "@mui/material";
 import "../ProductManager.css";
 
 function GoldPriceManager() {
@@ -118,13 +118,18 @@ function GoldPriceManager() {
                           </td>
                           <td>{goldPrice.goldAge + "K"}</td>
                           <td>
-                            <Button
-                              variant="link"
-                              onClick={() => handleShowUpdate(goldPrice)}
+                            <Tooltip
+                              describeChild
+                              title="Cập nhật thông tin"
+                              arrow placement="top"
                             >
-                              <EditIcon />
-                              Edit
-                            </Button>
+                              <Button
+                                variant="link"
+                                onClick={() => handleShowUpdate(goldPrice)}
+                              >
+                                <EditIcon />
+                              </Button>
+                            </Tooltip>
                             <DeleteGoldPriceForm
                               goldPriceID={goldPrice.goldPriceID}
                               onDelete={handleDelete}

@@ -11,7 +11,15 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { NavLink, Outlet } from "react-router-dom";
-import { cilSpeedometer, cilPuzzle, cilUser, cilBank } from "@coreui/icons";
+import {
+  cilSpeedometer,
+  cilPuzzle,
+  cilUser,
+  cilBank,
+  cilCart,
+  cilAddressBook,
+  cilStrikethrough,
+} from "@coreui/icons";
 import "../../components/Sidebar/SidebarAdmin.css";
 
 function SideBarAdmin() {
@@ -65,13 +73,7 @@ function SideBarAdmin() {
               </>
             }
           >
-            <CNavGroup
-              toggler={
-                <>
-                  Sản phẩm
-                </>
-              }
-            >
+            <CNavGroup toggler={<>Sản phẩm</>}>
               <CNavGroup
                 toggler={
                   <>
@@ -164,56 +166,21 @@ function SideBarAdmin() {
                   Giá vàng
                 </NavLink>
               </CNavGroup>
-              <NavLink
-                to="/admin/price/diamond-price-manager"
-                className="sidebar-nav-item"
-                activeClassName="active"
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>{" "}
-                Giá kim cương
-              </NavLink>
-              <NavLink
-                to="/admin/price/gold-price-manager"
-                className="sidebar-nav-item"
-                activeClassName="active"
-              >
-                <span className="nav-icon">
-                  <span className="nav-icon-bullet"></span>
-                </span>{" "}
-                Giá vàng
-              </NavLink>
             </CNavGroup>
             <NavLink
               to="/admin/account-manager"
               className="sidebar-nav-item"
               activeClassName="active"
             >
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>{" "}
+              <CIcon customClassName="nav-icon" icon={cilAddressBook} />
               Tài khoản
-            </NavLink>
-
-            <NavLink
-              to="/admin/warranty-manager"
-              className="sidebar-nav-item"
-              activeClassName="active"
-            >
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>{" "}
-              Giấy bảo hành
             </NavLink>
             <NavLink
               to="/admin/promotion-manager"
               className="sidebar-nav-item"
               activeClassName="active"
             >
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>{" "}
+              <CIcon customClassName="nav-icon" icon={cilStrikethrough} />
               Mã Giảm Giá
             </NavLink>
             <NavLink
@@ -221,9 +188,7 @@ function SideBarAdmin() {
               className="sidebar-nav-item"
               activeClassName="active"
             >
-              <span className="nav-icon">
-                <span className="nav-icon-bullet"></span>
-              </span>{" "}
+              <CIcon className="nav-icon" icon={cilCart} />
               Đơn hàng
             </NavLink>
           </CNavGroup>

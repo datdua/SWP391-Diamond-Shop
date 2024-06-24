@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
@@ -153,32 +154,37 @@ public class AccountService implements UserDetailsService {
     }
 
     public void createAccount(AccountRequest accountRequest) {
-        // Validate account request
-        validateAccountRequest(accountRequest);
+    // Validate account request
+    validateAccountRequest(accountRequest);
 
-        String accountName = accountRequest.getAccountName();
-        String password = accountRequest.getPassword();
-        String role = accountRequest.getRole();
-        String phoneNumber = accountRequest.getPhoneNumber();
-        String email = accountRequest.getEmail();
+    String accountName = accountRequest.getAccountName();
+    String password = accountRequest.getPassword();
+    String role = accountRequest.getRole();
+    String phoneNumber = accountRequest.getPhoneNumber();
+    String email = accountRequest.getEmail();
 
-        // Check if account already exists
-        Optional<Account> existingAccount = accountRepository.findByEmail(email);
-        if (existingAccount.isPresent()) {
-            throw new RuntimeException("Tài khoản đã tồn tại");
-        }
-
-        // Create a new account entity
-        Account account = new Account();
-        account.setAccountName(accountName);
-        account.setPassword(password);
-        account.setRole(role);
-        account.setPhoneNumber(phoneNumber);
-        account.setEmail(email);
-
-        // Save the account to the database
-        accountRepository.save(account);
+    // Check if account already exists
+    Optional<Account> existingAccount = accountRepository.findByEmail(email);
+    if (existingAccount.isPresent()) {
+        throw new RuntimeException("Tài khoản đã tồn tại");
     }
+
+    // Create a new account entity
+    Account account = new Account();
+    account.setAccountName(accountName);
+
+    // Encrypt the password using BCrypt
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    String encodedPassword = passwordEncoder.encode(password);
+    account.setPassword(encodedPassword);
+
+    account.setRole(role);
+    account.setPhoneNumber(phoneNumber);
+    account.setEmail(email);
+
+    // Save the account to the database
+    accountRepository.save(account);
+}
 
     private void validateAccountRequest(AccountRequest accountRequest) {
         String accountName = accountRequest.getAccountName();
@@ -229,6 +235,8 @@ public class AccountService implements UserDetailsService {
         return Collections.singletonMap("message", "Xóa tài khoản thành công");
     }
     
+    
+
     public Account updateAccount(Integer accountID, AccountRequest accountRequest) {
     Account existingAccount = accountRepository.findById(accountID).orElse(null);
     if (existingAccount == null) {
@@ -240,9 +248,11 @@ public class AccountService implements UserDetailsService {
     existingAccount.setEmail(accountRequest.getEmail());
     existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
     existingAccount.setRole(accountRequest.getRole());
+    existingAccount.setAddressAccount(accountRequest.getAddressAccount());
 
-    // Update password if provided and different from the current one
-    if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty()) {
+    // Only update the password if a new password is provided
+    if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty() &&
+        !accountRequest.getPassword().equals(existingAccount.getPassword())) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(accountRequest.getPassword());
         existingAccount.setPassword(encodedPassword);
@@ -250,4 +260,5 @@ public class AccountService implements UserDetailsService {
 
     return accountRepository.save(existingAccount);
 }
+
 }

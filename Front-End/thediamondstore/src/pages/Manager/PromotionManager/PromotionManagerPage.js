@@ -16,7 +16,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddPromotionForm from "../../../components/PromotionCRUD/AddPromotionForm";
 import UpdatePromotionForm from "../../../components/PromotionCRUD/UpdatePromotionForm";
 import DeletePromotionForm from "../../../components/PromotionCRUD/DeletePromotionForm";
-import { Pagination } from "@mui/material";
+import { Pagination, Tooltip } from "@mui/material";
 import "../ProductManager.css";
 
 function PromotionManagerPage() {
@@ -103,6 +103,7 @@ function PromotionManagerPage() {
                       <th>Start Date</th>
                       <th>End Date</th>
                       <th>Discount Amount</th>
+                      <th>Status</th>
                       <th>Description</th>
                       <th>Action</th>
                     </tr>
@@ -116,14 +117,21 @@ function PromotionManagerPage() {
                         <td>{promotion.startDate}</td>
                         <td>{promotion.endDate}</td>
                         <td>{promotion.discountAmount}</td>
+                        <td>{promotion.promotionStatus}</td>
                         <td>{promotion.description}</td>
                         <td>
-                          <Button
-                            variant="link"
-                            onClick={() => handleShowUpdate(promotion)}
+                          <Tooltip
+                            describeChild
+                            title="Cập nhật thông tin"
+                            arrow placement="top"
                           >
-                            <EditIcon />
-                          </Button>
+                            <Button
+                              variant="link"
+                              onClick={() => handleShowUpdate(promotion)}
+                            >
+                              <EditIcon />
+                            </Button>
+                          </Tooltip>
                           <DeletePromotionForm
                             promotionID={promotion.promotionID}
                             onDelete={() => handleDelete(promotion.promotionID)}
