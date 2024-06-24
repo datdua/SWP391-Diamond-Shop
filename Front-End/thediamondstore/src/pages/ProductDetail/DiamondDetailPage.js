@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getDiamondById } from "../../api/DiamondAPI";
 import { getAccountIDByEmail } from "../../api/accountCrud";
+import Button from "react-bootstrap/esm/Button";
 
 function DiamondDetailPage() {
     const navigate = useNavigate();
@@ -69,7 +70,7 @@ function DiamondDetailPage() {
     return (
         <div>
             <div id="wrapper" className="wrapper">
-            <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/the-diamond-store-423602.appspot.com/o/img-banner%2Fimg-banner-nhan1.png?alt=media&token=8056b83a-6c63-446a-9505-7cc15364c8f7)` }}>
+                <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/the-diamond-store-423602.appspot.com/o/img-banner%2Fimg-banner-nhan1.png?alt=media&token=8056b83a-6c63-446a-9505-7cc15364c8f7)` }}>
                     <div className="container">
                         <div className="tm-breadcrumb">
                             <h2>Product Details</h2>
@@ -99,7 +100,7 @@ function DiamondDetailPage() {
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-6 col-md-6 col-12">
-                                                    <div className="tm-prodetails-content" >
+                                                    <div className="tm-prodetails-contents" >
                                                         <h4 className="tm-prodetails-title">{diamond.diamondName}</h4>
                                                         <span className="tm-prodetails-price">{diamond.diamondEntryPrice.toLocaleString()} VND</span>
                                                         <div className="tm-prodetails-infos">
@@ -118,31 +119,28 @@ function DiamondDetailPage() {
                                                             <div className="tm-prodetails-singleinfo">
                                                                 <b>Clarity : </b>
                                                                 {diamond.clarity}
-                                                            <div/>
-                                                            <div className="tm-prodetails-singleinfo">
-                                                                    <b>Cut : </b>
-                                                                    {diamond.cut}
                                                             </div>
                                                             <div className="tm-prodetails-singleinfo">
-                                                                    <b>Shape : </b>
-                                                                    {diamond.shape}
+                                                                <b>Cut : </b>
+                                                                {diamond.cut}
                                                             </div>
                                                             <div className="tm-prodetails-singleinfo">
-                                                                    <b>Origin : </b>
-                                                            {diamond.origin}
+                                                                <b>Shape : </b>
+                                                                {diamond.shape}
                                                             </div>
+                                                            <div className="tm-prodetails-singleinfo">
+                                                                <b>Origin : </b>
+                                                                {diamond.origin}
                                                             </div>
-                                                            <div className="tm-prodetails-quantitycart">
-                                                                <h6>Quantity :</h6>
-                                                                
-                                                                    <input type="text" value={quantity} readOnly style={{maxWidth:"50px"}} />
-                                                                    <div className="quantity-buttons">
-                                                                        <button className="increase-button" onClick={increaseQuantity}>+</button>
-                                                                        <button className="decrease-button" onClick={decreaseQuantity}>-</button>
-                                                                    </div>
-                                                                
-                                                                <button onClick={() => handleAddToCart(diamond)} href="/cart">Add to cart</button>
-                                                            </div>
+                                                        </div>
+                                                        <div className="tm-prodetails-quantitycart">
+                                                            <h6>Quantity :</h6>                                                        
+                                                               <div className="input-group">
+                                                               <button className="decrease-button" onClick={decreaseQuantity}>-</button>               
+                                                                <input type="text" value={quantity} readOnly style={{ maxWidth: "50px", textAlign: "center" }} />
+                                                                <button className="increase-button" onClick={increaseQuantity}>+</button>
+                                                                <Button onClick={() => handleAddToCart(diamond)} href="/cart" style={{ background:"#f2ba59", borderRadius:"5px", textAlign:"center" }}>Add to cart</Button>
+                                                                </div>             
                                                         </div>
                                                     </div>
                                                 </div>
@@ -153,9 +151,9 @@ function DiamondDetailPage() {
                             </div>
                         </div>
                     )}
-                </main>
-            </div>
-        </div>
+        </main>
+            </div >
+        </div >
     );
 }
 

@@ -7,15 +7,9 @@ export const getAuthToken = () => {
 
 export async function getAllProduct() {
     try {
-        const token = getAuthToken();
-        console.log('Token:', token); // Logging token for debugging
+// Logging token for debugging
         const response = await axios.get(
           "http://localhost:8080/api/production/all",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // Example of using Bearer token authentication
-            },
-          }
         );
         console.log('Response:', response); // Logging entire response object for inspection
 
