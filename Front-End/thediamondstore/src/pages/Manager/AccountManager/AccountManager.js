@@ -162,6 +162,7 @@ function AccountManager() {
                     <tr>
                       <th>
                         <FormControlLabel
+                          className="checkbox-align" // Thêm class để áp dụng CSS
                           control={
                             <Checkbox
                               color="primary"
@@ -170,7 +171,6 @@ function AccountManager() {
                               onChange={handleSelectAllChange}
                             />
                           }
-                          label="Select All"
                         />
                       </th>
                       <th>Account ID</th>
