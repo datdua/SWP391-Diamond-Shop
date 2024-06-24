@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -11,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.diamondstore.model.Warranty;
 import com.example.diamondstore.repository.WarrantyRepository;
@@ -94,13 +97,19 @@ public class WarrantyService {
         return ResponseEntity.ok(Collections.singletonMap("message", "Giấy bảo hành đã được cập nhật thành công"));
     }
 
-    public ResponseEntity<Map<String, String>> deleteWarranty(String warrantyID) {
-        Warranty existingWarranty = warrantyRepository.findByWarrantyID(warrantyID);
-        if (existingWarranty == null) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Map<String, String>> deleteWarranty(@RequestBody List<String> warrantyIDs) {
+        // Filter out non-existing diamonds
+        List<String> existingWarrantyIDs = warrantyIDs.stream()
+                .filter(warrantyID -> warrantyRepository.existsById(warrantyID))
+                .collect(Collectors.toList());
+
+        // Delete diamonds
+        if (!existingWarrantyIDs.isEmpty()) {
+            warrantyRepository.deleteAllById(existingWarrantyIDs);
+            return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các giá vàng thành công"));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy giá vàng để xóa"));
         }
-        warrantyRepository.delete(existingWarranty);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Giấy bảo hành đã được xóa thành công"));
     }
 
     public ResponseEntity<Map<String, String>> getWarrantyImg(String warrantyID) {

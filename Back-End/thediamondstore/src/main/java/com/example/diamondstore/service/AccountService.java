@@ -6,11 +6,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.Customer;
@@ -228,13 +230,21 @@ public class AccountService implements UserDetailsService {
         return Collections.singletonMap("message", "Mật khẩu đã được thiết lập. Vui lòng đăng nhập.");
     }
 
-    public Map<String, String> deleteAccount(Integer accountID) {
-        Account account = accountRepository.findById(accountID)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy tài khoản"));
-        accountRepository.delete(account);
-        return Collections.singletonMap("message", "Xóa tài khoản thành công");
+
+    public ResponseEntity<Map<String, String>> deleteAccounts(@RequestBody List<Integer> accountIDs) {
+        // Filter out non-existing accounts
+        List<Integer> existingAccountIDs = accountIDs.stream()
+                .filter(accountID -> accountRepository.existsById(accountID))
+                .collect(Collectors.toList());
+
+        // Delete accounts
+        if (!existingAccountIDs.isEmpty()) {
+            accountRepository.deleteAllById(existingAccountIDs);
+            return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy tài khoản để xóa"));
+        }
     }
-    
     
 
     public Account updateAccount(Integer accountID, AccountRequest accountRequest) {

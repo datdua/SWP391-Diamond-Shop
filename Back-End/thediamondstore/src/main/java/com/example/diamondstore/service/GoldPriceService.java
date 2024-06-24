@@ -3,10 +3,14 @@ package com.example.diamondstore.service;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.diamondstore.model.GoldPrice;
 import com.example.diamondstore.model.Jewelry;
@@ -36,13 +40,19 @@ public class GoldPriceService {
         return goldPriceRepository.findById(goldPriceID).orElse(null);
     }
 
-    public ResponseEntity<?> deleteGoldPrice(Integer goldPriceID) {
-        GoldPrice existingGoldPrice = goldPriceRepository.findById(goldPriceID).orElse(null);
-        if (existingGoldPrice == null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy giá vàng"));
+    public ResponseEntity<Map<String, String>> deleteGoldPrices(@RequestBody List<Integer> goldPriceIDs) {
+        // Filter out non-existing diamonds
+        List<Integer> existingGoldPriceIDs = goldPriceIDs.stream()
+                .filter(goldPriceID -> goldPriceRepository.existsById(goldPriceID))
+                .collect(Collectors.toList());
+
+        // Delete diamonds
+        if (!existingGoldPriceIDs.isEmpty()) {
+            goldPriceRepository.deleteAllById(existingGoldPriceIDs);
+            return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các giá vàng thành công"));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy giá vàng để xóa"));
         }
-        goldPriceRepository.deleteById(goldPriceID);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa thành công"));
     }
 
     public ResponseEntity<?> addGoldPrice(GoldPriceRequest goldPriceRequest) {

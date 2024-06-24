@@ -4,14 +4,17 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.diamondstore.model.Diamond;
 import com.example.diamondstore.repository.DiamondRepository;
@@ -82,17 +85,19 @@ public class DiamondService {
 }
 
 
-    public Map<String, String> deleteDiamond(String diamondID) {
-        Diamond existingDiamond = diamondRepository.findByDiamondID(diamondID);
-        if (existingDiamond == null) {
-            return Collections.singletonMap("message", "Không tìm thấy kim cương");
-        }
-        diamondRepository.delete(existingDiamond);
-        return Collections.singletonMap("message", "Kim cương đã xóa thành công");
-    }
+    public ResponseEntity<Map<String, String>> deleteDiamonds(@RequestBody List<String> diamondIDs) {
+        // Filter out non-existing diamonds
+        List<String> existingDiamondIDs = diamondIDs.stream()
+                .filter(diamondID -> diamondRepository.existsById(diamondID))
+                .collect(Collectors.toList());
 
-    public List<Diamond> searchDiamondsByColor(String color) {
-        return diamondRepository.findByColor(color);
+        // Delete diamonds
+        if (!existingDiamondIDs.isEmpty()) {
+            diamondRepository.deleteAllById(existingDiamondIDs);
+            return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các chứng chỉ thành công"));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy chứng chỉ để xóa"));
+        }
     }
 
     public Page<Diamond> getAllDiamondsPaged(int page, int size) {

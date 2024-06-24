@@ -1,6 +1,7 @@
 package com.example.diamondstore.controller;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,9 +59,14 @@ public class PromotionController {
         return promotionService.updatePromotion(promotionID, promotionPutRequest);
     }
 
-    @DeleteMapping("/delete/{promotionID}")
-    public ResponseEntity<Map<String, String>> deletePromotion(@PathVariable Integer promotionID) {
-        return promotionService.deletePromotion(promotionID);
+    @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> deletePromotions(@RequestBody List<Integer> promotionIDs) {
+    try {
+        promotionService.deletePromotions(promotionIDs);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
+    } catch (RuntimeException e) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+    }
     }
 
     @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")

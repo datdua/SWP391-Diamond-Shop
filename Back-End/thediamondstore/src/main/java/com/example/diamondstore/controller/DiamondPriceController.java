@@ -1,5 +1,6 @@
 package com.example.diamondstore.controller;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.model.DiamondPrice;
 import com.example.diamondstore.request.DiamondPriceRequest;
-import com.example.diamondstore.request.putRequest.DiamondPricePutRequest;
 import com.example.diamondstore.service.DiamondPriceService;
 
 @RestController
@@ -45,9 +45,14 @@ public class DiamondPriceController {
         return diamondPriceService.updateDiamondPrice(diamondpriceID, diamondPriceRequest);
     }
 
-    @DeleteMapping("/{diamondpriceID}")
-    public ResponseEntity<?> deleteDiamondPrice(@PathVariable Integer diamondpriceID) {
-        return diamondPriceService.deleteDiamondPrice(diamondpriceID);
+    @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> deleteDiamondPrices(@RequestBody List<Integer> diamondPriceIDs) {
+    try {
+        diamondPriceService.deleteDiamondPrices(diamondPriceIDs);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
+    } catch (RuntimeException e) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+    }
     }
 
     @GetMapping("/{diamondpriceID}")

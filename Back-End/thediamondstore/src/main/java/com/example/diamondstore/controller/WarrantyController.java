@@ -61,9 +61,14 @@ public class WarrantyController {
         return warrantyService.updateWarranty(warrantyID, warrantyPutRequest);
     }
 
-    @DeleteMapping(value = "/delete/{warrantyID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> deleteWarranty(@PathVariable String warrantyID) {
-        return warrantyService.deleteWarranty(warrantyID);
+    @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> deleteWarrantys(@RequestBody List<String> warrantyIDs) {
+    try {
+        warrantyService.deleteWarranty(warrantyIDs);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
+    } catch (RuntimeException e) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+    }
     }
 
     @GetMapping(value = "/get/warrantyImg/{warrantyID}", produces = "application/json;charset=UTF-8")
