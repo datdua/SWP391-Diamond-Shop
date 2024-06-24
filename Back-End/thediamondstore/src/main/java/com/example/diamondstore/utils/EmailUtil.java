@@ -1,5 +1,11 @@
 package com.example.diamondstore.utils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
@@ -13,29 +19,84 @@ public class EmailUtil {
     @Autowired
     private JavaMailSender javaMailSender;
     
-    public void sendOtpEmail(String email, String otp) throws MessagingException {
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
-        mimeMessageHelper.setTo(email);
-        mimeMessageHelper.setSubject("Verify OTP");
-        String emailContent = "<div>" +
-        "<a href=\"http://localhost:3000/xacthucemail?email=" + email + "&otp=" + otp + "\">Click here to verify OTP</a>" +
-        "</div>";
-        mimeMessageHelper.setText(emailContent, true);
+    public String loadEmailTemplate_SetPassword() throws IOException {
+        // Use ClassLoader to load the resource
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream("template/SetPassword.html");
 
+        if (inputStream == null) {
+            throw new IOException("File not found: template/SetPassword.html");
+        }
+
+        // Read the file content
+        StringBuilder content = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+        }
+
+        return content.toString();
+    }
+
+    public String loadEmailTemplate_OtpEmail() throws IOException {
+        // Use ClassLoader to load the resource
+        ClassLoader classLoader = getClass().getClassLoader();
+        InputStream inputStream = classLoader.getResourceAsStream("template/OtpEmail.html");
+
+        if (inputStream == null) {
+            throw new IOException("File not found: template/OtpEmail.html");
+        }
+
+        // Read the file content
+        StringBuilder content = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+        }
+
+        return content.toString();
+    }
+    
+    public void sendOtpEmail(String email, String otp) throws MessagingException { 
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+        mimeMessageHelper.setTo(email);
+        mimeMessageHelper.setSubject("Xác Thực OTP The Diamond Store");
+        
+        String emailContent;
+        try {
+            emailContent = loadEmailTemplate_OtpEmail();
+            emailContent = emailContent.replace("{{otp}}", otp);
+            emailContent = emailContent.replace("{{email}}", email);
+        } catch (IOException e) {
+            // Handle the IOException (e.g., log it, throw a new exception, or set a default email content)
+            emailContent = "Default email content if template cannot be read"; // Example of setting a default content
+        }
+        
+        mimeMessageHelper.setText(emailContent, true);
         javaMailSender.send(mimeMessage);
     }
 
     public void sendSetPasswordEmail(String email) throws MessagingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
         mimeMessageHelper.setTo(email);
-        mimeMessageHelper.setSubject("Set Password");
-        String emailContent = "<div>" +
-        "<a href=\"http://localhost:3000/datlaimatkhau?email=" + email  + "\">Click here to set password</a>" +
-        "</div>";
+        mimeMessageHelper.setSubject("Yêu Cầu Đặt Lại Mật Khẩu The Diamond Store");
+        
+        String emailContent;
+        try {
+            emailContent = loadEmailTemplate_SetPassword();
+            emailContent = emailContent.replace("{{email}}", email);
+        } catch (IOException e) {
+            // Handle the IOException (e.g., log it, throw a new exception, or set a default email content)
+            emailContent = "Default email content if template cannot be read"; // Example of setting a default content
+        }
+        
         mimeMessageHelper.setText(emailContent, true);
-
         javaMailSender.send(mimeMessage);
     }
 }
