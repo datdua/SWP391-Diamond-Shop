@@ -107,8 +107,8 @@ public class AccountController {
     } catch (RuntimeException e) {
         return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
     }
-    }
 
+    }
 
     @PostMapping("/create")
     public ResponseEntity<Map<String, String>> createAccount(@RequestBody AccountRequest accountRequest) {
@@ -130,7 +130,6 @@ public class AccountController {
         }
     }
 
-    
     @PostMapping(value = "/forget-password", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> forgetPassword(@RequestParam String email) {
         try {

@@ -59,15 +59,15 @@ public class AccountService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<Account> accountOptional = accountRepository.findByEmail(email);
-        Account account = accountOptional.orElseThrow(() -> 
-            new UsernameNotFoundException("Không tìm thấy tài khoản với email: " + email)
+        Account account = accountOptional.orElseThrow(()
+                -> new UsernameNotFoundException("Không tìm thấy tài khoản với email: " + email)
         );
-        
+
         List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(account.getRole()));
         return new org.springframework.security.core.userdetails.User(
-            account.getEmail(), 
-            account.getPassword(), 
-            authorities
+                account.getEmail(),
+                account.getPassword(),
+                authorities
         );
     }
 
@@ -86,7 +86,7 @@ public class AccountService implements UserDetailsService {
         }
 
         Optional<Account> existingAccount = accountRepository.findByEmail(email);
-        if(existingAccount.isPresent()) {
+        if (existingAccount.isPresent()) {
             throw new RuntimeException("Tài khoản đã tồn tại");
         }
 
@@ -112,8 +112,8 @@ public class AccountService implements UserDetailsService {
     }
 
     public Map<String, String> verifyAccount(String email, String otp) {
-        Account account =  accountRepository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("Email không tồn tại" + email));
+        Account account = accountRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Email không tồn tại" + email));
         LocalDateTime otpGeneratedTime = account.getOtpGeneratedTime();
         LocalDateTime now = LocalDateTime.now();
         // Calculate the duration in seconds
@@ -123,7 +123,7 @@ public class AccountService implements UserDetailsService {
         String otpAccount = account.getOtp().trim();
 
         // Check if the OTP is valid
-        if (otpAccount .equals(otp) && otpAgeInSeconds < 600) {
+        if (otpAccount.equals(otp) && otpAgeInSeconds < 600) {
             // OTP is valid and within the allowed time frame
             account.setActive(true);
             accountRepository.save(account);
@@ -135,8 +135,8 @@ public class AccountService implements UserDetailsService {
     }
 
     public Map<String, String> regenerateOtp(String email) {
-        Account account =  accountRepository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("Email không tồn tại" + email));
+        Account account = accountRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Email không tồn tại" + email));
         String otp = otpUtil.generateOtp();
         try {
             emailUtil.sendOtpEmail(email, otp);
@@ -213,7 +213,7 @@ public class AccountService implements UserDetailsService {
 
     public Map<String, String> forgetPassword(String email) {
         Account account = accountRepository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("Email không tồn tại" + email));
+                .orElseThrow(() -> new RuntimeException("Email không tồn tại" + email));
         try {
             emailUtil.sendSetPasswordEmail(email);
         } catch (MessagingException e) {
@@ -224,12 +224,11 @@ public class AccountService implements UserDetailsService {
 
     public Map<String, String> setPassword(String email, String newPassword) {
         Account account = accountRepository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("Email không tồn tại" + email));
+                .orElseThrow(() -> new RuntimeException("Email không tồn tại" + email));
         account.setPassword(newPassword);
         accountRepository.save(account);
         return Collections.singletonMap("message", "Mật khẩu đã được thiết lập. Vui lòng đăng nhập.");
     }
-
 
     public ResponseEntity<Map<String, String>> deleteAccounts(@RequestBody List<Integer> accountIDs) {
         // Filter out non-existing accounts
@@ -245,30 +244,28 @@ public class AccountService implements UserDetailsService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy tài khoản để xóa"));
         }
     }
-    
 
     public Account updateAccount(Integer accountID, AccountRequest accountRequest) {
-    Account existingAccount = accountRepository.findById(accountID).orElse(null);
-    if (existingAccount == null) {
-        throw new RuntimeException("Không tìm thấy tài khoản");
+        Account existingAccount = accountRepository.findById(accountID).orElse(null);
+        if (existingAccount == null) {
+            throw new RuntimeException("Không tìm thấy tài khoản");
+        }
+    
+        // Update account fields from request
+        existingAccount.setAccountName(accountRequest.getAccountName());
+        existingAccount.setEmail(accountRequest.getEmail());
+        existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
+        existingAccount.setRole(accountRequest.getRole());
+        existingAccount.setAddressAccount(accountRequest.getAddressAccount());
+    
+        // Only update the password if a new password is provided
+        if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty() &&
+            !accountRequest.getPassword().equals(existingAccount.getPassword())) {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String encodedPassword = passwordEncoder.encode(accountRequest.getPassword());
+            existingAccount.setPassword(encodedPassword);
+        }
+    
+        return accountRepository.save(existingAccount);
     }
-
-    // Update account fields from request
-    existingAccount.setAccountName(accountRequest.getAccountName());
-    existingAccount.setEmail(accountRequest.getEmail());
-    existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
-    existingAccount.setRole(accountRequest.getRole());
-    existingAccount.setAddressAccount(accountRequest.getAddressAccount());
-
-    // Only update the password if a new password is provided
-    if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty() &&
-        !accountRequest.getPassword().equals(existingAccount.getPassword())) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(accountRequest.getPassword());
-        existingAccount.setPassword(encodedPassword);
-    }
-
-    return accountRepository.save(existingAccount);
-}
-
 }
