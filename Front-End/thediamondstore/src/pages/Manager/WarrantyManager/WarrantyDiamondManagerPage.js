@@ -17,7 +17,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddWarrantyForm from "../../../components/WarrantyCRUD/AddWarrantyForm";
-import UpdateWarrantyForm from "../../../components/WarrantyCRUD/UpdateWarrantyForm";
+import UpdateWarrantyDiamondForm from "../../../components/WarrantyCRUD/UpdateWarrantyDiamondForm";
 import DeleteWarrantyForm from "../../../components/WarrantyCRUD/DeleteWarrantyForm";
 import { Pagination } from "@mui/material";
 import "../ProductManager.css";
@@ -27,6 +27,8 @@ function WarrantyManagerPage() {
   const [showModal, setShowModal] = useState(false);
   const [selectedWarranty, setSelectedWarranty] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const size = 8;
 
@@ -61,6 +63,16 @@ function WarrantyManagerPage() {
     });
   };
 
+  const handleShowImage = (imageSrc) => {
+    setSelectedImage(imageSrc);
+    setShowImageModal(true);
+  };
+
+  const handleCloseImageModal = () => {
+    setShowImageModal(false);
+    setSelectedImage("");
+  };
+  
   useEffect(() => {
     getWarrantyJewelryIDIsNull()
       .then((data) => {
@@ -105,6 +117,7 @@ function WarrantyManagerPage() {
                       <th>Diamond ID</th>
                       <th>Expiration Date</th>
                       <th>Warranty Image</th>
+                      <th>Status</th>
                       <th>Action</th>
                     </tr>
                   </thead>
@@ -119,9 +132,17 @@ function WarrantyManagerPage() {
                           <img
                             src={warranty.warrantyImage}
                             alt="Warranty"
-                            style={{ width: "50px", height: "50px" }}
+                            style={{
+                              width: "50px",
+                              height: "50px",
+                              cursor: "pointer",
+                            }}
+                            onClick={() =>
+                              handleShowImage(warranty.warrantyImage)
+                            }
                           />
                         </td>
+                        <td>{warranty.warrantyStatus}</td>
                         <td>
                           <Button
                             variant="link"
@@ -161,13 +182,26 @@ function WarrantyManagerPage() {
         </Modal.Header>
         <Modal.Body>
           {isUpdating ? (
-            <UpdateWarrantyForm
+            <UpdateWarrantyDiamondForm
               warranty={selectedWarranty}
               onClose={handleClose}
             />
           ) : (
             <AddWarrantyForm onClose={handleClose} />
           )}
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={showImageModal} onHide={handleCloseImageModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Warranty Image</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="text-center">
+          <img
+            src={selectedImage}
+            alt="Warranty"
+            style={{ width: "100%", height: "500px" }}
+          />
         </Modal.Body>
       </Modal>
     </Container>

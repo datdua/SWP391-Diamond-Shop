@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SizeInstructionModal from "../../components/SizeInstructionModal/SizeInstructionModal";
 import { getAccountIDByEmail } from "../../api/accountCrud";
+import Button from "react-bootstrap/esm/Button";
+
 
 
 function JewelryDetailPage() {
@@ -188,30 +190,32 @@ function JewelryDetailPage() {
                               </div>
                             </div>
                             <p>{jewelry.description}</p>
-                            <div className="tm-prodetails-quantitycart" >
-                              <h6>Quantity :</h6>
+                            <div className="tm-prodetails-quantitycart">                        
                               <div className="input-group">
+                              <h6>Quantity :</h6>
                                 <button
                                   className="decrease-button"
                                   onClick={decreaseQuantity}
+                                  style={{fontWeight:"bold"}}
                                 >
                                   -
                                 </button>
-                                <input type="text" value={quantity} readOnly style={{ maxWidth: "80px", textAlign: "center" }} />
+                                <input type="text" value={quantity} readOnly style={{ maxWidth: "50px", textAlign: "center" }}/>
                                 <button
                                   className="increase-button"
                                   onClick={increaseQuantity}
+                                  style={{fontWeight:"bold"}}
                                 >
                                   +
                                 </button>
-                              </div>
-                              <button
+                                <Button
                                 onClick={() => handleAddToCart(jewelry)}
                                 href="/cart"
-                                style={{ marginLeft: "10px" }}
+                                style={{ background:"#f2ba59", borderRadius:"5px", textAlign:"center" }}
                               >
                                 Add to cart
-                              </button>
+                              </Button>
+                              </div>
                             </div>
                           </div>
                         </div>

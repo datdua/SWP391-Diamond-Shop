@@ -24,6 +24,8 @@ function JewelryManagerPage() {
   const [jewelryData, setJewelryData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedJewelry, setSelectedJewelry] = useState(null);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const size = 8;
@@ -52,6 +54,16 @@ function JewelryManagerPage() {
     setIsUpdating(true);
     setShowModal(true);
   };
+
+    const handleShowImage = (imageSrc) => {
+      setSelectedImage(imageSrc);
+      setShowImageModal(true);
+    };
+
+    const handleCloseImageModal = () => {
+      setShowImageModal(false);
+      setSelectedImage("");
+    };
 
   const handleDelete = (jewelryID) => {
     setJewelryData(
@@ -121,7 +133,14 @@ function JewelryManagerPage() {
                           <img
                             src={jewelry.jewelryImage}
                             alt={jewelry.jewelryName}
-                            style={{ width: "50px", height: "50px" }}
+                            style={{
+                              width: "50px",
+                              height: "50px",
+                              cursor: "pointer",
+                            }}
+                            onClick={() =>
+                              handleShowImage(jewelry.jewelryImage)
+                            }
                           />{" "}
                         </td>
                         <td>
@@ -182,6 +201,19 @@ function JewelryManagerPage() {
           ) : (
             <AddJewelryForm onClose={handleClose} />
           )}
+        </Modal.Body>
+      </Modal>
+
+      <Modal show={showImageModal} onHide={handleCloseImageModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Jewelry Image</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="text-center">
+          <img
+            src={selectedImage}
+            alt="Jewelry"
+            style={{ width: "100%", height: "500px" }}
+          />
         </Modal.Body>
       </Modal>
     </Container>

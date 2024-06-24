@@ -1,7 +1,11 @@
 package com.example.diamondstore.service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+
+import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.example.diamondstore.model.Certificate;
@@ -29,6 +34,35 @@ public class CertificateService {
         return certificateRepository.findAll();
     }
 
+    @PostConstruct
+    public void updateCertificateStatusesOnStartup() {
+        updateCertificateStatusesAuto();
+    }
+
+    @Scheduled(cron = "0 0 * * * *") // Chạy mỗi giờ
+    public void updateCertificateStatusesAuto() {
+        List<Certificate> certificates = certificateRepository.findAll();
+        LocalDateTime now = LocalDateTime.now();
+
+        for (Certificate certificate : certificates) {
+            if (certificate.getExpirationDate().isBefore(now)) {
+                certificate.setCertificateStatus("Hết Hạn");
+            } else {
+                certificate.setCertificateStatus("Còn Hạn");
+            }
+            certificateRepository.save(certificate);
+        }
+    }
+
+     private void updateCertificateStatus(Certificate certificate) {
+        LocalDateTime now = LocalDateTime.now();
+        if (certificate.getExpirationDate().isBefore(now)) {
+            certificate.setCertificateStatus("Hết Hạn");
+        } else {
+            certificate.setCertificateStatus("Còn Hạn");
+        }
+    }
+
     public ResponseEntity<?> getCertificateById(String certificateID) {
         Certificate certificate = certificateRepository.findByCertificateID(certificateID);
         if (certificate == null) {
@@ -47,6 +81,7 @@ public class CertificateService {
         if (existingCertificate != null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Chứng chỉ đã tồn tại"));
         }
+        updateCertificateStatus(certificate); // Cập nhật trạng thái trước khi lưu
         certificateRepository.save(certificate);
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công"));
     }
@@ -59,6 +94,7 @@ public class CertificateService {
         existingCertificate.setDiamondID(certificatePutRequest.getDiamondID());
         existingCertificate.setExpirationDate(certificatePutRequest.getExpirationDate());
         existingCertificate.setcertificateImage(certificatePutRequest.getCertificateImage());
+        updateCertificateStatus(existingCertificate);
         certificateRepository.save(existingCertificate);
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }

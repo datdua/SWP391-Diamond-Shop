@@ -106,3 +106,15 @@ export const getCustomerPoints = async (accountId) => {
   }
 };
 
+export const resetPassword = async (email) => {
+  try {
+      const response = await axios.post(`http://localhost:8080/api/accounts/forget-password?email=${email}`,
+      );
+      return response.data;
+  } catch (error) {
+      console.error('Error resetting password:', error);
+      throw error; // Throw the error for higher level handling
+  }
+};
+
+

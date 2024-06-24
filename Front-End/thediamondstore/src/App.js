@@ -37,11 +37,13 @@ import TransactionManagerPage from "./pages/Manager/TransactionManager/Transacti
 import CertificateManagerPage from "./pages/Manager/CertificateManager/CertificateManagerPage";
 import DiamondPriceManager from "./pages/Manager/PriceProductManager/DiamondPriceManagerPage";
 import WarrantyDiamondManagerPage from "./pages/Manager/WarrantyManager/WarrantyDiamondManagerPage";
-import WarrantyJewelryManagerPage from "./pages/Manager/WarrantyManager/WarrantyDiamondManagerPage";
+import WarrantyJewelryManagerPage from "./pages/Manager/WarrantyManager/WarrantyJewelryManagerPage";
 import PromotionManagerPage from "./pages/Manager/PromotionManager/PromotionManagerPage";
 import { AuthProvider } from "./components/Auth/AuthProvider";
 import ScrollToTop from "./components/ScrollToTop";
 import EmailConfirm from "./pages/EmailConfirm/EmailConfirm";
+import ForgetPasswordPage from "./components/ForgetPasswordModal/ForgetPasswordModal";
+import ResetPasswordForm from "./components/ResetPasswordForm/ResetPasswordForm";
 
 function App() {
   const handleLogout = (logoutCallback) => {
@@ -88,7 +90,7 @@ function App() {
           <Route path="/portfolio" element={<> <Header /> <PortfolioPage /> <Footer /> <BackToTop /> </>} />
           <Route path="/kienthuckimcuong" element={<> <Header /> <Knowledge /> <Footer /> <BackToTop />  </> }/>
           <Route path="/xacthucemail" element={<><Header/><EmailConfirm/><Footer/></>}/>
-          
+          <Route path="/datlaimatkhau" element={<><Header/><ResetPasswordForm/><Footer/></>}/>
           {/* actor: //Customer */}
 
           {/* actor: Admin */}

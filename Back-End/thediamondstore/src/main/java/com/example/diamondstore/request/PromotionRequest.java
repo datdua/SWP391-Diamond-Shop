@@ -1,66 +1,30 @@
-package com.example.diamondstore.model;
+package com.example.diamondstore.request;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-@Entity
-@Table(name = "Promotion")
-public class Promotion implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "promotionID")
-    private Integer promotionID;
-
-    @Column(name = "promotionCode")
+public class PromotionRequest {
     private String promotionCode;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "startDate")
     private LocalDateTime startDate;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "endDate")
     private LocalDateTime endDate;
-
-    @Column(name ="discountAmount", precision = 8, scale = 2)
     private BigDecimal discountAmount;
-
-    @Column(name ="description", length = 80)
     private String description;
 
-    @Column(name = "promotionStatus")
-    private String promotionStatus;
+    // Add your getters and setters here
 
-    public Promotion() {
+    public PromotionRequest() {
     }
 
-    public Promotion(Integer promotionID, String promotionCode, LocalDateTime startDate, LocalDateTime endDate, BigDecimal discountAmount, String description, String promotionStatus) {
-        this.promotionID = promotionID;
+    public PromotionRequest(String promotionCode, LocalDateTime startDate, LocalDateTime endDate, BigDecimal discountAmount, String description) {
         this.promotionCode = promotionCode;
         this.startDate = startDate;
         this.endDate = endDate;
         this.discountAmount = discountAmount;
         this.description = description;
-        this.promotionStatus = promotionStatus;
-    }
-
-    public Integer getPromotionID() {
-        return promotionID;
-    }
-
-    public void setPromotionID(Integer promotionID) {
-        this.promotionID = promotionID;
     }
 
     public String getPromotionCode() {
@@ -101,13 +65,5 @@ public class Promotion implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getPromotionStatus() {
-        return promotionStatus;
-    }
-
-    public void setPromotionStatus(String promotionStatus) {
-        this.promotionStatus = promotionStatus;
     }
 }
