@@ -43,7 +43,4 @@ public class CertificatePutRequest {
     public void setCertificateImage(String certificateImage) {
         this.certificateImage = certificateImage;
     }
-
-
-    
 }

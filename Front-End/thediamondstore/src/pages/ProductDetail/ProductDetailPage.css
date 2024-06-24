@@ -1,3 +1,15 @@
-.tm-prodetails-quantitycart{
+/* In your CSS file */
+.tm-prodetails-quantitycart {
     display: flex;
+    align-items: center
+}
+.input-group {
+    display: flex;
+    margin-left: 10px;
+}
+
+.input-group button {
+    border: none;
+    background: none;
+    cursor: pointer;
 }

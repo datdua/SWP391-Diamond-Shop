@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "Promotion")
-public class Promotion implements Serializable{
+public class Promotion implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

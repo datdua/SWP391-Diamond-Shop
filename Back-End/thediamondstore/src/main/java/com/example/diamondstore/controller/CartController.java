@@ -27,7 +27,6 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    
     @GetMapping
     public ResponseEntity<List<Cart>> getCartItems(@RequestParam Integer accountID) {
         List<Cart> cartItems = cartService.getCartItems(accountID);
@@ -37,7 +36,6 @@ public class CartController {
         return new ResponseEntity<>(cartItems, HttpStatus.OK);
     }
 
-    
     @PostMapping(value = "/add")
     public ResponseEntity<Map<String, String>> addItemToCart(
             @RequestParam(required = false) Integer accountID,
@@ -53,7 +51,6 @@ public class CartController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Thêm vào giỏ hàng thành công"));
     }
 
-
     @PutMapping(value = "/update/{cartID}")
     public ResponseEntity<Map<String, String>> updateCartItem(
             @PathVariable Integer cartID,
@@ -66,7 +63,6 @@ public class CartController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật giỏ hàng thành công"));
     }
 
-    
     @DeleteMapping(value = "/remove/{cartID}")
     public ResponseEntity<Map<String, String>> removeCartItem(@PathVariable Integer cartID) {
         cartService.removeCartItem(cartID);

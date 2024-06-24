@@ -123,6 +123,5 @@ public class DiamondController {
                 page, size);
         
         return ResponseEntity.ok(pageDiamonds);
-    }
-    
+    } 
 }

@@ -12,7 +12,6 @@ public class OrderPutRequest {
     private String warrantyImage;
     private String promotionCode;
     private BigDecimal totalOrder;
-    
 
     public OrderPutRequest() {
     }
@@ -26,7 +25,6 @@ public class OrderPutRequest {
         this.warrantyImage = warrantyImage;
         this.totalOrder = totalOrder;
     }
-
 
     public String getOrderStatus() {
         return orderStatus;
@@ -44,7 +42,6 @@ public class OrderPutRequest {
         this.deliveryDate = deliveryDate;
     }
 
-
     public String getDeliveryAddress() {
         return deliveryAddress;
     }
@@ -52,7 +49,6 @@ public class OrderPutRequest {
     public void setDeliveryAddress(String deliveryAddress) {
         this.deliveryAddress = deliveryAddress;
     }
-
 
     public String getCertificateImage() {
         return certificateImage;
@@ -85,6 +81,4 @@ public class OrderPutRequest {
     public void setTotalOrder(BigDecimal totalOrder) {
         this.totalOrder = totalOrder;
     }
-    
-
 }

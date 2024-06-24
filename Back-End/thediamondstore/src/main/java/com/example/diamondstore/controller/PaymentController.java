@@ -67,8 +67,6 @@ public class PaymentController {
         BigDecimal totalAmount = order.gettotalOrder();
         long amount = totalAmount.longValue() * 100;
         String bankCode = "NCB";
-
-        // String vnp_TxnRef = PaymentConfig.getRandomNumber(8);
         String vnp_IpAddr = "127.0.0.1";
         String vnp_TmnCode = PaymentConfig.vnp_TmnCode;
 
@@ -78,12 +76,10 @@ public class PaymentController {
         vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
         vnp_Params.put("vnp_Amount", String.valueOf(amount));
         vnp_Params.put("vnp_CurrCode", "VND");
-
         vnp_Params.put("vnp_BankCode", bankCode);
         vnp_Params.put("vnp_TxnRef", String.valueOf(orderID)); // Convert orderID to String
         vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + orderID);
         vnp_Params.put("vnp_OrderType", orderType);
-
         vnp_Params.put("vnp_Locale", "vn");
         vnp_Params.put("vnp_ReturnUrl", PaymentConfig.vnp_ReturnUrl);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
@@ -135,10 +131,10 @@ public class PaymentController {
 
     @GetMapping(value = "/vnpay_return")
     public ResponseEntity<TransactionStatusDTO> vnpayReturn(
-        @RequestParam(value = "vnp_BankCode") String bankCode,
-        @RequestParam(value = "vnp_OrderInfo") Integer orderID,
-        @RequestParam(value = "vnp_ResponseCode") String responseCode,
-        @RequestParam(value = "vnp_TransactionNo") Integer transactionNo
+            @RequestParam(value = "vnp_BankCode") String bankCode,
+            @RequestParam(value = "vnp_OrderInfo") Integer orderID,
+            @RequestParam(value = "vnp_ResponseCode") String responseCode,
+            @RequestParam(value = "vnp_TransactionNo") Integer transactionNo
     ) {
         Order order = orderRepository.findByOrderID(orderID);
         TransactionStatusDTO transactionStatusDTO = new TransactionStatusDTO();
@@ -173,7 +169,6 @@ public class PaymentController {
                 // Lưu thông tin tổng giá
                 BigDecimal totalPrice = cart.getGrossCartPrice().multiply(BigDecimal.valueOf(cart.getQuantity()));
                 orderDetail.setTotalPrice(totalPrice);
-
                 orderDetailRepository.save(orderDetail);
 
                 // Xóa giỏ hàng
@@ -192,7 +187,6 @@ public class PaymentController {
         return ResponseEntity.status(HttpStatus.OK).body(transactionStatusDTO);
     }
 
-
     @PostMapping("/refund")
     public ResponseEntity<?> refundTransaction(
             @RequestParam("order_id") String orderID,
@@ -200,7 +194,6 @@ public class PaymentController {
             @RequestParam("trans_date") String transactionDate,
             @RequestParam("accountID") Integer accountID) throws IOException {
 
-        // String vnp_RequestId = PaymentConfig.getRandomNumber(8);
         String vnp_RequestId = orderID;
         String vnp_Version = PaymentConfig.vnp_Version;
         String vnp_Command = "refund";
@@ -213,11 +206,9 @@ public class PaymentController {
         String vnp_TransactionNo = "";
         Account account = accountRepository.findByAccountID(accountID);
         String vnp_CreateBy = account.getAccountName();
-
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
         String vnp_CreateDate = formatter.format(cld.getTime());
-
         String vnp_IpAddr = "127.0.0.1"; // Hoặc lấy từ request
 
         Map<String, String> vnp_Params = new HashMap<>();
@@ -244,7 +235,6 @@ public class PaymentController {
                 transactionDate, vnp_CreateBy, vnp_CreateDate, vnp_IpAddr, vnp_OrderInfo);
 
         String vnp_SecureHash = PaymentConfig.hmacSHA512(PaymentConfig.secretKey, hash_Data);
-
         vnp_Params.put("vnp_SecureHash", vnp_SecureHash);
 
         // Chuyển Map sang chuỗi JSON

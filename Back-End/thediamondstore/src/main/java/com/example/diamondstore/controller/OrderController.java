@@ -94,8 +94,6 @@ public class OrderController {
     }
     }
 
-
-
     @PutMapping(value = "/update/{orderID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> updateOrder(@PathVariable Integer orderID, @RequestBody OrderPutRequest orderPutRequest) {
     Map<String, String> response = orderService.updateOrder(orderID, orderPutRequest);
