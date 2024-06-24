@@ -42,16 +42,13 @@ import PromotionManagerPage from "./pages/Manager/PromotionManager/PromotionMana
 import { AuthProvider } from "./components/Auth/AuthProvider";
 import ScrollToTop from "./components/ScrollToTop";
 import EmailConfirm from "./pages/EmailConfirm/EmailConfirm";
-import ForgetPasswordPage from "./components/ForgetPasswordModal/ForgetPasswordModal";
 import ResetPasswordForm from "./components/ResetPasswordForm/ResetPasswordForm";
+
 
 function App() {
   const handleLogout = (logoutCallback) => {
     if (logoutCallback) {
       logoutCallback();
-      setTimeout(() => {
-        window.location.href = "/dangnhap";
-      }, 2000);
     }
   };
 

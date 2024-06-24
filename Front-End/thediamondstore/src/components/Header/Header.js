@@ -8,7 +8,11 @@ import { AuthContext } from "../Auth/AuthContext";
 import { toast } from "react-toastify";
 import { searchProductionByName } from "../../api/ProductAPI";
 import { getAccountIDByEmail } from "../../api/accountCrud";
-
+import { Button } from "@mui/material";
+import AccountCircleSharpIcon from '@mui/icons-material/AccountCircleSharp';
+import ShoppingCartSharpIcon from '@mui/icons-material/ShoppingCartSharp';
+import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
+import LoginSharpIcon from '@mui/icons-material/LoginSharp';
 function Header() {
     const { isLoggedIn, accountName, onLogout } = useContext(AuthContext);
     const [isAccountDropdownOpen, setAccountDropdownOpen] = useState(false);
@@ -69,6 +73,7 @@ function Header() {
     };
 
     return (
+        <>
         <div className="tm-header tm-header-sticky">
             <div className="tm-header-toparea bg-black">
                 <div className="container">
@@ -81,21 +86,28 @@ function Header() {
                             </ul>
                         </div>
                         <div className="col-lg-6 col-12">
-                            <div className="tm-header-options">
+                            <div className="tm-header-options"
+                            >
+                                
                                 {isLoggedIn ? (
                                     <>
                                         <div className="flex">
-                                            <button onClick={handleAccountClick} className="tm-header-links">
-                                                Tài Khoản 
-                                            </button>
-                                            <button onClick={handleCartClick} className="tm-header-links">
-                                                Giỏ Hàng
-                                            </button>
-                                            <button onClick={onLogout} className="tm-logout-button">Đăng xuất</button>
+                                            <Button onClick={handleAccountClick} className="tm-header-links">
+                                                <AccountCircleSharpIcon/> Tài Khoản                                                 
+                                            </Button>
+                                            <Button onClick={handleCartClick} className="tm-header-links">
+                                               <ShoppingCartSharpIcon/> Giỏ Hàng
+                                            </Button>
+                                            <Button onClick={onLogout} className="tm-logout-button">
+                                                <LogoutSharpIcon/>
+                                                Đăng xuất
+                                            </Button>
                                         </div>
                                     </>
                                 ) : (
-                                    <button onClick={() => navigate('/dangnhap')} className="tm-login-button">Đăng nhập/Đăng ký</button>
+                                    <Button onClick={() => navigate('/dangnhap')} className="tm-login-button">
+                                        <LoginSharpIcon/> Đăng nhập/Đăng ký
+                                        </Button>
                                 )}
                             </div>
                         </div>
@@ -154,6 +166,7 @@ function Header() {
                 </div>
             </div>
         </div>
+        </>
     );
 }
 
