@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -237,47 +236,26 @@ public class AccountService implements UserDetailsService {
     }
 
     public Account updateAccount(Integer accountID, AccountRequest accountRequest) {
-        Optional<Account> optionalAccount = accountRepository.findById(accountID);
-        if (!optionalAccount.isPresent()) {
+        Account existingAccount = accountRepository.findById(accountID).orElse(null);
+        if (existingAccount == null) {
             throw new RuntimeException("Không tìm thấy tài khoản");
         }
-
-        Account existingAccount = optionalAccount.get();
-
+    
         // Update account fields from request
-        if (accountRequest.getAccountName() != null) {
-            existingAccount.setAccountName(accountRequest.getAccountName());
-        }
-        if (accountRequest.getEmail() != null) {
-            existingAccount.setEmail(accountRequest.getEmail());
-        }
-        if (accountRequest.getPhoneNumber() != null) {
-            existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
-        }
-        if (accountRequest.getRole() != null) {
-            existingAccount.setRole(accountRequest.getRole());
-        }
-
-        // Update password if provided and different from the current one
-        if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty()) {
+        existingAccount.setAccountName(accountRequest.getAccountName());
+        existingAccount.setEmail(accountRequest.getEmail());
+        existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
+        existingAccount.setRole(accountRequest.getRole());
+        existingAccount.setAddressAccount(accountRequest.getAddressAccount());
+    
+        // Only update the password if a new password is provided
+        if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty() &&
+            !accountRequest.getPassword().equals(existingAccount.getPassword())) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(accountRequest.getPassword());
             existingAccount.setPassword(encodedPassword);
         }
-
+    
         return accountRepository.save(existingAccount);
-    }
-
-        public String getCurrentUsername() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            return ((UserDetails) principal).getUsername();
-        } else {
-            return principal.toString();
-        }
-    }
-
-    public Account findByUsername(String username) {
-        return accountRepository.findByUsername(username);
     }
 }
