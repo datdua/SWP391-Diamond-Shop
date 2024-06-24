@@ -210,7 +210,6 @@ function JewelryDetailPage() {
                                 </button>
                                 <Button
                                 onClick={() => handleAddToCart(jewelry)}
-                                href="/cart"
                                 style={{ background:"#f2ba59", borderRadius:"5px", textAlign:"center" }}
                               >
                                 Add to cart
