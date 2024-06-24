@@ -16,9 +16,8 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { Pagination } from "@mui/material";
+import { Pagination, Tooltip } from "@mui/material";
 import "../ProductManager.css";
-
 
 function JewelryManagerPage() {
   const [jewelryData, setJewelryData] = useState([]);
@@ -55,15 +54,15 @@ function JewelryManagerPage() {
     setShowModal(true);
   };
 
-    const handleShowImage = (imageSrc) => {
-      setSelectedImage(imageSrc);
-      setShowImageModal(true);
-    };
+  const handleShowImage = (imageSrc) => {
+    setSelectedImage(imageSrc);
+    setShowImageModal(true);
+  };
 
-    const handleCloseImageModal = () => {
-      setShowImageModal(false);
-      setSelectedImage("");
-    };
+  const handleCloseImageModal = () => {
+    setShowImageModal(false);
+    setSelectedImage("");
+  };
 
   const handleDelete = (jewelryID) => {
     setJewelryData(
@@ -156,12 +155,20 @@ function JewelryManagerPage() {
                             : "N/A"}
                         </td>
                         <td>
-                          <Button
-                            variant="link"
-                            onClick={() => handleShowUpdate(jewelry)}
+                          <Tooltip
+                            describeChild
+                            title="Cập nhật thông tin"
+                            arrow
+                            placement="top"
                           >
-                            <EditIcon />
-                          </Button>
+                            <Button
+                              variant="link"
+                              onClick={() => handleShowUpdate(jewelry)}
+                            >
+                              <EditIcon />
+                            </Button>
+                          </Tooltip>
+
                           <DeleteJewelryButton
                             jewelryID={jewelry.jewelryID}
                             onDelete={() => handleDelete(jewelry.jewelryID)}
