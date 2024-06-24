@@ -68,13 +68,14 @@ public class JewelryController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/delete/{jewelryID}")
-    public ResponseEntity<Map<String, String>> deleteJewelry(@PathVariable String jewelryID) {
-        String message = jewelryService.deleteJewelry(jewelryID);
-        if ("Trang sức không tồn tại".equals(message)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(Collections.singletonMap("message", message));
+    @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> deleteJewelrys(@RequestBody List<String> jewelryIDs) {
+    try {
+        jewelryService.deleteJewelrys(jewelryIDs);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
+    } catch (RuntimeException e) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+    }
     }
 
     @GetMapping("/search/filter")

@@ -1,5 +1,6 @@
 package com.example.diamondstore.controller;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -57,20 +58,16 @@ public class DiamondController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/delete/{diamondID}")
-    public ResponseEntity<Map<String, String>> deleteDiamond(@PathVariable String diamondID) {
-        Map<String, String> response = diamondService.deleteDiamond(diamondID);
-        if (response.containsKey("message") && response.get("message").equals("Không tìm thấy kim cương")) {
-            return ResponseEntity.badRequest().body(response);
-        }
-        return ResponseEntity.ok(response);
+    @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> deleteDiamonds(@RequestBody List<String> diamondIDs) {
+    try {
+        diamondService.deleteDiamonds(diamondIDs);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
+    } catch (RuntimeException e) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+    }
     }
 
-    @GetMapping("/searchByColor")
-    public ResponseEntity<List<Diamond>> searchDiamonds(@RequestParam String color) {
-        List<Diamond> diamonds = diamondService.searchDiamondsByColor(color);
-        return ResponseEntity.ok(diamonds);
-    }
 
     @GetMapping("/paged/diamonds")
     public ResponseEntity<Page<Diamond>> getAllDiamondsPaged(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {

@@ -44,16 +44,19 @@ export async function updateAccount(accountID, account) {
   }
 }
 
-export async function deleteAccount(accountID) {
+
+export async function deleteAccounts(accountIDs) {
   try {
-    const response = await axios.delete(
-      `http://localhost:8080/api/accounts/delete/${accountID}`
-    );
+    const response = await axios.delete("http://localhost:8080/api/accounts/delete", {
+      data: accountIDs,
+    });
     return response.data;
   } catch (error) {
-    throw new Error("Failed to delete account");
+    throw new Error("Failed to delete accounts");
   }
 }
+
+
 
 export async function createAccount(account) {
   try {

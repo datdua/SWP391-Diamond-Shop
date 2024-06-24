@@ -2,8 +2,6 @@ package com.example.diamondstore.repository;
 
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.diamondstore.model.Account;
@@ -21,6 +19,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
 
     List<Order> findByTransactionNoNotNull();
 
-    long count();
-    
+    List<Order> findAllByOrderStatus(String orderStatus);
+
 }

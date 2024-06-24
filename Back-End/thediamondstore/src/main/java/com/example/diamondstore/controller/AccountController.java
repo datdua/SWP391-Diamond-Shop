@@ -99,14 +99,15 @@ public class AccountController {
         }
     }
 
-    @DeleteMapping(value = "/delete/{accountID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> delete(@PathVariable Integer accountID) {
-        try {
-            Map<String, String> response = accountService.deleteAccount(accountID);
-            return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
-        }
+    @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> deleteAccounts(@RequestBody List<Integer> accountIDs) {
+    try {
+        accountService.deleteAccounts(accountIDs);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
+    } catch (RuntimeException e) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+    }
+
     }
 
     @PostMapping("/create")

@@ -239,10 +239,15 @@ public class OrderService {
     public List<Order> getOrdersHaveTransactionNo(){
         return orderRepository.findByTransactionNoNotNull();
     }
-
-    public long countOrders() {
-        return orderRepository.count();
-    }
     
+    public BigDecimal getTotalOrderByOrderStatusPaid() {
+        List<Order> paidOrders = orderRepository.findAllByOrderStatus("Đã thanh toán");
+        BigDecimal total = BigDecimal.ZERO;
+        for (Order order : paidOrders) {
+            total = total.add(order.gettotalOrder());
+        }
+        return total;
+    }
+
 }
 
