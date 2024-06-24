@@ -139,7 +139,7 @@ function DiamondDetailPage() {
                                                                <button className="decrease-button" onClick={decreaseQuantity}>-</button>               
                                                                 <input type="text" value={quantity} readOnly style={{ maxWidth: "50px", textAlign: "center" }} />
                                                                 <button className="increase-button" onClick={increaseQuantity}>+</button>
-                                                                <Button onClick={() => handleAddToCart(diamond)} href="/cart" style={{ background:"#f2ba59", borderRadius:"5px", textAlign:"center" }}>Add to cart</Button>
+                                                                <Button onClick={() => handleAddToCart(diamond)} style={{ background:"#f2ba59", borderRadius:"5px", textAlign:"center" }}>Add to cart</Button>
                                                                 </div>             
                                                         </div>
                                                     </div>

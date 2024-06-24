@@ -308,7 +308,6 @@ function JewelryPage() {
           </div>
         </main>
         <div id="tm-product-quickview">
-          {" "}
           {/* Ensure this div is outside the main content */}
           {selectedItem && (
             <Modal
