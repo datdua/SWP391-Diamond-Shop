@@ -2,6 +2,7 @@ package com.example.diamondstore.controller;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.diamondstore.DTO.OrderSummaryDTO;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.request.putRequest.OrderPutRequest;
 import com.example.diamondstore.service.OrderService;
@@ -123,16 +125,23 @@ public class OrderController {
     }
 
     // API to get total order value in a day
-    @GetMapping("/totalValueInDay")
-    public ResponseEntity<BigDecimal> getTotalOrderValueInDay() {
-        BigDecimal totalValue = orderService.getTotalOrderValueInDay();
-        return new ResponseEntity<>(totalValue, HttpStatus.OK);
+    @GetMapping("/totalValueInToday")
+    public ResponseEntity<?> getTotalOrderValueInToday() {
+        OrderSummaryDTO orderSummary = orderService.getTotalOrderValueInToday();
+        return new ResponseEntity<>(orderSummary, HttpStatus.OK);
     }
 
     // API to get total order value in a month
-    @GetMapping("/totalValueInMonth")
-    public ResponseEntity<BigDecimal> getTotalOrderValueInMonth() {
-        BigDecimal totalValue = orderService.getTotalOrderValueInMonth();
-        return new ResponseEntity<>(totalValue, HttpStatus.OK);
+    @GetMapping("/totalValueDayInMonth")
+    public ResponseEntity<?> getTotalValueDayInMonth() {
+        List<OrderSummaryDTO> orderSummaries = orderService.getTotalValueDayInMonth();
+        return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
+    }
+
+    // API to get total order value in a year
+    @GetMapping("/totalValueMonthInYear")
+    public ResponseEntity<?> getTotalValueMonthInYear() {
+        List<OrderSummaryDTO> orderSummaries = orderService.getTotalValueMonthInYear();
+        return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
     }
 }
