@@ -261,14 +261,14 @@ public class OrderService {
     }
 
     // Lấy tổng số Order trong 1 ngày
-    public int getTotalOrderInDay() {
+    public int getTotalOrdersInDay() {
         LocalDateTime start = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
         LocalDateTime end = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).withNano(999999999);
         return orderRepository.countByStartorderDateBetween(start, end);
     }
 
     // tính tổng totalOrder của tất cả Order trong 1 ngày
-    public OrderSummaryDTO getTotalOrderValueInToday() {
+    public OrderSummaryDTO getRevenueValueInToday() {
         LocalDateTime start = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
         LocalDateTime end = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).withNano(999999999);
         List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
@@ -283,7 +283,7 @@ public class OrderService {
     }
 
     // tính tổng totalOrder của tất cả Order từng ngày trong 1 tháng
-    public List<OrderSummaryDTO> getTotalValueDayInMonth() {
+    public List<OrderSummaryDTO> getRevenueDayInMonth() {
         LocalDate now = LocalDate.now();
         int month = now.getMonthValue();
         int year = now.getYear();
@@ -305,7 +305,7 @@ public class OrderService {
     }
 
     // tính tổng totalOrder của tất cả Order từng ngày trong tháng (đã chọn) trong năm (đã chọn)
-    public List<OrderSummaryDTO> getTotalValueDayInMonthInYear(int month, int year) {
+    public List<OrderSummaryDTO> getRevenueDayInMonthInYear(int month, int year) {
         int dayOfMonth = LocalDate.of(year, month, 1).lengthOfMonth();
         List<OrderSummaryDTO> summaries = new ArrayList<>();
         for (int i = 1; i <= dayOfMonth; i++) {
@@ -313,18 +313,18 @@ public class OrderService {
             LocalDateTime start = date.atStartOfDay();
             LocalDateTime end = date.atTime(23, 59, 59, 999999999);
             List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
-            BigDecimal total = BigDecimal.ZERO;
+            BigDecimal revenue = BigDecimal.ZERO;
             for (Order order : orders) {
-                total = total.add(order.gettotalOrder());
+                revenue = revenue.add(order.gettotalOrder());
             }
-            OrderSummaryDTO summary = new OrderSummaryDTO(date, total);
+            OrderSummaryDTO summary = new OrderSummaryDTO(date, revenue);
             summaries.add(summary);
         }
         return summaries;
     }
 
     // tính tổng totalOrder của tất cả Order từng tháng trong 1 năm
-    public List<OrderSummaryDTO> getTotalValueMonthInYear() {
+    public List<OrderSummaryDTO> getRevenueMonthInYear() {
         LocalDate now = LocalDate.now();
         int year = now.getYear();
         List<OrderSummaryDTO> summaries = new ArrayList<>();
@@ -334,11 +334,30 @@ public class OrderService {
             LocalDateTime start = startOfMonth.atStartOfDay();
             LocalDateTime end = endOfMonth.atTime(23, 59, 59, 999999999);
             List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
-            BigDecimal total = BigDecimal.ZERO;
+            BigDecimal revenue = BigDecimal.ZERO;
             for (Order order : orders) {
-                total = total.add(order.gettotalOrder());
+                revenue = revenue.add(order.gettotalOrder());
             }
-            OrderSummaryDTO summary = new OrderSummaryDTO(endOfMonth, total);
+            OrderSummaryDTO summary = new OrderSummaryDTO(endOfMonth, revenue);
+            summaries.add(summary);
+        }
+        return summaries;
+    }
+
+    // tính tổng total Order của tất cả Order từng tháng trong năm (đã chọn)
+    public List<OrderSummaryDTO> getRevenueMonthInYear(int year) {
+        List<OrderSummaryDTO> summaries = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            LocalDate startOfMonth = LocalDate.of(year, i, 1);
+            LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+            LocalDateTime start = startOfMonth.atStartOfDay();
+            LocalDateTime end = endOfMonth.atTime(23, 59, 59, 999999999);
+            List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
+            BigDecimal revenue = BigDecimal.ZERO;
+            for (Order order : orders) {
+                revenue = revenue.add(order.gettotalOrder());
+            }
+            OrderSummaryDTO summary = new OrderSummaryDTO(endOfMonth, revenue);
             summaries.add(summary);
         }
         return summaries;

@@ -96,8 +96,20 @@ public class ProductionService {
     }
 
     public long getTotalProduction() {
-    long totalDiamonds = diamondRepository.count();
-    long totalJewelry = jewelryRepository.count();
-    return totalDiamonds + totalJewelry;
-}
+        long totalDiamonds = diamondRepository.count();
+        long totalJewelry = jewelryRepository.count();
+        return totalDiamonds + totalJewelry;
+    }
+
+    // lấy tổng số lượng diamond và jewelry
+    public Map<String, Object> getTotalProductionCount() {
+        long totalDiamonds = diamondRepository.count();
+        long totalJewelry = jewelryRepository.count();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("number of Diamonds", totalDiamonds);
+        response.put("number of Jewelry", totalJewelry);
+
+        return response;
+    }
 }

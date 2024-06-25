@@ -6,12 +6,12 @@ import java.time.LocalDate;
 public class OrderSummaryDTO {
 
     private LocalDate date;
-    private BigDecimal totalOrder;
+    private BigDecimal revenue;
 
     // constructor
-    public OrderSummaryDTO(LocalDate date, BigDecimal totalOrder) {
+    public OrderSummaryDTO(LocalDate date, BigDecimal revenue) {
         this.date = date;
-        this.totalOrder = totalOrder;
+        this.revenue = revenue;
     }
 
     // getters and setters
@@ -23,11 +23,11 @@ public class OrderSummaryDTO {
         this.date = date;
     }
 
-    public BigDecimal getTotalOrder() {
-        return totalOrder;
+    public BigDecimal getrevenue() {
+        return revenue;
     }
 
-    public void setTotalOrder(BigDecimal totalOrder) {
-        this.totalOrder = totalOrder;
+    public void setrevenue(BigDecimal revenue) {
+        this.revenue = revenue;
     }
 }

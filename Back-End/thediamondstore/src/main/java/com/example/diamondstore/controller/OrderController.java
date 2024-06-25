@@ -129,38 +129,45 @@ public class OrderController {
         return new ResponseEntity<>(totalOrderStatusPaid, HttpStatus.OK);
     }
 
-        // API to get total number of orders in a day
-    @GetMapping("/totalInDay")
+    // API to get total number of orders in a day
+    @GetMapping("/totalOrdersInDay")
     public ResponseEntity<Integer> getTotalOrdersInDay() {
-        int totalOrders = orderService.getTotalOrderInDay();
+        int totalOrders = orderService.getTotalOrdersInDay();
         return new ResponseEntity<>(totalOrders, HttpStatus.OK);
     }
 
     // API to get total order value in a day
-    @GetMapping("/totalValueInToday")
-    public ResponseEntity<?> getTotalOrderValueInToday() {
-        OrderSummaryDTO orderSummary = orderService.getTotalOrderValueInToday();
+    @GetMapping("/totalRevenueValueInToday")
+    public ResponseEntity<?> getRevenueValueInToday() {
+        OrderSummaryDTO orderSummary = orderService.getRevenueValueInToday();
         return new ResponseEntity<>(orderSummary, HttpStatus.OK);
     }
 
     // API to get total order value in a month
-    @GetMapping("/totalValueDayInMonth")
-    public ResponseEntity<?> getTotalValueDayInMonth() {
-        List<OrderSummaryDTO> orderSummaries = orderService.getTotalValueDayInMonth();
+    @GetMapping("/totalRevenueDayInMonth")
+    public ResponseEntity<?> getRevenueDayInMonth() {
+        List<OrderSummaryDTO> orderSummaries = orderService.getRevenueDayInMonth();
         return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
     }
 
     // API to get total order value in month xx of year yyyyy
-    @GetMapping("/totalValueDayInMonthInYear")
-    public ResponseEntity<?> getTotalValueDayInMonthInYear(@RequestParam int month, @RequestParam int year) {
-        List<OrderSummaryDTO> orderSummaries = orderService.getTotalValueDayInMonthInYear(month, year);
+    @GetMapping("/totalRevenueDayInMonthInYear")
+    public ResponseEntity<?> getRevenueDayInMonthInYear(@RequestParam int month, @RequestParam int year) {
+        List<OrderSummaryDTO> orderSummaries = orderService.getRevenueDayInMonthInYear(month, year);
         return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
     }
 
     // API to get total order value in a year
-    @GetMapping("/totalValueMonthInYear")
-    public ResponseEntity<?> getTotalValueMonthInYear() {
-        List<OrderSummaryDTO> orderSummaries = orderService.getTotalValueMonthInYear();
+    @GetMapping("/totalRevenueMonthInYear")
+    public ResponseEntity<?> getRevenueMonthInYear() {
+        List<OrderSummaryDTO> orderSummaries = orderService.getRevenueMonthInYear();
+        return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
+    }
+
+    // API to get total order value in year yyyy
+    @GetMapping("/totalRevenueMonthInAYear")
+    public ResponseEntity<?> getRevenueMonthInAYear(@RequestParam int year) {
+        List<OrderSummaryDTO> orderSummaries = orderService.getRevenueMonthInYear(year);
         return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
     }
 }
