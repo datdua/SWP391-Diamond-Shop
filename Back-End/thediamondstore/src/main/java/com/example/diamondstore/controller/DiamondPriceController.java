@@ -59,4 +59,9 @@ public class DiamondPriceController {
     public DiamondPrice getDiamondPriceById(@PathVariable Integer diamondPriceID) {
         return diamondPriceService.getDiamondPriceById(diamondPriceID);
     }
+
+    @GetMapping("/carat_size")
+    public List<DiamondPrice> getDiamondPriceByCaratSize(@RequestBody Float caratSize) {
+        return diamondPriceService.getDiamondPricesByCaratSize(caratSize);
+    }
 }

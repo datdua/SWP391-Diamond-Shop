@@ -126,4 +126,9 @@ public class DiamondPriceService {
 
         diamondRepository.save(diamond);
     }
+
+
+    public List<DiamondPrice> getDiamondPricesByCaratSize(Float caratSize) {
+        return diamondPriceRepository.findByCaratSize(caratSize);
+    }
 }
