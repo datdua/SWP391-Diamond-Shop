@@ -142,5 +142,27 @@ export const setPassword = async (email, newPassword) => {
   }
 };
 
+export const countCustomer = async () => {
+  try {
+      const response = await axios.get(`http://localhost:8080/api/customers/total`,
+      );
+      return response.data;
+  } catch (error) {
+      console.error('Error fetching customer count:', error);
+      throw error; // Throw the error for higher level handling
+  }
+};
+
+export const countRevenue = async () => {
+  try {
+      const response = await axios.get(`http://localhost:8080/api/orders/totalOrderPaid`,
+      );
+      return response.data;
+  } catch (error) {
+      console.error('Error fetching revenue count:', error);
+      throw error; // Throw the error for higher level handling
+  }
+};
+
 
 
