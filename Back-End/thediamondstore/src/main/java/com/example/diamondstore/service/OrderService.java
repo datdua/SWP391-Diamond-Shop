@@ -313,11 +313,11 @@ public class OrderService {
             LocalDateTime start = date.atStartOfDay();
             LocalDateTime end = date.atTime(23, 59, 59, 999999999);
             List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
-            BigDecimal total = BigDecimal.ZERO;
+            BigDecimal revenue = BigDecimal.ZERO;
             for (Order order : orders) {
-                total = total.add(order.gettotalOrder());
+                revenue = revenue.add(order.gettotalOrder());
             }
-            OrderSummaryDTO summary = new OrderSummaryDTO(date, total);
+            OrderSummaryDTO summary = new OrderSummaryDTO(date, revenue);
             summaries.add(summary);
         }
         return summaries;
@@ -334,11 +334,11 @@ public class OrderService {
             LocalDateTime start = startOfMonth.atStartOfDay();
             LocalDateTime end = endOfMonth.atTime(23, 59, 59, 999999999);
             List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
-            BigDecimal total = BigDecimal.ZERO;
+            BigDecimal revenue = BigDecimal.ZERO;
             for (Order order : orders) {
-                total = total.add(order.gettotalOrder());
+                revenue = revenue.add(order.gettotalOrder());
             }
-            OrderSummaryDTO summary = new OrderSummaryDTO(endOfMonth, total);
+            OrderSummaryDTO summary = new OrderSummaryDTO(endOfMonth, revenue);
             summaries.add(summary);
         }
         return summaries;
