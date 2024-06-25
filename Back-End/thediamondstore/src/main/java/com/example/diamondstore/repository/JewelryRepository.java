@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.example.diamondstore.model.Jewelry;
@@ -17,4 +18,10 @@ public interface JewelryRepository extends JpaRepository<Jewelry, String>, JpaSp
     List<Jewelry> findByJewelryNameLike(String jewelryNamePattern);
 
     List<Jewelry> findByJewelryEntryPriceBetween(BigDecimal minjewelryEntryPrice, BigDecimal maxjewelryEntryPrice);
+
+    @Query("SELECT COUNT(j) FROM Jewelry j WHERE j.gender = 'Male'")
+    int countMaleJewelry();
+
+    @Query("SELECT COUNT(j) FROM Jewelry j WHERE j.gender = 'Female'")
+    int countFemaleJewelry();
 }

@@ -249,5 +249,35 @@ public class OrderService {
         return total;
     }
 
+    // Lấy tổng số Order trong 1 ngày
+    public int getTotalOrderInDay() {
+        LocalDateTime start = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime end = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).withNano(999999999);
+        return orderRepository.countByStartorderDateBetween(start, end);
+    }
+
+    // tính tổng totalOrder của tất cả Order trong 1 ngày
+    public BigDecimal getTotalOrderValueInDay() {
+        LocalDateTime start = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime end = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).withNano(999999999);
+        List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
+        BigDecimal total = BigDecimal.ZERO;
+        for (Order order : orders) {
+            total = total.add(order.gettotalOrder());
+        }
+        return total;
+    }
+
+    // tính tổng totalOrder của tất cả Order trong 1 tháng
+    public BigDecimal getTotalOrderValueInMonth() {
+        LocalDateTime start = LocalDateTime.now().withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime end = LocalDateTime.now().withDayOfMonth(LocalDateTime.now().toLocalDate().lengthOfMonth()).withHour(23).withMinute(59).withSecond(59).withNano(999999999);
+        List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
+        BigDecimal total = BigDecimal.ZERO;
+        for (Order order : orders) {
+            total = total.add(order.gettotalOrder());
+        }
+        return total;
+    }
 }
 
