@@ -4,12 +4,16 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.diamondstore.model.Jewelry;
 import com.example.diamondstore.repository.JewelryRepository;
@@ -76,13 +80,19 @@ public class JewelryService {
         return Collections.singletonMap("message", "Cập nhật thành công");
     }
 
-    public String deleteJewelry(String jewelryID) {
-        Jewelry existingJewelry = jewelryRepository.findByJewelryID(jewelryID);
-        if (existingJewelry == null) {
-            return "Trang sức không tồn tại";
+    public ResponseEntity<Map<String, String>> deleteJewelrys(@RequestBody List<String> jewelryIDs) {
+        // Filter out non-existing diamonds
+        List<String> existingJewelryIDs = jewelryIDs.stream()
+                .filter(jewelryID -> jewelryRepository.existsById(jewelryID))
+                .collect(Collectors.toList());
+
+        // Delete diamonds
+        if (!existingJewelryIDs.isEmpty()) {
+            jewelryRepository.deleteAllById(existingJewelryIDs);
+            return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các giá vàng thành công"));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy giá vàng để xóa"));
         }
-        jewelryRepository.delete(existingJewelry);
-        return "Xóa thành công";
     }
 
     public List<Jewelry> searchJewelry(String jewelryName, Float minjewelryEntryPrice, Float maxjewelryEntryPrice, String gender) {

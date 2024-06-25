@@ -73,7 +73,7 @@ function Header() {
     };
 
     return (
-        <>
+      <>
         <div className="tm-header tm-header-sticky">
             <div className="tm-header-toparea bg-black">
                 <div className="container">
@@ -170,7 +170,7 @@ function Header() {
                 </div>
             </div>
         </div>
-        </>
+      </>
     );
 }
 

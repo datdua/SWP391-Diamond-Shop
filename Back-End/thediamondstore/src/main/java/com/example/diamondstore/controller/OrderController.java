@@ -1,5 +1,6 @@
 package com.example.diamondstore.controller;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Map;
 
@@ -113,10 +114,10 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getAllOrdersPaged(page, size));
     }
 
-    @GetMapping("/total")
-    public ResponseEntity<Long> getTotalOrders() {
-        long totalOrders = orderService.countOrders();
-        return new ResponseEntity<>(totalOrders, HttpStatus.OK);
+    @GetMapping("/totalOrderPaid")
+    public ResponseEntity<BigDecimal> getTotalOrderPaid() {
+        BigDecimal totalOrderPaid = orderService.getTotalOrderByOrderStatusPaid();
+        return ResponseEntity.ok(totalOrderPaid);
     }
 }
 

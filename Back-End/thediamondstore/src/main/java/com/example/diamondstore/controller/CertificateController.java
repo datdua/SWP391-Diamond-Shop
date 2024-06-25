@@ -1,6 +1,7 @@
 package com.example.diamondstore.controller;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
@@ -54,9 +55,14 @@ public class CertificateController {
         return certificateService.updateCertificate(certificateID, certificatePutRequest);
     }
 
-    @DeleteMapping(value = "/delete/{certificateID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> deleteCertificate(@PathVariable String certificateID) {
-        return certificateService.deleteCertificate(certificateID);
+    @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> deleteCertificates(@RequestBody List<String> certificateIDs) {
+    try {
+        certificateService.deleteCertificates(certificateIDs);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
+    } catch (RuntimeException e) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+    }
     }
 
     @GetMapping(value = "/get/certificateImg/{certificateID}", produces = "application/json;charset=UTF-8")

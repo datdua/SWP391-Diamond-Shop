@@ -2,70 +2,70 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./ProductDetailPage.css";
 import { addDiamondToCart } from "../../api/addToCart";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { getDiamondById } from "../../api/DiamondAPI";
 import { getAccountIDByEmail } from "../../api/accountCrud";
 import Button from "react-bootstrap/esm/Button";
 
 function DiamondDetailPage() {
-    const navigate = useNavigate();
-    const [diamond, setDiamond] = useState(null);
-    const { diamondId } = useParams();
-    const [quantity, setQuantity] = useState(1);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+  const [diamond, setDiamond] = useState(null);
+  const { diamondId } = useParams();
+  const [quantity, setQuantity] = useState(1);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    useEffect(() => {
-        const fetchDiamond = async () => {
-            try {
-                const diamondData = await getDiamondById(diamondId);
-                setDiamond(diamondData);
-            } catch (error) {
-                console.error('Error fetching diamond details:', error);
-            }
-        };
-        fetchDiamond();
-    }, [diamondId]);
+  useEffect(() => {
+    const fetchDiamond = async () => {
+      try {
+        const diamondData = await getDiamondById(diamondId);
+        setDiamond(diamondData);
+      } catch (error) {
+        console.error("Error fetching diamond details:", error);
+      }
+    };
+    fetchDiamond();
+  }, [diamondId]);
 
-    const increaseQuantity = () => {
-        setQuantity(prevQuantity => prevQuantity + 1);
+  const increaseQuantity = () => {
+    setQuantity((prevQuantity) => prevQuantity + 1);
+  };
+
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity((prevQuantity) => prevQuantity - 1);
+    }
+  };
+
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      const jwt = localStorage.getItem("jwt");
+      setIsLoggedIn(!!jwt);
     };
 
-    const decreaseQuantity = () => {
-        if (quantity > 1) {
-            setQuantity(prevQuantity => prevQuantity - 1);
-        }
-    };
+    checkLoginStatus();
+  }, []);
 
-    useEffect(() => {
-        const checkLoginStatus = () => {
-            const jwt = localStorage.getItem('jwt');
-            setIsLoggedIn(!!jwt);
-        };
+  const handleAddToCart = async (item) => {
+    if (!isLoggedIn) {
+      toast.error("Vui lòng đăng nhập trước khi thêm sản phẩm vào giỏ hàng");
+    } else {
+      try {
+        const email = localStorage.getItem("email");
+        const accountID = await getAccountIDByEmail(email);
+        await addDiamondToCart(accountID, item.diamondID, quantity);
+        toast.success("Thêm vào giỏ hàng thành công!");
+        navigate(`/cart/${accountID}`);
+      } catch (error) {
+        console.error("Failed to add item to cart:", error.message);
+        toast.error("Thêm vào giỏ hàng không thành công: " + error.message);
+      }
+    }
+  };
 
-        checkLoginStatus();
-    }, []);
-
-    const handleAddToCart = async (item) => {
-        if (!isLoggedIn) {
-            toast.error("Vui lòng đăng nhập trước khi thêm sản phẩm vào giỏ hàng");
-        } else {
-            try {
-                const email = localStorage.getItem('email');
-                const accountID = await getAccountIDByEmail(email);
-                await addDiamondToCart(accountID, item.diamondID, quantity);
-                toast.success("Thêm vào giỏ hàng thành công!");
-                navigate(`/cart/${accountID}`);
-            } catch (error) {
-                console.error("Failed to add item to cart:", error.message);
-                toast.error("Thêm vào giỏ hàng không thành công: " + error.message);
-            }
-        }
-    };
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
     return (
         <>

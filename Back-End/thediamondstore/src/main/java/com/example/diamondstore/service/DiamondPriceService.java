@@ -4,10 +4,13 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.diamondstore.model.Diamond;
 import com.example.diamondstore.model.DiamondPrice;
@@ -101,14 +104,19 @@ public class DiamondPriceService {
         return diamondPriceRepository.findById(diamondpriceID).orElseThrow(() -> new RuntimeException("DiamondPrice not found"));
     }
 
-    public ResponseEntity<?> deleteDiamondPrice(Integer diamondpriceID) {
-        DiamondPrice existingDiamondPrice = diamondPriceRepository.findById(diamondpriceID).orElse(null);
-        if (existingDiamondPrice == null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy DiamondPrice"));
-        }
+    public ResponseEntity<Map<String, String>> deleteDiamondPrices(@RequestBody List<Integer> diamondPriceIDs) {
+        // Filter out non-existing diamondPrices
+        List<Integer> existingDiamondPriceIDs = diamondPriceIDs.stream()
+                .filter(diamondPriceID -> diamondPriceRepository.existsById(diamondPriceID))
+                .collect(Collectors.toList());
 
-        diamondPriceRepository.deleteById(diamondpriceID);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa thành công"));
+        // Delete diamondPrices
+        if (!existingDiamondPriceIDs.isEmpty()) {
+            diamondPriceRepository.deleteAllById(existingDiamondPriceIDs);
+            return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các chứng chỉ thành công"));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy chứng chỉ để xóa"));
+        }
     }
 
     public void updateDiamondPrice(DiamondPrice diamondPrice, Diamond diamond) {

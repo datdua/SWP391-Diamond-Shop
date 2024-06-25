@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.diamondstore.model.Certificate;
 import com.example.diamondstore.repository.CertificateRepository;
@@ -99,13 +101,19 @@ public class CertificateService {
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }
 
-    public ResponseEntity<Map<String, String>> deleteCertificate(String certificateID) {
-        Certificate existingCertificate = certificateRepository.findByCertificateID(certificateID);
-        if (existingCertificate == null) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Map<String, String>> deleteCertificates(@RequestBody List<String> certificateIDs) {
+        // Filter out non-existing certificates
+        List<String> existingCertificateIDs = certificateIDs.stream()
+                .filter(certificateID -> certificateRepository.existsById(certificateID))
+                .collect(Collectors.toList());
+
+        // Delete certificates
+        if (!existingCertificateIDs.isEmpty()) {
+            certificateRepository.deleteAllById(existingCertificateIDs);
+            return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các chứng chỉ thành công"));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy chứng chỉ để xóa"));
         }
-        certificateRepository.delete(existingCertificate);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa thành công"));
     }
 
     public ResponseEntity<?> getCertificateImg(String certificateID) {

@@ -4,13 +4,16 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.diamondstore.model.Promotion;
 import com.example.diamondstore.repository.PromotionRepository;
@@ -70,13 +73,19 @@ public class PromotionService {
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }
 
-    public ResponseEntity<Map<String, String>> deletePromotion(Integer promotionID) {
-        Promotion promotion = promotionRepository.findByPromotionID(promotionID);
-        if (promotion == null) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<Map<String, String>> deletePromotions(@RequestBody List<Integer> promotionIDs) {
+        // Filter out non-existing diamonds
+        List<Integer> existingPromotionIDs = promotionIDs.stream()
+                .filter(promotionID -> promotionRepository.existsById(promotionID))
+                .collect(Collectors.toList());
+
+        // Delete diamonds
+        if (!existingPromotionIDs.isEmpty()) {
+            promotionRepository.deleteAllById(existingPromotionIDs);
+            return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các giá vàng thành công"));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy giá vàng để xóa"));
         }
-        promotionRepository.delete(promotion);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa thành công"));
     }
 
     @PostConstruct

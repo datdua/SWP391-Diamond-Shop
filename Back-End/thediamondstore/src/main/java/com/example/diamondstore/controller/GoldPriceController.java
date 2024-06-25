@@ -1,5 +1,6 @@
 package com.example.diamondstore.controller;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -42,8 +43,13 @@ public class GoldPriceController {
         return goldPriceService.updateGoldPrice(goldPriceID, goldPriceRequest);
     }
 
-    @DeleteMapping("/{goldPriceID}")
-    public ResponseEntity<?> deleteGoldPrice(@PathVariable Integer goldPriceID) {
-        return goldPriceService.deleteGoldPrice(goldPriceID);
+    @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> deleteGoldPrices(@RequestBody List<Integer> goldPriceIDs) {
+    try {
+        goldPriceService.deleteGoldPrices(goldPriceIDs);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
+    } catch (RuntimeException e) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+    }
     }
 }
