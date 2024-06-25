@@ -38,6 +38,7 @@ public class DiamondPrice {
 
     public DiamondPrice(Integer diamondPriceID, String diamondID, BigDecimal diamondEntryPrice, String clarity,
             String color, BigDecimal caratSize) {
+
         this.diamondPriceID = diamondPriceID;
         this.diamondID = diamondID;
         this.diamondEntryPrice = diamondEntryPrice;

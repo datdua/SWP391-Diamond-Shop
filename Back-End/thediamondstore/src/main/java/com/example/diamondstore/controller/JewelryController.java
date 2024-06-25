@@ -107,4 +107,18 @@ public class JewelryController {
         Page<Jewelry> pageJewelrys = jewelryService.searchJewelryWithFilters(jewelryName, minjewelryEntryPrice, maxjewelryEntryPrice, gender, page, size);
         return ResponseEntity.ok(pageJewelrys);
     }
+
+    // // API to get total count of male jewelry
+    // @GetMapping("/countMale")
+    // public ResponseEntity<Integer> countMaleJewelry() {
+    //     int count = jewelryService.countMaleJewelry();
+    //     return new ResponseEntity<>(count, HttpStatus.OK);
+    // }
+
+    // // API to get total count of female jewelry
+    // @GetMapping("/countFemale")
+    // public ResponseEntity<Integer> countFemaleJewelry() {
+    //     int count = jewelryService.countFemaleJewelry();
+    //     return new ResponseEntity<>(count, HttpStatus.OK);
+    // }
 }
