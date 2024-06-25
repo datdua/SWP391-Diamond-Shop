@@ -343,5 +343,24 @@ public class OrderService {
         }
         return summaries;
     }
+
+    // tính tổng total Order của tất cả Order từng tháng trong năm (đã chọn)
+    public List<OrderSummaryDTO> getRevenueMonthInYear(int year) {
+        List<OrderSummaryDTO> summaries = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            LocalDate startOfMonth = LocalDate.of(year, i, 1);
+            LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+            LocalDateTime start = startOfMonth.atStartOfDay();
+            LocalDateTime end = endOfMonth.atTime(23, 59, 59, 999999999);
+            List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
+            BigDecimal revenue = BigDecimal.ZERO;
+            for (Order order : orders) {
+                revenue = revenue.add(order.gettotalOrder());
+            }
+            OrderSummaryDTO summary = new OrderSummaryDTO(endOfMonth, revenue);
+            summaries.add(summary);
+        }
+        return summaries;
+    }
 }
 
