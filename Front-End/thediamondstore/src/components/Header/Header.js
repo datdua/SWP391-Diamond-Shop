@@ -14,63 +14,49 @@ import ShoppingCartSharpIcon from '@mui/icons-material/ShoppingCartSharp';
 import LogoutSharpIcon from '@mui/icons-material/LogoutSharp';
 import LoginSharpIcon from '@mui/icons-material/LoginSharp';
 function Header() {
-    const { isLoggedIn, accountName, onLogout } = useContext(AuthContext);
-    const [isAccountDropdownOpen, setAccountDropdownOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState('');
-    const navigate = useNavigate();
-    const accountId = localStorage.getItem('accountID')
+  const { isLoggedIn, accountName, onLogout } = useContext(AuthContext);
+  const [isAccountDropdownOpen, setAccountDropdownOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
+  const accountId = localStorage.getItem('accountID')
 
 
-    const toggleDropdown = () => {
-        setAccountDropdownOpen(!isAccountDropdownOpen);
-    };
-    const handleCartClick = async () => {
-        const email = localStorage.getItem("email");
-        const accountId = await getAccountIDByEmail(email);
-        if (accountId) {
-            // Redirect to the user's cart
-            window.location.href = `http://localhost:3000/cart/${accountId}`;
-        } else {
-            // Handle the case when accountId is null
-            // For example, redirect to the login page
-            window.location.href = 'http://localhost:3000/dangnhap';
-        }
-    };
-    const handleAccountClick = async () => {
-        const email = localStorage.getItem("email");
-        const accountId = await getAccountIDByEmail(email)
-        if (accountId) {
-            // Redirect to the user's cart
-            window.location.href = `http://localhost:3000/account/${accountId}`;
-        } else {
-            // Handle the case when accountId is null
-            // For example, redirect to the login page
-            window.location.href = 'http://localhost:3000/login';
-        }
-    };
+  const toggleDropdown = () => {
+    setAccountDropdownOpen(!isAccountDropdownOpen);
+  };
+  const handleCartClick = async () => {
+    const email = localStorage.getItem("email");
+    const accountId = await getAccountIDByEmail(email);
+    if (accountId) {
+      // Redirect to the user's cart
+      window.location.href = `http://localhost:3000/cart/${accountId}`;
+    } else {
+      // Handle the case when accountId is null
+      // For example, redirect to the login page
+      window.location.href = 'http://localhost:3000/dangnhap';
+    }
+  };
+  const handleAccountClick = async () => {
+    const email = localStorage.getItem("email");
+    const accountId = await getAccountIDByEmail(email)
+    if (accountId) {
+      // Redirect to the user's cart
+      window.location.href = `http://localhost:3000/account/${accountId}`;
+    } else {
+      // Handle the case when accountId is null
+      // For example, redirect to the login page
+      window.location.href = 'http://localhost:3000/login';
+    }
+  };
 
 
-    const handleSearch = async () => {
-        try {
-            const [jewelryResults, diamondResults, productResults] = await Promise.all([
-                searchJewelryByName(searchTerm),
-                searchDiamondByName(searchTerm),
-                searchProductionByName(searchTerm)
-            ]);
-    
-            if (jewelryResults.length > 0) {
-                navigate(`/trangsuc?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(jewelryResults))}`);
-            } else if (diamondResults.length > 0) {
-                navigate(`/kimcuong?search=${encodeURIComponent(searchTerm)}&results=${encodeURIComponent(JSON.stringify(diamondResults))}`);
-            } else if (productResults.length > 0) {
-                navigate(`/sanpham?search=${encodeURIComponent(searchTerm)}&jewelryResults=${encodeURIComponent(JSON.stringify(jewelryResults))}&diamondResults=${encodeURIComponent(JSON.stringify(diamondResults))}`);
-            } else {
-                console.log('No search results found');
-            }
-        } catch (error) {
-            console.error("Error during search:", error);
-        }
-    };
+  const handleSearch = async () => {
+    try {
+      const [jewelryResults, diamondResults, productResults] = await Promise.all([
+        searchJewelryByName(searchTerm),
+        searchDiamondByName(searchTerm),
+        searchProductionByName(searchTerm)
+      ]);
 
     return (
       <>
@@ -170,8 +156,54 @@ function Header() {
                 </div>
             </div>
         </div>
-      </>
-    );
+        <div className="tm-header-bottomarea bg-white">
+          <div className="container">
+            <nav className="tm-header-nav">
+              <ul>
+                <li>
+                  <Link to="/trangchu">Trang Chủ</Link>
+                </li>
+                <li>
+                  <Link to="/gioithieu">Giới Thiệu</Link>
+                </li>
+                <li style={{ marginRight: "5px" }}>
+                  <Link to="/sanpham">Sản Phẩm</Link>
+                </li>
+                <li style={{ margin: "0px" }}>
+                  <NavDropdown
+                    className="drop-hover"
+                    id="collapsible-nav-dropdown"
+                  >
+                    <NavDropdown.Item
+                      style={{ textAlign: "center" }}
+                      href="/kimcuong"
+                    >
+                      Kim Cương
+                    </NavDropdown.Item>
+                    <NavDropdown.Item
+                      style={{ textAlign: "center" }}
+                      href="/trangsuc"
+                    >
+                      Trang Sức
+                    </NavDropdown.Item>
+                  </NavDropdown>
+                </li>
+                <li>
+                  <Link to="#">Bảng Giá</Link>
+                </li>
+                <li>
+                  <Link to="/kienthuckimcuong">Kiến Thức Kim Cương</Link>
+                </li>
+                <li>
+                  <Link to="/lienhe">Liên Hệ</Link>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default Header;

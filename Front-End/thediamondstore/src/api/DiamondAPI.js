@@ -59,10 +59,11 @@ export async function updateDiamond(diamondID, diamond) {
   }
 }
 
-export async function deleteDiamond(diamondID) {
+export async function deleteDiamond(diamondIDs) {
   try {
     const response = await axios.delete(
-      `http://localhost:8080/api/diamonds/delete/${diamondID}`
+      `http://localhost:8080/api/diamonds/delete`
+      , { data: diamondIDs }
     );
     return response.data;
   } catch (error) {

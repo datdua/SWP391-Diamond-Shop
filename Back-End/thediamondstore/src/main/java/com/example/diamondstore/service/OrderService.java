@@ -249,5 +249,13 @@ public class OrderService {
         return total;
     }
 
+    public Long getTotalOrdersByOrderStatus(String orderStatus) {
+        return orderRepository.countByOrderStatus("Đã thanh toán");
+    }
+
+    public Long getTotalOrders() {
+        return orderRepository.count();
+    }
+
 }
 

@@ -119,5 +119,17 @@ public class OrderController {
         BigDecimal totalOrderPaid = orderService.getTotalOrderByOrderStatusPaid();
         return ResponseEntity.ok(totalOrderPaid);
     }
+
+    @GetMapping("/totalOrder")
+    public ResponseEntity<Long> getTotalOrder() {
+        long totalOrder = orderService.getTotalOrders();
+        return new ResponseEntity<>(totalOrder, HttpStatus.OK);
+    }
+
+    @GetMapping("/totalOrderStatusPaid")
+    public ResponseEntity<Long> getTotalOrderStatusPaid() {
+        long totalOrderStatusPaid = orderService.getTotalOrdersByOrderStatus("Đã thanh toán");
+        return new ResponseEntity<>(totalOrderStatusPaid, HttpStatus.OK);
+    }
 }
 

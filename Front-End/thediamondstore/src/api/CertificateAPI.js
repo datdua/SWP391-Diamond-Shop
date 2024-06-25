@@ -48,17 +48,16 @@ export const updateCertificate = async (certificateId, certificate) => {
   }
 };
 
-export const deleteCertificate = async (certificateId) => {
+export async function deleteCertificate(certificateIDs) {
   try {
-    const response = await axios.delete(
-      `http://localhost:8080/api/certificates/delete/${certificateId}`
-    );
+    const response = await axios.delete("http://localhost:8080/api/accounts/delete", {
+      data: certificateIDs,
+    });
     return response.data;
   } catch (error) {
-    console.error("Error deleting certificate:", error);
-    throw error;
+    throw new Error("Failed to delete accounts");
   }
-};
+}
 
 export const getCertificateImage = async (certificationID) => {
   try {
