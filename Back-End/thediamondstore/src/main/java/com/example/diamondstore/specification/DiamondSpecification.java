@@ -22,11 +22,11 @@ public class DiamondSpecification {
     }
 
     public static Specification<Diamond> hasMinCaratSize(Float minCaratSize) {
-        return (root, query, builder) -> builder.greaterThanOrEqualTo(root.get("carat_size"), minCaratSize);
+        return (root, query, builder) -> builder.greaterThanOrEqualTo(root.get("caratSize"), minCaratSize);
     }
 
     public static Specification<Diamond> hasMaxCaratSize(Float maxCaratSize) {
-        return (root, query, builder) -> builder.lessThanOrEqualTo(root.get("carat_size"), maxCaratSize);
+        return (root, query, builder) -> builder.lessThanOrEqualTo(root.get("caratSize"), maxCaratSize);
     }
     
     public static Specification<Diamond> hasMinCaratWeight(Float minCaratWeight) {

@@ -21,8 +21,8 @@ public class Diamond {
     @Column(name = "certificationID")
     private String certificationID;
 
-    @Column(name = "carat_size")
-    private Float carat_size;
+    @Column(name = "caratSize")
+    private Float caratSize;
 
     @Column(name = "diamondEntryPrice", precision = 16, scale = 2)
     private BigDecimal diamondEntryPrice;
@@ -57,11 +57,11 @@ public class Diamond {
     public Diamond() {
     }
 
-    public Diamond(String diamondID, String warrantyID, String certificationID, Float carat_size, BigDecimal diamondEntryPrice, Float carat_weight, String color, String cut, String clarity, String diamondImage, String shape, String diamondName, String origin, BigDecimal grossDiamondPrice) {
+    public Diamond(String diamondID, String warrantyID, String certificationID, Float caratSize, BigDecimal diamondEntryPrice, Float carat_weight, String color, String cut, String clarity, String diamondImage, String shape, String diamondName, String origin, BigDecimal grossDiamondPrice) {
         this.diamondID = diamondID;
         this.warrantyID = warrantyID;
         this.certificationID = certificationID;
-        this.carat_size = carat_size;
+        this.caratSize = caratSize;
         this.diamondEntryPrice = diamondEntryPrice;
         this.carat_weight = carat_weight;
         this.color = color;
@@ -106,12 +106,12 @@ public class Diamond {
         this.certificationID = certificationID;
     }
 
-    public Float getCarat_size() {
-        return carat_size;
+    public Float getCaratSize() {
+        return caratSize;
     }
 
-    public void setCarat_size(Float carat_size) {
-        this.carat_size = carat_size;
+    public void setCaratSize(Float caratSize) {
+        this.caratSize = caratSize;
     }
 
     public BigDecimal getDiamondEntryPrice() {

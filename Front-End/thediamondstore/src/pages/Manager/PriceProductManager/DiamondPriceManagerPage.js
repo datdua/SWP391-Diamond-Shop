@@ -218,7 +218,7 @@ function DiamondPriceManager() {
                           </td>
                           <td>{diamondPrice.clarity}</td>
                           <td>{diamondPrice.color}</td>
-                          <td>{diamondPrice.carat_size}</td>
+                          <td>{diamondPrice.caratSize}</td>
                           <td>
                             <Tooltip
                               describeChild

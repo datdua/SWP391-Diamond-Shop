@@ -1,5 +1,6 @@
 package com.example.diamondstore.controller;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -60,8 +61,8 @@ public class DiamondPriceController {
         return diamondPriceService.getDiamondPriceById(diamondPriceID);
     }
 
-    @GetMapping("/carat_size")
-    public List<DiamondPrice> getDiamondPriceByCaratSize(@RequestBody Float caratSize) {
+    @GetMapping("/carat/{caratSize}")
+    public List<DiamondPrice> getDiamondPriceByCaratSize(@PathVariable BigDecimal caratSize) {
         return diamondPriceService.getDiamondPricesByCaratSize(caratSize);
     }
 }

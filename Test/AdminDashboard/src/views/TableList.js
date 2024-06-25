@@ -306,7 +306,7 @@ function TableList() {
                             />
                           </td>
                           <td>{diamond.carat_weight}</td>
-                          <td>{diamond.carat_size}</td>
+                          <td>{diamond.caratSize}</td>
                           <td>{diamond.color}</td>
                           <td>{diamond.cut}</td>
                           <td>{diamond.clarity}</td>
