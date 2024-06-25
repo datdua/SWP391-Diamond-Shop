@@ -55,7 +55,7 @@ function LoginRegisterPage() {
         setIsLoggedIn(true);
         toast.success("Đăng nhập thành công!");
 
-        if (decodedToken.role === "ROLE_ADMIN") {
+        if (decodedToken.role === "ROLE_ADMIN", "ROLE_MANAGER") {
           navigate("/admin/profile");
         } else {
           navigate("/trangchu");

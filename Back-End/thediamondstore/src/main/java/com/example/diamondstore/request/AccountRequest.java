@@ -8,17 +8,19 @@ public class AccountRequest {
     private String phoneNumber;
     private String email;
     private String addressAccount;
+    private Boolean active;
 
     public AccountRequest() {
     }
 
-    public AccountRequest(String accountName, String password, String role, String phoneNumber, String email, String addressAccount) {
+    public AccountRequest(String accountName, String password, String role, String phoneNumber, String email, String addressAccount, Boolean active) {
         this.accountName = accountName;
         this.password = password; // Không mã hóa mật khẩu tại đây
         this.role = role;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.addressAccount = addressAccount;
+        this.active = active;
     }
 
     // Getters và setters
@@ -70,5 +72,13 @@ public class AccountRequest {
 
     public void setAddressAccount(String addressAccount) {
         this.addressAccount = addressAccount;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
