@@ -16,7 +16,7 @@ function UpdateDiamondPriceForm({ diamondPrice }) {
     event.preventDefault();
     try {
       await updateDiamondPrice(
-        diamondPrice.diamondpriceID,
+        diamondPrice.diamondPriceID,
         updatedDiamondPrice
       );
       alert("Cập nhật thông tin Giá Kim Cương thành công");

@@ -46,11 +46,11 @@ public class DiamondPrice {
         this.carat_size = carat_size;
     }
 
-    public Integer getDiamondpriceID() {
+    public Integer getDiamondPriceID() {
         return diamondPriceID;
     }
 
-    public void setDiamondpriceID(Integer diamondPriceID) {
+    public void setDiamondPriceID(Integer diamondPriceID) {
         this.diamondPriceID = diamondPriceID;
     }
 

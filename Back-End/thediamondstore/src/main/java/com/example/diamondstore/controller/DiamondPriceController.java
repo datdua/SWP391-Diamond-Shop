@@ -40,9 +40,9 @@ public class DiamondPriceController {
         return diamondPriceService.addDiamondPrice(diamondPriceRequest);
     }
 
-    @PutMapping("/{diamondpriceID}")
-    public ResponseEntity<Map<String, String>> updateDiamondPrice(@PathVariable Integer diamondpriceID, @RequestBody DiamondPriceRequest diamondPriceRequest) {
-        return diamondPriceService.updateDiamondPrice(diamondpriceID, diamondPriceRequest);
+    @PutMapping("/{diamondPriceID}")
+    public ResponseEntity<Map<String, String>> updateDiamondPrice(@PathVariable Integer diamondPriceID, @RequestBody DiamondPriceRequest diamondPriceRequest) {
+        return diamondPriceService.updateDiamondPrice(diamondPriceID, diamondPriceRequest);
     }
 
     @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
@@ -55,8 +55,13 @@ public class DiamondPriceController {
     }
     }
 
-    @GetMapping("/{diamondpriceID}")
-    public DiamondPrice getDiamondPriceById(@PathVariable Integer diamondpriceID) {
-        return diamondPriceService.getDiamondPriceById(diamondpriceID);
+    @GetMapping("/{diamondPriceID}")
+    public DiamondPrice getDiamondPriceById(@PathVariable Integer diamondPriceID) {
+        return diamondPriceService.getDiamondPriceById(diamondPriceID);
+    }
+
+    @GetMapping("/carat_size")
+    public List<DiamondPrice> getDiamondPriceByCaratSize(@RequestBody Float caratSize) {
+        return diamondPriceService.getDiamondPricesByCaratSize(caratSize);
     }
 }
