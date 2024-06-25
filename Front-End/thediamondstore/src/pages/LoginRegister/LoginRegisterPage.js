@@ -107,7 +107,7 @@ function LoginRegisterPage() {
       if (response.status === 200 || response.status === 201) {
         const data = response.data;
         console.log("Đăng ký thành công:", data.message);
-        toast.success("Đăng ký thành công!");
+        toast.success("Đăng ký thành công! Vui lòng kiểm tra email để xác thực");
       } else {
         console.error("Đăng ký thất bại:", response);
         toast.error("Đăng ký thất bại!");
