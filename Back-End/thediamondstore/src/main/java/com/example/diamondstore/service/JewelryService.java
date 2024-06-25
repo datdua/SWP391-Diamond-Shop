@@ -145,4 +145,14 @@ public class JewelryService {
         Pageable pageable = PageRequest.of(page - 1, size);
         return jewelryRepository.findAll(spec, pageable);
     }
+
+    // // tính tổng số nhẫn nam
+    // public int countMaleJewelry() {
+    //     return jewelryRepository.countMaleJewelry();
+    // }
+
+    // // tính tổng số nhẫn nữ 
+    // public int countFemaleJewelry() {
+    //     return jewelryRepository.countFemaleJewelry();
+    // }
 }

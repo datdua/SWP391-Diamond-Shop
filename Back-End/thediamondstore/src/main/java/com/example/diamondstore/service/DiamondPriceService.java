@@ -43,7 +43,7 @@ public class DiamondPriceService {
 
         existingDiamondPrice.setClarity(diamondPriceRequest.getClarity());
         existingDiamondPrice.setColor(diamondPriceRequest.getColor());
-        existingDiamondPrice.setCarat_size(diamondPriceRequest.getCarat_size());
+        existingDiamondPrice.setcaratSize(diamondPriceRequest.getcaratSize()) ;
         existingDiamondPrice.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
 
         diamondPriceRepository.save(existingDiamondPrice);
@@ -83,7 +83,7 @@ public class DiamondPriceService {
         diamondPrice.setDiamondID(diamondPriceRequest.getDiamondID());
         diamondPrice.setClarity(diamondPriceRequest.getClarity());
         diamondPrice.setColor(diamondPriceRequest.getColor());
-        diamondPrice.setCarat_size(diamondPriceRequest.getCarat_size());
+        diamondPrice.setcaratSize(diamondPriceRequest.getcaratSize());
         diamondPrice.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
 
         diamondPriceRepository.save(diamondPrice);
