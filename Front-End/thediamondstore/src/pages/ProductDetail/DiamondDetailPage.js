@@ -68,6 +68,7 @@ function DiamondDetailPage() {
     }, []);
 
     return (
+        <>
         <div>
             <div id="wrapper" className="wrapper">
                 <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/the-diamond-store-423602.appspot.com/o/img-banner%2Fimg-banner-nhan1.png?alt=media&token=8056b83a-6c63-446a-9505-7cc15364c8f7)` }}>
@@ -154,6 +155,7 @@ function DiamondDetailPage() {
         </main>
             </div >
         </div >
+        </>
     );
 }
 

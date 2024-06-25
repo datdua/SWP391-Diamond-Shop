@@ -120,7 +120,7 @@ function Header() {
                     <div className="row align-items-center">
                         <div className="col-lg-3 col-6 order-1 order-lg-1">
                             <a href="/trangchu" className="tm-header-logo">
-                                <img style={{ width: "220px" }} src="assets/images/logo.png" alt="thediamondstore" />
+                                <img style={{ width: "220px" }} src="https://firebasestorage.googleapis.com/v0/b/the-diamond-store-423602.appspot.com/o/img-logo%2Flogo.png?alt=media&token=64cf8af5-a8ac-42be-9983-88c3935af287" alt="thediamondstore" />
                             </a>
                         </div>
                         <div className="col-lg-6 col-12 order-3 order-lg-2">
@@ -136,8 +136,12 @@ function Header() {
                         </div>
                         <div className="col-lg-3 col-6 order-2 order-lg-3">
                             <ul className="tm-header-icons">
-                                <li><Link to="/wishlist"><i className="ion-android-favorite-outline"></i><span>0</span></Link></li>
-                                <li><Link to="/cart"><i className="ion-bag"></i><span>0</span></Link></li>
+                                <li><Link to="#"><i className="ion-android-favorite-outline"></i><span>0</span></Link></li>
+                                {isLoggedIn ? (
+                                        <li><Link onClick={handleCartClick}><i className="ion-bag"></i><span>0</span></Link></li>
+                                    ) : (
+                                        <li><i className="ion-bag" style={{ opacity: 0.5 }} title="Please log in to access the cart"></i><span>0</span></li>
+                                    )}
                             </ul>
                         </div>
                     </div>
