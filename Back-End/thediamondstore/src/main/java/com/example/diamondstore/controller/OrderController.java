@@ -2,6 +2,7 @@ package com.example.diamondstore.controller;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.diamondstore.DTO.OrderSummaryDTO;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.request.putRequest.OrderPutRequest;
 import com.example.diamondstore.service.OrderService;
@@ -126,5 +128,41 @@ public class OrderController {
         long totalOrderStatusPaid = orderService.getTotalOrdersByOrderStatus("Đã thanh toán");
         return new ResponseEntity<>(totalOrderStatusPaid, HttpStatus.OK);
     }
+
+        // API to get total number of orders in a day
+    @GetMapping("/totalInDay")
+    public ResponseEntity<Integer> getTotalOrdersInDay() {
+        int totalOrders = orderService.getTotalOrderInDay();
+        return new ResponseEntity<>(totalOrders, HttpStatus.OK);
+    }
+
+    // API to get total order value in a day
+    @GetMapping("/totalValueInToday")
+    public ResponseEntity<?> getTotalOrderValueInToday() {
+        OrderSummaryDTO orderSummary = orderService.getTotalOrderValueInToday();
+        return new ResponseEntity<>(orderSummary, HttpStatus.OK);
+    }
+
+    // API to get total order value in a month
+    @GetMapping("/totalValueDayInMonth")
+    public ResponseEntity<?> getTotalValueDayInMonth() {
+        List<OrderSummaryDTO> orderSummaries = orderService.getTotalValueDayInMonth();
+        return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
+    }
+
+    // API to get total order value in month xx of year yyyyy
+    @GetMapping("/totalValueDayInMonthInYear")
+    public ResponseEntity<?> getTotalValueDayInMonthInYear(@RequestParam int month, @RequestParam int year) {
+        List<OrderSummaryDTO> orderSummaries = orderService.getTotalValueDayInMonthInYear(month, year);
+        return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
+    }
+
+    // API to get total order value in a year
+    @GetMapping("/totalValueMonthInYear")
+    public ResponseEntity<?> getTotalValueMonthInYear() {
+        List<OrderSummaryDTO> orderSummaries = orderService.getTotalValueMonthInYear();
+        return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
+    }
 }
+
 
