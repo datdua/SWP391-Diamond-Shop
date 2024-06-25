@@ -69,7 +69,7 @@ public class DiamondService {
     existingDiamond.setCut(diamondPutRequest.getCut());
     existingDiamond.setShape(diamondPutRequest.getShape());
     existingDiamond.setColor(diamondPutRequest.getColor());
-    existingDiamond.setCarat_size(diamondPutRequest.getCarat_size());
+    existingDiamond.setCaratSize(diamondPutRequest.getCaratSize());
     existingDiamond.setCarat_weight(diamondPutRequest.getCarat_weight());
     existingDiamond.setClarity(diamondPutRequest.getClarity());
 

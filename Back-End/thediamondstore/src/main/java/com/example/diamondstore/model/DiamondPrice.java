@@ -30,14 +30,15 @@ public class DiamondPrice {
     @Column(name = "color")
     private String color;
 
-    @Column(name = "caratSize")
-    private Float caratSize;
+    @Column(name = "caratSize", precision = 16, scale = 2)
+    private BigDecimal caratSize;
 
     public DiamondPrice() {
     }
 
     public DiamondPrice(Integer diamondPriceID, String diamondID, BigDecimal diamondEntryPrice, String clarity,
-            String color, Float caratSize) {
+            String color, BigDecimal caratSize) {
+
         this.diamondPriceID = diamondPriceID;
         this.diamondID = diamondID;
         this.diamondEntryPrice = diamondEntryPrice;
@@ -86,15 +87,13 @@ public class DiamondPrice {
         this.color = color;
     }
 
-    public Float getcaratSize() {
+    public BigDecimal getCaratSize() {
         return caratSize;
     }
 
-    public void setcaratSize(Float caratSize) {
+    public void setCaratSize(BigDecimal caratSize) {
         this.caratSize = caratSize;
     }
 
-
-    
 
 }

@@ -1,5 +1,6 @@
 package com.example.diamondstore.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +15,5 @@ public interface  DiamondPriceRepository extends  JpaRepository<DiamondPrice, In
 
     List<DiamondPrice> findAllByDiamondID(String diamondID);
 
-    public List<DiamondPrice> findByCaratSize(Float caratSize);
+    List<DiamondPrice> findByCaratSize(BigDecimal caratSize);
 }
