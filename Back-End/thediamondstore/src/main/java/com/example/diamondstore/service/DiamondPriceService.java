@@ -35,8 +35,8 @@ public class DiamondPriceService {
         return diamondPriceRepository.findAll();
     }
 
-    public ResponseEntity<Map<String, String>> updateDiamondPrice(Integer diamondpriceID, DiamondPriceRequest diamondPriceRequest) {
-        DiamondPrice existingDiamondPrice = diamondPriceRepository.findById(diamondpriceID).orElse(null);
+    public ResponseEntity<Map<String, String>> updateDiamondPrice(Integer diamondPriceID, DiamondPriceRequest diamondPriceRequest) {
+        DiamondPrice existingDiamondPrice = diamondPriceRepository.findById(diamondPriceID).orElse(null);
         if (existingDiamondPrice == null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy DiamondPrice"));
         }
@@ -54,7 +54,7 @@ public class DiamondPriceService {
         }
 
         DiamondPrice diamondPriceWithDiamondID = diamondPriceRepository.findByDiamondID(diamondPriceRequest.getDiamondID());
-        if (diamondPriceWithDiamondID != null && !diamondPriceWithDiamondID.getDiamondpriceID().equals(existingDiamondPrice.getDiamondpriceID())) {
+        if (diamondPriceWithDiamondID != null && !diamondPriceWithDiamondID.getDiamondPriceID().equals(existingDiamondPrice.getDiamondPriceID())) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Kim cương này đã có giá"));
         }
         // Update the diamondEntryPrice and grossDiamondPrice
@@ -100,8 +100,8 @@ public class DiamondPriceService {
         
     }
         
-    public DiamondPrice getDiamondPriceById(Integer diamondpriceID) {
-        return diamondPriceRepository.findById(diamondpriceID).orElseThrow(() -> new RuntimeException("DiamondPrice not found"));
+    public DiamondPrice getDiamondPriceById(Integer diamondPriceID) {
+        return diamondPriceRepository.findById(diamondPriceID).orElseThrow(() -> new RuntimeException("DiamondPrice not found"));
     }
 
     public ResponseEntity<Map<String, String>> deleteDiamondPrices(@RequestBody List<Integer> diamondPriceIDs) {

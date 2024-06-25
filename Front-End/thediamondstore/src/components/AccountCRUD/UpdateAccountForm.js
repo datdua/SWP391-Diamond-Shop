@@ -78,6 +78,7 @@ function UpdateAccountForm({ account }) {
           onChange={handleChange}
         />
       </Form.Group>
+      
       <Button variant="primary" type="submit">
         Update
       </Button>
