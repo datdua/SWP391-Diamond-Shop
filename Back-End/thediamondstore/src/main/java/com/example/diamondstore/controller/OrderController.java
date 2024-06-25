@@ -138,6 +138,13 @@ public class OrderController {
         return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
     }
 
+    // API to get total order value in month xx of year yyyyy
+    @GetMapping("/totalValueDayInMonthInYear")
+    public ResponseEntity<?> getTotalValueDayInMonthInYear(@RequestParam int month, @RequestParam int year) {
+        List<OrderSummaryDTO> orderSummaries = orderService.getTotalValueDayInMonthInYear(month, year);
+        return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
+    }
+
     // API to get total order value in a year
     @GetMapping("/totalValueMonthInYear")
     public ResponseEntity<?> getTotalValueMonthInYear() {

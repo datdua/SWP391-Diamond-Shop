@@ -296,6 +296,25 @@ public class OrderService {
         return summaries;
     }
 
+    // tính tổng totalOrder của tất cả Order từng ngày trong tháng (đã chọn) trong năm (đã chọn)
+    public List<OrderSummaryDTO> getTotalValueDayInMonthInYear(int month, int year) {
+        int dayOfMonth = LocalDate.of(year, month, 1).lengthOfMonth();
+        List<OrderSummaryDTO> summaries = new ArrayList<>();
+        for (int i = 1; i <= dayOfMonth; i++) {
+            LocalDate date = LocalDate.of(year, month, i);
+            LocalDateTime start = date.atStartOfDay();
+            LocalDateTime end = date.atTime(23, 59, 59, 999999999);
+            List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
+            BigDecimal total = BigDecimal.ZERO;
+            for (Order order : orders) {
+                total = total.add(order.gettotalOrder());
+            }
+            OrderSummaryDTO summary = new OrderSummaryDTO(date, total);
+            summaries.add(summary);
+        }
+        return summaries;
+    }
+
     // tính tổng totalOrder của tất cả Order từng tháng trong 1 năm
     public List<OrderSummaryDTO> getTotalValueMonthInYear() {
         LocalDate now = LocalDate.now();
