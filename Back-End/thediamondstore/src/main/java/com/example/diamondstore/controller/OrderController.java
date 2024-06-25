@@ -132,35 +132,35 @@ public class OrderController {
         // API to get total number of orders in a day
     @GetMapping("/totalInDay")
     public ResponseEntity<Integer> getTotalOrdersInDay() {
-        int totalOrders = orderService.getTotalOrderInDay();
+        int totalOrders = orderService.getTotalOrdersInDay();
         return new ResponseEntity<>(totalOrders, HttpStatus.OK);
     }
 
     // API to get total order value in a day
     @GetMapping("/totalValueInToday")
     public ResponseEntity<?> getTotalOrderValueInToday() {
-        OrderSummaryDTO orderSummary = orderService.getTotalOrderValueInToday();
+        OrderSummaryDTO orderSummary = orderService.getRevenueValueInToday();
         return new ResponseEntity<>(orderSummary, HttpStatus.OK);
     }
 
     // API to get total order value in a month
     @GetMapping("/totalValueDayInMonth")
     public ResponseEntity<?> getTotalValueDayInMonth() {
-        List<OrderSummaryDTO> orderSummaries = orderService.getTotalValueDayInMonth();
+        List<OrderSummaryDTO> orderSummaries = orderService.getRevenueDayInMonth();
         return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
     }
 
     // API to get total order value in month xx of year yyyyy
     @GetMapping("/totalValueDayInMonthInYear")
     public ResponseEntity<?> getTotalValueDayInMonthInYear(@RequestParam int month, @RequestParam int year) {
-        List<OrderSummaryDTO> orderSummaries = orderService.getTotalValueDayInMonthInYear(month, year);
+        List<OrderSummaryDTO> orderSummaries = orderService.getRevenueDayInMonthInYear(month, year);
         return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
     }
 
     // API to get total order value in a year
     @GetMapping("/totalValueMonthInYear")
     public ResponseEntity<?> getTotalValueMonthInYear() {
-        List<OrderSummaryDTO> orderSummaries = orderService.getTotalValueMonthInYear();
+        List<OrderSummaryDTO> orderSummaries = orderService.getRevenueMonthInYear();
         return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
     }
 }
