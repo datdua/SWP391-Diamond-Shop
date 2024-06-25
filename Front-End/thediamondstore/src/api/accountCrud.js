@@ -44,16 +44,19 @@ export async function updateAccount(accountID, account) {
   }
 }
 
-export async function deleteAccount(accountID) {
+
+export async function deleteAccounts(accountIDs) {
   try {
-    const response = await axios.delete(
-      `http://localhost:8080/api/accounts/delete/${accountID}`
-    );
+    const response = await axios.delete("http://localhost:8080/api/accounts/delete", {
+      data: accountIDs,
+    });
     return response.data;
   } catch (error) {
-    throw new Error("Failed to delete account");
+    throw new Error("Failed to delete accounts");
   }
 }
+
+
 
 export async function createAccount(account) {
   try {
@@ -136,6 +139,28 @@ export const setPassword = async (email, newPassword) => {
     } else {
       throw new Error(error.message);
     }
+  }
+};
+
+export const countCustomer = async () => {
+  try {
+      const response = await axios.get(`http://localhost:8080/api/customers/total`,
+      );
+      return response.data;
+  } catch (error) {
+      console.error('Error fetching customer count:', error);
+      throw error; // Throw the error for higher level handling
+  }
+};
+
+export const countRevenue = async () => {
+  try {
+      const response = await axios.get(`http://localhost:8080/api/orders/totalOrderPaid`,
+      );
+      return response.data;
+  } catch (error) {
+      console.error('Error fetching revenue count:', error);
+      throw error; // Throw the error for higher level handling
   }
 };
 
