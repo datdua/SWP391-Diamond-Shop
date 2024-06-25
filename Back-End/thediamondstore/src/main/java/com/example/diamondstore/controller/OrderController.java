@@ -111,7 +111,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getAllOrdersPaged(page, size));
     }
 
-    @GetMapping("/totalOrderPaid")
+    @GetMapping("/totalRevenue")
     public ResponseEntity<BigDecimal> getTotalOrderPaid() {
         BigDecimal totalOrderPaid = orderService.getTotalOrderByOrderStatusPaid();
         return ResponseEntity.ok(totalOrderPaid);
@@ -123,7 +123,7 @@ public class OrderController {
         return new ResponseEntity<>(totalOrder, HttpStatus.OK);
     }
 
-    @GetMapping("/totalOrderStatusPaid")
+    @GetMapping("/totalTransaction")
     public ResponseEntity<Long> getTotalOrderStatusPaid() {
         long totalOrderStatusPaid = orderService.getTotalOrdersByOrderStatus("Đã thanh toán");
         return new ResponseEntity<>(totalOrderStatusPaid, HttpStatus.OK);
