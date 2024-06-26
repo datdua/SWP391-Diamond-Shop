@@ -3,9 +3,12 @@ package com.example.diamondstore.request.putRequest;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class OrderPutRequest {
 
     private String orderStatus;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime deliveryDate;
     private String deliveryAddress;
     private String certificateImage;

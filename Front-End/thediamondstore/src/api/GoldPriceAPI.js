@@ -46,10 +46,11 @@ export const updateGoldPrice = async (goldPriceID, goldPrice) => {
   }
 };
 
-export const deleteGoldPrice = async (goldPriceID) => {
+export const deleteGoldPrice = async (goldPriceIDs) => {
   try {
     const response = await axios.delete(
-      `http://localhost:8080/api/goldPrices/${goldPriceID}`
+      `http://localhost:8080/api/goldPrices`
+      , { data: goldPriceIDs }
     );
     return response.data;
   } catch (error) {
