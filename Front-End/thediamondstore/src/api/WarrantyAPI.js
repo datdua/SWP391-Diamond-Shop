@@ -48,10 +48,11 @@ export const updateWarranty = async (warrantyId, warranty) => {
   }
 };
 
-export const deleteWarranty = async (warrantyId) => {
+export const deleteWarranty = async (warrantyIDs) => {
   try {
     const response = await axios.delete(
-      `http://localhost:8080/api/warranties/delete/${warrantyId}`
+      `http://localhost:8080/api/warranties/delete`
+      , { data: warrantyIDs }
     );
     return response.data;
   } catch (error) {

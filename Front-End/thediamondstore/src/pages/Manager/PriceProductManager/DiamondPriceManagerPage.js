@@ -54,13 +54,6 @@ function DiamondPriceManager() {
     setShowModal(true);
   };
 
-  const handleDelete = (diamondPriceID) => {
-    setDiamondPriceData(
-      diamondPriceData.filter(
-        (diamondPrice) => diamondPrice.diamondPriceID !== diamondPriceID
-      )
-    );
-  };
 
   const handleClick = (event, id) => {
     const selectedIndex = selected.indexOf(id);

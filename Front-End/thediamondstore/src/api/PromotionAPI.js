@@ -48,10 +48,11 @@ export const updatePromotion = async (promotionID, promotion) => {
   }
 };
 
-export const deletePromotion = async (promotionID) => {
+export const deletePromotion = async (promotionIDs) => {
   try {
     const response = await axios.delete(
-      `http://localhost:8080/api/promotion/delete/${promotionID}`
+      `http://localhost:8080/api/promotion/delete`
+      , { data: promotionIDs }
     );
     return response.data;
   } catch (error) {
