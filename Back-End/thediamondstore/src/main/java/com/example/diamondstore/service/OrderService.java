@@ -81,12 +81,12 @@ public class OrderService {
         order.setDeliveryDate(LocalDateTime.now().plusDays(7));
         order.setOrderStatus("Đang xử lý");
 
-        if (account.getPhoneNumber() == null) {
-            account.setPhoneNumber(phoneNumber);
-        }
-        if (account.getAddressAccount() == null) {
-            account.setAddressAccount(deliveryAddress);
-        }
+        // if (account.getPhoneNumber() == null) {
+        //     account.setPhoneNumber(phoneNumber);
+        // }
+        // if (account.getAddressAccount() == null) {
+        //     account.setAddressAccount(deliveryAddress);
+        // }
         accountRepository.save(account);
 
         // Lưu Order trước
