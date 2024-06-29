@@ -27,4 +27,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     public int countByStartorderDateBetween(LocalDateTime start, LocalDateTime end);
 
     public List<Order> findAllByStartorderDateBetween(LocalDateTime start, LocalDateTime end);
+
+    public Order findFirstByAccountIDOrderByOrderDateDesc(Integer accountID);
 }

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.DTO.AccountContactInfoDTO;
 import com.example.diamondstore.model.Account;
+import com.example.diamondstore.model.Order;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.CustomerRepository;
 import com.example.diamondstore.repository.OrderRepository;
@@ -101,12 +102,12 @@ public class AccountController {
 
     @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> deleteAccounts(@RequestBody List<Integer> accountIDs) {
-    try {
-        accountService.deleteAccounts(accountIDs);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
-    } catch (RuntimeException e) {
-        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
-    }
+        try {
+            accountService.deleteAccounts(accountIDs);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+        }
 
     }
 
@@ -122,11 +123,11 @@ public class AccountController {
 
     @PutMapping(value = "/update/{accountID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> update(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
-    try {
-        Account updatedAccount = accountService.updateAccount(accountID, accountRequest);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
+        try {
+            Account updatedAccount = accountService.updateAccount(accountID, accountRequest);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
         } catch (RuntimeException e) {
-        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
         }
     }
 
@@ -193,7 +194,29 @@ public class AccountController {
         if (account == null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
         }
-        AccountContactInfoDTO contactInfo = new AccountContactInfoDTO(account.getPhoneNumber(), account.getAddressAccount());
+
+        String phoneNumber = account.getPhoneNumber();
+        String address = account.getAddressAccount();
+
+        // Check if phoneNumber and address are null
+        if (phoneNumber == null || address == null) {
+            Order order = orderRepository.findFirstByAccountIDOrderByOrderDateDesc(accountID);
+            if (order != null) {
+                if (phoneNumber == null) {
+                    phoneNumber = order.getPhoneNumber();
+                }
+                if (address == null) {
+                    address = order.getDeliveryAddress();
+                }
+            }
+        }
+
+        // If both phoneNumber and address are still null, return an appropriate message
+        if (phoneNumber == null || address == null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy thông tin liên lạc hợp lệ"));
+        }
+
+        AccountContactInfoDTO contactInfo = new AccountContactInfoDTO(phoneNumber, address);
         return ResponseEntity.ok(contactInfo);
     }
 }
