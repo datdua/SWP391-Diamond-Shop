@@ -1,13 +1,7 @@
 package com.example.diamondstore.controller;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -24,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.diamondstore.DTO.PaymentResDTO;
 import com.example.diamondstore.DTO.TransactionStatusDTO;
 import com.example.diamondstore.config.PaymentConfig;
-import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.Cart;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.model.OrderDetail;
@@ -185,94 +177,5 @@ public class PaymentController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(transactionStatusDTO);
-    }
-
-    @PostMapping("/refund")
-    public ResponseEntity<?> refundTransaction(
-            @RequestParam("order_id") String orderID,
-            @RequestParam("trantype") String transactionType,
-            @RequestParam("trans_date") String transactionDate,
-            @RequestParam("accountID") Integer accountID) throws IOException {
-
-        String vnp_RequestId = orderID;
-        String vnp_Version = PaymentConfig.vnp_Version;
-        String vnp_Command = "refund";
-        String vnp_TmnCode = PaymentConfig.vnp_TmnCode;
-        Order order = orderRepository.findByOrderID(Integer.parseInt(orderID));
-        BigDecimal totalAmount = order.gettotalOrder();
-        long refundAmount = totalAmount.multiply(BigDecimal.valueOf(100)).longValue();
-        String vnp_Amount = String.valueOf(refundAmount);
-        String vnp_OrderInfo = "Hoan tien GD OrderId:" + orderID;
-        String vnp_TransactionNo = "";
-        Account account = accountRepository.findByAccountID(accountID);
-        String vnp_CreateBy = account.getAccountName();
-        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        String vnp_CreateDate = formatter.format(cld.getTime());
-        String vnp_IpAddr = "127.0.0.1"; // Hoặc lấy từ request
-
-        Map<String, String> vnp_Params = new HashMap<>();
-        vnp_Params.put("vnp_RequestId", vnp_RequestId);
-        vnp_Params.put("vnp_Version", vnp_Version);
-        vnp_Params.put("vnp_Command", vnp_Command);
-        vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
-        vnp_Params.put("vnp_TransactionType", transactionType);
-        vnp_Params.put("vnp_TxnRef", orderID);
-        vnp_Params.put("vnp_Amount", vnp_Amount);
-        vnp_Params.put("vnp_OrderInfo", vnp_OrderInfo);
-        vnp_Params.put("vnp_TransactionDate", transactionDate);
-        vnp_Params.put("vnp_CreateBy", vnp_CreateBy);
-        vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
-        vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
-
-        if (!vnp_TransactionNo.isEmpty()) {
-            vnp_Params.put("vnp_TransactionNo", vnp_TransactionNo);
-        }
-
-        String hash_Data = String.join("|",
-                vnp_RequestId, vnp_Version, vnp_Command, vnp_TmnCode,
-                transactionType, orderID, vnp_Amount, vnp_TransactionNo,
-                transactionDate, vnp_CreateBy, vnp_CreateDate, vnp_IpAddr, vnp_OrderInfo);
-
-        String vnp_SecureHash = PaymentConfig.hmacSHA512(PaymentConfig.secretKey, hash_Data);
-        vnp_Params.put("vnp_SecureHash", vnp_SecureHash);
-
-        // Chuyển Map sang chuỗi JSON
-        StringBuilder jsonBuilder = new StringBuilder();
-        jsonBuilder.append("{");
-        for (Map.Entry<String, String> entry : vnp_Params.entrySet()) {
-            jsonBuilder.append("\"").append(entry.getKey()).append("\":\"")
-                    .append(entry.getValue()).append("\",");
-        }
-        // Xóa dấu phẩy cuối cùng
-        jsonBuilder.setLength(jsonBuilder.length() - 1);
-        jsonBuilder.append("}");
-        String jsonString = jsonBuilder.toString();
-
-        URL url = new URL(PaymentConfig.vnp_ApiUrl);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("POST");
-        con.setRequestProperty("Content-Type", "application/json");
-        con.setDoOutput(true);
-
-        try (DataOutputStream wr = new DataOutputStream(con.getOutputStream())) {
-            wr.writeBytes(jsonString);
-            wr.flush();
-        }
-
-        int responseCode = con.getResponseCode();
-        System.out.println("Sending 'POST' request to URL : " + url);
-        System.out.println("Post Data : " + jsonString);
-        System.out.println("Response Code : " + responseCode);
-
-        StringBuilder response;
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
-            String output;
-            response = new StringBuilder();
-            while ((output = in.readLine()) != null) {
-                response.append(output);
-            }
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(response.toString());
     }
 }
