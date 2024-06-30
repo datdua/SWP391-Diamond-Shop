@@ -59,7 +59,7 @@ public class Account {
     private Customer customer;
 
     @Transient
-    private String unencryptedPassword; // Transient field for unencrypted password
+    private String unencryptedPassword; 
 
     public Account() {
     }
@@ -69,7 +69,7 @@ public class Account {
         // Hàm khởi tạo với các tham số
         this.accountID = accountID;
         this.accountName = accountName;
-        setPassword(password); // Set mật khẩu với phương thức setPassword
+        setPassword(password); 
         this.role = role;
         this.phoneNumber = phoneNumber;
         this.email = email;

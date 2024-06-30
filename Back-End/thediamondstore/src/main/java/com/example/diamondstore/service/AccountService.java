@@ -246,26 +246,25 @@ public class AccountService implements UserDetailsService {
     }
 
     public Account updateAccount(Integer accountID, AccountRequest accountRequest) {
-        Account existingAccount = accountRepository.findById(accountID).orElse(null);
-        if (existingAccount == null) {
-            throw new RuntimeException("Không tìm thấy tài khoản");
-        }
-    
-        // Update account fields from request
-        existingAccount.setAccountName(accountRequest.getAccountName());
-        existingAccount.setEmail(accountRequest.getEmail());
-        existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
-        existingAccount.setRole(accountRequest.getRole());
-        existingAccount.setAddressAccount(accountRequest.getAddressAccount());
-    
-        // Only update the password if a new password is provided
-        if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty() &&
-            !accountRequest.getPassword().equals(existingAccount.getPassword())) {
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String encodedPassword = passwordEncoder.encode(accountRequest.getPassword());
-            existingAccount.setPassword(encodedPassword);
-        }
-    
-        return accountRepository.save(existingAccount);
+    Account existingAccount = accountRepository.findById(accountID).orElse(null);
+    if (existingAccount == null) {
+        throw new RuntimeException("Không tìm thấy tài khoản");
+    }
+
+    // Update account fields from request
+    existingAccount.setAccountName(accountRequest.getAccountName());
+    existingAccount.setEmail(accountRequest.getEmail());
+    existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
+    existingAccount.setRole(accountRequest.getRole());
+    existingAccount.setAddressAccount(accountRequest.getAddressAccount());
+
+    // Only update the password if a new password is provided
+    if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty() &&
+        !new BCryptPasswordEncoder().matches(accountRequest.getPassword(), existingAccount.getPassword())) {
+        // Directly set the password, letting the Account class handle hashing
+        existingAccount.setPassword(accountRequest.getPassword());
+    }
+
+    return accountRepository.save(existingAccount);
     }
 }
