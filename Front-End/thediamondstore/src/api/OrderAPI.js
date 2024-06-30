@@ -135,10 +135,7 @@ export const handleVnpayReturn = async (params) => {
 export const getPromotion = async (promotionCode) => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/promotion/{promotionCode}?${promotionCode}`,
-      {
-        params: { promotionCode },
-      }
+      `http://localhost:8080/api/promotion/code/${promotionCode}`,
     );
     return response.data;
   } catch (error) {

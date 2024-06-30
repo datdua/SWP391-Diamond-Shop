@@ -1,10 +1,8 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
-// actor: Customer
 import AboutPage from "./pages/About/AboutPage";
 import BackToTop from "./components/BackToTop";
 import CartPage from "./pages/Cart/CartPage";
@@ -23,7 +21,6 @@ import PortfolioPage from "./pages/Portfolio/PortfolioPage";
 import ProductPage from "./pages/Product/ProductPage";
 import WishlistPage from "./pages/Wishlist/WishlistPage";
 
-// actor: Admin
 import AccountManager from "./pages/Manager/AccountManager/AccountManager";
 import JewelryManagerPage from "./pages/Manager/JewelryManager/JewelryManagerPage";
 import PaymentConfirm from "./pages/PaymentConfirm/PaymentConfirm";
@@ -45,12 +42,12 @@ import ScrollToTop from "./components/ScrollToTop";
 import EmailConfirm from "./pages/EmailConfirm/EmailConfirm";
 import ResetPasswordForm from "./components/ResetPasswordForm/ResetPasswordForm";
 
-
 function App() {
-  const handleLogout = (logoutCallback) => {
-    if (logoutCallback) {
-      logoutCallback();
-    }
+
+  const handleLogout = () => {
+    setTimeout(() => {
+      window.location.href='/dangnhap';
+    }, 2000);
   };
 
   return (
@@ -66,32 +63,31 @@ function App() {
         draggable
         pauseOnHover
       />
-      <AuthProvider logoutCallback={() => handleLogout(handleLogout)}>
+      <AuthProvider logoutCallback={handleLogout}>
         <ScrollToTop/>
         <Routes>
-          {/* actor: Customer */}
-          <Route path="/" element={<> <Header /> <HomePage /> <Footer /> <BackToTop /> </>} />
-          <Route path="/dangnhap" element={<> <Header /> <LoginRegisterPage /> <Footer /> <BackToTop /> </>} />
-          <Route path="/xacthucthanhtoan" element={<> <Header /> <PaymentConfirm /> <Footer /> <BackToTop /> </>} />
-          <Route path="/trangchu" element={<> <Header /> <HomePage /> <Footer /> <BackToTop /> </>} />
-          <Route path="/gioithieu" element={<> <Header /> <AboutPage /> <Footer /> <BackToTop /> </>} />
-          <Route path="/lienhe" element={<> <Header /> <ContactPage /> <Footer /> <BackToTop /> </>} />
-          <Route path="/sanpham" element={<> <Header /> <ProductPage /> <Footer /> <BackToTop /> </>} />
-          <Route path="/trangsuc" element={<> <Header /> <JewelryPage /> <Footer /> <BackToTop /> </>} />
-          <Route path="/kimcuong" element={<> <Header /> <DiamondPage /> <Footer /> <BackToTop /> </>} />
-          <Route path="/cart/:accountId" element={<> <Header /> <CartPage /> <Footer /> <BackToTop /> </>} />
-          <Route path="/product-detail/jewelry/:jewelryId" element={<> <Header /> <JewelryDetailPage /> <Footer /> <BackToTop /> </>} />
-          <Route path="/product-detail/diamond/:diamondId" element={<> <Header /> <DiamondDetailPage /> <Footer /> <BackToTop /> </>} />
-          <Route path="/account/:accountId" element={<> <Header /> <MyAccountPage /> <Footer /> <BackToTop /> </>} />
-          <Route path="/checkout/:accountId" element={<> <Header /> <CheckoutPage /> <Footer /> <BackToTop /> </>} />
-          <Route path="/wishlist" element={<> <Header /> <WishlistPage /> <Footer /> <BackToTop /> </>} />
-          <Route path="/portfolio" element={<> <Header /> <PortfolioPage /> <Footer /> <BackToTop /> </>} />
-          <Route path="/kienthuckimcuong" element={<> <Header /> <Knowledge /> <Footer /> <BackToTop />  </> }/>
-          <Route path="/xacthucemail" element={<><Header/><EmailConfirm/><Footer/></>}/>
-          <Route path="/datlaimatkhau" element={<><Header/><ResetPasswordForm/><Footer/></>}/>
-          {/* actor: //Customer */}
+          {/* Customer Routes */}
+          <Route path="/" element={<><Header /><HomePage /><Footer /><BackToTop /></>} />
+          <Route path="/dangnhap" element={<><Header /><LoginRegisterPage /><Footer /><BackToTop /></>} />
+          <Route path="/xacthucthanhtoan" element={<><Header /><PaymentConfirm /><Footer /><BackToTop /></>} />
+          <Route path="/trangchu" element={<><Header /><HomePage /><Footer /><BackToTop /></>} />
+          <Route path="/gioithieu" element={<><Header /><AboutPage /><Footer /><BackToTop /></>} />
+          <Route path="/lienhe" element={<><Header /><ContactPage /><Footer /><BackToTop /></>} />
+          <Route path="/sanpham" element={<><Header /><ProductPage /><Footer /><BackToTop /></>} />
+          <Route path="/trangsuc" element={<><Header /><JewelryPage /><Footer /><BackToTop /></>} />
+          <Route path="/kimcuong" element={<><Header /><DiamondPage /><Footer /><BackToTop /></>} />
+          <Route path="/cart/:accountId" element={<><Header /><CartPage /><Footer /><BackToTop /></>} />
+          <Route path="/product-detail/jewelry/:jewelryId" element={<><Header /><JewelryDetailPage /><Footer /><BackToTop /></>} />
+          <Route path="/product-detail/diamond/:diamondId" element={<><Header /><DiamondDetailPage /><Footer /><BackToTop /></>} />
+          <Route path="/account/:accountId" element={<><Header /><MyAccountPage /><Footer /><BackToTop /></>} />
+          <Route path="/checkout/:accountId" element={<><Header /><CheckoutPage /><Footer /><BackToTop /></>} />
+          <Route path="/wishlist" element={<><Header /><WishlistPage /><Footer /><BackToTop /></>} />
+          <Route path="/portfolio" element={<><Header /><PortfolioPage /><Footer /><BackToTop /></>} />
+          <Route path="/kienthuckimcuong" element={<><Header /><Knowledge /><Footer /><BackToTop /></>} />
+          <Route path="/xacthucemail" element={<><Header /><EmailConfirm /><Footer /></>} />
+          <Route path="/datlaimatkhau" element={<><Header /><ResetPasswordForm /><Footer /></>} />
 
-          {/* actor: Admin */}
+          {/* Admin Routes */}
           <Route path="/admin/*" element={<SideBarAdmin />}>
             <Route path="profile" element={<ProfilePage />} />
             <Route path="dashboard" element={<Dashboard />} />
@@ -107,7 +103,6 @@ function App() {
             <Route path="transaction-manager" element={<TransactionManagerPage />} />
             <Route path="diamond/certificate-manager" element={<CertificateManagerPage />} />
           </Route>
-          {/* actor: //Admin */}
         </Routes>
       </AuthProvider>
     </BrowserRouter>
