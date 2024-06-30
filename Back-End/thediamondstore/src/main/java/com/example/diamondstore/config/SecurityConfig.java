@@ -35,7 +35,12 @@ public class SecurityConfig {
         "/api/test/**", "/authenticate"};
     private static final String[] COMMON_URL = {"/login", "/api/accounts/register", "/api/diamonds/**", "/api/certificates/**", "/api/jewelry/**", "/api/customers/**", 
     "/api/accounts/forgetPassword/**", "/api/promotion/**", "/api/warranties/**", "/api/orders/**", "/api/cart/**", "/api/accounts/**", 
-    "/api/accounts", "/api/cart", "api/collections/**", "/api/collections", "/api/production/**", "/api/production", "/api/diamondprices", "/api/diamondprices/**", "/api/goldPrices", "/api/goldPrices/**"};
+    "/api/accounts", "/api/cart", "api/collections/**", "/api/collections", "/api/production/**", "/api/production", "/api/goldPrices", "/api/goldPrices/**"};
+    private static final String[] ADMIN_URLS = {"/api/diamondprices/**"};
+    private static final String[] CUSTOMER_OR_ADMIN_GET_URLS = {"/api/diamondprices/**"};
+
+    private static final String ROLE_ADMIN = "ADMIN";
+    private static final String ROLE_CUSTOMER = "CUSTOMER";
 
     @Autowired
     private final AccountService UserService;
@@ -58,6 +63,9 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight requests
                 .antMatchers(SWAGGER_URL).permitAll()
                 .antMatchers(COMMON_URL).permitAll()
+                .antMatchers(HttpMethod.PUT, ADMIN_URLS).hasRole(ROLE_ADMIN)
+                .antMatchers(HttpMethod.DELETE, ADMIN_URLS).hasRole(ROLE_ADMIN)
+                .antMatchers(HttpMethod.GET, CUSTOMER_OR_ADMIN_GET_URLS).hasAnyRole(ROLE_CUSTOMER, ROLE_ADMIN)
                 .anyRequest().authenticated())
                 .exceptionHandling(e -> e
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
