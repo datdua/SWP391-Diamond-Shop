@@ -176,10 +176,10 @@ function CheckoutPage() {
                                                             <tr key={`${item.diamondID || item.jewelryID}-${index}`}>
                                                                 <td>
                                                                     {item.diamondID && (
-                                                                        <Link to={`/product-detail/diamond/${item.diamondID}`} className="tm-checkout-productlink">{item.diamondName} * {item.quantity}</Link>
+                                                                        <Link to={`#`} className="tm-checkout-productlink">{item.diamondName} * {item.quantity}</Link>
                                                                     )}
                                                                     {item.jewelryID && (
-                                                                        <Link to={`/product-detail/jewelry/${item.jewelryID}`} className="tm-checkout-productlink">{item.jewelryName} * {item.quantity}</Link>
+                                                                        <Link to={`#`} className="tm-checkout-productlink">{item.jewelryName} * {item.quantity}</Link>
                                                                     )}
                                                                 </td>
                                                                 <td>

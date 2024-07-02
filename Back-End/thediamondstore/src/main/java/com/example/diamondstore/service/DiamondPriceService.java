@@ -35,15 +35,15 @@ public class DiamondPriceService {
         return diamondPriceRepository.findAll();
     }
 
-    public ResponseEntity<Map<String, String>> updateDiamondPrice(Integer diamondpriceID, DiamondPriceRequest diamondPriceRequest) {
-        DiamondPrice existingDiamondPrice = diamondPriceRepository.findById(diamondpriceID).orElse(null);
+    public ResponseEntity<Map<String, String>> updateDiamondPrice(Integer diamondPriceID, DiamondPriceRequest diamondPriceRequest) {
+        DiamondPrice existingDiamondPrice = diamondPriceRepository.findById(diamondPriceID).orElse(null);
         if (existingDiamondPrice == null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy DiamondPrice"));
         }
 
         existingDiamondPrice.setClarity(diamondPriceRequest.getClarity());
         existingDiamondPrice.setColor(diamondPriceRequest.getColor());
-        existingDiamondPrice.setCarat_size(diamondPriceRequest.getCarat_size());
+        existingDiamondPrice.setCaratSize(diamondPriceRequest.getCaratSize());
         existingDiamondPrice.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
 
         diamondPriceRepository.save(existingDiamondPrice);
@@ -54,7 +54,7 @@ public class DiamondPriceService {
         }
 
         DiamondPrice diamondPriceWithDiamondID = diamondPriceRepository.findByDiamondID(diamondPriceRequest.getDiamondID());
-        if (diamondPriceWithDiamondID != null && !diamondPriceWithDiamondID.getDiamondpriceID().equals(existingDiamondPrice.getDiamondpriceID())) {
+        if (diamondPriceWithDiamondID != null && !diamondPriceWithDiamondID.getDiamondPriceID().equals(existingDiamondPrice.getDiamondPriceID())) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Kim cương này đã có giá"));
         }
         // Update the diamondEntryPrice and grossDiamondPrice
@@ -83,7 +83,7 @@ public class DiamondPriceService {
         diamondPrice.setDiamondID(diamondPriceRequest.getDiamondID());
         diamondPrice.setClarity(diamondPriceRequest.getClarity());
         diamondPrice.setColor(diamondPriceRequest.getColor());
-        diamondPrice.setCarat_size(diamondPriceRequest.getCarat_size());
+        diamondPrice.setCaratSize(diamondPriceRequest.getCaratSize());
         diamondPrice.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
 
         diamondPriceRepository.save(diamondPrice);
@@ -100,8 +100,8 @@ public class DiamondPriceService {
         
     }
         
-    public DiamondPrice getDiamondPriceById(Integer diamondpriceID) {
-        return diamondPriceRepository.findById(diamondpriceID).orElseThrow(() -> new RuntimeException("DiamondPrice not found"));
+    public DiamondPrice getDiamondPriceById(Integer diamondPriceID) {
+        return diamondPriceRepository.findById(diamondPriceID).orElseThrow(() -> new RuntimeException("DiamondPrice not found"));
     }
 
     public ResponseEntity<Map<String, String>> deleteDiamondPrices(@RequestBody List<Integer> diamondPriceIDs) {
@@ -125,5 +125,10 @@ public class DiamondPriceService {
         diamond.setGrossDiamondPrice(diamondPrice.getDiamondEntryPrice().multiply(new BigDecimal("1.1")));
 
         diamondRepository.save(diamond);
+    }
+
+
+    public List<DiamondPrice> getDiamondPricesByCaratSize(BigDecimal caratSize) {
+        return diamondPriceRepository.findByCaratSize(caratSize);
     }
 }

@@ -46,10 +46,11 @@ export const updateDiamondPrice = async (diamondPriceID, diamondPrice) => {
   }
 };
 
-export const deleteDiamondPrice = async (diamondPriceID) => {
+export const deleteDiamondPrice = async (diamondPriceIDs) => {
   try {
     const response = await axios.delete(
-      `http://localhost:8080/api/diamondprices/${diamondPriceID}`
+      `http://localhost:8080/api/diamondprices`
+      , { data: diamondPriceIDs }
     );
     return response.data;
   } catch (error) {

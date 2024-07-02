@@ -14,7 +14,7 @@ export async function getAllJewelry() {
 export async function searchJewelryByName(name) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/jewelry/search/filter?jewelryName=${name}`
+      `http://localhost:8080/api/jewelry/searchByName?name=${name}`
     );
     console.log(response.data); // Log the response data
     return response.data;
@@ -69,10 +69,11 @@ export async function updateJewelry(jewelryID, jewelry) {
   }
 }
 
-export async function deleteJewelry(jewelryID) {
+export async function deleteJewelry(jewelryIDs) {
   try {
     const response = await axios.delete(
-      `http://localhost:8080/api/jewelry/delete/${jewelryID}`
+      `http://localhost:8080/api/jewelry/delete`
+      , { data: jewelryIDs }
     );
     return response.data;
   } catch (error) {

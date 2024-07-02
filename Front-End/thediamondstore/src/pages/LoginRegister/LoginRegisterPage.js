@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./LoginRegisterPage.css";
-import {jwtDecode} from 'jwt-decode'; // Correct import statement for jwtDecode
+import { jwtDecode } from 'jwt-decode'; // Correct import statement for jwtDecode
 import ForgetPasswordModal from "../../components/ForgetPasswordModal/ForgetPasswordModal";
 
 
@@ -27,6 +27,7 @@ function LoginRegisterPage() {
     e.preventDefault();
 
     try {
+      
       const response = await axios.post(
         "http://localhost:8080/login",
         {
@@ -55,7 +56,7 @@ function LoginRegisterPage() {
         setIsLoggedIn(true);
         toast.success("Đăng nhập thành công!");
 
-        if (decodedToken.role === "ROLE_ADMIN") {
+        if (decodedToken.role === "ROLE_ADMIN" || decodedToken.role === "ROLE_MANAGER") {
           navigate("/admin/profile");
         } else {
           navigate("/trangchu");

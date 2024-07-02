@@ -8,17 +8,17 @@ public class DiamondPriceRequest {
     private BigDecimal diamondEntryPrice;
     private String clarity;
     private String color;
-    private Float carat_size;
+    private BigDecimal caratSize;
 
     public DiamondPriceRequest() {
     }
 
-    public DiamondPriceRequest(String diamondID, BigDecimal diamondEntryPrice, String clarity, String color, Float carat_size) {
+    public DiamondPriceRequest(String diamondID, BigDecimal diamondEntryPrice, String clarity, String color, BigDecimal caratSize) {
         this.diamondID = diamondID;
         this.diamondEntryPrice = diamondEntryPrice;
         this.clarity = clarity;
         this.color = color;
-        this.carat_size = carat_size;
+        this.caratSize = caratSize;
     }
 
     public String getDiamondID() {
@@ -53,12 +53,12 @@ public class DiamondPriceRequest {
         this.color = color;
     }
 
-    public Float getCarat_size() {
-        return carat_size;
+    public BigDecimal getCaratSize() {
+        return caratSize;
     }
 
-    public void setCarat_size(Float carat_size) {
-        this.carat_size = carat_size;
+    public void setCaratSize(BigDecimal caratSize) {
+        this.caratSize = caratSize;
     }
 
     

@@ -59,10 +59,11 @@ export async function updateDiamond(diamondID, diamond) {
   }
 }
 
-export async function deleteDiamond(diamondID) {
+export async function deleteDiamond(diamondIDs) {
   try {
     const response = await axios.delete(
-      `http://localhost:8080/api/diamonds/delete/${diamondID}`
+      `http://localhost:8080/api/diamonds/delete`
+      , { data: diamondIDs }
     );
     return response.data;
   } catch (error) {
@@ -97,7 +98,7 @@ export async function getWarrantityImage(warrantyID) {
 export async function searchDiamondByName(name) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/diamonds/search/filter?diamondName=${name}`
+      `http://localhost:8080/api/diamonds/search/filter?diamondNameLike=${name}`
     );
     if (response.status !== 200) {
       throw new Error("Failed to search diamonds by name");

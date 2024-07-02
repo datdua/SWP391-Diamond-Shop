@@ -1,7 +1,9 @@
 package com.example.diamondstore.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.diamondstore.DTO.OrderSummaryDTO;
 import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.Cart;
 import com.example.diamondstore.model.Certificate;
@@ -249,5 +252,115 @@ public class OrderService {
         return total;
     }
 
+    public Long getTotalOrdersByOrderStatus(String orderStatus) {
+        return orderRepository.countByOrderStatus("Đã thanh toán");
+    }
+
+    public Long getTotalOrders() {
+        return orderRepository.count();
+    }
+
+    // Lấy tổng số Order trong 1 ngày
+    public int getTotalOrdersInDay() {
+        LocalDateTime start = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime end = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).withNano(999999999);
+        return orderRepository.countByStartorderDateBetween(start, end);
+    }
+
+    // tính tổng totalOrder của tất cả Order trong 1 ngày
+    public OrderSummaryDTO getRevenueValueInToday() {
+        LocalDateTime start = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime end = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).withNano(999999999);
+        List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
+        BigDecimal total = BigDecimal.ZERO;
+        for (Order order : orders) {
+            total = total.add(order.gettotalOrder());
+        }
+        
+        // tạo một đối tượng OrderSummary để lưu trữ kết quả
+        OrderSummaryDTO summary = new OrderSummaryDTO(LocalDate.now(), total);
+        return summary;
+    }
+
+    // tính tổng totalOrder của tất cả Order từng ngày trong 1 tháng
+    public List<OrderSummaryDTO> getRevenueDayInMonth() {
+        LocalDate now = LocalDate.now();
+        int month = now.getMonthValue();
+        int year = now.getYear();
+        int dayOfMonth = now.lengthOfMonth();
+        List<OrderSummaryDTO> summaries = new ArrayList<>();
+        for (int i = 1; i <= dayOfMonth; i++) {
+            LocalDate date = LocalDate.of(year, month, i);
+            LocalDateTime start = date.atStartOfDay();
+            LocalDateTime end = date.atTime(23, 59, 59, 999999999);
+            List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
+            BigDecimal total = BigDecimal.ZERO;
+            for (Order order : orders) {
+                total = total.add(order.gettotalOrder());
+            }
+            OrderSummaryDTO summary = new OrderSummaryDTO(date, total);
+            summaries.add(summary);
+        }
+        return summaries;
+    }
+
+    // tính tổng totalOrder của tất cả Order từng ngày trong tháng (đã chọn) trong năm (đã chọn)
+    public List<OrderSummaryDTO> getRevenueDayInMonthInYear(int month, int year) {
+        int dayOfMonth = LocalDate.of(year, month, 1).lengthOfMonth();
+        List<OrderSummaryDTO> summaries = new ArrayList<>();
+        for (int i = 1; i <= dayOfMonth; i++) {
+            LocalDate date = LocalDate.of(year, month, i);
+            LocalDateTime start = date.atStartOfDay();
+            LocalDateTime end = date.atTime(23, 59, 59, 999999999);
+            List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
+            BigDecimal revenue = BigDecimal.ZERO;
+            for (Order order : orders) {
+                revenue = revenue.add(order.gettotalOrder());
+            }
+            OrderSummaryDTO summary = new OrderSummaryDTO(date, revenue);
+            summaries.add(summary);
+        }
+        return summaries;
+    }
+
+    // tính tổng totalOrder của tất cả Order từng tháng trong 1 năm
+    public List<OrderSummaryDTO> getRevenueMonthInYear() {
+        LocalDate now = LocalDate.now();
+        int year = now.getYear();
+        List<OrderSummaryDTO> summaries = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            LocalDate startOfMonth = LocalDate.of(year, i, 1);
+            LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+            LocalDateTime start = startOfMonth.atStartOfDay();
+            LocalDateTime end = endOfMonth.atTime(23, 59, 59, 999999999);
+            List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
+            BigDecimal revenue = BigDecimal.ZERO;
+            for (Order order : orders) {
+                revenue = revenue.add(order.gettotalOrder());
+            }
+            OrderSummaryDTO summary = new OrderSummaryDTO(endOfMonth, revenue);
+            summaries.add(summary);
+        }
+        return summaries;
+    }
+
+    // tính tổng total Order của tất cả Order từng tháng trong năm (đã chọn)
+    public List<OrderSummaryDTO> getRevenueMonthInYear(int year) {
+        List<OrderSummaryDTO> summaries = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            LocalDate startOfMonth = LocalDate.of(year, i, 1);
+            LocalDate endOfMonth = startOfMonth.withDayOfMonth(startOfMonth.lengthOfMonth());
+            LocalDateTime start = startOfMonth.atStartOfDay();
+            LocalDateTime end = endOfMonth.atTime(23, 59, 59, 999999999);
+            List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
+            BigDecimal revenue = BigDecimal.ZERO;
+            for (Order order : orders) {
+                revenue = revenue.add(order.gettotalOrder());
+            }
+            OrderSummaryDTO summary = new OrderSummaryDTO(endOfMonth, revenue);
+            summaries.add(summary);
+        }
+        return summaries;
+    }
 }
 

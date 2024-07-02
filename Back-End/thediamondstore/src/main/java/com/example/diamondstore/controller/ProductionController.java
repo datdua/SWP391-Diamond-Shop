@@ -47,4 +47,11 @@ public class ProductionController {
         long totalProduction = productionService.getTotalProduction();
         return new ResponseEntity<>(totalProduction, HttpStatus.OK);
     }
+
+    @GetMapping("/totalDiamond&Jewelry")
+    public ResponseEntity<Map<String, Object>> getTotalProductionCount() {
+        Map<String, Object> response = productionService.getTotalProductionCount();
+        return ResponseEntity.ok(response);
+    }
+    
 }

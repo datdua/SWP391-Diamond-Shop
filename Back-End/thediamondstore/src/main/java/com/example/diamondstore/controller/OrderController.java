@@ -2,6 +2,7 @@ package com.example.diamondstore.controller;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.diamondstore.DTO.OrderSummaryDTO;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.request.putRequest.OrderPutRequest;
 import com.example.diamondstore.service.OrderService;
-
-
 
 @RestController
 @RequestMapping("/api/orders")
@@ -29,7 +29,6 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
-
 
     @GetMapping(value = "/get/{orderID}")
     public ResponseEntity<Order> getOrder(@PathVariable int orderID) {
@@ -70,7 +69,6 @@ public class OrderController {
     public ResponseEntity<?> getOrdersHaveTransactionNo() {
         return ResponseEntity.ok(orderService.getOrdersHaveTransactionNo());
     }
-    
 
     @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> createOrder(
@@ -84,24 +82,23 @@ public class OrderController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo đơn hàng thành công"));
     }
 
-
-    @DeleteMapping(value ="/cancel/{orderID}", produces = "application/json;charset=UTF-8")
+    @DeleteMapping(value = "/cancel/{orderID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> cancelOrder(@PathVariable int orderID) {
-    try {
-        orderService.cancelOrder(orderID);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Hủy đơn hàng thành công"));
-    } catch (IllegalStateException e) {
-        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
-    }
+        try {
+            orderService.cancelOrder(orderID);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Hủy đơn hàng thành công"));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+        }
     }
 
     @PutMapping(value = "/update/{orderID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> updateOrder(@PathVariable Integer orderID, @RequestBody OrderPutRequest orderPutRequest) {
-    Map<String, String> response = orderService.updateOrder(orderID, orderPutRequest);
-    if (response.get("message").equals("Cập nhật thất bại")) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-    }
-    return ResponseEntity.ok(response);
+        Map<String, String> response = orderService.updateOrder(orderID, orderPutRequest);
+        if (response.get("message").equals("Cập nhật thất bại")) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping(value = "/getByStatus/{orderStatus}", produces = "application/json;charset=UTF-8")
@@ -114,10 +111,65 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getAllOrdersPaged(page, size));
     }
 
-    @GetMapping("/totalOrderPaid")
+    @GetMapping("/totalRevenue")
     public ResponseEntity<BigDecimal> getTotalOrderPaid() {
         BigDecimal totalOrderPaid = orderService.getTotalOrderByOrderStatusPaid();
         return ResponseEntity.ok(totalOrderPaid);
     }
+
+    @GetMapping("/totalOrder")
+    public ResponseEntity<Long> getTotalOrder() {
+        long totalOrder = orderService.getTotalOrders();
+        return new ResponseEntity<>(totalOrder, HttpStatus.OK);
+    }
+
+    @GetMapping("/totalTransaction")
+    public ResponseEntity<Long> getTotalOrderStatusPaid() {
+        long totalOrderStatusPaid = orderService.getTotalOrdersByOrderStatus("Đã thanh toán");
+        return new ResponseEntity<>(totalOrderStatusPaid, HttpStatus.OK);
+    }
+
+    // API to get total number of orders in a day
+    @GetMapping("/totalOrdersInDay")
+    public ResponseEntity<Integer> getTotalOrdersInDay() {
+        int totalOrders = orderService.getTotalOrdersInDay();
+        return new ResponseEntity<>(totalOrders, HttpStatus.OK);
+    }
+
+    // API to get total order value in a day
+    @GetMapping("/totalRevenueValueInToday")
+    public ResponseEntity<?> getRevenueValueInToday() {
+        OrderSummaryDTO orderSummary = orderService.getRevenueValueInToday();
+        return new ResponseEntity<>(orderSummary, HttpStatus.OK);
+    }
+
+    // API to get total order value in a month
+    @GetMapping("/totalRevenueDayInMonth")
+    public ResponseEntity<?> getRevenueDayInMonth() {
+        List<OrderSummaryDTO> orderSummaries = orderService.getRevenueDayInMonth();
+        return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
+    }
+
+    // API to get total order value in month xx of year yyyyy
+    @GetMapping("/totalRevenueDayInMonthInYear")
+    public ResponseEntity<?> getRevenueDayInMonthInYear(@RequestParam int month, @RequestParam int year) {
+        List<OrderSummaryDTO> orderSummaries = orderService.getRevenueDayInMonthInYear(month, year);
+        return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
+    }
+
+    // API to get total order value in a year
+    @GetMapping("/totalRevenueMonthInYear")
+    public ResponseEntity<?> getRevenueMonthInYear() {
+        List<OrderSummaryDTO> orderSummaries = orderService.getRevenueMonthInYear();
+        return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
+    }
+
+    // API to get total order value in year yyyy
+    @GetMapping("/totalRevenueMonthInAYear")
+    public ResponseEntity<?> getRevenueMonthInAYear(@RequestParam int year) {
+        List<OrderSummaryDTO> orderSummaries = orderService.getRevenueMonthInYear(year);
+        return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
+    }
 }
+
 
