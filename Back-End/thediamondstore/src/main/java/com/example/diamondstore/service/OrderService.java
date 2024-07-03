@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -149,23 +150,22 @@ public class OrderService {
         return order;
     }
 
-
     public void cancelOrder(int orderID) {
-    Order order = orderRepository.findById(orderID)
-            .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+        Order order = orderRepository.findById(orderID)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found"));
 
-    if (!order.getOrderStatus().equals("Đang xử lý")) {
-        throw new IllegalStateException("Chỉ Order có Status 'Đang xử lý' mới được xóa");
-    }
+        if (!order.getOrderStatus().equals("Đang xử lý")) {
+            throw new IllegalStateException("Chỉ Order có Status 'Đang xử lý' mới được xóa");
+        }
 
-    // Delete the Cart items associated with the Order
-    List<Cart> carts = order.getCartItems();
-    for (Cart cart : carts) {
-        cartRepository.delete(cart);
-    }
+        // Delete the Cart items associated with the Order
+        List<Cart> carts = order.getCartItems();
+        for (Cart cart : carts) {
+            cartRepository.delete(cart);
+        }
 
-    // Now delete the Order
-    orderRepository.delete(order);
+        // Now delete the Order
+        orderRepository.delete(order);
     }
 
     public Order getOrder(int orderID) {
@@ -173,7 +173,6 @@ public class OrderService {
         order.getCartItems().size(); // This will fetch the cartItems from the database
         return order;
     }
-
 
     public List<Order> getOrdersByAccountId(int accountID) {
         Account account = accountRepository.findById(accountID)
@@ -208,7 +207,7 @@ public class OrderService {
             existingOrder.setDeliveryDate(orderPutRequest.getDeliveryDate());
             existingOrder.setCertificateImage(orderPutRequest.getCertificateImage());
             existingOrder.setWarrantyImage(orderPutRequest.getWarrantyImage());
-            
+
             // Handle promotion code and totalOrder update
             String newPromotionCode = orderPutRequest.getPromotionCode();
             BigDecimal totalOrder = existingOrder.gettotalOrder();
@@ -239,10 +238,10 @@ public class OrderService {
         return orderRepository.findAll(pageable);
     }
 
-    public List<Order> getOrdersHaveTransactionNo(){
+    public List<Order> getOrdersHaveTransactionNo() {
         return orderRepository.findByTransactionNoNotNull();
     }
-    
+
     public BigDecimal getTotalOrderByOrderStatusPaid() {
         List<Order> paidOrders = orderRepository.findAllByOrderStatus("Đã thanh toán");
         BigDecimal total = BigDecimal.ZERO;
@@ -276,7 +275,7 @@ public class OrderService {
         for (Order order : orders) {
             total = total.add(order.gettotalOrder());
         }
-        
+
         // tạo một đối tượng OrderSummary để lưu trữ kết quả
         OrderSummaryDTO summary = new OrderSummaryDTO(LocalDate.now(), total);
         return summary;
@@ -362,5 +361,28 @@ public class OrderService {
         }
         return summaries;
     }
-}
 
+    //last in first out order with accountID
+    public Integer LIFO(Integer accountID) {
+        Optional<Account> accountOpt = accountRepository.findById(accountID);
+    
+        if (accountOpt.isPresent()) {
+            Account account = accountOpt.get();
+            List<Order> orders = orderRepository.findByAccount(account);
+    
+            if (orders.isEmpty()) {
+                return null; // or throw an exception if preferred
+            }
+    
+            // Sort orders by creation date or ID in descending order
+            orders.sort((o1, o2) -> o2.getStartorderDate().compareTo(o1.getStartorderDate())); // or o2.getId().compareTo(o1.getId())
+    
+            // Get the first order ID from the sorted list
+            Integer max = orders.get(0).getOrderID();
+    
+            return max;
+        } else {
+            return null;
+        }
+    }   
+}

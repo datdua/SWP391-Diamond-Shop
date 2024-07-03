@@ -30,6 +30,7 @@ import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.request.AccountRequest;
 import com.example.diamondstore.request.RegisterRequest;
 import com.example.diamondstore.service.AccountService;
+import com.example.diamondstore.service.OrderService;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -38,11 +39,13 @@ public class AccountController {
     private final AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
     private final OrderRepository orderRepository;
+    private final OrderService orderService;
 
-    public AccountController(AccountRepository accountRepository, CustomerRepository customerRepository, OrderRepository orderRepository) {
+    public AccountController(AccountRepository accountRepository, CustomerRepository customerRepository, OrderRepository orderRepository, OrderService orderService) {
         this.accountRepository = accountRepository;
         this.customerRepository = customerRepository;
         this.orderRepository = orderRepository;
+        this.orderService = orderService;
     }
 
     @Autowired
@@ -190,33 +193,36 @@ public class AccountController {
     //get phoneNumber, addressAccount by accountID
     @GetMapping("/contactInfo/{accountID}")
     public ResponseEntity<?> getContactInfoByAccountID(@PathVariable Integer accountID) {
-        Account account = accountRepository.findById(accountID).orElse(null);
-        if (account == null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
-        }
-
-        String phoneNumber = account.getPhoneNumber();
-        String address = account.getAddressAccount();
-
-        // Check if phoneNumber and address are null
-        if (phoneNumber == null || address == null) {
-            Order order = orderRepository.findFirstByAccountIDOrderByOrderDateDesc(accountID);
-            if (order != null) {
-                if (phoneNumber == null) {
-                    phoneNumber = order.getPhoneNumber();
-                }
-                if (address == null) {
-                    address = order.getDeliveryAddress();
-                }
-            }
-        }
-
-        // If both phoneNumber and address are still null, return an appropriate message
-        if (phoneNumber == null || address == null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy thông tin liên lạc hợp lệ"));
-        }
-
-        AccountContactInfoDTO contactInfo = new AccountContactInfoDTO(phoneNumber, address);
-        return ResponseEntity.ok(contactInfo);
+    Optional<Account> accountOpt = accountRepository.findById(accountID);
+    if (accountOpt.isEmpty()) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
     }
+    
+    Account account = accountOpt.get();
+    String phoneNumber = account.getPhoneNumber();
+    String address = account.getAddressAccount();
+
+    // Check if phoneNumber and address are null
+    if (phoneNumber == null || address == null) {
+        Integer orderNo = orderService.LIFO(accountID);
+        if (orderNo == null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy thông tin liên lạc hợp lệ"));
+        } else {
+            Order order = orderRepository.findByOrderID(orderNo);
+            if (order != null) {
+                phoneNumber = order.getPhoneNumber();
+                address = order.getDeliveryAddress();  
+            } 
+        }       
+    }
+
+    // If both phoneNumber and address are still null, return an appropriate message
+    if (phoneNumber == null || address == null) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy thông tin liên lạc hợp lệ"));
+    }
+
+    AccountContactInfoDTO contactInfo = new AccountContactInfoDTO(phoneNumber, address);
+    return ResponseEntity.ok(contactInfo);
+}
+
 }
