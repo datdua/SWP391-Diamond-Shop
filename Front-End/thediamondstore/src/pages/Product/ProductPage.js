@@ -204,33 +204,7 @@ function ProductPage() {
           </div>
         </main>
         {/* Modal for Product Quickview */}
-        <div id="tm-product-quickview">
-          {selectedItem && (
-            <Modal
-              isOpen={modalIsOpen}
-              onRequestClose={closeModal}
-              style={customModalStyles}
-              contentLabel="Product Quickview"
-            >
-              <div className="modal-content">
-                <div className="img-container">
-                  <img src={selectedItem.imageUrl} alt={selectedItem.name} />
-                </div>
-                <button className="close-button" onClick={closeModal}>
-                  Close
-                </button>
-                <div className="content-container">
-                  <h2>{selectedItem.name}</h2>
-                  <p>{selectedItem.description}</p>
-                  <p>Product ID: {selectedItem.id}</p>
-                  {/* Assuming selectedItem has category and price */}
-                  <p>Category: {selectedItem.category}</p>
-                  <span>{selectedItem.price.toLocaleString()} VND</span>
-                </div>
-              </div>
-            </Modal>
-          )}
-        </div>
+        
       </div>
     </div>
   );

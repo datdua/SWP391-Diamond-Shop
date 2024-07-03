@@ -121,6 +121,7 @@ function CartPage() {
                                                     <div className="tm-quantitybox">
                                                         <input
                                                             type="number"
+                                                            min="1"
                                                             value={item.quantity}
                                                             onChange={(e) => handleUpdateCartItem(item.cartID, parseInt(e.target.value, 10), item.sizeJewelry, item.diamondID, item.jewelryID)}
                                                             className="w-12 text-center"
