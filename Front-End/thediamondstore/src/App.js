@@ -41,6 +41,7 @@ import { AuthProvider } from "./components/Auth/AuthProvider";
 import ScrollToTop from "./components/ScrollToTop";
 import EmailConfirm from "./pages/EmailConfirm/EmailConfirm";
 import ResetPasswordForm from "./components/ResetPasswordForm/ResetPasswordForm";
+import { PointsProvider } from "./components/PointsContext/PointsContext";
 
 function App() {
 
@@ -64,6 +65,7 @@ function App() {
         pauseOnHover
       />
       <AuthProvider logoutCallback={handleLogout}>
+        <PointsProvider>
         <ScrollToTop/>
         <Routes>
           {/* Customer Routes */}
@@ -104,6 +106,7 @@ function App() {
             <Route path="diamond/certificate-manager" element={<CertificateManagerPage />} />
           </Route>
         </Routes>
+        </PointsProvider>
       </AuthProvider>
     </BrowserRouter>
   );

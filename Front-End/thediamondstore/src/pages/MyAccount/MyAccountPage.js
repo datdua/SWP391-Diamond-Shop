@@ -1,5 +1,3 @@
-// MyAccountPage.js
-
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./MyAccountPage.css";
@@ -8,6 +6,7 @@ import { getAccountByID, updateAccount } from "../../api/accountCrud";
 import { AuthContext } from "../../components/Auth/AuthContext";
 import OrderSidebar from "../../components/OrderSidebar/OrderSidebar";
 import { toast } from "react-toastify";
+import { PointsContext } from "../../components/PointsContext/PointsContext";
 
 function MyAccountPage() {
   const { accountName } = useContext(AuthContext);
@@ -16,9 +15,9 @@ function MyAccountPage() {
   const [error, setError] = useState(null);
   const [accountDetails, setAccountDetails] = useState({
     accountName: "",
-    address: "",
+    addressAccount: "",
     email: "",
-    phone: "",
+    phoneNumber: "",
     role: ""
   });
   const { accountId } = useParams();
@@ -26,7 +25,8 @@ function MyAccountPage() {
   // State for managing the sidebar visibility and selected order
   const [showSidebar, setShowSidebar] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
-
+  const {totalAccumulatedPoints} = useState(100);
+  const {pointsToRedeem, updatePointsToRedeem} = useContext(PointsContext)
   useEffect(() => {
     if (!accountId) {
       console.error("Account ID is not available in params");
@@ -34,40 +34,42 @@ function MyAccountPage() {
       return;
     }
 
-    const getAccountDetails = async () => {
-      try {
-        const accountData = await getAccountByID(accountId);
-        setAccountDetails({
-          accountName: accountData.accountName,
-          address: accountData.addressAccount,
-          email: accountData.email,
-          phone: accountData.phoneNumber,
-          role: accountData.role
-        });
-      } catch (error) {
-        console.error('Failed to fetch account details:', error);
-      }
-    };
-
-    const getOrders = async () => {
-      setLoading(true);
-      try {
-        if (accountId) {
-          const response = await fetchOrders(accountId);
-          setOrders(response);
-        } else {
-          console.error('accountId is undefined');
-        }
-      } catch (error) {
-        setError(error.toString());
-      } finally {
-        setLoading(false);
-      }
-    };
-
     getAccountDetails();
     getOrders();
   }, [accountId]);
+
+  const getAccountDetails = async () => {
+    try {
+      const accountData = await getAccountByID(accountId);
+      setAccountDetails({
+        accountName: accountData.accountName,
+        addressAccount: accountData.addressAccount,
+        email: accountData.email,
+        phoneNumber: accountData.phoneNumber,
+        role: accountData.role
+      });
+    } catch (error) {
+      console.error('Failed to fetch account details:', error);
+      setError('Failed to fetch account details');
+    }
+  };
+
+  const getOrders = async () => {
+    setLoading(true);
+    try {
+      if (accountId) {
+        const response = await fetchOrders(accountId);
+        setOrders(response);
+      } else {
+        console.error('accountId is undefined');
+        setError('Account ID is undefined');
+      }
+    } catch (error) {
+      setError(error.toString());
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -79,6 +81,7 @@ function MyAccountPage() {
     try {
       await updateAccount(accountId, accountDetails);
       toast.success("Account details updated successfully");
+      await getAccountDetails(); 
     } catch (error) {
       console.error('Failed to update account details:', error);
       toast.error("Failed to update account details");
@@ -119,6 +122,7 @@ function MyAccountPage() {
       await deleteOrder(orderID);
       setOrders(orders.filter(order => order.orderID !== orderID));
       toast.success('Xoá đơn hàng thành công');
+      updatePointsToRedeem(-totalAccumulatedPoints);
     } catch (error) {
       console.error('Failed to delete order:', error);
     }
@@ -149,22 +153,16 @@ function MyAccountPage() {
             <div className="container">
               <div className="tm-myaccount">
                 <ul className="nav tm-tabgroup" id="account" role="tablist">
-                  <li className="nav-item">
-                    <a className="nav-link" id="account-dashboard-tab" data-toggle="tab"
-                      href="#account-dashboard" role="tab" aria-controls="account-dashboard"
-                      aria-selected="true">Dashboard</a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link active" id="account-orders-tab" data-toggle="tab" href="#account-orders"
-                      role="tab" aria-controls="account-orders" aria-selected="false">Orders</a>
-                  </li>
-                  <li className="nav-item">
-                    <a className="nav-link" id="account-acdetails-tab" data-toggle="tab"
+                <li className="nav-item">
+                    <a className="nav-link active" id="account-acdetails-tab" data-toggle="tab"
                       href="#account-acdetails" role="tab" aria-controls="account-acdetails"
                       aria-selected="false">Account Details</a>
                   </li>
+                  <li className="nav-item">
+                    <a className="nav-link " id="account-orders-tab" data-toggle="tab" href="#account-orders"
+                      role="tab" aria-controls="account-orders" aria-selected="false">Orders</a>
+                  </li>               
                 </ul>
-
                 <div className="tab-content" id="account-content">
                   <div className="tab-pane fade" id="account-dashboard" role="tabpanel"
                     aria-labelledby="account-dashboard-tab">
@@ -173,10 +171,10 @@ function MyAccountPage() {
                       <p>From your account dashboard you can view your recent orders, manage your shipping and billing addresses, and edit your password and account details.</p>
                     </div>
                   </div>
-                  <div className="tab-pane fade show active" id="account-orders" role="tabpanel"
+                  <div className="tab-pane fade " id="account-orders" role="tabpanel"
                     aria-labelledby="account-orders-tab">
                     <div className="tm-myaccount-orders">
-                      {loading && <p>Loading...</p>}
+                      {loading && <p>Thông tin chi tiết của đơn hàng sẽ được hiển thị khi bạn đã thanh toán thành công</p>}
                       {error && <p className="error">{error}</p>}
                       <div className="table-responsive">
                         <table className="table table-bordered mb-0">
@@ -215,7 +213,7 @@ function MyAccountPage() {
                       </div>
                     </div>
                   </div>
-                  <div className="tab-pane fade" id="account-acdetails" role="tabpanel"
+                  <div className="tab-pane fade show active" id="account-acdetails" role="tabpanel"
                     aria-labelledby="account-acdetails-tab">
                     <div className="tm-myaccount-details">
                       <form onSubmit={handleSubmit}>
@@ -230,11 +228,11 @@ function MyAccountPage() {
                             />
                           </div>
                           <div className="tm-form-field">
-                            <label htmlFor="address">Address</label>
+                            <label htmlFor="addressAccount">Address</label>
                             <input
                               type="text"
-                              id="address"
-                              value={accountDetails.address}
+                              id="addressAccount"
+                              value={accountDetails.addressAccount}
                               onChange={handleInputChange}
                             />
                           </div>
@@ -245,14 +243,15 @@ function MyAccountPage() {
                               id="email"
                               value={accountDetails.email}
                               onChange={handleInputChange}
+                              disabled
                             />
                           </div>
                           <div className="tm-form-field">
-                            <label htmlFor="phone">Phone</label>
+                            <label htmlFor="phoneNumber">Phone</label>
                             <input
                               type="tel"
-                              id="phone"
-                              value={accountDetails.phone}
+                              id="phoneNumber"
+                              value={accountDetails.phoneNumber}
                               onChange={handleInputChange}
                             />
                           </div>
