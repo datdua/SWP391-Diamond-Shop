@@ -52,11 +52,7 @@ public class JewelryController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<Map<String, String>> createJewelry(@RequestBody Jewelry jewelry) {
-        Map<String, String> response = jewelryService.createJewelry(jewelry);
-        if ("Trang sức đã tồn tại".equals(response.get("message"))) {
-            return ResponseEntity.badRequest().body(response);
-        }
-        return ResponseEntity.ok(response);
+        return jewelryService.createJewelry(jewelry);
     }
 
     @PutMapping("/update/{jewelryID}")
@@ -71,8 +67,8 @@ public class JewelryController {
     @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> deleteJewelrys(@RequestBody List<String> jewelryIDs) {
     try {
-        jewelryService.deleteJewelrys(jewelryIDs);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
+        jewelryService.deleteJewelry(jewelryIDs);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các trang sức thành công"));
     } catch (RuntimeException e) {
         return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
     }

@@ -8,7 +8,7 @@ function DeleteWarrantyForm({ warrantyID, onDelete }) {
   const handleDelete = async () => {
     if (window.confirm("Bạn có chắc muốn XÓA warranty này ?")) {
       try {
-        await deleteWarranty(warrantyID);
+        await deleteWarranty([warrantyID]);
         onDelete(warrantyID);
         alert("Xóa thành công");
       } catch (error) {

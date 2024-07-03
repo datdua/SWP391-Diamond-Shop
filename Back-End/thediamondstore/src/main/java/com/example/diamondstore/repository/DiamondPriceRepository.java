@@ -16,4 +16,6 @@ public interface  DiamondPriceRepository extends  JpaRepository<DiamondPrice, In
     List<DiamondPrice> findAllByDiamondID(String diamondID);
 
     List<DiamondPrice> findByCaratSize(BigDecimal caratSize);
+
+    void deleteByDiamondID(String diamondID);
 }

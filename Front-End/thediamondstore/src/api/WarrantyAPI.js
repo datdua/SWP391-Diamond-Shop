@@ -10,10 +10,10 @@ export const getAllWarranties = async () => {
   }
 };
 
-export const getWarrantyById = async (warrantyId) => {
+export const getWarrantyById = async (warrantyID) => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/warranties/${warrantyId}`
+      `http://localhost:8080/api/warranties/${warrantyID}`
     );
     return response.data;
   } catch (error) {
@@ -35,10 +35,10 @@ export const createWarranty = async (warranty) => {
   }
 };
 
-export const updateWarranty = async (warrantyId, warranty) => {
+export const updateWarranty = async (warrantyID, warranty) => {
   try {
     const response = await axios.put(
-      `http://localhost:8080/api/warranties/update/${warrantyId}`,
+      `http://localhost:8080/api/warranties/update/${warrantyID}`,
       warranty
     );
     return response.data;

@@ -65,7 +65,7 @@ public class WarrantyController {
     public ResponseEntity<Map<String, String>> deleteWarrantys(@RequestBody List<String> warrantyIDs) {
     try {
         warrantyService.deleteWarranty(warrantyIDs);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
+        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các giấy bảo hành thành công"));
     } catch (RuntimeException e) {
         return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
     }
