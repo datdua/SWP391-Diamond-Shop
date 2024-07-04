@@ -18,7 +18,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddWarrantyForm from "../../../components/WarrantyCRUD/AddWarrantyForm";
 import UpdateWarrantyDiamondForm from "../../../components/WarrantyCRUD/UpdateWarrantyDiamondForm";
-import DeleteWarrantyForm from "../../../components/WarrantyCRUD/DeleteWarrantyForm";
 import { Pagination, Tooltip, Checkbox, FormControlLabel } from "@mui/material";
 import "../ProductManager.css";
 
@@ -34,7 +33,6 @@ function WarrantyManagerPage() {
   const [indeterminate, setIndeterminate] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const size = 8;
-
   const startIndex = (currentPage - 1) * size;
   const endIndex = startIndex + size;
   const currentPageData = warrantyData.slice(startIndex, endIndex);
@@ -50,11 +48,6 @@ function WarrantyManagerPage() {
     setShowModal(true);
   };
 
-  const handleDelete = async (warrantyID) => {
-    setWarrantyData(
-      warrantyData.filter((warranty) => warranty.warrantyID !== warrantyID)
-    );
-  };
 
   const handleChangePage = (event, newPage) => {
     setCurrentPage(newPage);
@@ -123,8 +116,8 @@ function WarrantyManagerPage() {
   const handleDeleteWarranty = async () => {
     if (window.confirm("Bạn có chắc muốn XÓA các chứng chỉ này?")) {
       try {
-        await deleteWarranty(selectedWarranty);
-        setWarrantyData(warrantyData.filter((warranty) => !selectedWarranty.includes(warranty.warrantyID)));
+        await deleteWarranty(selected);
+        setWarrantyData(warrantyData.filter((warranty) => !selected.includes(warranty.warrantyID)));
         setSelected([]);
         alert("Xóa thành công");
       } catch (error) {

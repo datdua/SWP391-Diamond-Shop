@@ -123,8 +123,8 @@ function WarrantyManagerPage() {
   const handleDeleteWarranty = async () => {
     if (window.confirm("Bạn có chắc muốn XÓA các chứng chỉ này?")) {
       try {
-        await deleteWarranty(selectedWarranty);
-        setWarrantyData(warrantyData.filter((warranty) => !selectedWarranty.includes(warranty.warrantyID)));
+        await deleteWarranty(selected);
+        setWarrantyData(warrantyData.filter((warranty) => !selected.includes(warranty.warrantyID)));
         setSelected([]);
         alert("Xóa thành công");
       } catch (error) {

@@ -107,7 +107,6 @@ public class AccountController {
     } catch (RuntimeException e) {
         return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
     }
-
     }
 
     @PostMapping("/create")

@@ -108,8 +108,8 @@ function CertificateManagerPage() {
   const handleDeleteCertificate = async () => {
     if (window.confirm("Bạn có chắc muốn XÓA các chứng chỉ này?")) {
       try {
-        await deleteCertificate(selectedCertificate);
-        setCertificateData(certificateData.filter((certificate) => !selectedCertificate.includes(certificate.certificateID)));
+        await deleteCertificate(selected);
+        setCertificateData(certificateData.filter((certificate) => !selected.includes(certificate.certificateID)));
         setSelected([]);
         alert("Xóa thành công");
       } catch (error) {

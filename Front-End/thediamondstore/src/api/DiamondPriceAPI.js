@@ -2,8 +2,12 @@ import axios from "axios";
 
 export const getAllDiamondPrice = async () => {
   try {
+    const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      "http://localhost:8080/api/diamondprices/getAll"
+      "http://localhost:8080/api/diamondprices/getAll",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -36,9 +40,13 @@ export const createDiamondPrice = async (diamondPrice) => {
 
 export const updateDiamondPrice = async (diamondPriceID, diamondPrice) => {
   try {
+    const token = localStorage.getItem('jwt');
     const response = await axios.put(
       `http://localhost:8080/api/diamondprices/${diamondPriceID}`,
-      diamondPrice
+      diamondPrice,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {

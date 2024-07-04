@@ -8,6 +8,7 @@ function AddJewelryForm() {
     jewelryName: "",
     gender: "",
     jewelryImage: "",
+    warrantyID: "",
     jewelryEntryPrice: "",
   });
 

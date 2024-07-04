@@ -6,9 +6,9 @@ import { Tooltip } from "@mui/material";
 
 function DeleteWarrantyForm({ warrantyID, onDelete }) {
   const handleDelete = async () => {
-    if (window.confirm("Bạn có chắc muốn XÓA warranty này ?")) {
+    if (window.confirm("Bạn có chắc muốn XÓA giấy bảo hành này ?")) {
       try {
-        await deleteWarranty([warrantyID]);
+        await deleteWarranty(warrantyID);
         onDelete(warrantyID);
         alert("Xóa thành công");
       } catch (error) {

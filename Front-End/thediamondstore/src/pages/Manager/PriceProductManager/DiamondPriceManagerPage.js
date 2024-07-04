@@ -54,7 +54,6 @@ function DiamondPriceManager() {
     setShowModal(true);
   };
 
-
   const handleClick = (event, id) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];

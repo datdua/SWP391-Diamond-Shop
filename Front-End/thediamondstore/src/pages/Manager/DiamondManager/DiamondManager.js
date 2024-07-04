@@ -76,11 +76,6 @@ function DiamondManagerPage() {
     setSelectedImage("");
   };
 
-  const handleDelete = (diamondID) => {
-    setDiamondData(
-      diamondData.filter((diamond) => diamond.diamondID !== diamondID)
-    );
-  };
 
   const handleShowCertificate = async (certificationID) => {
     try {

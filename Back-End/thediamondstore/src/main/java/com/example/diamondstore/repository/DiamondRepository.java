@@ -24,5 +24,5 @@ public interface DiamondRepository extends JpaRepository<Diamond, String>, JpaSp
 
     boolean existsByWarrantyID(String warrantyID);
 
-    
+    List<Diamond> findAllByCertificationIDIn(List<String> certificationIDs);
 }
