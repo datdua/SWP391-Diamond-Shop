@@ -19,4 +19,6 @@ public interface JewelryRepository extends JpaRepository<Jewelry, String>, JpaSp
     List<Jewelry> findByJewelryEntryPriceBetween(BigDecimal minjewelryEntryPrice, BigDecimal maxjewelryEntryPrice);
 
     boolean existsByWarrantyID(String warrantyID);
+
+    List<Jewelry> findAllByWarrantyIDIn(List<String> warrantyIDs);
 }

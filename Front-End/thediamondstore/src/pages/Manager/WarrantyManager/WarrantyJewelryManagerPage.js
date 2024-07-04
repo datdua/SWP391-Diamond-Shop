@@ -16,7 +16,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import AddWarrantyForm from "../../../components/WarrantyCRUD/AddWarrantyForm";
+import AddWarrantyJewelryForm from "../../../components/WarrantyCRUD/AddWarrantyJewelryForm";
 import UpdateWarrantyDiamondForm from "../../../components/WarrantyCRUD/UpdateWarrantyDiamondForm";
 import DeleteWarrantyForm from "../../../components/WarrantyCRUD/DeleteWarrantyForm";
 import { Pagination, Tooltip, Checkbox, FormControlLabel } from "@mui/material";
@@ -281,7 +281,7 @@ function WarrantyManagerPage() {
               onClose={handleClose}
             />
           ) : (
-            <AddWarrantyForm onClose={handleClose} />
+            <AddWarrantyJewelryForm onClose={handleClose} />
           )}
         </Modal.Body>
       </Modal>
