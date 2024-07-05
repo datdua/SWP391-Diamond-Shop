@@ -45,11 +45,11 @@ public class SecurityConfig {
 
     // admin urls: là những api mà chỉ admin mới được phép truy cập (/api/(tên
     // controller)/admin/**)
-    private static final String[] ADMIN_URL = {"/api/accounts/admin/**", "/api/certificates/admin/**"};
+    private static final String[] ADMIN_URL = {"/api/accounts/admin/**", "/api/certificates/admin/**", "/api/cart/admin/**"};
 
     // customer urls: là những api mà chỉ customer mới được phép truy cập (/api/(tên
     // controller)/customer/**)
-    private static final String[] CUSTOMER_URL = {"/api/accounts/customer/**", "/api/certificates/customer/**"};
+    private static final String[] CUSTOMER_URL = {"/api/accounts/customer/**", "/api/certificates/customer/**", "/api/cart/customer/**"};
     @Autowired
     private final AccountService UserService;
 
