@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.model.DiamondPrice;
@@ -64,5 +65,12 @@ public class DiamondPriceController {
     @GetMapping("/carat/{caratSize}")
     public List<DiamondPrice> getDiamondPriceByCaratSize(@PathVariable BigDecimal caratSize) {
         return diamondPriceService.getDiamondPricesByCaratSize(caratSize);
+    }
+
+    @GetMapping("/diamondPrices")
+    public List<DiamondPrice> getDiamondPrices(@RequestParam(required = false) String clarity,
+                                               @RequestParam(required = false) String color,
+                                               @RequestParam(required = false) BigDecimal caratSize) {
+        return diamondPriceService.findByCriteria(clarity, color, caratSize);
     }
 }

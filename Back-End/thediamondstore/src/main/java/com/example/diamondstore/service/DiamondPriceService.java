@@ -17,6 +17,7 @@ import com.example.diamondstore.model.DiamondPrice;
 import com.example.diamondstore.repository.DiamondPriceRepository;
 import com.example.diamondstore.repository.DiamondRepository;
 import com.example.diamondstore.request.DiamondPriceRequest;
+import com.example.diamondstore.specification.DiamondPriceSpecification;
 
 @Service
 public class DiamondPriceService {
@@ -33,6 +34,10 @@ public class DiamondPriceService {
 
     public List<DiamondPrice> getAll() {
         return diamondPriceRepository.findAll();
+    }
+
+    public List<DiamondPrice> findByCriteria(String clarity, String color, BigDecimal caratSize) {
+        return diamondPriceRepository.findAll(DiamondPriceSpecification.filterBy(clarity, color, caratSize));
     }
 
     public ResponseEntity<Map<String, String>> updateDiamondPrice(Integer diamondPriceID, DiamondPriceRequest diamondPriceRequest) {
