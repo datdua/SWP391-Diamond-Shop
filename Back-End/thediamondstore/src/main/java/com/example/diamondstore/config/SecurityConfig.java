@@ -46,12 +46,12 @@ public class SecurityConfig {
     // admin urls: là những api mà chỉ admin mới được phép truy cập (/api/(tên
     // controller)/admin/**)
     private static final String[] ADMIN_URL = {"/api/accounts/admin/**", "/api/certificates/admin/**", "/api/cart/admin/**", "/api/collections/admin/**",
-        "/api/diamonds/admin/**", "/api/jewelry/admin/**", "/api/orders/admin/**", "/api/promotion/admin/**", "/api/warranties/admin/**"};
+        "/api/customers/admin/**" ,"/api/diamonds/admin/**", "/api/jewelry/admin/**", "/api/orders/admin/**", "/api/promotion/admin/**", "/api/warranties/admin/**"};
 
     // customer urls: là những api mà chỉ customer mới được phép truy cập (/api/(tên
     // controller)/customer/**)
     private static final String[] CUSTOMER_URL = {"/api/accounts/customer/**", "/api/certificates/customer/**", "/api/cart/customer/**",
-        "/api/collections/customer/**",};
+        "/api/collections/customer/**", "/api/customers/admin/**"};
 
     @Autowired
     private final AccountService UserService;
