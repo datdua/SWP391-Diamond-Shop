@@ -41,7 +41,7 @@ public class SecurityConfig {
     //     "/api/accounts", "/api/cart", "api/collections/**", "/api/collections", "/api/production/**",
     //     "/api/production", "/api/diamondprices", "/api/diamondprices/**", "/api/goldPrices", "/api/goldPrices/**"};
     // common urls (guest): là những api mà không cần phải xác thực
-    private static final String[] GUEST_URL = {"/guest/**", "/api/accounts/guest/**"};
+    private static final String[] GUEST_URL = {"/guest/**", "/api/accounts/guest/**","/api/diamonds/guest/**"};
 
     // admin urls: là những api mà chỉ admin mới được phép truy cập (/api/(tên
     // controller)/admin/**)

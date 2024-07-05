@@ -30,12 +30,26 @@ public class DiamondController {
         this.diamondService = diamondService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Diamond>> getDiamonds() {
+    // guest
+    @GetMapping("/guest")
+    public ResponseEntity<List<Diamond>> getDiamonds_Guest() {
         return ResponseEntity.ok(diamondService.getAllDiamonds());
     }
 
-    @GetMapping("/get/{diamondID}")
+    // admin
+    @GetMapping("/admin")
+    public ResponseEntity<List<Diamond>> getDiamonds_Admin() {
+        return ResponseEntity.ok(diamondService.getAllDiamonds());
+    }
+
+    // customer
+    @GetMapping("/customer")
+    public ResponseEntity<List<Diamond>> getDiamonds_Customer() {
+        return ResponseEntity.ok(diamondService.getAllDiamonds());
+    }
+
+    // guest
+    @GetMapping("/guest/get/{diamondID}")
     public ResponseEntity<Diamond> getDiamond(@PathVariable String diamondID) {
         Diamond diamond = diamondService.getDiamondById(diamondID);
         if (diamond == null) {
@@ -44,13 +58,35 @@ public class DiamondController {
         return ResponseEntity.ok(diamond);
     }
 
-    @PostMapping(value = "/create")
-    public ResponseEntity<Map<String, String>> createDiamond(@RequestBody Diamond diamond) {
+    // admin
+    @GetMapping("/admin/get/{diamondID}")
+    public ResponseEntity<Diamond> getDiamond_Admin(@PathVariable String diamondID) {
+        Diamond diamond = diamondService.getDiamondById(diamondID);
+        if (diamond == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(diamond);
+    }
+
+    //customer
+    @GetMapping("/customer/get/{diamondID}")
+    public ResponseEntity<Diamond> getDiamond_Customer(@PathVariable String diamondID) {
+        Diamond diamond = diamondService.getDiamondById(diamondID);
+        if (diamond == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(diamond);
+    }
+
+    // admin
+    @PostMapping("/admin/create")
+    public ResponseEntity<Map<String, String>> createDiamond_Admin(@RequestBody Diamond diamond) {
         return diamondService.createDiamond(diamond);
     }
 
-    @PutMapping(value = "/update/{diamondID}")
-    public ResponseEntity<Map<String, String>> updateDiamond(@PathVariable String diamondID, @RequestBody DiamondPutRequest diamondPutRequest) {
+    // admin
+    @PutMapping(value = "/admin/update/{diamondID}")
+    public ResponseEntity<Map<String, String>> updateDiamond_Admin(@PathVariable String diamondID, @RequestBody DiamondPutRequest diamondPutRequest) {
         Map<String, String> response = diamondService.updateDiamond(diamondID, diamondPutRequest);
         if (response.containsKey("message") && response.get("message").equals("Không tìm thấy kim cương")) {
             return ResponseEntity.notFound().build();
@@ -58,25 +94,41 @@ public class DiamondController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> deleteDiamonds(@RequestBody List<String> diamondIDs) {
-    try {
-        diamondService.deleteDiamonds(diamondIDs);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
-    } catch (RuntimeException e) {
-        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
-    }
+    // admin
+    @DeleteMapping(value = "/admin/delete", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> deleteDiamonds_Admin(@RequestBody List<String> diamondIDs) {
+        try {
+            diamondService.deleteDiamonds(diamondIDs);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+        }
     }
 
-
-    @GetMapping("/paged/diamonds")
-    public ResponseEntity<Page<Diamond>> getAllDiamondsPaged(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+    // guest
+    @GetMapping("/guest/paged/diamonds")
+    public ResponseEntity<Page<Diamond>> getAllDiamondsPaged_Guest(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         Page<Diamond> pageDiamonds = diamondService.getAllDiamondsPaged(page, size);
         return ResponseEntity.ok(pageDiamonds);
     }
 
-    @GetMapping("/search/filter")
-    public ResponseEntity<List<Diamond>> searchDiamonds(
+    // admin    
+    @GetMapping("/admin/paged/diamonds")
+    public ResponseEntity<Page<Diamond>> getAllDiamondsPaged_Admin(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+        Page<Diamond> pageDiamonds = diamondService.getAllDiamondsPaged(page, size);
+        return ResponseEntity.ok(pageDiamonds);
+    }
+
+    // customer
+    @GetMapping("/customer/paged/diamonds")
+    public ResponseEntity<Page<Diamond>> getAllDiamondsPaged_Customer(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+        Page<Diamond> pageDiamonds = diamondService.getAllDiamondsPaged(page, size);
+        return ResponseEntity.ok(pageDiamonds);
+    }
+
+    // guest
+    @GetMapping("/guest/search/filter")
+    public ResponseEntity<List<Diamond>> searchDiamonds_Guest(
             @RequestParam(required = false) Float minDiamondPrice,
             @RequestParam(required = false) Float maxDiamondPrice,
             @RequestParam(required = false) String origin,
@@ -93,12 +145,59 @@ public class DiamondController {
         List<Diamond> diamonds = diamondService.searchDiamondsWithFilters(
                 minDiamondPrice, maxDiamondPrice, origin, cut, shape, color,
                 minCaratSize, maxCaratSize, minCaratWeight, maxCaratWeight, clarity, diamondNameLike);
-        
+
         return ResponseEntity.ok(diamonds);
     }
 
-    @GetMapping("/search/filter/paged")
-    public ResponseEntity<Page<Diamond>> searchDiamondsPaged(
+    // admin
+    @GetMapping("/admin/search/filter")
+    public ResponseEntity<List<Diamond>> searchDiamonds_Admin(
+            @RequestParam(required = false) Float minDiamondPrice,
+            @RequestParam(required = false) Float maxDiamondPrice,
+            @RequestParam(required = false) String origin,
+            @RequestParam(required = false) String cut,
+            @RequestParam(required = false) String shape,
+            @RequestParam(required = false) String color,
+            @RequestParam(required = false) Float minCaratSize,
+            @RequestParam(required = false) Float maxCaratSize,
+            @RequestParam(required = false) Float minCaratWeight,
+            @RequestParam(required = false) Float maxCaratWeight,
+            @RequestParam(required = false) String clarity,
+            @RequestParam(required = false) String diamondNameLike) {
+
+        List<Diamond> diamonds = diamondService.searchDiamondsWithFilters(
+                minDiamondPrice, maxDiamondPrice, origin, cut, shape, color,
+                minCaratSize, maxCaratSize, minCaratWeight, maxCaratWeight, clarity, diamondNameLike);
+
+        return ResponseEntity.ok(diamonds);
+    }
+
+    // customer
+    @GetMapping("/customer/search/filter")
+    public ResponseEntity<List<Diamond>> searchDiamonds_Customer(
+            @RequestParam(required = false) Float minDiamondPrice,
+            @RequestParam(required = false) Float maxDiamondPrice,
+            @RequestParam(required = false) String origin,
+            @RequestParam(required = false) String cut,
+            @RequestParam(required = false) String shape,
+            @RequestParam(required = false) String color,
+            @RequestParam(required = false) Float minCaratSize,
+            @RequestParam(required = false) Float maxCaratSize,
+            @RequestParam(required = false) Float minCaratWeight,
+            @RequestParam(required = false) Float maxCaratWeight,
+            @RequestParam(required = false) String clarity,
+            @RequestParam(required = false) String diamondNameLike) {
+
+        List<Diamond> diamonds = diamondService.searchDiamondsWithFilters(
+                minDiamondPrice, maxDiamondPrice, origin, cut, shape, color,
+                minCaratSize, maxCaratSize, minCaratWeight, maxCaratWeight, clarity, diamondNameLike);
+
+        return ResponseEntity.ok(diamonds);
+    }
+
+    // guest
+    @GetMapping("/guest/search/filter/paged")
+    public ResponseEntity<Page<Diamond>> searchDiamondsPaged_Guest(
             @RequestParam(required = false) Float minDiamondPrice,
             @RequestParam(required = false) Float maxDiamondPrice,
             @RequestParam(required = false) String origin,
@@ -118,7 +217,59 @@ public class DiamondController {
                 minDiamondPrice, maxDiamondPrice, origin, cut, shape, color,
                 minCaratSize, maxCaratSize, minCaratWeight, maxCaratWeight, clarity, diamondName,
                 page, size);
-        
+
         return ResponseEntity.ok(pageDiamonds);
-    } 
+    }
+
+    // admin
+    @GetMapping("/admin/search/filter/paged")
+    public ResponseEntity<Page<Diamond>> searchDiamondsPaged_Admin(
+            @RequestParam(required = false) Float minDiamondPrice,
+            @RequestParam(required = false) Float maxDiamondPrice,
+            @RequestParam(required = false) String origin,
+            @RequestParam(required = false) String cut,
+            @RequestParam(required = false) String shape,
+            @RequestParam(required = false) String color,
+            @RequestParam(required = false) Float minCaratSize,
+            @RequestParam(required = false) Float maxCaratSize,
+            @RequestParam(required = false) Float minCaratWeight,
+            @RequestParam(required = false) Float maxCaratWeight,
+            @RequestParam(required = false) String clarity,
+            @RequestParam(required = false) String diamondName,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Page<Diamond> pageDiamonds = diamondService.searchDiamondsWithFiltersPaged(
+                minDiamondPrice, maxDiamondPrice, origin, cut, shape, color,
+                minCaratSize, maxCaratSize, minCaratWeight, maxCaratWeight, clarity, diamondName,
+                page, size);
+
+        return ResponseEntity.ok(pageDiamonds);
+    }
+
+    // customer
+    @GetMapping("/customer/search/filter/paged")
+    public ResponseEntity<Page<Diamond>> searchDiamondsPaged_Customer(
+            @RequestParam(required = false) Float minDiamondPrice,
+            @RequestParam(required = false) Float maxDiamondPrice,
+            @RequestParam(required = false) String origin,
+            @RequestParam(required = false) String cut,
+            @RequestParam(required = false) String shape,
+            @RequestParam(required = false) String color,
+            @RequestParam(required = false) Float minCaratSize,
+            @RequestParam(required = false) Float maxCaratSize,
+            @RequestParam(required = false) Float minCaratWeight,
+            @RequestParam(required = false) Float maxCaratWeight,
+            @RequestParam(required = false) String clarity,
+            @RequestParam(required = false) String diamondName,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Page<Diamond> pageDiamonds = diamondService.searchDiamondsWithFiltersPaged(
+                minDiamondPrice, maxDiamondPrice, origin, cut, shape, color,
+                minCaratSize, maxCaratSize, minCaratWeight, maxCaratWeight, clarity, diamondName,
+                page, size);
+
+        return ResponseEntity.ok(pageDiamonds);
+    }
 }
