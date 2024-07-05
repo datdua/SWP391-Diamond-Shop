@@ -40,17 +40,16 @@ public class SecurityConfig {
     //     "/api/cart/**", "/api/accounts/**",
     //     "/api/accounts", "/api/cart", "api/collections/**", "/api/collections", "/api/production/**",
     //     "/api/production", "/api/diamondprices", "/api/diamondprices/**", "/api/goldPrices", "/api/goldPrices/**"};
-
     // common urls (guest): là những api mà không cần phải xác thực
     private static final String[] GUEST_URL = {"/guest/**", "/api/accounts/guest/**"};
 
     // admin urls: là những api mà chỉ admin mới được phép truy cập (/api/(tên
     // controller)/admin/**)
-    private static final String[] ADMIN_URL = {"/api/accounts/admin/**"};
+    private static final String[] ADMIN_URL = {"/api/accounts/admin/**", "/api/certificates/admin/**"};
 
     // customer urls: là những api mà chỉ customer mới được phép truy cập (/api/(tên
     // controller)/customer/**)
-    private static final String[] CUSTOMER_URL = {"/api/accounts/customer/**"};
+    private static final String[] CUSTOMER_URL = {"/api/accounts/customer/**", "/api/certificates/customer/**"};
     @Autowired
     private final AccountService UserService;
 
@@ -86,7 +85,6 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(authz -> authz
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight requests
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight requests
                 .antMatchers(SWAGGER_URL).permitAll()
                 .antMatchers(GUEST_URL).permitAll()

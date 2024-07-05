@@ -30,49 +30,69 @@ public class CertificateController {
         this.certificateService = certificateService;
     }
 
-    @GetMapping
-    public ResponseEntity<Iterable<Certificate>> getCertificates() {
+    // admin
+    @GetMapping("/admin")
+    public ResponseEntity<Iterable<Certificate>> getCertificates_Admin() {
         return ResponseEntity.ok(certificateService.getAllCertificates());
     }
 
-    @GetMapping(value = "/{certificateID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> getCertificate(@PathVariable String certificateID) {
+    //admin
+    @GetMapping("/admin/{certificateID}")
+    public ResponseEntity<?> getCertificate_Admin(@PathVariable String certificateID) {
         return certificateService.getCertificateById(certificateID);
     }
 
-    @GetMapping("/paged")
-    public ResponseEntity<Page<Certificate>> getAllDiamondsPaged(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+    // customer
+    @GetMapping("/customer/{certificateID}")
+    public ResponseEntity<?> getCertificate_Customer(@PathVariable String certificateID) {
+        return certificateService.getCertificateById(certificateID);
+    }
+
+    // admin
+    @GetMapping("/admin/paged")
+    public ResponseEntity<Page<Certificate>> getAllCertificatePaged_Admin(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(certificateService.getAllCertificatesPaged(page, size));
     }
 
-    @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> createCertificate(@RequestBody Certificate certificate) {
+    // admin
+    @PostMapping(value = "/admin/create", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> createCertificate_Admin(@RequestBody Certificate certificate) {
         return certificateService.createCertificate(certificate);
     }
 
-    @PutMapping(value = "/update/{certificateID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> updateCertificate(@PathVariable String certificateID, @RequestBody CertificatePutRequest certificatePutRequest) {
+    // admin
+    @PutMapping(value = "/admin/update/{certificateID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> updateCertificate_Admin(@PathVariable String certificateID, @RequestBody CertificatePutRequest certificatePutRequest) {
         return certificateService.updateCertificate(certificateID, certificatePutRequest);
     }
 
-    @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> deleteCertificates(@RequestBody List<String> certificateIDs) {
+    // admin
+    @DeleteMapping(value = "/admin/delete", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> deleteCertificates_Admin(@RequestBody List<String> certificateIDs) {
     try {
         certificateService.deleteCertificates(certificateIDs);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
+        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các giấy chứng chỉ thành công"));
     } catch (RuntimeException e) {
         return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
     }
     }
 
-    @GetMapping(value = "/get/certificateImg/{certificateID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> getCertificateImg(@PathVariable String certificateID) {
+    // admin 
+    @GetMapping(value = "/admin/get/certificateImg/{certificateID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getCertificateImg_Admin(@PathVariable String certificateID) {
         return certificateService.getCertificateImg(certificateID);
     }
 
-    @PostMapping("/update-statuses")
-    public ResponseEntity<Map<String, String>> updateCertificateStatusesAuto() {
+    // customer
+    @GetMapping(value = "/customer/get/certificateImg/{certificateID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getCertificateImg_Customer(@PathVariable String certificateID) {
+        return certificateService.getCertificateImg(certificateID);
+    }
+
+    // admin
+    @PostMapping("/admin/update-statuses")
+    public ResponseEntity<Map<String, String>> updateCertificateStatusesAuto_Admin() {
         certificateService.updateCertificateStatusesAuto();
-        return ResponseEntity.ok(Collections.singletonMap("message", "Trạng thái khuyến mãi đã được cập nhật"));
+        return ResponseEntity.ok(Collections.singletonMap("message", "Trạng thái chứng chỉ đã được cập nhật"));
     }
 }
