@@ -41,16 +41,19 @@ public class SecurityConfig {
     //     "/api/accounts", "/api/cart", "api/collections/**", "/api/collections", "/api/production/**",
     //     "/api/production", "/api/diamondprices", "/api/diamondprices/**", "/api/goldPrices", "/api/goldPrices/**"};
     // common urls (guest): là những api mà không cần phải xác thực
-    private static final String[] GUEST_URL = {"/guest/**", "/api/accounts/guest/**","/api/diamonds/guest/**", "/api/diamondprices/guest/**"};
+    private static final String[] GUEST_URL = {"/guest/**", "/api/accounts/guest/**","/api/diamonds/guest/**", "/api/diamondprices/guest/**", 
+        "/api/goldPrices/guest/**", "/api/certificates/guest/**", "/api/cart/guest/**", "/api/collections/guest/**", "/api/customers/guest/**", 
+        "/api/jewelry/guest/**"};
 
     // admin urls: là những api mà chỉ admin mới được phép truy cập (/api/(tên
     // controller)/admin/**)
     private static final String[] ADMIN_URL = {"/api/accounts/admin/**", "/api/certificates/admin/**", "/api/cart/admin/**", "/api/collections/admin/**",
-        "/api/customers/admin/**" ,"/api/diamonds/admin/**", "/api/diamondprices/admin/**", "/api/goldPrices/admin/**"};
+        "/api/customers/admin/**" ,"/api/diamonds/admin/**", "/api/diamondprices/admin/**", "/api/goldPrices/admin/**", "/api/jewelry/admin/**"};
     // customer urls: là những api mà chỉ customer mới được phép truy cập (/api/(tên
     // controller)/customer/**)
     private static final String[] CUSTOMER_URL = {"/api/accounts/customer/**", "/api/certificates/customer/**", "/api/cart/customer/**",
-        "/api/collections/customer/**", "/api/customers/admin/**", "/api/diamondprices/customer/**", "/api/goldPrices/customer/**"};
+        "/api/collections/customer/**", "/api/customers/admin/**", "/api/diamondprices/customer/**", "/api/goldPrices/customer/**", 
+        "/api/jewelry/customer/**"};
 
     @Autowired
     private final AccountService UserService;
