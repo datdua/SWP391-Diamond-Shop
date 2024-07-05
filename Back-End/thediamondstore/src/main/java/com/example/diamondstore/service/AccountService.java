@@ -32,7 +32,10 @@ import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.request.AccountRequest;
 import com.example.diamondstore.request.RegisterRequest;
 import com.example.diamondstore.utils.EmailUtil;
+import com.example.diamondstore.utils.JwtUtil;
 import com.example.diamondstore.utils.OtpUtil;
+
+import io.jsonwebtoken.Claims;
 
 @Service
 public class AccountService implements UserDetailsService {
@@ -51,6 +54,9 @@ public class AccountService implements UserDetailsService {
 
     @Autowired
     private EmailUtil emailUtil;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
@@ -156,37 +162,37 @@ public class AccountService implements UserDetailsService {
     }
 
     public void createAccount(AccountRequest accountRequest) {
-    // Validate account request
-    validateAccountRequest(accountRequest);
+        // Validate account request
+        validateAccountRequest(accountRequest);
 
-    String accountName = accountRequest.getAccountName();
-    String password = accountRequest.getPassword();
-    String role = accountRequest.getRole();
-    String phoneNumber = accountRequest.getPhoneNumber();
-    String email = accountRequest.getEmail();
+        String accountName = accountRequest.getAccountName();
+        String password = accountRequest.getPassword();
+        String role = accountRequest.getRole();
+        String phoneNumber = accountRequest.getPhoneNumber();
+        String email = accountRequest.getEmail();
 
-    // Check if account already exists
-    Optional<Account> existingAccount = accountRepository.findByEmail(email);
-    if (existingAccount.isPresent()) {
-        throw new RuntimeException("Tài khoản đã tồn tại");
+        // Check if account already exists
+        Optional<Account> existingAccount = accountRepository.findByEmail(email);
+        if (existingAccount.isPresent()) {
+            throw new RuntimeException("Tài khoản đã tồn tại");
+        }
+
+        // Create a new account entity
+        Account account = new Account();
+        account.setAccountName(accountName);
+
+        // Encrypt the password using BCrypt
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(password);
+        account.setPassword(encodedPassword);
+
+        account.setRole(role);
+        account.setPhoneNumber(phoneNumber);
+        account.setEmail(email);
+
+        // Save the account to the database
+        accountRepository.save(account);
     }
-
-    // Create a new account entity
-    Account account = new Account();
-    account.setAccountName(accountName);
-
-    // Encrypt the password using BCrypt
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    String encodedPassword = passwordEncoder.encode(password);
-    account.setPassword(encodedPassword);
-
-    account.setRole(role);
-    account.setPhoneNumber(phoneNumber);
-    account.setEmail(email);
-
-    // Save the account to the database
-    accountRepository.save(account);
-}
 
     private void validateAccountRequest(AccountRequest accountRequest) {
         String accountName = accountRequest.getAccountName();
@@ -245,27 +251,56 @@ public class AccountService implements UserDetailsService {
         }
     }
 
-    public Account updateAccount(Integer accountID, AccountRequest accountRequest) {
+    // public Account updateAccount(Integer accountID, AccountRequest accountRequest) {
+    //     Account existingAccount = accountRepository.findById(accountID).orElse(null);
+    //     if (existingAccount == null) {
+    //         throw new RuntimeException("Không tìm thấy tài khoản");
+    //     }
+    //     // Update account fields from request
+    //     existingAccount.setAccountName(accountRequest.getAccountName());
+    //     existingAccount.setEmail(accountRequest.getEmail());
+    //     existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
+    //     existingAccount.setRole(accountRequest.getRole());
+    //     existingAccount.setAddressAccount(accountRequest.getAddressAccount());
+    //     // Only update the password if a new password is provided
+    //     if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty() &&
+    //         !accountRequest.getPassword().equals(existingAccount.getPassword())) {
+    //         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    //         String encodedPassword = passwordEncoder.encode(accountRequest.getPassword());
+    //         existingAccount.setPassword(encodedPassword);
+    //     }
+    //     return accountRepository.save(existingAccount);
+    // }
+    public Account updateAccount(Integer accountID, AccountRequest accountRequest, String token) {
         Account existingAccount = accountRepository.findById(accountID).orElse(null);
         if (existingAccount == null) {
             throw new RuntimeException("Không tìm thấy tài khoản");
         }
-    
+
+        // Decode the JWT token to extract the role of the currently logged-in account
+        Claims claims = jwtUtil.extractAllClaims(token);
+        String currentRole = claims.get("role", String.class);
+
+        // If the account being updated is the same as the one logged in, ensure the role cannot be changed
+        if (accountID.equals(claims.get("accountID")) && !accountRequest.getRole().equals(currentRole)) {
+            throw new RuntimeException("Không thể cập nhật vai trò của tài khoản đang đăng nhập");
+        }
+
         // Update account fields from request
         existingAccount.setAccountName(accountRequest.getAccountName());
         existingAccount.setEmail(accountRequest.getEmail());
         existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
         existingAccount.setRole(accountRequest.getRole());
         existingAccount.setAddressAccount(accountRequest.getAddressAccount());
-    
+
         // Only update the password if a new password is provided
-        if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty() &&
-            !accountRequest.getPassword().equals(existingAccount.getPassword())) {
+        if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty()
+                && !accountRequest.getPassword().equals(existingAccount.getPassword())) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(accountRequest.getPassword());
             existingAccount.setPassword(encodedPassword);
         }
-    
+
         return accountRepository.save(existingAccount);
     }
 }

@@ -32,7 +32,7 @@ public class JwtUtil {
         return claimsResolver.apply(claims);
     }
        
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
@@ -58,4 +58,9 @@ public class JwtUtil {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
+    // Method to extract accountID from JWT
+    public Integer extractAccountID(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.get("accountID", Integer.class);
+    }    
 }

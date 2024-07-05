@@ -160,27 +160,37 @@ public class AccountController {
         }
     }
 
-    // admin
-    @PutMapping(value = "/admin/update/{accountID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> updateAccount_Admin(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
-        try {
-            Account updatedAccount = accountService.updateAccount(accountID, accountRequest);
-            return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
-        }
+    // // admin
+    // @PutMapping(value = "/admin/update/{accountID}", produces = "application/json;charset=UTF-8")
+    // public ResponseEntity<?> updateAccount_Admin(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
+    //     try {
+    //         Account updatedAccount = accountService.updateAccount(accountID, accountRequest);
+    //         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
+    //     } catch (RuntimeException e) {
+    //         return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+    //     }
+    // }
+    @PutMapping("/admin/update/{accountID}")
+    public ResponseEntity<Account> updateAccount(
+            @PathVariable Integer accountID,
+            @RequestBody AccountRequest accountRequest,
+            @RequestHeader("Authorization") String token) {
+        
+        String jwtToken = token.substring(7); // Remove "Bearer " prefix
+        Account updatedAccount = accountService.updateAccount(accountID, accountRequest, jwtToken);
+        return ResponseEntity.ok(updatedAccount);
     }
 
-    // customer 
-    @PutMapping(value = "/customer/update/{accountID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> updateAccount_Customer(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
-        try {
-            Account updatedAccount = accountService.updateAccount(accountID, accountRequest);
-            return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
-        }
-    }
+    // // customer 
+    // @PutMapping(value = "/customer/update/{accountID}", produces = "application/json;charset=UTF-8")
+    // public ResponseEntity<?> updateAccount_Customer(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
+    //     try {
+    //         Account updatedAccount = accountService.updateAccount(accountID, accountRequest);
+    //         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
+    //     } catch (RuntimeException e) {
+    //         return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+    //     }
+    // }
 
     // guest
     @PostMapping(value = "/guest/forget-password", produces = "application/json;charset=UTF-8")
