@@ -24,13 +24,21 @@ public class CollectionController {
         this.collectionRepository = collectionRepository;
     }
 
-    @GetMapping
-    public ResponseEntity<Iterable<Collection>> getCollections() {
+    // admin
+    @GetMapping("/admin")
+    public ResponseEntity<Iterable<Collection>> getCollections_Admin() {
         return ResponseEntity.ok(collectionRepository.findAll());
     }
 
-    @GetMapping("/{collectionID}")
-    public ResponseEntity<Collection> getCollection(@RequestParam int collectionID) {
+    // customer
+    @GetMapping("/customer")
+    public ResponseEntity<Iterable<Collection>> getCustomerCollections_Customer() {
+        return ResponseEntity.ok(collectionRepository.findAll());
+    }
+
+    // admin
+    @GetMapping("/admin/{collectionID}")
+    public ResponseEntity<Collection> getCollection_Admin(@RequestParam int collectionID) {
         Collection collection = collectionRepository.findByCollectionID(collectionID);
         if (collection == null) {
             return ResponseEntity.notFound().build();
@@ -38,8 +46,19 @@ public class CollectionController {
         return ResponseEntity.ok(collection);
     }
 
-    @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> createCollection(@RequestBody Collection collection) {
+    // customer
+    @GetMapping("/customer/{collectionID}")
+    public ResponseEntity<Collection> getCollection_Customer(@RequestParam int collectionID) {
+        Collection collection = collectionRepository.findByCollectionID(collectionID);
+        if (collection == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(collection);
+    }
+
+    // admin
+    @PostMapping(value = "/admin/create", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> createCollection_Admin(@RequestBody Collection collection) {
         Collection existingCollection = collectionRepository.findByCollectionID(collection.getCollectionID());
         if (existingCollection != null) {
             return ResponseEntity.badRequest().build();
@@ -48,8 +67,9 @@ public class CollectionController {
         return ResponseEntity.ok(collection);
     }
 
-    @PutMapping(value = "/update/{collectionID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> updateCollection(@PathVariable int collectionID, @RequestBody Collection collection) {
+    // admin
+    @PutMapping(value = "/admin/update/{collectionID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> updateCollection_Admin(@PathVariable int collectionID, @RequestBody Collection collection) {
         Collection existingCollection = collectionRepository.findByCollectionID(collectionID);
         if (existingCollection == null) {
             return ResponseEntity.notFound().build();
@@ -62,8 +82,9 @@ public class CollectionController {
         return ResponseEntity.ok(collection);
     }
 
-    @DeleteMapping(value = "/delete/{collectionID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> deleteCollection(@PathVariable int collectionID) {
+    // admin
+    @DeleteMapping(value = "/admin/delete/{collectionID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> deleteCollection_Admin(@PathVariable int collectionID) {
         Collection existingCollection = collectionRepository.findByCollectionID(collectionID);
         if (existingCollection == null) {
             return ResponseEntity.notFound().build();
