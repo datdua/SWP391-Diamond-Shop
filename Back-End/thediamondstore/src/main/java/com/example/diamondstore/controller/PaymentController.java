@@ -49,8 +49,9 @@ public class PaymentController {
     @Autowired
     private OrderDetailRepository orderDetailRepository;
 
-    @GetMapping("/createPayment")
-    public ResponseEntity<?> createPayment(@RequestParam Integer orderID) throws UnsupportedEncodingException {
+    // customer
+    @GetMapping("/customer/createPayment")
+    public ResponseEntity<?> createPayment_Customer(@RequestParam Integer orderID) throws UnsupportedEncodingException {
 
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
@@ -121,7 +122,8 @@ public class PaymentController {
         return ResponseEntity.status(HttpStatus.OK).body(paymentResDTO);
     }
 
-    @GetMapping(value = "/vnpay_return")
+    // customer
+    @GetMapping(value = "/customer/vnpay_return")
     public ResponseEntity<TransactionStatusDTO> vnpayReturn(
             @RequestParam(value = "vnp_BankCode") String bankCode,
             @RequestParam(value = "vnp_OrderInfo") Integer orderID,
