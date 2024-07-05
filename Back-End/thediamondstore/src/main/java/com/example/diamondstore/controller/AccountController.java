@@ -138,15 +138,23 @@ public class AccountController {
     }
 
     // admin
-    @DeleteMapping(value = "/admin/delete", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> deleteAccounts_Admin(@RequestBody List<Integer> accountIDs) {
-        try {
-            accountService.deleteAccounts(accountIDs);
-            return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
-        }
+    // @DeleteMapping(value = "/admin/delete", produces = "application/json;charset=UTF-8")
+    // public ResponseEntity<Map<String, String>> deleteAccounts_Admin(@RequestBody List<Integer> accountIDs) {
+    //     try {
+    //         accountService.deleteAccounts(accountIDs);
+    //         return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
+    //     } catch (RuntimeException e) {
+    //         return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+    //     }
 
+    // }
+    @DeleteMapping("/admin/delete")
+    public ResponseEntity<Map<String, String>> deleteAccounts_Admin(
+            @RequestBody List<Integer> accountIDs,
+            @RequestHeader("Authorization") String token) {
+        
+        String jwtToken = token.substring(7); // Remove "Bearer " prefix
+        return accountService.deleteAccounts(accountIDs, jwtToken);
     }
 
     // admin
@@ -160,37 +168,28 @@ public class AccountController {
         }
     }
 
-    // // admin
-    // @PutMapping(value = "/admin/update/{accountID}", produces = "application/json;charset=UTF-8")
-    // public ResponseEntity<?> updateAccount_Admin(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
-    //     try {
-    //         Account updatedAccount = accountService.updateAccount(accountID, accountRequest);
-    //         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
-    //     } catch (RuntimeException e) {
-    //         return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
-    //     }
-    // }
+    // admin
     @PutMapping("/admin/update/{accountID}")
-    public ResponseEntity<Account> updateAccount(
+    public ResponseEntity<Account> updateAccount_Admin(
             @PathVariable Integer accountID,
             @RequestBody AccountRequest accountRequest,
             @RequestHeader("Authorization") String token) {
         
         String jwtToken = token.substring(7); // Remove "Bearer " prefix
-        Account updatedAccount = accountService.updateAccount(accountID, accountRequest, jwtToken);
+        Account updatedAccount = accountService.updateAccount_Admin(accountID, accountRequest, jwtToken);
         return ResponseEntity.ok(updatedAccount);
     }
 
-    // // customer 
-    // @PutMapping(value = "/customer/update/{accountID}", produces = "application/json;charset=UTF-8")
-    // public ResponseEntity<?> updateAccount_Customer(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
-    //     try {
-    //         Account updatedAccount = accountService.updateAccount(accountID, accountRequest);
-    //         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
-    //     } catch (RuntimeException e) {
-    //         return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
-    //     }
-    // }
+    // customer 
+    @PutMapping(value = "/customer/update/{accountID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> updateAccount_Customer(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
+        try {
+            Account updatedAccount = accountService.updateAccount_Customer(accountID, accountRequest);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+        }
+    }
 
     // guest
     @PostMapping(value = "/guest/forget-password", produces = "application/json;charset=UTF-8")

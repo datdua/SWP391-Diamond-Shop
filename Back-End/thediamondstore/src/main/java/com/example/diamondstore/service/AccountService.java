@@ -22,7 +22,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.Customer;
@@ -236,42 +235,70 @@ public class AccountService implements UserDetailsService {
         return Collections.singletonMap("message", "Mật khẩu đã được thiết lập. Vui lòng đăng nhập.");
     }
 
-    public ResponseEntity<Map<String, String>> deleteAccounts(@RequestBody List<Integer> accountIDs) {
-        // Filter out non-existing accounts
+    // public ResponseEntity<Map<String, String>> deleteAccounts(@RequestBody List<Integer> accountIDs) {
+    //     // Filter out non-existing accounts
+    //     List<Integer> existingAccountIDs = accountIDs.stream()
+    //             .filter(accountID -> accountRepository.existsById(accountID))
+    //             .collect(Collectors.toList());
+
+    //     // Delete accounts
+    //     if (!existingAccountIDs.isEmpty()) {
+    //         accountRepository.deleteAllById(existingAccountIDs);
+    //         return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
+    //     } else {
+    //         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy tài khoản để xóa"));
+    //     }
+    // }
+    public ResponseEntity<Map<String, String>> deleteAccounts(List<Integer> accountIDs, String token) {
+        // Decode the JWT token to get the current user's account ID and role
+        Claims claims = jwtUtil.extractAllClaims(token);
+        Integer currentAccountID = claims.get("accountID", Integer.class);
+        String currentRole = claims.get("role", String.class);
+
+        // Filter out non-existing accounts and restricted accounts
         List<Integer> existingAccountIDs = accountIDs.stream()
                 .filter(accountID -> accountRepository.existsById(accountID))
+                .filter(accountID -> {
+                    Account account = accountRepository.findById(accountID).orElse(null);
+                    return account != null &&
+                            !accountID.equals(currentAccountID) &&
+                            !account.getRole().equals("ROLE_ADMIN") &&
+                            !account.getRole().equals("ROLE_MANAGER");
+                })
                 .collect(Collectors.toList());
 
-        // Delete accounts
-        if (!existingAccountIDs.isEmpty()) {
-            accountRepository.deleteAllById(existingAccountIDs);
-            return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy tài khoản để xóa"));
+        // Check if all IDs were restricted
+        if (existingAccountIDs.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "Không thể xóa tài khoản đang đăng nhập hoặc các tài khoản với vai trò ADMIN và MANAGER"));
         }
+
+        // Delete accounts
+        accountRepository.deleteAllById(existingAccountIDs);
+        return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
     }
 
-    // public Account updateAccount(Integer accountID, AccountRequest accountRequest) {
-    //     Account existingAccount = accountRepository.findById(accountID).orElse(null);
-    //     if (existingAccount == null) {
-    //         throw new RuntimeException("Không tìm thấy tài khoản");
-    //     }
-    //     // Update account fields from request
-    //     existingAccount.setAccountName(accountRequest.getAccountName());
-    //     existingAccount.setEmail(accountRequest.getEmail());
-    //     existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
-    //     existingAccount.setRole(accountRequest.getRole());
-    //     existingAccount.setAddressAccount(accountRequest.getAddressAccount());
-    //     // Only update the password if a new password is provided
-    //     if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty() &&
-    //         !accountRequest.getPassword().equals(existingAccount.getPassword())) {
-    //         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    //         String encodedPassword = passwordEncoder.encode(accountRequest.getPassword());
-    //         existingAccount.setPassword(encodedPassword);
-    //     }
-    //     return accountRepository.save(existingAccount);
-    // }
-    public Account updateAccount(Integer accountID, AccountRequest accountRequest, String token) {
+    public Account updateAccount_Customer(Integer accountID, AccountRequest accountRequest) {
+        Account existingAccount = accountRepository.findById(accountID).orElse(null);
+        if (existingAccount == null) {
+            throw new RuntimeException("Không tìm thấy tài khoản");
+        }
+        // Update account fields from request
+        existingAccount.setAccountName(accountRequest.getAccountName());
+        existingAccount.setEmail(accountRequest.getEmail());
+        existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
+        existingAccount.setRole(accountRequest.getRole());
+        existingAccount.setAddressAccount(accountRequest.getAddressAccount());
+        // Only update the password if a new password is provided
+        if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty() &&
+            !accountRequest.getPassword().equals(existingAccount.getPassword())) {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String encodedPassword = passwordEncoder.encode(accountRequest.getPassword());
+            existingAccount.setPassword(encodedPassword);
+        }
+        return accountRepository.save(existingAccount);
+    }
+
+    public Account updateAccount_Admin(Integer accountID, AccountRequest accountRequest, String token) {
         Account existingAccount = accountRepository.findById(accountID).orElse(null);
         if (existingAccount == null) {
             throw new RuntimeException("Không tìm thấy tài khoản");
