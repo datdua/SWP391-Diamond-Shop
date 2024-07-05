@@ -50,6 +50,7 @@ public class SecurityConfig {
     // customer urls: là những api mà chỉ customer mới được phép truy cập (/api/(tên
     // controller)/customer/**)
     private static final String[] CUSTOMER_URL = {"/api/accounts/customer/**", "/api/certificates/customer/**", "/api/cart/customer/**"};
+    
     @Autowired
     private final AccountService UserService;
 
