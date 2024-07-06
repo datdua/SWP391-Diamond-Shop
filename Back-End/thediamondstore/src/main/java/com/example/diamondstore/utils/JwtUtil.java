@@ -36,14 +36,14 @@ public class JwtUtil {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
-    private Boolean isTokenExpired(String token) {
+    public Boolean isTokenExpired(String token) { // Change from private to public
         return extractExpiration(token).before(new Date());
     }
 
     public String generateToken(Account account) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("accountID", account.getAccountID()); // Add accountID to JWT claims
-        claims.put("role", account.getRole()); // Add role to JWT claims
+        claims.put("accountID", account.getAccountID());
+        claims.put("role", account.getRole());
         return createToken(claims, account.getEmail());
     }
 
@@ -58,9 +58,10 @@ public class JwtUtil {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    // Method to extract accountID from JWT
-    public Integer extractAccountID(String token) {
-        Claims claims = extractAllClaims(token);
-        return claims.get("accountID", Integer.class);
-    }    
+    public String refreshToken(String token) {
+        final Claims claims = extractAllClaims(token);
+        claims.setIssuedAt(new Date(System.currentTimeMillis()));
+        claims.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10));
+        return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
+    }
 }

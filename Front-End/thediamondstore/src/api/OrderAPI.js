@@ -136,9 +136,6 @@ export const getPromotion = async (promotionCode) => {
   try {
     const response = await axios.get(
       `http://localhost:8080/api/promotion/code/${promotionCode}`,
-      {
-        params: { promotionCode },
-      }
     );
     return response.data;
   } catch (error) {

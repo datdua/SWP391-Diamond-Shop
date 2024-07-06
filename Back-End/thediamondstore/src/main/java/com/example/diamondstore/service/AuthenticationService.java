@@ -55,4 +55,13 @@ public class AuthenticationService {
 
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
+
+    public ResponseEntity<?> refresh(String token) {
+        if (jwtTokenUtil.isTokenExpired(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("message", "Token đã hết hạn"));
+        }
+
+        final String refreshedToken = jwtTokenUtil.refreshToken(token);
+        return ResponseEntity.ok(new AuthenticationResponse(refreshedToken));
+    }
 }

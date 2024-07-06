@@ -368,38 +368,7 @@ function JewelryPage() {
             </div>
           </div>
         </main>
-        <div id="tm-product-quickview">
-          {/* Ensure this div is outside the main content */}
-          {selectedItem && (
-            <Modal
-              isOpen={modalIsOpen}
-              onRequestClose={closeModal}
-              style={customModalStyles}
-              contentLabel="Product Quickview"
-            >
-              <div className="modal-content">
-                <div className="img-container">
-                  <img
-                    src={selectedItem.jewelryImage}
-                    alt={selectedItem.jewelryName}
-                  />
-                </div>
-                <button className="close-button" onClick={closeModal}>
-                  Close
-                </button>
-                <div className="content-container">
-                  <h2>{selectedItem.jewelryName}</h2>
-                  <p>{selectedItem.jewelryDescription}</p>
-                  <p>Gender: {selectedItem.gender}</p>
-                  <span>
-                    {selectedItem.jewelryEntryPrice.toLocaleString()} VND
-                  </span>
-                </div>
-              </div>
-            </Modal>
-          )}
-        </div>
-        {/*<Footer />*/}
+
       </div>
     </div>
   );
