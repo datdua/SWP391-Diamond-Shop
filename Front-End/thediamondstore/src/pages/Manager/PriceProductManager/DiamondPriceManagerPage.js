@@ -54,7 +54,6 @@ function DiamondPriceManager() {
     setShowModal(true);
   };
 
-
   const handleClick = (event, id) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
@@ -176,13 +175,13 @@ function DiamondPriceManager() {
                           }
                         />
                       </th>
-                      <th>Diamond Price ID</th>
-                      <th>Diamond ID</th>
-                      <th>Diamond Price</th>
-                      <th>Clarity</th>
-                      <th>Color</th>
-                      <th>Carat Size</th>
-                      <th>Actions</th>
+                      <th>Mã Giá Kim Cương</th>
+                      <th>Mã Kim Cương</th>
+                      <th>Giá Kim Cương</th>
+                      <th>Độ Trong</th>
+                      <th>Màu Sắc</th>
+                      <th>Kích Cỡ Carat</th>
+                      <th>Thao Tác</th>
                     </tr>
                   </thead>
                   <tbody>

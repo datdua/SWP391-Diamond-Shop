@@ -12,7 +12,6 @@ import { getOrdersHaveTransactionNo, deleteOrder } from "../../../api/OrderAPI";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
 import UpdateOrderForm from "../../../components/OrderCRUD/OrderUpdate";
-import DeleteOrderForm from "../../../components/OrderCRUD/OrderDelete";
 import { Pagination, Tooltip } from "@mui/material";
 import "../ProductManager.css";
 
@@ -41,14 +40,6 @@ function TransactionManagerPage() {
     setShowModal(true);
   };
 
-  const handleDelete = async (orderID) => {
-    try {
-      await deleteOrder(orderID);
-      setOrderData(orderData.filter((order) => order.orderID !== orderID));
-    } catch (error) {
-      console.error("Error deleting order:", error);
-    }
-  };
 
   const handleChangePage = (event, newPage) => {
     setCurrentPage(newPage);
@@ -119,19 +110,19 @@ function TransactionManagerPage() {
                   <thead>
                     <tr>
                       <th>#</th>
-                      <th>Transaction No</th>
-                      <th>Order ID</th>
-                      <th>Account ID</th>
-                      <th>Start Order Date</th>
-                      <th>Order Status</th>
-                      <th>Delivery Date</th>
-                      <th>Total Order</th>
-                      <th>Delivery Address</th>
-                      <th>Phone Number</th>
-                      <th>Certificate Image</th>
-                      <th>Warranty Image</th>
-                      <th>Promotion Code</th>
-                      <th>Action</th>
+                      <th>Mã Giao Dịch</th>
+                      <th>Mã Đơn Hàng</th>
+                      <th>Mã Tài Khoản</th>
+                      <th>Ngày Bắt Đầu Đơn Hàng</th>
+                      <th>Tình Trạng Đơn Hàng</th>
+                      <th>Ngày Giao Hàng</th>
+                      <th>Tổng Đơn</th>
+                      <th>Địa Chỉ Giao Hàng</th>
+                      <th>Số Điện Thoại</th>
+                      <th>Giấy Chứng Nhận</th>
+                      <th>Giấy Bảo Hành</th>
+                      <th>Mã Khuyến Mãi</th>
+                      <th>Thao tác</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -194,11 +185,6 @@ function TransactionManagerPage() {
                               <EditIcon />
                             </Button>
                           </Tooltip>
-
-                          <DeleteOrderForm
-                            orderID={order.orderID}
-                            onDelete={() => handleDelete(order.orderID)}
-                          />
                         </td>
                       </tr>
                     ))}
@@ -225,14 +211,13 @@ function TransactionManagerPage() {
           {isUpdating ? (
             <UpdateOrderForm order={selectedOrder} onClose={handleClose} />
           ) : (
-            <div>Add Order Form Here</div> // Placeholder for Add Order Form if needed
+            <div>Add Order Form Here</div> 
           )}
         </Modal.Body>
       </Modal>
 
       <Modal show={showImageModal} onHide={handleCloseImageModal} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Image</Modal.Title>
         </Modal.Header>
         <Modal.Body className="text-center">
           <img
