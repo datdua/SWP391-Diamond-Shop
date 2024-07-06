@@ -30,8 +30,9 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping(value = "/get/{orderID}")
-    public ResponseEntity<Order> getOrder(@PathVariable int orderID) {
+    // customer
+    @GetMapping(value = "/customer/get/{orderID}")
+    public ResponseEntity<Order> getOrder_Customer(@PathVariable int orderID) {
         Order order = orderService.getOrder(orderID);
 
         if (order == null) {
@@ -41,8 +42,9 @@ public class OrderController {
         return ResponseEntity.ok(order);
     }
 
+    // admin
     @GetMapping(value = "/account/{accountID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> getOrdersByAccount(@PathVariable int accountID) {
+    public ResponseEntity<?> getOrdersByAccount_Admin(@PathVariable int accountID) {
         try {
             return ResponseEntity.ok(orderService.getOrdersByAccountId(accountID));
         } catch (IllegalArgumentException e) {
@@ -50,14 +52,26 @@ public class OrderController {
         }
     }
 
-    @GetMapping(value = "/getAll", produces = "application/json;charset=UTF-8")
+    // customer
+    @GetMapping(value = "/customer/account/{accountID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getOrdersByAccount_Customer(@PathVariable int accountID) {
+        try {
+            return ResponseEntity.ok(orderService.getOrdersByAccountId(accountID));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+        }
+    }
+
+    // admin
+    @GetMapping(value = "/admin/getAll", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getAllOrders() {
         return ResponseEntity.ok(orderService.getAllOrders());
     }
 
+    // admin
     //api lấy totalOrder của order
-    @GetMapping(value = "/totalOrder/{orderID}")
-    public ResponseEntity<?> getTotalOrder(@PathVariable Integer orderID) {
+    @GetMapping(value = "/admin/totalOrder/{orderID}")
+    public ResponseEntity<?> getTotalOrder_Admin(@PathVariable Integer orderID) {
         try {
             return ResponseEntity.ok(orderService.getTotalOrder(orderID));
         } catch (IllegalArgumentException e) {
@@ -65,13 +79,25 @@ public class OrderController {
         }
     }
 
-    @GetMapping(value = "/getOrderHaveTransactionNo", produces = "application/json;charset=UTF-8")
+    // customer
+    @GetMapping(value = "/customer/totalOrder/{orderID}")
+    public ResponseEntity<?> getTotalOrder_Customer(@PathVariable Integer orderID) {
+        try {
+            return ResponseEntity.ok(orderService.getTotalOrder(orderID));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+        }
+    }
+
+    // admin
+    @GetMapping(value = "/admin/getOrderHaveTransactionNo", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrdersHaveTransactionNo() {
         return ResponseEntity.ok(orderService.getOrdersHaveTransactionNo());
     }
 
-    @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> createOrder(
+    // customer
+    @PostMapping(value = "/customer/create", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> createOrder_Customer(
             @RequestParam Integer accountID,
             @RequestParam String deliveryAddress,
             @RequestParam(required = false) String promotionCode,
@@ -82,8 +108,9 @@ public class OrderController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo đơn hàng thành công"));
     }
 
-    @DeleteMapping(value = "/cancel/{orderID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> cancelOrder(@PathVariable int orderID) {
+    // customer
+    @DeleteMapping(value = "/customer/cancel/{orderID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> cancelOrder_Customer(@PathVariable int orderID) {
         try {
             orderService.cancelOrder(orderID);
             return ResponseEntity.ok(Collections.singletonMap("message", "Hủy đơn hàng thành công"));
@@ -92,8 +119,9 @@ public class OrderController {
         }
     }
 
-    @PutMapping(value = "/update/{orderID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> updateOrder(@PathVariable Integer orderID, @RequestBody OrderPutRequest orderPutRequest) {
+    // customer
+    @PutMapping(value = "/customer/update/{orderID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> updateOrder_Customer(@PathVariable Integer orderID, @RequestBody OrderPutRequest orderPutRequest) {
         Map<String, String> response = orderService.updateOrder(orderID, orderPutRequest);
         if (response.get("message").equals("Cập nhật thất bại")) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -101,72 +129,102 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping(value = "/getByStatus/{orderStatus}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> getOrdersByStatus(@PathVariable String orderStatus) {
+    // admin
+    @GetMapping(value = "/admin/getByStatus/{orderStatus}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getOrdersByStatus_Admin(@PathVariable String orderStatus) {
         return ResponseEntity.ok(orderService.getOrdersByStatus(orderStatus));
     }
 
-    @GetMapping(value = "/getOrder/paged", produces = "application/json;charset=UTF-8")
+    // customer
+    @GetMapping(value = "/customer/getByStatus/{orderStatus}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getOrdersByStatus_Customer(@PathVariable String orderStatus) {
+        return ResponseEntity.ok(orderService.getOrdersByStatus(orderStatus));
+    }
+
+    // admin
+    @GetMapping(value = "/admin/getOrder/paged", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrdersPaged(@RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(orderService.getAllOrdersPaged(page, size));
     }
 
-    @GetMapping("/totalRevenue")
+    // customer
+    @GetMapping(value = "/customer/getOrder/paged", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getOrdersPaged_Customer(@RequestParam int page, @RequestParam int size) {
+        return ResponseEntity.ok(orderService.getAllOrdersPaged(page, size));
+    }
+
+    // admin
+    @GetMapping("/admin/totalRevenue")
     public ResponseEntity<BigDecimal> getTotalOrderPaid() {
         BigDecimal totalOrderPaid = orderService.getTotalOrderByOrderStatusPaid();
         return ResponseEntity.ok(totalOrderPaid);
     }
 
-    @GetMapping("/totalOrder")
-    public ResponseEntity<Long> getTotalOrder() {
+    //admin
+    @GetMapping("/admin/totalOrder")
+    public ResponseEntity<Long> getTotalOrder_Admin() {
         long totalOrder = orderService.getTotalOrders();
         return new ResponseEntity<>(totalOrder, HttpStatus.OK);
     }
 
-    @GetMapping("/totalTransaction")
-    public ResponseEntity<Long> getTotalOrderStatusPaid() {
+    // customer
+    @GetMapping("/customer/totalOrder")
+    public ResponseEntity<Long> getTotalOrder_Customer() {
+        long totalOrder = orderService.getTotalOrders();
+        return new ResponseEntity<>(totalOrder, HttpStatus.OK);
+    }
+
+    // admin
+    @GetMapping("/admin/totalTransaction")
+    public ResponseEntity<Long> getTotalOrderStatusPaid_Admin() {
         long totalOrderStatusPaid = orderService.getTotalOrdersByOrderStatus("Đã thanh toán");
         return new ResponseEntity<>(totalOrderStatusPaid, HttpStatus.OK);
     }
 
+    // admin
     // API to get total number of orders in a day
-    @GetMapping("/totalOrdersInDay")
-    public ResponseEntity<Integer> getTotalOrdersInDay() {
+    @GetMapping("/admin/totalOrdersInDay")
+    public ResponseEntity<Integer> getTotalOrdersInDay_Admin() {
         int totalOrders = orderService.getTotalOrdersInDay();
         return new ResponseEntity<>(totalOrders, HttpStatus.OK);
     }
 
+    // admin
     // API to get total order value in a day
-    @GetMapping("/totalRevenueValueInToday")
-    public ResponseEntity<?> getRevenueValueInToday() {
+    @GetMapping("/admin/totalRevenueValueInToday")
+    public ResponseEntity<?> getRevenueValueInToday_Admin() {
         OrderSummaryDTO orderSummary = orderService.getRevenueValueInToday();
         return new ResponseEntity<>(orderSummary, HttpStatus.OK);
     }
 
+    // admin
     // API to get total order value in a month
     @GetMapping("/totalRevenueDayInMonth")
-    public ResponseEntity<?> getRevenueDayInMonth() {
+    public ResponseEntity<?> getRevenueDayInMonth_Admin() {
         List<OrderSummaryDTO> orderSummaries = orderService.getRevenueDayInMonth();
         return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
     }
 
+    // admin
     // API to get total order value in month xx of year yyyyy
-    @GetMapping("/totalRevenueDayInMonthInYear")
-    public ResponseEntity<?> getRevenueDayInMonthInYear(@RequestParam int month, @RequestParam int year) {
+    @GetMapping("/admin/totalRevenueDayInMonthInYear")
+    public ResponseEntity<?> getRevenueDayInMonthInYear_Admin(@RequestParam int month, @RequestParam int year) {
         List<OrderSummaryDTO> orderSummaries = orderService.getRevenueDayInMonthInYear(month, year);
         return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
     }
 
+    // admin
     // API to get total order value in a year
-    @GetMapping("/totalRevenueMonthInYear")
-    public ResponseEntity<?> getRevenueMonthInYear() {
+    @GetMapping("/admin/totalRevenueMonthInYear")
+    public ResponseEntity<?> getRevenueMonthInYear_Admin() {
         List<OrderSummaryDTO> orderSummaries = orderService.getRevenueMonthInYear();
         return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
     }
 
+    // admin
     // API to get total order value in year yyyy
-    @GetMapping("/totalRevenueMonthInAYear")
-    public ResponseEntity<?> getRevenueMonthInAYear(@RequestParam int year) {
+    @GetMapping("/admin/totalRevenueMonthInAYear")
+    public ResponseEntity<?> getRevenueMonthInAYear_Admin(@RequestParam int year) {
         List<OrderSummaryDTO> orderSummaries = orderService.getRevenueMonthInYear(year);
         return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
     }

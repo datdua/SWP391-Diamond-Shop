@@ -6,7 +6,14 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.model.GoldPrice;
 import com.example.diamondstore.request.GoldPriceRequest;
@@ -23,33 +30,62 @@ public class GoldPriceController {
         this.goldPriceService = goldPriceService;
     }
 
-    @GetMapping
-    public List<GoldPrice> getAllGoldPrices() {
+    // guest
+    @GetMapping("guest")
+    public List<GoldPrice> getAllGoldPrices_Guest() {
         return goldPriceService.getAll();
     }
 
-    @GetMapping("/{goldPriceID}")
-    public GoldPrice getGoldPriceById(@PathVariable Integer goldPriceID) {
+    // admin
+    @GetMapping("admin")
+    public List<GoldPrice> getAllGoldPrices_Admin() {
+        return goldPriceService.getAll();
+    }
+
+    // customer
+    @GetMapping("customer")
+    public List<GoldPrice> getAllGoldPrices_Customer() {
+        return goldPriceService.getAll();
+    }
+
+    // guest
+    @GetMapping("/guest/{goldPriceID}")
+    public GoldPrice getGoldPriceById_Guest(@PathVariable Integer goldPriceID) {
         return goldPriceService.getGoldPriceById(goldPriceID);
     }
 
-    @PostMapping
-    public ResponseEntity<?> addGoldPrice(@RequestBody GoldPriceRequest goldPriceRequest) {
+    // admin
+    @GetMapping("/admin/{goldPriceID}")
+    public GoldPrice getGoldPriceById_Admin(@PathVariable Integer goldPriceID) {
+        return goldPriceService.getGoldPriceById(goldPriceID);
+    }
+
+    // customer
+    @GetMapping("/customer/{goldPriceID}")
+    public GoldPrice getGoldPriceById_Customer(@PathVariable Integer goldPriceID) {
+        return goldPriceService.getGoldPriceById(goldPriceID);
+    }
+
+    // admin
+    @PostMapping("/admin")
+    public ResponseEntity<?> addGoldPrice_Admin(@RequestBody GoldPriceRequest goldPriceRequest) {
         return goldPriceService.addGoldPrice(goldPriceRequest);
     }
 
-    @PutMapping("/{goldPriceID}")
-    public ResponseEntity<?> updateGoldPrice(@PathVariable Integer goldPriceID, @RequestBody GoldPriceRequest goldPriceRequest) {
+    // admin
+    @PutMapping("/admin/{goldPriceID}")
+    public ResponseEntity<?> updateGoldPrice_Admin(@PathVariable Integer goldPriceID, @RequestBody GoldPriceRequest goldPriceRequest) {
         return goldPriceService.updateGoldPrice(goldPriceID, goldPriceRequest);
     }
 
-    @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> deleteGoldPrices(@RequestBody List<Integer> goldPriceIDs) {
-    try {
-        goldPriceService.deleteGoldPrices(goldPriceIDs);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
-    } catch (RuntimeException e) {
-        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
-    }
+    // admin
+    @DeleteMapping(value = "/admin/delete", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> deleteGoldPrices_Admin(@RequestBody List<Integer> goldPriceIDs) {
+        try {
+            goldPriceService.deleteGoldPrices(goldPriceIDs);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+        }
     }
 }

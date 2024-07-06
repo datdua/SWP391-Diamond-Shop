@@ -27,8 +27,9 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    @GetMapping
-    public ResponseEntity<List<Cart>> getCartItems(@RequestParam Integer accountID) {
+    // customer
+    @GetMapping("/customer")
+    public ResponseEntity<List<Cart>> getCartItems_Customer(@RequestParam Integer accountID) {
         List<Cart> cartItems = cartService.getCartItems(accountID);
         if (cartItems.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -36,8 +37,9 @@ public class CartController {
         return new ResponseEntity<>(cartItems, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/add")
-    public ResponseEntity<Map<String, String>> addItemToCart(
+    // customer
+    @PostMapping("/customer/add")
+    public ResponseEntity<Map<String, String>> addItemToCart_Customer(
             @RequestParam(required = false) Integer accountID,
             @RequestParam(required = false) String diamondID,
             @RequestParam(required = false) String jewelryID,
@@ -51,8 +53,9 @@ public class CartController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Thêm vào giỏ hàng thành công"));
     }
 
-    @PutMapping(value = "/update/{cartID}")
-    public ResponseEntity<Map<String, String>> updateCartItem(
+    // customer
+    @PutMapping("/customer/update/{cartID}")
+    public ResponseEntity<Map<String, String>> updateCartItem_Customer(
             @PathVariable Integer cartID,
             @RequestParam Integer accountID,
             @RequestParam(required = false) String diamondID,
@@ -63,13 +66,15 @@ public class CartController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật giỏ hàng thành công"));
     }
 
-    @DeleteMapping(value = "/remove/{cartID}")
+    // customer
+    @DeleteMapping(value = "/customer/remove/{cartID}")
     public ResponseEntity<Map<String, String>> removeCartItem(@PathVariable Integer cartID) {
         cartService.removeCartItem(cartID);
         return ResponseEntity.ok(Collections.singletonMap("message", "Xóa khỏi giỏ hàng thành công"));
     }
 
-    @GetMapping(value = "/totalCart")
+    // customer
+    @GetMapping(value = "/customer/totalCart")
     public ResponseEntity<?> getTotalCart(@RequestParam Integer accountID) {
         BigDecimal totalCart = cartService.getTotalCart(accountID);
         return ResponseEntity.ok(totalCart);

@@ -31,23 +31,39 @@ public class DiamondPriceController {
         this.diamondPriceService = diamondPriceService;
     }
 
-    @GetMapping("/getAll")
-    public List<DiamondPrice> getAll() {
+    // guest
+    @GetMapping("/guest/getAll")
+    public List<DiamondPrice> getAll_Guest() {
         return diamondPriceService.getAll();
     }
 
-    @PostMapping(value = "/create")
-    public ResponseEntity<?> addDiamondPrice(@RequestBody DiamondPriceRequest diamondPriceRequest) {
+    // admin
+    @GetMapping("/admin/getAll")
+    public List<DiamondPrice> getAll_Admin() {
+        return diamondPriceService.getAll();
+    }
+
+    // customer
+    @GetMapping("/customer/getAll")
+    public List<DiamondPrice> getAll_Customer() {
+        return diamondPriceService.getAll();
+    }
+
+    // admin
+    @PostMapping(value = "/admin/create")
+    public ResponseEntity<?> addDiamondPrice_Admin(@RequestBody DiamondPriceRequest diamondPriceRequest) {
         return diamondPriceService.addDiamondPrice(diamondPriceRequest);
     }
 
-    @PutMapping("/{diamondPriceID}")
-    public ResponseEntity<Map<String, String>> updateDiamondPrice(@PathVariable Integer diamondPriceID, @RequestBody DiamondPriceRequest diamondPriceRequest) {
+    // admin
+    @PutMapping("/admin/{diamondPriceID}")
+    public ResponseEntity<Map<String, String>> updateDiamondPrice_Admin(@PathVariable Integer diamondPriceID, @RequestBody DiamondPriceRequest diamondPriceRequest) {
         return diamondPriceService.updateDiamondPrice(diamondPriceID, diamondPriceRequest);
     }
 
-    @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> deleteDiamondPrices(@RequestBody List<Integer> diamondPriceIDs) {
+    // admin
+    @DeleteMapping(value = "/admin/delete", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> deleteDiamondPrices_Admin(@RequestBody List<Integer> diamondPriceIDs) {
     try {
         diamondPriceService.deleteDiamondPrices(diamondPriceIDs);
         return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
@@ -56,13 +72,39 @@ public class DiamondPriceController {
     }
     }
 
-    @GetMapping("/{diamondPriceID}")
-    public DiamondPrice getDiamondPriceById(@PathVariable Integer diamondPriceID) {
+    // guest
+    @GetMapping("/guest/{diamondPriceID}")
+    public DiamondPrice getDiamondPriceById_Guest(@PathVariable Integer diamondPriceID) {
         return diamondPriceService.getDiamondPriceById(diamondPriceID);
     }
 
+    // admin
+    @GetMapping("/admin/{diamondPriceID}")
+    public DiamondPrice getDiamondPriceById_Admin(@PathVariable Integer diamondPriceID) {
+        return diamondPriceService.getDiamondPriceById(diamondPriceID);
+    }
+
+    // customer
+    @GetMapping("/customer/{diamondPriceID}")
+    public DiamondPrice getDiamondPriceById_Customer(@PathVariable Integer diamondPriceID) {
+        return diamondPriceService.getDiamondPriceById(diamondPriceID);
+    }
+
+    // guest
     @GetMapping("/carat/{caratSize}")
     public List<DiamondPrice> getDiamondPriceByCaratSize(@PathVariable BigDecimal caratSize) {
+        return diamondPriceService.getDiamondPricesByCaratSize(caratSize);
+    }
+
+    // admin
+    @GetMapping("/admin/carat/{caratSize}")
+    public List<DiamondPrice> getDiamondPriceByCaratSize_Admin(@PathVariable BigDecimal caratSize) {
+        return diamondPriceService.getDiamondPricesByCaratSize(caratSize);
+    }
+
+    // customer
+    @GetMapping("/customer/carat/{caratSize}")
+    public List<DiamondPrice> getDiamondPriceByCaratSize_Customer(@PathVariable BigDecimal caratSize) {
         return diamondPriceService.getDiamondPricesByCaratSize(caratSize);
     }
 }
