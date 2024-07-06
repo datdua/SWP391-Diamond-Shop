@@ -37,20 +37,27 @@ public class SecurityConfig {
     // common urls (guest): là những api mà không cần phải xác thực
     private static final String[] GUEST_URL = {"/guest/**", "/api/accounts/guest/**","/api/diamonds/guest/**", "/api/diamondprices/guest/**", 
         "/api/goldPrices/guest/**", "/api/certificates/guest/**", "/api/cart/guest/**", "/api/collections/guest/**", "/api/customers/guest/**", 
-        "/api/jewelry/guest/**", "/api/orders/guest/**", "/api/orderDetail/guest/**", "/api/payment/guest/**", "/api/production/guest/**", "/api/promotion/guest/**", "/api/warranties/guest/**"};
+        "/api/jewelry/guest/**", "/api/orders/guest/**", "/api/orderDetail/guest/**", "/api/payment/guest/**", "/api/production/guest/**", "/api/promotion/guest/**", 
+        "/api/warranties/guest/**"};
 
     // admin urls: là những api mà chỉ admin mới được phép truy cập (/api/(tên
     // controller)/admin/**)
-    private static final String[] ADMIN_URL = {"/api/accounts/admin/**", "/api/certificates/admin/**", "/api/cart/admin/**", "/api/collections/admin/**",
+    private static final String[] ADMIN_URL = {"/admin/**", "/api/accounts/admin/**", "/api/certificates/admin/**", "/api/cart/admin/**", "/api/collections/admin/**",
         "/api/customers/admin/**" ,"/api/diamonds/admin/**", "/api/diamondprices/admin/**", "/api/goldPrices/admin/**", "/api/jewelry/admin/**", 
         "/api/orders/admin/**", "/api/orderDetail/admin/**", "/api/payment/admin/**", "/api/production/admin/**", "/api/promotion/admin/**", "/api/warranties/admin/**"};
 
     // customer urls: là những api mà chỉ customer mới được phép truy cập (/api/(tên
     // controller)/customer/**)
-    private static final String[] CUSTOMER_URL = {"/api/accounts/customer/**", "/api/certificates/customer/**", "/api/cart/customer/**",
+    private static final String[] CUSTOMER_URL = {"/customer/**","/api/accounts/customer/**", "/api/certificates/customer/**", "/api/cart/customer/**",
         "/api/collections/customer/**", "/api/customers/admin/**", "/api/diamondprices/customer/**", "/api/goldPrices/customer/**", 
         "/api/jewelry/customer/**", "/api/orders/customer/**", "/api/orderDetail/customer/**", "/api/payment/customer/**", "/api/production/customer/**", "/api/promotion/customer/**", 
         "/api/warranties/customer/**"};
+
+    // manager urls:
+    private static final String[] MANAGER_URL = {"/manager/**", "/api/accounts/manager/**", "/api/certificates/manager/**", "/api/cart/manager/**",
+        "/api/collections/manager/**", "/api/customers/manager/**", "/api/diamondprices/manager/**", "/api/goldPrices/manager/**", "/api/jewelry/manager/**", 
+        "/api/orders/manager/**", "/api/orderDetail/manager/**", "/api/payment/manager/**", "/api/production/manager/**", "/api/promotion/manager/**", 
+        "/api/warranties/manager/**"};
 
     @Autowired
     private final AccountService UserService;
@@ -63,24 +70,6 @@ public class SecurityConfig {
         this.jwtRequestFilter = jwtRequestFilter;
     }
 
-    // @Bean
-    // public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    //     http
-    //             .cors(withDefaults())
-    //             .csrf(csrf -> csrf.disable())
-    //             .authorizeRequests(authz -> authz
-    //             .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight requests
-    //             .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight requests
-    //             .antMatchers(SWAGGER_URL).permitAll()
-    //             .antMatchers(COMMON_URL).permitAll()
-    //             .anyRequest().authenticated())
-    //             .exceptionHandling(e -> e
-    //             .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-    //             .sessionManagement(s -> s
-    //             .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-    //             .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-    //     return http.build();
-    // }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -92,6 +81,7 @@ public class SecurityConfig {
                 .antMatchers(GUEST_URL).permitAll()
                 .antMatchers(ADMIN_URL).hasRole("ADMIN")
                 .antMatchers(CUSTOMER_URL).hasRole("CUSTOMER")
+                .antMatchers(MANAGER_URL).hasRole("MANAGER")
                 .anyRequest().authenticated())
                 .exceptionHandling(e -> e
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))

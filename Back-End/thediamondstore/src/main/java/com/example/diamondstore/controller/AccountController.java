@@ -63,6 +63,12 @@ public class AccountController {
         return "Welcome to Diamond Store";
     }
 
+    // manager
+    @GetMapping("/manager/home")
+    public String welcome_Manager() {
+        return "Welcome to Diamond Store";
+    }
+
     //customer 
     @GetMapping("/customer/home")
     public String welcome_Customer() {
@@ -75,6 +81,12 @@ public class AccountController {
         return ResponseEntity.ok(accountRepository.findAll());
     }
 
+    //manager 
+    @GetMapping("/manager/accounts")
+    public ResponseEntity<Iterable<Account>> getAccounts_Manager() {
+        return ResponseEntity.ok(accountRepository.findAll());
+    }
+
     // customer
     @GetMapping("/customer/accounts")
     public ResponseEntity<Iterable<Account>> getAccounts_Customer() {
@@ -84,6 +96,16 @@ public class AccountController {
     // admin
     @GetMapping("/admin/{accountName}")
     public ResponseEntity<Account> getByAccountName_Admin(@PathVariable String accountName) {
+        Account account = accountRepository.findByAccountName(accountName);
+        if (account == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(account);
+    }
+
+    // manager
+    @GetMapping("/manager/{accountName}")
+    public ResponseEntity<Account> getByAccountName_Manager(@PathVariable String accountName) {
         Account account = accountRepository.findByAccountName(accountName);
         if (account == null) {
             return ResponseEntity.notFound().build();
@@ -125,7 +147,7 @@ public class AccountController {
         }
     }
 
-    //guest
+    // guest
     @PutMapping(value = "/guest/regenerate-otp", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> regenerateOtp_Guest(@RequestParam String email) {
         Map<String, String> response;
@@ -138,21 +160,11 @@ public class AccountController {
     }
 
     // admin
-    // @DeleteMapping(value = "/admin/delete", produces = "application/json;charset=UTF-8")
-    // public ResponseEntity<Map<String, String>> deleteAccounts_Admin(@RequestBody List<Integer> accountIDs) {
-    //     try {
-    //         accountService.deleteAccounts(accountIDs);
-    //         return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
-    //     } catch (RuntimeException e) {
-    //         return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
-    //     }
-
-    // }
     @DeleteMapping("/admin/delete")
     public ResponseEntity<Map<String, String>> deleteAccounts_Admin(
             @RequestBody List<Integer> accountIDs,
             @RequestHeader("Authorization") String token) {
-        
+
         String jwtToken = token.substring(7); // Remove "Bearer " prefix
         return accountService.deleteAccounts(accountIDs, jwtToken);
     }
@@ -174,10 +186,21 @@ public class AccountController {
             @PathVariable Integer accountID,
             @RequestBody AccountRequest accountRequest,
             @RequestHeader("Authorization") String token) {
-        
+
         String jwtToken = token.substring(7); // Remove "Bearer " prefix
         Account updatedAccount = accountService.updateAccount_Admin(accountID, accountRequest, jwtToken);
         return ResponseEntity.ok(updatedAccount);
+    }
+
+    // manager
+    @PutMapping(value = "/manger/update/{accountID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> updateAccount_Manger(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
+        try {
+            Account updatedAccount = accountService.updateAccount_Customer(accountID, accountRequest);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+        }
     }
 
     // customer 
@@ -221,9 +244,27 @@ public class AccountController {
         return ResponseEntity.ok(pageAccount);
     }
 
+    // manager
+    @GetMapping("/manager/paged")
+    public ResponseEntity<Page<Account>> getAllAccountsPaged_Manager(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Account> pageAccount = accountRepository.findAll(pageable);
+        return ResponseEntity.ok(pageAccount);
+    }
+
     // admin
     @GetMapping("/admin/get/{accountID}")
     public ResponseEntity<?> getByAccountID_Admin(@PathVariable Integer accountID) {
+        Account account = accountRepository.findByAccountID(accountID);
+        if (account == null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
+        }
+        return ResponseEntity.ok(account);
+    }
+
+    // manager
+    @GetMapping("/manager/get/{accountID}")
+    public ResponseEntity<?> getByAccountID_Manager(@PathVariable Integer accountID) {
         Account account = accountRepository.findByAccountID(accountID);
         if (account == null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
@@ -242,10 +283,32 @@ public class AccountController {
         }
     }
 
+    // manager
+    @GetMapping("/manager/getByEmail/{email}")
+    public ResponseEntity<?> getByAccountEmail_Manager(@PathVariable String email) {
+        Optional<Account> account = accountRepository.findByEmail(email);
+        if (account.isPresent()) {
+            return ResponseEntity.ok(account.get());
+        } else {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
+        }
+    }
+
     // admin
     //get account by role
     @GetMapping("/admin/getByRole/{role}")
     public ResponseEntity<?> getByAccountRole_Admin(@PathVariable String role) {
+        List<Account> accounts = accountRepository.findByRole(role);
+        if (accounts.isEmpty()) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
+        }
+        return ResponseEntity.ok(accounts);
+    }
+
+    // manager
+    //get account by role
+    @GetMapping("/manager/getByRole/{role}")
+    public ResponseEntity<?> getByAccountRole_Manager(@PathVariable String role) {
         List<Account> accounts = accountRepository.findByRole(role);
         if (accounts.isEmpty()) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));

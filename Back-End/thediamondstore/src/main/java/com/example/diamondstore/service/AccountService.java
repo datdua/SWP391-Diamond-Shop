@@ -288,6 +288,7 @@ public class AccountService implements UserDetailsService {
         existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
         existingAccount.setRole(accountRequest.getRole());
         existingAccount.setAddressAccount(accountRequest.getAddressAccount());
+        
         // Only update the password if a new password is provided
         if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty() &&
             !accountRequest.getPassword().equals(existingAccount.getPassword())) {
