@@ -132,7 +132,7 @@ function AccountManager() {
           <Card>
             <Card.Header>
               <Card.Title as="h4">
-                Account List
+                Ban Điều Hành
                 <Button
                   variant="link"
                   style={{ textDecoration: "none" }}
@@ -244,6 +244,122 @@ function AccountManager() {
         </Col>
       </Row>
 
+      <Row>
+        <Col md={12}>
+          <Card>
+            <Card.Header>
+              <Card.Title as="h4">
+                Khách Hàng
+                <Button
+                  variant="link"
+                  style={{ textDecoration: "none" }}
+                  onClick={refreshTable}
+                >
+                  <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> REFRESH
+                </Button>
+                <Button
+                  variant="link"
+                  style={{ textDecoration: "none" }}
+                  onClick={handleShowAdd}
+                >
+                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> ADD
+                </Button>
+                {selected.length > 0 && (
+                  <Tooltip describeChild title="Xóa các tài khoản đã chọn" arrow placement="top">
+                    <Button variant="link" onClick={handleDeleteAccounts} style={{ color: "red" }}>
+                      <DeleteIcon />
+                    </Button>
+                  </Tooltip>
+                )}
+              </Card.Title>
+            </Card.Header>
+            <Card.Body>
+              <div className="table-responsive">
+                <Table striped bordered hover className="account-table">
+                  <thead>
+                    <tr>
+                      <th>
+                        <FormControlLabel
+                          className="checkbox-align" // Thêm class để áp dụng CSS
+                          control={
+                            <Checkbox
+                              color="primary"
+                              indeterminate={indeterminate}
+                              checked={selectAll}
+                              onChange={handleSelectAllChange}
+                            />
+                          }
+                        />
+                      </th>
+                      <th>Mã Tài Khoản</th>
+                      <th>Email</th>
+                      <th>Tên Tài Khoản</th>
+                      <th>Mật Khẩu</th>
+                      <th>Số Điện Thoại</th>
+                      <th>Địa Chỉ</th>
+                      <th>Kích Hoạt</th>
+                      <th>Vai Trò</th>
+                      <th>Thao Tác</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {currentPageData.map((account) => {
+                      const isItemSelected = isSelected(account.accountID);
+
+                      return (
+                        <tr
+                          key={account.accountID}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          <td onClick={(event) => handleClick(event, account.accountID)}>
+                            <Checkbox
+                              color="primary"
+                              checked={isItemSelected}
+                              onChange={(event) => handleCheckboxChange(event, account.accountID)}
+                            />
+                          </td>
+                          <td>{account.accountID}</td>
+                          <td>{account.email}</td>
+                          <td>{account.accountName}</td>
+                          <td className="password-cell">{account.password}</td>
+                          <td>{account.phoneNumber}</td>
+                          <td>{account.addressAccount}</td>
+                          <td className={account.active ? "active-status" : "inactive-status"}>
+                            {account.active ? "Đã kích hoạt" : "Chưa kích hoạt"}
+                          </td>
+                          <td>{account.role}</td>
+                          <td>
+                            <Tooltip
+                              describeChild
+                              title="Cập nhật thông tin"
+                              arrow
+                              placement="top"
+                            >
+                              <Button
+                                variant="link"
+                                onClick={() => handleShowUpdate(account)}
+                              >
+                                <EditIcon />
+                              </Button>
+                            </Tooltip>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Table>
+              </div>
+            </Card.Body>
+            <Card.Footer>
+              <Pagination
+                count={Math.ceil(accounts.length / size)}
+                page={currentPage}
+                onChange={handleChangePage}
+              />
+            </Card.Footer>
+          </Card>
+        </Col>
+      </Row>
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>

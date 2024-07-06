@@ -175,6 +175,11 @@ public class AccountController {
         }
     }
 
+    @GetMapping("/all-except-customer")
+    public List<Account> getAllAccountsExceptCustomer() {
+        return accountService.getAllAccountsExcludingRoleCustomer();
+    }
+    
     //get account by role
     @GetMapping("/getByRole/{role}")
     public ResponseEntity<?> getByAccountRole(@PathVariable String role) {

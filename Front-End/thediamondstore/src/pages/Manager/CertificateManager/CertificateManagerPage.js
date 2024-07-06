@@ -195,11 +195,11 @@ function CertificateManagerPage() {
                           }
                         />
                       </th>
-                      <th>Certificate ID</th>
-                      <th>Expiration Date</th>
-                      <th>Certificate Image</th>
-                      <th>Status</th>
-                      <th>Action</th>
+                      <th>Mã Chứng Chỉ</th>
+                      <th>Ngày Hết Hạn</th>
+                      <th>Giấy</th>
+                      <th>Trạng Thái</th>
+                      <th>Thao Tác</th>
                     </tr>
                   </thead>
                   <tbody>

@@ -52,9 +52,6 @@ public class AccountService implements UserDetailsService {
     @Autowired
     private EmailUtil emailUtil;
 
-    public AccountService(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -69,6 +66,10 @@ public class AccountService implements UserDetailsService {
                 account.getPassword(),
                 authorities
         );
+    }
+
+    public List<Account> getAllAccountsExcludingRoleCustomer() {
+        return accountRepository.findByRoleNot("ROLE_CUSTOMER");
     }
 
     public Map<String, String> register(RegisterRequest registerRequest) {
@@ -267,4 +268,6 @@ public class AccountService implements UserDetailsService {
 
     return accountRepository.save(existingAccount);
     }
+
+
 }

@@ -187,12 +187,12 @@ function WarrantyManagerPage() {
                           }
                         />
                       </th>
-                      <th>Warranty ID</th>
-                      <th>Diamond ID</th>
-                      <th>Expiration Date</th>
-                      <th>Warranty Image</th>
-                      <th>Status</th>
-                      <th>Action</th>
+                      <th>Mã Bảo Hành</th>
+                      <th>Mã Kim Cương</th>
+                      <th>Ngày Hết Hạn</th>
+                      <th>Giấy Bảo Hành</th>
+                      <th>Tình Trạng</th>
+                      <th>Thao tác</th>
                     </tr>
                   </thead>
                   <tbody>

@@ -11,7 +11,6 @@ import {
 import { getAllJewelry, deleteJewelry, getWarrantityImage } from "../../../api/JewelryAPI.js";
 import AddJewelryForm from "../../../components/JewelryCRUD/AddJewelryForm.js";
 import UpdateJewelryForm from "../../../components/JewelryCRUD/UpdateJewelryForm.js";
-import DeleteJewelryButton from "../../../components/JewelryCRUD/DeleteJewelryForm.js";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -206,14 +205,14 @@ function JewelryManagerPage() {
                           }
                         />
                       </th>
-                      <th>Jewelry ID</th>
-                      <th>Jewelry Name</th>
-                      <th>Gender</th>
-                      <th>Jewelry Image</th>
-                      <th>Warrantity</th>
-                      <th>Jewelry Entry Price</th>
-                      <th>Jewelry Gross Price</th>
-                      <th>Action</th>
+                      <th>Mã Trang Sức</th>
+                      <th>Tên Trang Sức</th>
+                      <th>Giới Tính</th>
+                      <th>Hình Ảnh Trang Sức</th>
+                      <th>Bảo Hành</th>
+                      <th>Giá Nhập Trang Sức</th>
+                      <th>Giá Bán Trang Sức</th>
+                      <th>Thao Tác</th>
                     </tr>
                   </thead>
                   <tbody>
