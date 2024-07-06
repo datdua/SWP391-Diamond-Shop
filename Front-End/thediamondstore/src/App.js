@@ -40,10 +40,12 @@ import DiamondPriceManager from "./pages/Manager/PriceProductManager/DiamondPric
 import WarrantyDiamondManagerPage from "./pages/Manager/WarrantyManager/WarrantyDiamondManagerPage";
 import WarrantyJewelryManagerPage from "./pages/Manager/WarrantyManager/WarrantyJewelryManagerPage";
 import PromotionManagerPage from "./pages/Manager/PromotionManager/PromotionManagerPage";
+import CustomerManager from "./pages/Manager/AccountManager/CustomerManager";
 import { AuthProvider } from "./components/Auth/AuthProvider";
 import ScrollToTop from "./components/ScrollToTop";
 import EmailConfirm from "./pages/EmailConfirm/EmailConfirm";
 import ResetPasswordForm from "./components/ResetPasswordForm/ResetPasswordForm";
+import DiamondPriceTable from "./components/TablePrice/DiamondPriceTable";
 
 
 function App() {
@@ -87,6 +89,7 @@ function App() {
           <Route path="/wishlist" element={<> <Header /> <WishlistPage /> <Footer /> <BackToTop /> </>} />
           <Route path="/portfolio" element={<> <Header /> <PortfolioPage /> <Footer /> <BackToTop /> </>} />
           <Route path="/kienthuckimcuong" element={<> <Header /> <Knowledge /> <Footer /> <BackToTop />  </> }/>
+          <Route path="/banggia" element={<> <Header /> <DiamondPriceTable/> <Footer /> <BackToTop /> </>} />
           <Route path="/xacthucemail" element={<><Header/><EmailConfirm/><Footer/></>}/>
           <Route path="/datlaimatkhau" element={<><Header/><ResetPasswordForm/><Footer/></>}/>
           {/* actor: //Customer */}
@@ -98,7 +101,7 @@ function App() {
             <Route path="diamond/diamond-manager" element={<ProductManagerPage />} />
             <Route path="diamond/warranty-manager" element={<WarrantyDiamondManagerPage />} />
             <Route path="jewelry/warranty-manager" element={<WarrantyJewelryManagerPage />} />
-            <Route path="account-manager" element={<AccountManager />} />
+            <Route path="account-manager" element={<><AccountManager /><CustomerManager/></>} />
             <Route path="jewelry/jewelry-manager" element={<JewelryManagerPage />} />
             <Route path="promotion-manager" element={<PromotionManagerPage />} />
             <Route path="order-manager" element={<OrderManagerPage />} />

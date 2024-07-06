@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -72,5 +73,23 @@ public class DiamondPriceController {
                                                @RequestParam(required = false) String color,
                                                @RequestParam(required = false) BigDecimal caratSize) {
         return diamondPriceService.findByCriteria(clarity, color, caratSize);
+    }
+
+    @GetMapping("/prices/{caratSize}")
+    public Map<String, Map<String, BigDecimal>> getDiamondPrices(@PathVariable BigDecimal caratSize) {
+        List<DiamondPrice> diamondPrices = diamondPriceService.getDiamondPricesByCaratSize(caratSize);
+
+        // Transform the data to match the required format
+        return diamondPrices.stream()
+                .collect(Collectors.groupingBy(
+                        DiamondPrice::getColor,
+                        Collectors.groupingBy(
+                                DiamondPrice::getClarity,
+                                Collectors.collectingAndThen(
+                                        Collectors.toList(),
+                                        list -> list.get(0).getDiamondEntryPrice()
+                                )
+                        )
+                ));
     }
 }

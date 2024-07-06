@@ -54,6 +54,21 @@ export const updateDiamondPrice = async (diamondPriceID, diamondPrice) => {
   }
 };
 
+export const  getDiamondPriceByCaratSize= async (caratSize) => {
+  try{
+    const token = localStorage.getItem('jwt');
+    const response = await axios.get(
+      `http://localhost:8080/api/diamondprices/prices/${caratSize}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 export const deleteDiamondPrice = async (diamondPriceIDs) => {
   try {
     const response = await axios.delete(
