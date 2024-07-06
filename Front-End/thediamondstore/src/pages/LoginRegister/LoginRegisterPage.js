@@ -27,6 +27,7 @@ function LoginRegisterPage() {
     e.preventDefault();
 
     try {
+      
       const response = await axios.post(
         "http://localhost:8080/guest/login",
         {

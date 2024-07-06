@@ -1,10 +1,8 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
-// actor: Customer
 import AboutPage from "./pages/About/AboutPage";
 import BackToTop from "./components/BackToTop";
 import CartPage from "./pages/Cart/CartPage";
@@ -23,7 +21,6 @@ import PortfolioPage from "./pages/Portfolio/PortfolioPage";
 import ProductPage from "./pages/Product/ProductPage";
 import WishlistPage from "./pages/Wishlist/WishlistPage";
 
-// actor: Admin
 import AccountManager from "./pages/Manager/AccountManager/AccountManager";
 import JewelryManagerPage from "./pages/Manager/JewelryManager/JewelryManagerPage";
 import PaymentConfirm from "./pages/PaymentConfirm/PaymentConfirm";
@@ -46,13 +43,14 @@ import ScrollToTop from "./components/ScrollToTop";
 import EmailConfirm from "./pages/EmailConfirm/EmailConfirm";
 import ResetPasswordForm from "./components/ResetPasswordForm/ResetPasswordForm";
 import DiamondPriceTable from "./components/TablePrice/DiamondPriceTable";
-
+import { PointsProvider } from "./components/PointsContext/PointsContext";
 
 function App() {
-  const handleLogout = (logoutCallback) => {
-    if (logoutCallback) {
-      logoutCallback();
-    }
+
+  const handleLogout = () => {
+    setTimeout(() => {
+      window.location.href='/dangnhap';
+    }, 2000);
   };
 
   return (
@@ -68,7 +66,8 @@ function App() {
         draggable
         pauseOnHover
       />
-      <AuthProvider logoutCallback={() => handleLogout(handleLogout)}>
+      <AuthProvider logoutCallback={handleLogout}>
+        <PointsProvider>
         <ScrollToTop/>
         <Routes>
           {/* actor: Customer */}
@@ -94,7 +93,7 @@ function App() {
           <Route path="/datlaimatkhau" element={<><Header/><ResetPasswordForm/><Footer/></>}/>
           {/* actor: //Customer */}
 
-          {/* actor: Admin */}
+          {/* Admin Routes */}
           <Route path="/admin/*" element={<SideBarAdmin />}>
             <Route path="profile" element={<ProfilePage />} />
             <Route path="dashboard" element={<Dashboard />} />
@@ -110,8 +109,8 @@ function App() {
             <Route path="transaction-manager" element={<TransactionManagerPage />} />
             <Route path="diamond/certificate-manager" element={<CertificateManagerPage />} />
           </Route>
-          {/* actor: //Admin */}
         </Routes>
+        </PointsProvider>
       </AuthProvider>
     </BrowserRouter>
   );

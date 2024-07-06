@@ -33,14 +33,31 @@ public class SecurityConfig {
         "/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**", "/configuration/ui",
         "/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html", "/api/auth/**",
         "/api/test/**", "/authenticate"};
-    private static final String[] COMMON_URL = {"/login", "/api/accounts/register", "/api/diamonds/**", "/api/certificates/**", "/api/jewelry/**", "/api/customers/**", 
-    "/api/accounts/forgetPassword/**", "/api/promotion/**", "/api/warranties/**", "/api/orders/**", "/api/cart/**", "/api/accounts/**", 
-    "/api/accounts", "/api/cart", "api/collections/**", "/api/collections", "/api/production/**", "/api/production", "/api/goldPrices", "/api/goldPrices/**"};
-    private static final String[] ADMIN_URLS = {"/api/diamondprices/**"};
-    private static final String[] CUSTOMER_OR_ADMIN_GET_URLS = {"/api/diamondprices/**"};
 
-    private static final String ROLE_ADMIN = "ADMIN";
-    private static final String ROLE_CUSTOMER = "CUSTOMER";
+    // common urls (guest): là những api mà không cần phải xác thực
+    private static final String[] GUEST_URL = {"/guest/**", "/api/accounts/guest/**","/api/diamonds/guest/**", "/api/diamondprices/guest/**", 
+        "/api/goldPrices/guest/**", "/api/certificates/guest/**", "/api/cart/guest/**", "/api/collections/guest/**", "/api/customers/guest/**", 
+        "/api/jewelry/guest/**", "/api/orders/guest/**", "/api/orderDetail/guest/**", "/api/payment/guest/**", "/api/production/guest/**", "/api/promotion/guest/**", 
+        "/api/warranties/guest/**"};
+
+    // admin urls: là những api mà chỉ admin mới được phép truy cập (/api/(tên
+    // controller)/admin/**)
+    private static final String[] ADMIN_URL = {"/admin/**", "/api/accounts/admin/**", "/api/certificates/admin/**", "/api/cart/admin/**", "/api/collections/admin/**",
+        "/api/customers/admin/**" ,"/api/diamonds/admin/**", "/api/diamondprices/admin/**", "/api/goldPrices/admin/**", "/api/jewelry/admin/**", 
+        "/api/orders/admin/**", "/api/orderDetail/admin/**", "/api/payment/admin/**", "/api/production/admin/**", "/api/promotion/admin/**", "/api/warranties/admin/**"};
+
+    // customer urls: là những api mà chỉ customer mới được phép truy cập (/api/(tên
+    // controller)/customer/**)
+    private static final String[] CUSTOMER_URL = {"/customer/**","/api/accounts/customer/**", "/api/certificates/customer/**", "/api/cart/customer/**",
+        "/api/collections/customer/**", "/api/customers/admin/**", "/api/diamondprices/customer/**", "/api/goldPrices/customer/**", 
+        "/api/jewelry/customer/**", "/api/orders/customer/**", "/api/orderDetail/customer/**", "/api/payment/customer/**", "/api/production/customer/**", "/api/promotion/customer/**", 
+        "/api/warranties/customer/**"};
+
+    // manager urls:
+    private static final String[] MANAGER_URL = {"/manager/**", "/api/accounts/manager/**", "/api/certificates/manager/**", "/api/cart/manager/**",
+        "/api/collections/manager/**", "/api/customers/manager/**", "/api/diamondprices/manager/**", "/api/goldPrices/manager/**", "/api/jewelry/manager/**", 
+        "/api/orders/manager/**", "/api/orderDetail/manager/**", "/api/payment/manager/**", "/api/production/manager/**", "/api/promotion/manager/**", 
+        "/api/warranties/manager/**"};
 
     @Autowired
     private final AccountService UserService;
@@ -60,12 +77,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(authz -> authz
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight requests
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight requests
                 .antMatchers(SWAGGER_URL).permitAll()
-                .antMatchers(COMMON_URL).permitAll()
-                .antMatchers(HttpMethod.PUT, ADMIN_URLS).hasRole(ROLE_ADMIN)
-                .antMatchers(HttpMethod.DELETE, ADMIN_URLS).hasRole(ROLE_ADMIN)
-                .antMatchers(HttpMethod.GET, CUSTOMER_OR_ADMIN_GET_URLS).hasAnyRole(ROLE_CUSTOMER, ROLE_ADMIN)
+                .antMatchers(GUEST_URL).permitAll()
+                .antMatchers(ADMIN_URL).hasRole("ADMIN")
+                .antMatchers(CUSTOMER_URL).hasRole("CUSTOMER")
+                .antMatchers(MANAGER_URL).hasRole("MANAGER")
                 .anyRequest().authenticated())
                 .exceptionHandling(e -> e
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
@@ -88,7 +104,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://the-diamond-store-demo.web.app", "https://www.thediamondstore.site"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://the-diamond-store-demo.web.app",
+                "https://www.thediamondstore.site"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);

@@ -19,6 +19,7 @@ const customModalStyles = {
     overlay: {
         backgroundColor: 'rgba(0, 0, 0, 0.75)',
         zIndex: '1000',
+        transition: 'opacity 0.5s ease-in-out',
     },
 };
 
@@ -117,6 +118,7 @@ function DiamondPage() {
             setDiamonds(content);
             setLoading(false);
             window.scrollTo(0, 0);
+            closeModal();
         } catch (error) {
             setError(error.message);
             setLoading(false);
@@ -153,6 +155,13 @@ function DiamondPage() {
                     <div className="tm-products-area tm-section tm-padding-section bg-white">
                         <div className="container">
                             <div className="row">
+                            <button className="btn btn-primary mb-4" onClick={openModal}>Open Advanced Search</button>
+                            <Modal
+                                        isOpen={modalIsOpen}
+                                        onRequestClose={closeModal}
+                                        style={customModalStyles}
+                                        contentLabel="Advanced Search Modal"
+                                    >
                                 <div className="col-12">
                                     <form action="#" className="tm-shop-header">
                                         <div className="container-fluid px-1 px-sm-4 py-5 mx-auto">
@@ -161,7 +170,7 @@ function DiamondPage() {
                                                     <div className="card border-0">
                                                         <div className="card-header bg-white">
                                                             <h4 className="mb-1">Advanced Search and Filter</h4>
-                                                            <small className="text-muted">Create segments for filtering your data for seeing business insights.</small>
+                                                            <button type="button" className="btn btn-link" onClick={closeModal}>Close</button>
                                                         </div>
                                                         <div className="card-body px-4 px-md-5 py-4">
 
@@ -380,7 +389,7 @@ function DiamondPage() {
                                                         <div className="col-md-12 d-flex flex-column">
                                                             <div className="mt-auto w-100">
                                                                 <div className="col-md-4 card-footer bg-white d-flex mx-0 mb-2 justify-content-end">
-                                                                    <button className="btn btn-secondary px-4 mb-2">Cancel</button>
+                                                                <button className="btn btn-secondary px-4 mb-2" type="button" onClick={closeModal}>Cancel</button>
                                                                     <button className="btn btn-success ml-auto" onClick={handleSearch}>
                                                                         <span className="fa fa-filter"></span> &nbsp;&nbsp;Apply Filter
                                                                     </button>
@@ -390,10 +399,11 @@ function DiamondPage() {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <p className="tm-shop-countview">Showing 1 to {diamonds.length} of {diamonds.length}</p>
+                                        </div>      
                                     </form>
                                 </div>
+                                </Modal>
+                                <p className="tm-shop-countview">Showing 1 to {diamonds.length} of {diamonds.length}</p>
                                 <div className="col-12">
                                     <div className="row">
                                         <div className="col-lg-9">
@@ -462,34 +472,6 @@ function DiamondPage() {
                         </div>
                     </div>
                 </main>
-            </div>
-            <div id="tm-product-quickview">
-                {selectedItem && (
-                    <Modal
-                        isOpen={modalIsOpen}
-                        onRequestClose={closeModal}
-                        style={customModalStyles}
-                        contentLabel="Product Modal"
-                    >
-                        <div className="modal-content">
-                            <div className="img-container">
-                                <img src={selectedItem.diamondImage} alt={selectedItem.diamondName} />
-                            </div>
-                            <button className="close-button" onClick={closeModal}>Close</button>
-                            <div className="content-container">
-                                <h2>{selectedItem.diamondName}</h2>
-                                <p>Price: {selectedItem.diamondEntryPrice ? selectedItem.diamondEntryPrice.toLocaleString() : 'N/A'} VND</p>
-                                <p>Carat Size: {selectedItem.caratSize}</p>
-                                <p>Color: {selectedItem.color}</p>
-                                <p>Cut: {selectedItem.cut}</p>
-                                <p>Clarity: {selectedItem.clarity}</p>
-                                <p>Shape: {selectedItem.shape}</p>
-                                <p>Origin: {selectedItem.origin}</p>
-                            </div>
-                        </div>
-                    </Modal>
-                )}
-
             </div>
         </div>
     );

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getAuthToken } from "./OrderAPI";
 
 export async function getAllAccount() {
   const response = await axios.get(
@@ -52,11 +53,17 @@ export async function getAccountByRoleCustomer() {
   }
 }
 
-export async function updateAccount(accountID, account) {
+export async function updateAccount(accountID, accountDetails) {
+  const token = getAuthToken();
   try {
     const response = await axios.put(
       `http://localhost:8080/api/accounts/update/${accountID}`,
-      account
+      accountDetails,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     return response.data;
   } catch (error) {

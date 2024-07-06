@@ -23,12 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.DTO.AccountContactInfoDTO;
 import com.example.diamondstore.model.Account;
+import com.example.diamondstore.model.Order;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.CustomerRepository;
 import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.request.AccountRequest;
 import com.example.diamondstore.request.RegisterRequest;
 import com.example.diamondstore.service.AccountService;
+import com.example.diamondstore.service.OrderService;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -37,28 +39,63 @@ public class AccountController {
     private final AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
     private final OrderRepository orderRepository;
+    private final OrderService orderService;
 
-    public AccountController(AccountRepository accountRepository, CustomerRepository customerRepository, OrderRepository orderRepository) {
+    public AccountController(AccountRepository accountRepository, CustomerRepository customerRepository, OrderRepository orderRepository, OrderService orderService) {
         this.accountRepository = accountRepository;
         this.customerRepository = customerRepository;
         this.orderRepository = orderRepository;
+        this.orderService = orderService;
     }
 
     @Autowired
     private AccountService accountService;
 
-    @GetMapping("/home")
-    public String welcome() {
+    // guest
+    @GetMapping("/guest/home")
+    public String welcome_Guest() {
         return "Welcome to Diamond Store";
     }
 
-    @GetMapping("/accounts")
-    public ResponseEntity<Iterable<Account>> getaccounts() {
+    // admin
+    @GetMapping("/admin/home")
+    public String welcome_Admin() {
+        return "Welcome to Diamond Store";
+    }
+
+    // manager
+    @GetMapping("/manager/home")
+    public String welcome_Manager() {
+        return "Welcome to Diamond Store";
+    }
+
+    //customer 
+    @GetMapping("/customer/home")
+    public String welcome_Customer() {
+        return "Welcome to Diamond Store";
+    }
+
+    // admin
+    @GetMapping("/admin/accounts")
+    public ResponseEntity<Iterable<Account>> getAccounts_Admin() {
         return ResponseEntity.ok(accountRepository.findAll());
     }
 
-    @GetMapping("/{accountName}")
-    public ResponseEntity<Account> getByAccountName(@PathVariable String accountName) {
+    //manager 
+    @GetMapping("/manager/accounts")
+    public ResponseEntity<Iterable<Account>> getAccounts_Manager() {
+        return ResponseEntity.ok(accountRepository.findAll());
+    }
+
+    // customer
+    @GetMapping("/customer/accounts")
+    public ResponseEntity<Iterable<Account>> getAccounts_Customer() {
+        return ResponseEntity.ok(accountRepository.findAll());
+    }
+
+    // admin
+    @GetMapping("/admin/{accountName}")
+    public ResponseEntity<Account> getByAccountName_Admin(@PathVariable String accountName) {
         Account account = accountRepository.findByAccountName(accountName);
         if (account == null) {
             return ResponseEntity.notFound().build();
@@ -66,8 +103,29 @@ public class AccountController {
         return ResponseEntity.ok(account);
     }
 
-    @PostMapping(value = "/register", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> register(@RequestBody RegisterRequest registerRequest) {
+    // manager
+    @GetMapping("/manager/{accountName}")
+    public ResponseEntity<Account> getByAccountName_Manager(@PathVariable String accountName) {
+        Account account = accountRepository.findByAccountName(accountName);
+        if (account == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(account);
+    }
+
+    // customer
+    @GetMapping("/customer/{accountName}")
+    public ResponseEntity<Account> getByAccountName_Customer(@PathVariable String accountName) {
+        Account account = accountRepository.findByAccountName(accountName);
+        if (account == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(account);
+    }
+
+    // guest
+    @PostMapping(value = "/guest/register", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> register_Guest(@RequestBody RegisterRequest registerRequest) {
         Map<String, String> message;
         try {
             message = accountService.register(registerRequest);
@@ -77,8 +135,9 @@ public class AccountController {
         }
     }
 
-    @PutMapping(value = "/verify-account", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> verifyAccount(@RequestParam String email, @RequestParam String otp) {
+    // guest
+    @PutMapping(value = "/guest/verify-account", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> verifyAccount_Guest(@RequestParam String email, @RequestParam String otp) {
         Map<String, String> response;
         try {
             response = accountService.verifyAccount(email, otp);
@@ -88,8 +147,9 @@ public class AccountController {
         }
     }
 
-    @PutMapping(value = "/regenerate-otp", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> regenerateOtp(@RequestParam String email) {
+    // guest
+    @PutMapping(value = "/guest/regenerate-otp", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> regenerateOtp_Guest(@RequestParam String email) {
         Map<String, String> response;
         try {
             response = accountService.regenerateOtp(email);
@@ -107,10 +167,11 @@ public class AccountController {
     } catch (RuntimeException e) {
         return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
     }
-    }
+}
 
-    @PostMapping("/create")
-    public ResponseEntity<Map<String, String>> createAccount(@RequestBody AccountRequest accountRequest) {
+    // admin
+    @PostMapping("/admin/create")
+    public ResponseEntity<Map<String, String>> createAccount_Admin(@RequestBody AccountRequest accountRequest) {
         try {
             accountService.createAccount(accountRequest);
             return ResponseEntity.ok(Collections.singletonMap("message", "Tạo tài khoản thành công"));
@@ -119,18 +180,43 @@ public class AccountController {
         }
     }
 
-    @PutMapping(value = "/update/{accountID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> update(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
-    try {
-        Account updatedAccount = accountService.updateAccount(accountID, accountRequest);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
+    // admin
+    @PutMapping("/admin/update/{accountID}")
+    public ResponseEntity<Account> updateAccount_Admin(
+            @PathVariable Integer accountID,
+            @RequestBody AccountRequest accountRequest,
+            @RequestHeader("Authorization") String token) {
+
+        String jwtToken = token.substring(7); // Remove "Bearer " prefix
+        Account updatedAccount = accountService.updateAccount_Admin(accountID, accountRequest, jwtToken);
+        return ResponseEntity.ok(updatedAccount);
+    }
+
+    // manager
+    @PutMapping(value = "/manger/update/{accountID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> updateAccount_Manger(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
+        try {
+            Account updatedAccount = accountService.updateAccount_Customer(accountID, accountRequest);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
         } catch (RuntimeException e) {
-        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
         }
     }
 
-    @PostMapping(value = "/forget-password", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> forgetPassword(@RequestParam String email) {
+    // customer 
+    @PutMapping(value = "/customer/update/{accountID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> updateAccount_Customer(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
+        try {
+            Account updatedAccount = accountService.updateAccount_Customer(accountID, accountRequest);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+        }
+    }
+
+    // guest
+    @PostMapping(value = "/guest/forget-password", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> forgetPassword_Guest(@RequestParam String email) {
         try {
             Map<String, String> response = accountService.forgetPassword(email);
             return ResponseEntity.ok(response);
@@ -139,8 +225,9 @@ public class AccountController {
         }
     }
 
-    @PutMapping(value = "/set-password", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> setPassword(@RequestParam String email, @RequestHeader String newPassword) {
+    // guest
+    @PutMapping(value = "/guest/set-password", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> setPassword_Guest(@RequestParam String email, @RequestHeader String newPassword) {
         try {
             Map<String, String> response = accountService.setPassword(email, newPassword);
             return ResponseEntity.ok(response);
@@ -149,15 +236,25 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/paged")
-    public ResponseEntity<Page<Account>> getAllAccountsPaged(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+    // admin
+    @GetMapping("/admin/paged")
+    public ResponseEntity<Page<Account>> getAllAccountsPaged_Admin(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Account> pageAccount = accountRepository.findAll(pageable);
         return ResponseEntity.ok(pageAccount);
     }
 
-    @GetMapping("/get/{accountID}")
-    public ResponseEntity<?> getByAccountID(@PathVariable Integer accountID) {
+    // manager
+    @GetMapping("/manager/paged")
+    public ResponseEntity<Page<Account>> getAllAccountsPaged_Manager(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Account> pageAccount = accountRepository.findAll(pageable);
+        return ResponseEntity.ok(pageAccount);
+    }
+
+    // admin
+    @GetMapping("/admin/get/{accountID}")
+    public ResponseEntity<?> getByAccountID_Admin(@PathVariable Integer accountID) {
         Account account = accountRepository.findByAccountID(accountID);
         if (account == null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
@@ -165,8 +262,30 @@ public class AccountController {
         return ResponseEntity.ok(account);
     }
 
-    @GetMapping("/getByEmail/{email}")
-    public ResponseEntity<?> getByAccountEmail(@PathVariable String email) {
+    // manager
+    @GetMapping("/manager/get/{accountID}")
+    public ResponseEntity<?> getByAccountID_Manager(@PathVariable Integer accountID) {
+        Account account = accountRepository.findByAccountID(accountID);
+        if (account == null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
+        }
+        return ResponseEntity.ok(account);
+    }
+
+    // admin
+    @GetMapping("/admin/getByEmail/{email}")
+    public ResponseEntity<?> getByAccountEmail_Admin(@PathVariable String email) {
+        Optional<Account> account = accountRepository.findByEmail(email);
+        if (account.isPresent()) {
+            return ResponseEntity.ok(account.get());
+        } else {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
+        }
+    }
+
+    // manager
+    @GetMapping("/manager/getByEmail/{email}")
+    public ResponseEntity<?> getByAccountEmail_Manager(@PathVariable String email) {
         Optional<Account> account = accountRepository.findByEmail(email);
         if (account.isPresent()) {
             return ResponseEntity.ok(account.get());
@@ -181,8 +300,8 @@ public class AccountController {
     }
     
     //get account by role
-    @GetMapping("/getByRole/{role}")
-    public ResponseEntity<?> getByAccountRole(@PathVariable String role) {
+    @GetMapping("/manager/getByRole/{role}")
+    public ResponseEntity<?> getByAccountRole_Manager(@PathVariable String role) {
         List<Account> accounts = accountRepository.findByRole(role);
         if (accounts.isEmpty()) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
@@ -190,14 +309,39 @@ public class AccountController {
         return ResponseEntity.ok(accounts);
     }
 
+    // customer
     //get phoneNumber, addressAccount by accountID
-    @GetMapping("/contactInfo/{accountID}")
-    public ResponseEntity<?> getContactInfoByAccountID(@PathVariable Integer accountID) {
-        Account account = accountRepository.findById(accountID).orElse(null);
-        if (account == null) {
+    @GetMapping("/customer/contactInfo/{accountID}")
+    public ResponseEntity<?> getContactInfoByAccountID_Customer(@PathVariable Integer accountID) {
+        Optional<Account> accountOpt = accountRepository.findById(accountID);
+        if (accountOpt.isEmpty()) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
         }
-        AccountContactInfoDTO contactInfo = new AccountContactInfoDTO(account.getPhoneNumber(), account.getAddressAccount());
+
+        Account account = accountOpt.get();
+        String phoneNumber = account.getPhoneNumber();
+        String address = account.getAddressAccount();
+
+        // Check if phoneNumber and address are null
+        if (phoneNumber == null || address == null) {
+            Integer orderNo = orderService.LIFO(accountID);
+            if (orderNo == null) {
+                return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy thông tin liên lạc hợp lệ"));
+            } else {
+                Order order = orderRepository.findByOrderID(orderNo);
+                if (order != null) {
+                    phoneNumber = order.getPhoneNumber();
+                    address = order.getDeliveryAddress();
+                }
+            }
+        }
+
+        // If both phoneNumber and address are still null, return an appropriate message
+        if (phoneNumber == null || address == null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy thông tin liên lạc hợp lệ"));
+        }
+
+        AccountContactInfoDTO contactInfo = new AccountContactInfoDTO(phoneNumber, address);
         return ResponseEntity.ok(contactInfo);
     }
 }

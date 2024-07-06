@@ -22,7 +22,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.Customer;
@@ -32,7 +31,10 @@ import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.request.AccountRequest;
 import com.example.diamondstore.request.RegisterRequest;
 import com.example.diamondstore.utils.EmailUtil;
+import com.example.diamondstore.utils.JwtUtil;
 import com.example.diamondstore.utils.OtpUtil;
+
+import io.jsonwebtoken.Claims;
 
 @Service
 public class AccountService implements UserDetailsService {
@@ -52,6 +54,8 @@ public class AccountService implements UserDetailsService {
     @Autowired
     private EmailUtil emailUtil;
 
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -157,37 +161,37 @@ public class AccountService implements UserDetailsService {
     }
 
     public void createAccount(AccountRequest accountRequest) {
-    // Validate account request
-    validateAccountRequest(accountRequest);
+        // Validate account request
+        validateAccountRequest(accountRequest);
 
-    String accountName = accountRequest.getAccountName();
-    String password = accountRequest.getPassword();
-    String role = accountRequest.getRole();
-    String phoneNumber = accountRequest.getPhoneNumber();
-    String email = accountRequest.getEmail();
+        String accountName = accountRequest.getAccountName();
+        String password = accountRequest.getPassword();
+        String role = accountRequest.getRole();
+        String phoneNumber = accountRequest.getPhoneNumber();
+        String email = accountRequest.getEmail();
 
-    // Check if account already exists
-    Optional<Account> existingAccount = accountRepository.findByEmail(email);
-    if (existingAccount.isPresent()) {
-        throw new RuntimeException("Tài khoản đã tồn tại");
+        // Check if account already exists
+        Optional<Account> existingAccount = accountRepository.findByEmail(email);
+        if (existingAccount.isPresent()) {
+            throw new RuntimeException("Tài khoản đã tồn tại");
+        }
+
+        // Create a new account entity
+        Account account = new Account();
+        account.setAccountName(accountName);
+
+        // Encrypt the password using BCrypt
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(password);
+        account.setPassword(encodedPassword);
+
+        account.setRole(role);
+        account.setPhoneNumber(phoneNumber);
+        account.setEmail(email);
+
+        // Save the account to the database
+        accountRepository.save(account);
     }
-
-    // Create a new account entity
-    Account account = new Account();
-    account.setAccountName(accountName);
-
-    // Encrypt the password using BCrypt
-    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    String encodedPassword = passwordEncoder.encode(password);
-    account.setPassword(encodedPassword);
-
-    account.setRole(role);
-    account.setPhoneNumber(phoneNumber);
-    account.setEmail(email);
-
-    // Save the account to the database
-    accountRepository.save(account);
-}
 
     private void validateAccountRequest(AccountRequest accountRequest) {
         String accountName = accountRequest.getAccountName();
@@ -231,43 +235,86 @@ public class AccountService implements UserDetailsService {
         return Collections.singletonMap("message", "Mật khẩu đã được thiết lập. Vui lòng đăng nhập.");
     }
 
-    public ResponseEntity<Map<String, String>> deleteAccounts(@RequestBody List<Integer> accountIDs) {
-        // Filter out non-existing accounts
+    public ResponseEntity<Map<String, String>> deleteAccounts(List<Integer> accountIDs, String token) {
+        // Decode the JWT token to get the current user's account ID and role
+        Claims claims = jwtUtil.extractAllClaims(token);
+        Integer currentAccountID = claims.get("accountID", Integer.class);
+        String currentRole = claims.get("role", String.class);
+
+        // Filter out non-existing accounts and restricted accounts
         List<Integer> existingAccountIDs = accountIDs.stream()
                 .filter(accountID -> accountRepository.existsById(accountID))
+                .filter(accountID -> {
+                    Account account = accountRepository.findById(accountID).orElse(null);
+                    return account != null &&
+                            !accountID.equals(currentAccountID) &&
+                            !account.getRole().equals("ROLE_ADMIN") &&
+                            !account.getRole().equals("ROLE_MANAGER");
+                })
                 .collect(Collectors.toList());
 
-        // Delete accounts
-        if (!existingAccountIDs.isEmpty()) {
-            accountRepository.deleteAllById(existingAccountIDs);
-            return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy tài khoản để xóa"));
+        // Check if all IDs were restricted
+        if (existingAccountIDs.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "Không thể xóa tài khoản đang đăng nhập hoặc các tài khoản với vai trò ADMIN và MANAGER"));
         }
+
+        // Delete accounts
+        accountRepository.deleteAllById(existingAccountIDs);
+        return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
     }
 
-    public Account updateAccount(Integer accountID, AccountRequest accountRequest) {
-    Account existingAccount = accountRepository.findById(accountID).orElse(null);
-    if (existingAccount == null) {
-        throw new RuntimeException("Không tìm thấy tài khoản");
+    public Account updateAccount_Customer(Integer accountID, AccountRequest accountRequest) {
+        Account existingAccount = accountRepository.findById(accountID).orElse(null);
+        if (existingAccount == null) {
+            throw new RuntimeException("Không tìm thấy tài khoản");
+        }
+        // Update account fields from request
+        existingAccount.setAccountName(accountRequest.getAccountName());
+        existingAccount.setEmail(accountRequest.getEmail());
+        existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
+        existingAccount.setRole(accountRequest.getRole());
+        existingAccount.setAddressAccount(accountRequest.getAddressAccount());
+        
+        // Only update the password if a new password is provided
+        if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty() &&
+            !accountRequest.getPassword().equals(existingAccount.getPassword())) {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String encodedPassword = passwordEncoder.encode(accountRequest.getPassword());
+            existingAccount.setPassword(encodedPassword);
+        }
+        return accountRepository.save(existingAccount);
     }
 
-    // Update account fields from request
-    existingAccount.setAccountName(accountRequest.getAccountName());
-    existingAccount.setEmail(accountRequest.getEmail());
-    existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
-    existingAccount.setRole(accountRequest.getRole());
-    existingAccount.setAddressAccount(accountRequest.getAddressAccount());
+    public Account updateAccount_Admin(Integer accountID, AccountRequest accountRequest, String token) {
+        Account existingAccount = accountRepository.findById(accountID).orElse(null);
+        if (existingAccount == null) {
+            throw new RuntimeException("Không tìm thấy tài khoản");
+        }
 
-    // Only update the password if a new password is provided
-    if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty() &&
-        !new BCryptPasswordEncoder().matches(accountRequest.getPassword(), existingAccount.getPassword())) {
-        // Directly set the password, letting the Account class handle hashing
-        existingAccount.setPassword(accountRequest.getPassword());
+        // Decode the JWT token to extract the role of the currently logged-in account
+        Claims claims = jwtUtil.extractAllClaims(token);
+        String currentRole = claims.get("role", String.class);
+
+        // If the account being updated is the same as the one logged in, ensure the role cannot be changed
+        if (accountID.equals(claims.get("accountID")) && !accountRequest.getRole().equals(currentRole)) {
+            throw new RuntimeException("Không thể cập nhật vai trò của tài khoản đang đăng nhập");
+        }
+
+        // Update account fields from request
+        existingAccount.setAccountName(accountRequest.getAccountName());
+        existingAccount.setEmail(accountRequest.getEmail());
+        existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
+        existingAccount.setRole(accountRequest.getRole());
+        existingAccount.setAddressAccount(accountRequest.getAddressAccount());
+
+        // Only update the password if a new password is provided
+        if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty()
+                && !accountRequest.getPassword().equals(existingAccount.getPassword())) {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String encodedPassword = passwordEncoder.encode(accountRequest.getPassword());
+            existingAccount.setPassword(encodedPassword);
+        }
+
+        return accountRepository.save(existingAccount);
     }
-
-    return accountRepository.save(existingAccount);
-    }
-
-
 }

@@ -116,13 +116,13 @@ function JewelryDetailPage() {
         >
           <div className="container">
             <div className="tm-breadcrumb">
-              <h2>Product Details</h2>
-              <ul>
+              <h2>Thông tin chi tiết</h2>
+              <ul className="add-back">
                 <li>
-                  <Link to="/trangchu">Home</Link>
+                  <Link to="/trangchu">Trang chủ</Link>
                 </li>
                 <li>
-                  <Link to="/sanpham">Products</Link>
+                  <Link to="/sanpham">Sản phẩm</Link>
                 </li>
                 <li>{jewelry ? jewelry.jewelryName : "Loading..."}</li>
               </ul>
@@ -150,19 +150,19 @@ function JewelryDetailPage() {
                           </div>
                         </div>
                         <div className="col-lg-6 col-md-6 col-12">
-                          <div className="tm-prodetails-content">
-                            <h4 className="tm-prodetails-title">
+                          <div className="tm-prodetails-content" style={{fontSize:'larger'}}>
+                            <h2 className="tm-prodetails-title" >
                               {jewelry.jewelryName}
-                            </h4>
-                            <span className="tm-prodetails-price">
+                            </h2>
+                            <span className="tm-prodetails-price" >
                               {jewelry.jewelryEntryPrice.toLocaleString()} VND
                             </span>
                             <div className="tm-prodetails-infos">
-                              <div className="tm-prodetails-singleinfo">
+                              <div className="tm-prodetails-singleinfo" style={{marginTop:'20px', marginBottom:'20px'}}>
                                 <b>Product ID : </b>
                                 {jewelry.jewelryID}
                               </div>
-                              <div className="tm-prodetails-singleinfo">
+                              <div className="tm-prodetails-singleinfo" style={{marginTop:'20px', marginBottom:'20px'}}>
                                 <b>Size : </b>
                                 <select
                                   value={sizeJewelry}
@@ -178,10 +178,11 @@ function JewelryDetailPage() {
                                     </option>
                                   ))}
                                 </select>
-                                <button
+                                <Button
                                   onClick={() => setModalShow(true)}
-                                  style={{ marginLeft: "10px" }}
-                                >Hướng dẫn đo ni</button>
+                                  style={{ marginLeft: "10px", background:"#f2ba59", borderRadius:"5px", textAlign:"center" }}
+                                >Hướng dẫn đo ni
+                                </Button>
                               </div>
                               <div className="tm-prodetails-singleinfo">
                                 <b>Gender : </b>
@@ -190,10 +191,10 @@ function JewelryDetailPage() {
                                 </span>
                               </div>
                             </div>
-                            <p>{jewelry.description}</p>
+                            
                             <div className="tm-prodetails-quantitycart">                        
                               <div className="input-group">
-                              <h6>Quantity :</h6>
+                              <h4>Quantity </h4>
                                 <button
                                   className="decrease-button"
                                   onClick={decreaseQuantity}
