@@ -159,15 +159,15 @@ public class AccountController {
         }
     }
 
-    // admin
-    @DeleteMapping("/admin/delete")
-    public ResponseEntity<Map<String, String>> deleteAccounts_Admin(
-            @RequestBody List<Integer> accountIDs,
-            @RequestHeader("Authorization") String token) {
-
-        String jwtToken = token.substring(7); // Remove "Bearer " prefix
-        return accountService.deleteAccounts(accountIDs, jwtToken);
+    @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> deleteAccounts(@RequestBody List<Integer> accountIDs, @RequestHeader("Authorization") String token) {
+    try {
+        accountService.deleteAccounts(accountIDs, token);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
+    } catch (RuntimeException e) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
     }
+}
 
     // admin
     @PostMapping("/admin/create")
@@ -294,18 +294,11 @@ public class AccountController {
         }
     }
 
-    // admin
-    //get account by role
-    @GetMapping("/admin/getByRole/{role}")
-    public ResponseEntity<?> getByAccountRole_Admin(@PathVariable String role) {
-        List<Account> accounts = accountRepository.findByRole(role);
-        if (accounts.isEmpty()) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
-        }
-        return ResponseEntity.ok(accounts);
+    @GetMapping("/all-except-customer")
+    public List<Account> getAllAccountsExceptCustomer() {
+        return accountService.getAllAccountsExcludingRoleCustomer();
     }
-
-    // manager
+    
     //get account by role
     @GetMapping("/manager/getByRole/{role}")
     public ResponseEntity<?> getByAccountRole_Manager(@PathVariable String role) {

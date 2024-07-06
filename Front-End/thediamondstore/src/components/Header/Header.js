@@ -142,7 +142,7 @@ function Header() {
                     </NavDropdown.Item>
                   </NavDropdown>
                 </li>
-                <li><Link to="#">Bảng Giá</Link></li>
+                <li><Link to="/banggia">Bảng Giá</Link></li>
                 <li><Link to="/kienthuckimcuong">Kiến Thức Kim Cương</Link></li>
                 <li><Link to="/lienhe">Liên Hệ</Link></li>
               </ul>

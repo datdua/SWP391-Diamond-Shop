@@ -23,6 +23,18 @@ export async function searchJewelryByName(name) {
   }
 }
 
+export async function getWarrantityImage(warrantyID) {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/warranties/get/warrantyImg/${warrantyID}`
+    );
+    console.log("API Response:", response.data); // Debug line
+    return response.data.warrantyImage; // Correctly extract the warrantityImage URL
+  } catch (error) {
+    throw new Error("Failed to fetch diamond warranty image");
+  }
+}
+
 export async function getJewelryById(jewelryId) {
   try {
     const response = await axios.get(

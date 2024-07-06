@@ -57,10 +57,6 @@ public class AccountService implements UserDetailsService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    public AccountService(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-    }
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<Account> accountOptional = accountRepository.findByEmail(email);
@@ -74,6 +70,10 @@ public class AccountService implements UserDetailsService {
                 account.getPassword(),
                 authorities
         );
+    }
+
+    public List<Account> getAllAccountsExcludingRoleCustomer() {
+        return accountRepository.findByRoleNot("ROLE_CUSTOMER");
     }
 
     public Map<String, String> register(RegisterRequest registerRequest) {
@@ -235,20 +235,6 @@ public class AccountService implements UserDetailsService {
         return Collections.singletonMap("message", "Mật khẩu đã được thiết lập. Vui lòng đăng nhập.");
     }
 
-    // public ResponseEntity<Map<String, String>> deleteAccounts(@RequestBody List<Integer> accountIDs) {
-    //     // Filter out non-existing accounts
-    //     List<Integer> existingAccountIDs = accountIDs.stream()
-    //             .filter(accountID -> accountRepository.existsById(accountID))
-    //             .collect(Collectors.toList());
-
-    //     // Delete accounts
-    //     if (!existingAccountIDs.isEmpty()) {
-    //         accountRepository.deleteAllById(existingAccountIDs);
-    //         return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
-    //     } else {
-    //         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy tài khoản để xóa"));
-    //     }
-    // }
     public ResponseEntity<Map<String, String>> deleteAccounts(List<Integer> accountIDs, String token) {
         // Decode the JWT token to get the current user's account ID and role
         Claims claims = jwtUtil.extractAllClaims(token);

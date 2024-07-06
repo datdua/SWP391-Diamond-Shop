@@ -22,10 +22,30 @@ export async function getAccountByID(accountID) {
   }
 }
 
-export async function getAccountByRole(role) {
+export async function getAccountHaveNotRoleCustomer() {
   try {
+    const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      `http://localhost:8080/api/accounts/getByRole/${role}`
+      `http://localhost:8080/api/accounts/all-except-customer`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch account by role");
+  }
+}
+
+
+export async function getAccountByRoleCustomer() {
+  try {
+    const token = localStorage.getItem('jwt');
+    const response = await axios.get(
+      `http://localhost:8080/api/accounts/getByRole/ROLE_CUSTOMER`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -78,11 +98,11 @@ export async function createAccount(account) {
 }
 export const getContactInfo = async (accountId) => {
   try {
-      const response = await axios.get(`http://localhost:8080/api/accounts/contactInfo/${accountId}`);
-      return response.data;
+    const response = await axios.get(`http://localhost:8080/api/accounts/contactInfo/${accountId}`);
+    return response.data;
   } catch (error) {
-      console.error('Error fetching contact info:', error);
-      throw error;
+    console.error('Error fetching contact info:', error);
+    throw error;
   }
 };
 export const getAccountIDByEmail = async (email) => {
@@ -104,26 +124,26 @@ export const getAccountIDByEmail = async (email) => {
 };
 export const getCustomerPoints = async (accountId) => {
   try {
-      const response = await axios.get(`http://localhost:8080/api/customers/${accountId}`);
-      if (response.status === 200) {
-          return response.data.point;
-      } else {
-          throw new Error('Failed to fetch customer points');
-      }
+    const response = await axios.get(`http://localhost:8080/api/customers/${accountId}`);
+    if (response.status === 200) {
+      return response.data.point;
+    } else {
+      throw new Error('Failed to fetch customer points');
+    }
   } catch (error) {
-      console.error('Error fetching customer points:', error);
-      throw error;
+    console.error('Error fetching customer points:', error);
+    throw error;
   }
 };
 
 export const resetPassword = async (email) => {
   try {
-      const response = await axios.post(`http://localhost:8080/api/accounts/forget-password?email=${email}`,
-      );
-      return response.data;
+    const response = await axios.post(`http://localhost:8080/api/accounts/forget-password?email=${email}`,
+    );
+    return response.data;
   } catch (error) {
-      console.error('Error resetting password:', error);
-      throw error; // Throw the error for higher level handling
+    console.error('Error resetting password:', error);
+    throw error; // Throw the error for higher level handling
   }
 };
 
@@ -151,23 +171,23 @@ export const setPassword = async (email, newPassword) => {
 
 export const countCustomer = async () => {
   try {
-      const response = await axios.get(`http://localhost:8080/api/customers/total`,
-      );
-      return response.data;
+    const response = await axios.get(`http://localhost:8080/api/customers/total`,
+    );
+    return response.data;
   } catch (error) {
-      console.error('Error fetching customer count:', error);
-      throw error; // Throw the error for higher level handling
+    console.error('Error fetching customer count:', error);
+    throw error; // Throw the error for higher level handling
   }
 };
 
 export const countRevenue = async () => {
   try {
-      const response = await axios.get(`http://localhost:8080/api/orders/totalOrderPaid`,
-      );
-      return response.data;
+    const response = await axios.get(`http://localhost:8080/api/orders/totalOrderPaid`,
+    );
+    return response.data;
   } catch (error) {
-      console.error('Error fetching revenue count:', error);
-      throw error; // Throw the error for higher level handling
+    console.error('Error fetching revenue count:', error);
+    throw error; // Throw the error for higher level handling
   }
 };
 

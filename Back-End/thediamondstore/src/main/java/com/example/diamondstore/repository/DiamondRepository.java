@@ -19,4 +19,12 @@ public interface DiamondRepository extends JpaRepository<Diamond, String>, JpaSp
     List<Diamond> findByDiamondNameLike(String diamondNamePattern);
 
     List<Diamond> findBydiamondEntryPriceBetween(BigDecimal minDiamondPrice, BigDecimal maxDiamondPrice);
+
+    boolean existsByCertificationID(String certificationID);
+
+    boolean existsByWarrantyID(String warrantyID);
+
+    List<Diamond> findAllByCertificationIDIn(List<String> certificationIDs);
+
+    List<Diamond> findAllByWarrantyIDIn(List<String> warrantyIDs);
 }

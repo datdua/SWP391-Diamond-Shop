@@ -1,25 +1,46 @@
 import React, { useState } from "react";
 import { createDiamond } from "../../api/DiamondAPI.js";
-import { Form, Button } from "react-bootstrap";
+// import { Form, Button } from "react-bootstrap";
+
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
 
 function AddDiamondForm() {
   const [diamond, setDiamond] = useState({
-    diamondID: "",
-    warrantyID: "",
-    certificationID: "",
-    diamondName: "",
-    diamondEntryPrice: "",
-    diamondImage: "",
-    carat_weight: "",
-    caratSize: "",
-    color: "",
-    cut: "",
-    clarity: "",
-    shape: "",
-    origin: "",
+    maSo: "",
+    maBaoHanh: "",
+    maChungNhan: "",
+    tenKimCuong: "",
+    giaNhap: "",
+    hinhAnh: "",
+    trongLuongCarat: "",
+    kichThuocCarat: "",
+    mauSac: "",
+    vetCat: "",
+    doTinhKhiet: "",
+    hinhDang: "",
+    xuatXu: "",
   });
 
   const [message, setMessage] = useState("");
+
+  const labels = {
+    maSo: "Mã số",
+    maBaoHanh: "Mã bảo hành",
+    maChungNhan: "Mã chứng nhận",
+    tenKimCuong: "Tên kim cương",
+    giaNhap: "Giá nhập",
+    hinhAnh: "Hình ảnh",
+    trongLuongCarat: "Trọng lượng carat",
+    kichThuocCarat: "Kích thước carat",
+    mauSac: "Màu sắc",
+    vetCat: "Vết cắt",
+    doTinhKhiet: "Độ tinh khiết",
+    hinhDang: "Hình dạng",
+    xuatXu: "Xuất xứ",
+  };
 
   const handleChange = (event) => {
     setDiamond({ ...diamond, [event.target.name]: event.target.value });
@@ -39,24 +60,38 @@ function AddDiamondForm() {
 
   return (
     <div>
-      <Form onSubmit={handleSubmit}>
+      <Box
+        component="form"
+        sx={{
+          '& > :not(style)': { m: 1, width: '25ch' },
+        }}
+        noValidate
+        autoComplete="off"
+        onSubmit={handleSubmit}
+      >
+        {Object.keys(diamond).map((key) => (
+          <TextField id="outlined-basic" label={labels[key]} variant="outlined" onChange={handleChange} />
+        ))}
+        <Button type="submit" variant="contained" color="success">Hoàn thành</Button>
+        {message && <p style={{color: '#F2BA59', fontWeight:'bold'}}>{message}</p>}
+      </Box>
+      {/* <Form onSubmit={handleSubmit}>
         {Object.keys(diamond).map((key) => (
           <Form.Group controlId={key} key={key}>
-            <Form.Label>{key}</Form.Label>
+            <Form.Label>{labels[key]}</Form.Label>
             <Form.Control
               type="text"
               name={key}
               value={diamond[key]}
               onChange={handleChange}
-              placeholder={key}
+              placeholder={labels[key]}
             />
           </Form.Group>
         ))}
         <Button variant="primary" type="submit">
-          Create diamond
+          Tạo Kim Cương
         </Button>
-      </Form>
-      {message && <p>{message}</p>}
+      </Form> */}
     </div>
   );
 }

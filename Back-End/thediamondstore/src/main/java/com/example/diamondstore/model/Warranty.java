@@ -17,7 +17,7 @@ public class Warranty {
     @Column(name = "warrantyID")
     private String warrantyID;
 
-    @Column(name = "diamondID", nullable = false)
+    @Column(name = "diamondID", nullable = true)
     private String diamondID;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -27,7 +27,7 @@ public class Warranty {
     @Column(name = "warrantyImage")
     private String warrantyImage;
 
-    @Column(name = "jewelryID", nullable = false)
+    @Column(name = "jewelryID", nullable = true)
     private String jewelryID;
 
     @Column(name = "warrantyStatus")

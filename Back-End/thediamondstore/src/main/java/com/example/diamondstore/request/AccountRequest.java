@@ -15,7 +15,7 @@ public class AccountRequest {
 
     public AccountRequest(String accountName, String password, String role, String phoneNumber, String email, String addressAccount, Boolean active) {
         this.accountName = accountName;
-        this.password = password; // Không mã hóa mật khẩu tại đây
+        this.password = password; 
         this.role = role;
         this.phoneNumber = phoneNumber;
         this.email = email;
@@ -23,8 +23,6 @@ public class AccountRequest {
         this.active = active;
     }
 
-    // Getters và setters
-    // Không thay đổi gì tại đây
 
     public String getAccountName() {
         return accountName;

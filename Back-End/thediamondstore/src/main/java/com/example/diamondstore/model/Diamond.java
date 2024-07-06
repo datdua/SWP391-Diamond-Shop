@@ -15,10 +15,10 @@ public class Diamond {
     @Column(name = "diamondID")
     private String diamondID;
 
-    @Column(name = "warrantyID")
+    @Column(name = "warrantyID", nullable = true)
     private String warrantyID;
 
-    @Column(name = "certificationID")
+    @Column(name = "certificationID", nullable = true)
     private String certificationID;
 
     @Column(name = "caratSize")

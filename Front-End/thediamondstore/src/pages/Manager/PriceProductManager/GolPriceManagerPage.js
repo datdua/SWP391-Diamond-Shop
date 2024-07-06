@@ -180,11 +180,10 @@ function GoldPriceManager() {
                           }
                         />
                       </th>
-                      <th>ID</th>
-                      <th>Jewelry ID</th>
-                      <th>Gold Price</th>
-                      <th>Gold Age</th>
-                      <th>Actions</th>
+                      <th>Mã trang sức</th>
+                      <th>Giá vàng</th>
+                      <th>Lượng</th>
+                      <th>Thao tác</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -203,7 +202,6 @@ function GoldPriceManager() {
                                 onChange={(event) => handleCheckboxChange(event, goldPrice.goldpriceID)}
                               />
                           </td>
-                          <td>{goldPrice.goldpriceID}</td>
                           <td>{goldPrice.jewelryID}</td>
                           <td>
                             {goldPrice.goldPrice

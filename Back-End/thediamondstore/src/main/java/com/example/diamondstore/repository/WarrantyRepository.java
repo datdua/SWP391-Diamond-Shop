@@ -13,4 +13,11 @@ public interface WarrantyRepository extends JpaRepository<Warranty, String> {
     List<Warranty> findByDiamondIDIsNull();
 
     List<Warranty> findByJewelryIDIsNull();
+
+    void deleteByDiamondID(String diamondID);
+
+    void deleteByJewelryID(String jewelryID);
+
+    void deleteAllByDiamondIDIn(List<String> diamondIDs);
+   
 }
