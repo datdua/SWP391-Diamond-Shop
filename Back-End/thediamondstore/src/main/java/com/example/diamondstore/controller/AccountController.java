@@ -160,9 +160,9 @@ public class AccountController {
     }
 
     @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> deleteAccounts(@RequestBody List<Integer> accountIDs) {
+    public ResponseEntity<Map<String, String>> deleteAccounts(@RequestBody List<Integer> accountIDs, @RequestHeader("Authorization") String token) {
     try {
-        accountService.deleteAccounts(accountIDs);
+        accountService.deleteAccounts(accountIDs, token);
         return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
     } catch (RuntimeException e) {
         return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
