@@ -31,13 +31,13 @@ public class GoldPriceController {
     }
 
     // guest
-    @GetMapping("guest")
+    @GetMapping("/guest")
     public List<GoldPrice> getAllGoldPrices_Guest() {
         return goldPriceService.getAll();
     }
 
     // admin
-    @GetMapping("admin")
+    @GetMapping("/get-all")
     public List<GoldPrice> getAllGoldPrices_Admin() {
         return goldPriceService.getAll();
     }
@@ -55,7 +55,7 @@ public class GoldPriceController {
     }
 
     // admin
-    @GetMapping("/admin/{goldPriceID}")
+    @GetMapping("/manager/{goldPriceID}")
     public GoldPrice getGoldPriceById_Admin(@PathVariable Integer goldPriceID) {
         return goldPriceService.getGoldPriceById(goldPriceID);
     }
@@ -67,19 +67,19 @@ public class GoldPriceController {
     }
 
     // admin
-    @PostMapping("/admin")
+    @PostMapping("/manager/create")
     public ResponseEntity<?> addGoldPrice_Admin(@RequestBody GoldPriceRequest goldPriceRequest) {
         return goldPriceService.addGoldPrice(goldPriceRequest);
     }
 
     // admin
-    @PutMapping("/admin/{goldPriceID}")
+    @PutMapping("/manager/{goldPriceID}")
     public ResponseEntity<?> updateGoldPrice_Admin(@PathVariable Integer goldPriceID, @RequestBody GoldPriceRequest goldPriceRequest) {
         return goldPriceService.updateGoldPrice(goldPriceID, goldPriceRequest);
     }
 
     // admin
-    @DeleteMapping(value = "/admin/delete", produces = "application/json;charset=UTF-8")
+    @DeleteMapping(value = "/manager/delete", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> deleteGoldPrices_Admin(@RequestBody List<Integer> goldPriceIDs) {
         try {
             goldPriceService.deleteGoldPrices(goldPriceIDs);

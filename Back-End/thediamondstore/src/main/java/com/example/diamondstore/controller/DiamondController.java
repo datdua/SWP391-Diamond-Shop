@@ -37,7 +37,7 @@ public class DiamondController {
     }
 
     // admin
-    @GetMapping("/admin")
+    @GetMapping("/get-all")
     public ResponseEntity<List<Diamond>> getDiamonds_Admin() {
         return ResponseEntity.ok(diamondService.getAllDiamonds());
     }
@@ -79,13 +79,13 @@ public class DiamondController {
     }
 
     // admin
-    @PostMapping("/admin/create")
+    @PostMapping("/manager/create")
     public ResponseEntity<Map<String, String>> createDiamond_Admin(@RequestBody Diamond diamond) {
         return diamondService.createDiamond(diamond);
     }
 
     // admin
-    @PutMapping(value = "/admin/update/{diamondID}")
+    @PutMapping(value = "/manager/update/{diamondID}")
     public ResponseEntity<Map<String, String>> updateDiamond_Admin(@PathVariable String diamondID, @RequestBody DiamondPutRequest diamondPutRequest) {
         Map<String, String> response = diamondService.updateDiamond(diamondID, diamondPutRequest);
         if (response.containsKey("message") && response.get("message").equals("Không tìm thấy kim cương")) {
@@ -95,7 +95,7 @@ public class DiamondController {
     }
 
     // admin
-    @DeleteMapping(value = "/admin/delete", produces = "application/json;charset=UTF-8")
+    @DeleteMapping(value = "/manager/delete", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> deleteDiamonds_Admin(@RequestBody List<String> diamondIDs) {
         try {
             diamondService.deleteDiamonds(diamondIDs);

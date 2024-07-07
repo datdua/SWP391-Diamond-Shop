@@ -31,13 +31,13 @@ public class CertificateController {
     }
 
     // admin
-    @GetMapping("/admin")
+    @GetMapping("/get-all")
     public ResponseEntity<Iterable<Certificate>> getCertificates_Admin() {
         return ResponseEntity.ok(certificateService.getAllCertificates());
     }
 
     //admin
-    @GetMapping("/manager/{certificateID}")
+    @GetMapping("/getById/{certificateID}")
     public ResponseEntity<?> getCertificate_Admin(@PathVariable String certificateID) {
         return certificateService.getCertificateById(certificateID);
     }
@@ -78,14 +78,8 @@ public class CertificateController {
     }
 
     // admin 
-    @GetMapping(value = "/admin/get/certificateImg/{certificateID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/get/certificateImg/{certificateID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getCertificateImg_Admin(@PathVariable String certificateID) {
-        return certificateService.getCertificateImg(certificateID);
-    }
-
-    // manager
-    @GetMapping(value = "/manager/get/certificateImg/{certificateID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> getCertificateImg_Manager(@PathVariable String certificateID) {
         return certificateService.getCertificateImg(certificateID);
     }
 

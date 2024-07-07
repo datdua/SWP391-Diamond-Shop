@@ -43,7 +43,7 @@ public class OrderController {
     }
 
     // admin
-    @GetMapping(value = "/account/{accountID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/manager/{accountID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrdersByAccount_Admin(@PathVariable int accountID) {
         try {
             return ResponseEntity.ok(orderService.getOrdersByAccountId(accountID));
@@ -63,7 +63,7 @@ public class OrderController {
     }
 
     // admin
-    @GetMapping(value = "/admin/getAll", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/get-all", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getAllOrders() {
         return ResponseEntity.ok(orderService.getAllOrders());
     }
@@ -90,7 +90,7 @@ public class OrderController {
     }
 
     // admin
-    @GetMapping(value = "/admin/getOrderHaveTransactionNo", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/getOrderHaveTransactionNo", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrdersHaveTransactionNo() {
         return ResponseEntity.ok(orderService.getOrdersHaveTransactionNo());
     }
@@ -129,8 +129,18 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+    //manager
+    @PutMapping(value = "/manager/update/{orderID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> updateOrder_Manager(@PathVariable Integer orderID, @RequestBody OrderPutRequest orderPutRequest) {
+        Map<String, String> response = orderService.updateOrder(orderID, orderPutRequest);
+        if (response.get("message").equals("Cập nhật thất bại")) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+        return ResponseEntity.ok(response);
+    }
+
     // admin
-    @GetMapping(value = "/admin/getByStatus/{orderStatus}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/getByStatus/{orderStatus}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrdersByStatus_Admin(@PathVariable String orderStatus) {
         return ResponseEntity.ok(orderService.getOrdersByStatus(orderStatus));
     }
@@ -154,14 +164,14 @@ public class OrderController {
     }
 
     // admin
-    @GetMapping("/admin/totalRevenue")
+    @GetMapping("/totalRevenue")
     public ResponseEntity<BigDecimal> getTotalOrderPaid() {
         BigDecimal totalOrderPaid = orderService.getTotalOrderByOrderStatusPaid();
         return ResponseEntity.ok(totalOrderPaid);
     }
 
     //admin
-    @GetMapping("/admin/totalOrder")
+    @GetMapping("/totalOrder")
     public ResponseEntity<Long> getTotalOrder_Admin() {
         long totalOrder = orderService.getTotalOrders();
         return new ResponseEntity<>(totalOrder, HttpStatus.OK);
@@ -175,7 +185,7 @@ public class OrderController {
     }
 
     // admin
-    @GetMapping("/admin/totalTransaction")
+    @GetMapping("/totalTransaction")
     public ResponseEntity<Long> getTotalOrderStatusPaid_Admin() {
         long totalOrderStatusPaid = orderService.getTotalOrdersByOrderStatus("Đã thanh toán");
         return new ResponseEntity<>(totalOrderStatusPaid, HttpStatus.OK);

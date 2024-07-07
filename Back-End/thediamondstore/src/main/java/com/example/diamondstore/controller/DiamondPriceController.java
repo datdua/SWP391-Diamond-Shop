@@ -27,11 +27,7 @@ import com.example.diamondstore.service.DiamondPriceService;
 public class DiamondPriceController {
 
     @Autowired
-    private final DiamondPriceService diamondPriceService;
-
-    public DiamondPriceController(DiamondPriceService diamondPriceService) {
-        this.diamondPriceService = diamondPriceService;
-    }
+    private  DiamondPriceService diamondPriceService;
 
     // guest
     @GetMapping("/guest/getAll")
@@ -40,7 +36,7 @@ public class DiamondPriceController {
     }
 
     // admin
-    @GetMapping("/admin/getAll")
+    @GetMapping("/get-all")
     public List<DiamondPrice> getAll_Admin() {
         return diamondPriceService.getAll();
     }
@@ -93,7 +89,7 @@ public class DiamondPriceController {
     }
 
     // guest
-    @GetMapping("/manager/carat/{caratSize}")
+    @GetMapping("/guest/carat/{caratSize}")
     public List<DiamondPrice> getDiamondPriceByCaratSize(@PathVariable BigDecimal caratSize) {
         return diamondPriceService.getDiamondPricesByCaratSize(caratSize);
     }

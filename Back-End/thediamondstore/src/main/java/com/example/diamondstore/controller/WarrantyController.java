@@ -33,7 +33,7 @@ public class WarrantyController {
     }
 
     // admin
-    @GetMapping("/admin")
+    @GetMapping("/get-all")
     public ResponseEntity<Iterable<Warranty>> getWarranties_Admin() {
         return ResponseEntity.ok(warrantyService.getAllWarranties());
     }
@@ -45,8 +45,8 @@ public class WarrantyController {
     }
 
     // admin
-    @GetMapping("/admin/{warrantyID}")
-    public ResponseEntity<Warranty> getWarranty_Admin(@PathVariable String warrantyID) {
+    @GetMapping("/manager/{warrantyID}")
+    public ResponseEntity<Warranty> getWarranty_Manager(@PathVariable String warrantyID) {
         Warranty warranty = warrantyService.getWarrantyById(warrantyID);
         if (warranty == null) {
             return ResponseEntity.notFound().build();
@@ -71,19 +71,19 @@ public class WarrantyController {
     }
 
     // admin
-    @PostMapping(value = "/admin/create", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> createWarranty_Admin(@RequestBody Warranty warranty) {
+    @PostMapping(value = "/manager/create", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> createWarranty_Manager(@RequestBody Warranty warranty) {
         return warrantyService.createWarranty(warranty);
     }
 
     // admin
-    @PutMapping(value = "/admin/update/{warrantyID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> updateWarranty_Admin(@PathVariable String warrantyID, @RequestBody WarrantyPutRequest warrantyPutRequest) {
+    @PutMapping(value = "/manager/update/{warrantyID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> updateWarranty_Manager(@PathVariable String warrantyID, @RequestBody WarrantyPutRequest warrantyPutRequest) {
         return warrantyService.updateWarranty(warrantyID, warrantyPutRequest);
     }
 
-    @DeleteMapping(value = "/admin/delete", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> deleteWarrantys_Admin(@RequestBody List<String> warrantyIDs) {
+    @DeleteMapping(value = "/manager/delete", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> deleteWarrantys_Manager(@RequestBody List<String> warrantyIDs) {
     try {
         warrantyService.deleteWarranty(warrantyIDs);
         return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các giấy bảo hành thành công"));
@@ -93,7 +93,7 @@ public class WarrantyController {
     }
 
     // admin
-    @GetMapping(value = "/admin/get/warrantyImg/{warrantyID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/get/warrantyImg/{warrantyID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> getWarrantyImg_Admin(@PathVariable String warrantyID) {
         return warrantyService.getWarrantyImg(warrantyID);
     }
@@ -105,19 +105,19 @@ public class WarrantyController {
     }
 
     // admin
-    @GetMapping("/admin/diamondIDIsNull")
+    @GetMapping("/diamondIDIsNull")
     public ResponseEntity<List<Warranty>> getWarrantiesByDiamondIDIsNull_ADmin() {
         return ResponseEntity.ok(warrantyService.getWarrantiesByDiamondIDIsNull());
     }
 
     // admin
-    @GetMapping("/admin/jewelryIDIsNull")
+    @GetMapping("/jewelryIDIsNull")
     public ResponseEntity<List<Warranty>> getWarrantiesByJewelryIDIsNull_Admin() {
         return ResponseEntity.ok(warrantyService.getWarrantiesByJewelryIDIsNull());
     }
 
     // admin
-    @PostMapping("/admin/update-statuses")
+    @PostMapping("/manager/update-statuses")
     public ResponseEntity<Map<String, String>> updateWarrantyStatusesAuto_Admin() {
         warrantyService.updateWarrantyStatusesAuto();
         return ResponseEntity.ok(Collections.singletonMap("message", "Trạng thái giấy bảo hành đã được cập nhật"));

@@ -60,7 +60,9 @@ public class SecurityConfig {
         "/api/warranties/manager/**"};
 
     //Admin and Manager urls
-    private static final String[] ADMIN_MANAGER_URL = {"/api/accounts/get-all", "/api/accounts/all-except-customer", "/api/accounts/getByRole/**"};
+    private static final String[] ADMIN_MANAGER_URL = {"/api/accounts/get-all", "/api/accounts/all-except-customer", "/api/accounts/getByRole/**", "/api/certificates/get-all", "/api/certificates/getById/**", "/api/certificates/get/certificateImg/**", "/api/diamonds/get-all", "/api/diamondprices/get-all",
+         "/api/goldPrices/get-all", "/api/jewelry/get-all", "/api/orders/get-all", "/api/orders/getOrderHaveTransactionNo", "/api/orders/getByStatus/**", "/api/orders/totalRevenue", "/api/orders/totalOrder", "/api/orders/totalTransaction", "api/promotion/get-all", "/api/warranties/get-all", "/api/warranties/get/warrantyImg/**",
+         "/api/warranties/diamondIDIsNull", "/api/warranties/jewelryIDIsNull" };
 
     @Autowired
     private final AccountService UserService;

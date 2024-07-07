@@ -37,8 +37,8 @@ public class JewelryController {
     }
 
     // admin
-    @GetMapping("/admin")
-    public ResponseEntity<List<Jewelry>> getAllJewelry_Admin() {
+    @GetMapping("/get-all")
+    public ResponseEntity<List<Jewelry>> getAllJewelry_Manager() {
         return ResponseEntity.ok(jewelryService.getAllJewelry());
     }
 
@@ -59,8 +59,8 @@ public class JewelryController {
     }
 
     // admin
-    @GetMapping("/admin/get/{jewelryID}")
-    public ResponseEntity<Jewelry> getJewelry_Admin(@PathVariable String jewelryID) {
+    @GetMapping("/manager/get/{jewelryID}")
+    public ResponseEntity<Jewelry> getJewelry_Manager(@PathVariable String jewelryID) {
         Jewelry jewelry = jewelryService.getJewelryById(jewelryID);
         if (jewelry == null) {
             return ResponseEntity.notFound().build();
@@ -99,13 +99,13 @@ public class JewelryController {
         return ResponseEntity.ok(pageJewelrys);
     }
 
-    @PostMapping(value = "/admin/create")
+    @PostMapping(value = "/manager/create")
     public ResponseEntity<Map<String, String>> createJewelry_Admin(@RequestBody Jewelry jewelry) {
         return jewelryService.createJewelry(jewelry);
     }
 
     // admin
-    @PutMapping("/admin/update/{jewelryID}")
+    @PutMapping("/manager/update/{jewelryID}")
     public ResponseEntity<Map<String, String>> updateJewelry_Admin(@PathVariable String jewelryID, @RequestBody JewelryPutRequest jewelryPutRequest) {
         Map<String, String> response = jewelryService.updateJewelry(jewelryID, jewelryPutRequest);
         if ("Trang sức không tồn tại".equals(response.get("message"))) {
@@ -114,7 +114,7 @@ public class JewelryController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping(value = "/admin/delete", produces = "application/json;charset=UTF-8")
+    @DeleteMapping(value = "/manager/delete", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> deleteJewelrys_Admin(@RequestBody List<String> jewelryIDs) {
     try {
         jewelryService.deleteJewelry(jewelryIDs);
