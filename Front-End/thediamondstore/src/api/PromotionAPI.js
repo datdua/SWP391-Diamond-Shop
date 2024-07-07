@@ -2,7 +2,12 @@ import axios from "axios";
 
 export const getAllPromotions = async () => {
   try {
-    const response = await axios.get("http://localhost:8080/api/promotion");
+    const token = localStorage.getItem('jwt');
+    const response = await axios.get("http://localhost:8080/api/promotion/get-all",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching promotions:", error);

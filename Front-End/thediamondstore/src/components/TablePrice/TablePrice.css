@@ -26,6 +26,7 @@
     text-align: center;
 }
 
+
 .bodyPriceCell:nth-of-type(odd) {
     background-color: #f5f5f5;
 }
@@ -40,6 +41,7 @@
     color: #bd9a7a;
     margin-bottom: 16px;
     text-align: center;
+    padding-top: 60px;
 }
 
 .description {

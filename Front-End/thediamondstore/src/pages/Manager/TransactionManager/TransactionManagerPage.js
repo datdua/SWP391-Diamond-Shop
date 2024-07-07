@@ -8,7 +8,7 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
-import { getOrdersHaveTransactionNo, deleteOrder } from "../../../api/OrderAPI";
+import { getOrdersHaveTransactionNo } from "../../../api/OrderAPI";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
 import UpdateOrderForm from "../../../components/OrderCRUD/OrderUpdate";
@@ -82,13 +82,13 @@ function TransactionManagerPage() {
                 }}
               >
                 <div>
-                  Order List
+                  Giao Dịch
                   <Button
                     variant="link"
                     style={{ textDecoration: "none" }}
                     onClick={refreshTable}
                   >
-                    <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> REFRESH
+                    <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> Tải Lại
                   </Button>
                 </div>
                 <Button
@@ -122,7 +122,6 @@ function TransactionManagerPage() {
                       <th>Giấy Chứng Nhận</th>
                       <th>Giấy Bảo Hành</th>
                       <th>Mã Khuyến Mãi</th>
-                      <th>Thao tác</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -171,21 +170,6 @@ function TransactionManagerPage() {
                           />
                         </td>
                         <td>{order.promotionCode}</td>
-                        <td>
-                          <Tooltip
-                            describeChild
-                            title="Cập nhật thông tin"
-                            arrow
-                            placement="top"
-                          >
-                            <Button
-                              variant="link"
-                              onClick={() => handleShowUpdate(order)}
-                            >
-                              <EditIcon />
-                            </Button>
-                          </Tooltip>
-                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -211,7 +195,7 @@ function TransactionManagerPage() {
           {isUpdating ? (
             <UpdateOrderForm order={selectedOrder} onClose={handleClose} />
           ) : (
-            <div>Add Order Form Here</div> 
+            <div>Add Order Form Here</div>
           )}
         </Modal.Body>
       </Modal>

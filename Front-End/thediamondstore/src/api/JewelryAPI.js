@@ -25,8 +25,12 @@ export async function searchJewelryByName(name , page = 1, size = 9) {
 
 export async function getWarrantityImage(warrantyID) {
   try {
+    const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      `http://localhost:8080/api/warranties/customer/get/warrantyImg/${warrantyID}`
+      `http://localhost:8080/api/warranties/get/warrantyImg/${warrantyID}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     console.log("API Response:", response.data); // Debug line
     return response.data.warrantyImage; // Correctly extract the warrantityImage URL
@@ -59,9 +63,13 @@ export async function getPage(page = 1, size = 9) {
 
 export async function createJewelry(jewelry) {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await axios.post(
-      "http://localhost:8080/api/jewelry/create",
-      jewelry
+      "http://localhost:8080/api/jewelry/manager/create",
+      jewelry,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -71,9 +79,13 @@ export async function createJewelry(jewelry) {
 
 export async function updateJewelry(jewelryID, jewelry) {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await axios.put(
-      `http://localhost:8080/api/jewelry/update/${jewelryID}`,
-      jewelry
+      `http://localhost:8080/api/jewelry/manager/update/${jewelryID}`,
+      jewelry,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -83,9 +95,12 @@ export async function updateJewelry(jewelryID, jewelry) {
 
 export async function deleteJewelry(jewelryIDs) {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await axios.delete(
-      `http://localhost:8080/api/jewelry/delete`
-      , { data: jewelryIDs }
+      `http://localhost:8080/api/jewelry/manager/delete`
+      , { 
+        headers: { Authorization: `Bearer ${token}` },
+        data: jewelryIDs }
     );
     return response.data;
   } catch (error) {

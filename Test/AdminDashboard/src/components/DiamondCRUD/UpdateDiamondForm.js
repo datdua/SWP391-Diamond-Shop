@@ -46,7 +46,7 @@ function UpdateDiamondForm({ diamond }) {
       </Form.Group>
       <Form.Group>
         <Form.Label>Carat Weight</Form.Label>
-        <Form.Control type="text" name="carat_weight" value={updatedDiamond.carat_weight} onChange={handleChange} />
+        <Form.Control type="text" name="weight" value={updatedDiamond.weight} onChange={handleChange} />
       </Form.Group>
       <Form.Group>
         <Form.Label>Carat Size</Form.Label>

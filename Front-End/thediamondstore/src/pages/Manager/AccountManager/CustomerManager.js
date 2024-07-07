@@ -127,7 +127,7 @@ function CustomerManager() {
 
     return (
         <Container fluid>
-            <Row style={{marginTop: "20px"}}>
+            <Row style={{ marginTop: "20px" }}>
                 <Col md={12}>
                     <Card>
                         <Card.Header>
@@ -138,7 +138,7 @@ function CustomerManager() {
                                     style={{ textDecoration: "none" }}
                                     onClick={refreshTable}
                                 >
-                                    <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> REFRESH
+                                    <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> Tải Lại
                                 </Button>
                                 <Button
                                     variant="link"

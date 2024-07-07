@@ -2,7 +2,12 @@ import axios from "axios";
 
 export const getAllCertificates = async () => {
   try {
-    const response = await axios.get("http://localhost:8080/api/certificates");
+    const token = localStorage.getItem("jwt");
+    const response = await axios.get("http://localhost:8080/api/certificates/get-all",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching certificates:", error);
@@ -24,9 +29,13 @@ export const getCertificateById = async (certificateId) => {
 
 export const createCertificate = async (certificate) => {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await axios.post(
-      "http://localhost:8080/api/certificates/create",
-      certificate
+      "http://localhost:8080/api/certificates/manager/create",
+      certificate,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -37,9 +46,13 @@ export const createCertificate = async (certificate) => {
 
 export const updateCertificate = async (certificateId, certificate) => {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await axios.put(
-      `http://localhost:8080/api/certificates/update/${certificateId}`,
-      certificate
+      `http://localhost:8080/api/certificates/manager/update/${certificateId}`,
+      certificate,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -51,8 +64,12 @@ export const updateCertificate = async (certificateId, certificate) => {
 
 export async function deleteCertificate(certificateIDs) {
   try {
-    const response = await axios.delete("http://localhost:8080/api/certificates/delete", 
-      { data: certificateIDs }
+    const token = localStorage.getItem("jwt");
+    const response = await axios.delete("http://localhost:8080/api/certificates/manager/delete", 
+      { 
+        headers: { Authorization: `Bearer ${token}` },
+        data: certificateIDs
+       }
     );
     return response.data;
   } catch (error) {

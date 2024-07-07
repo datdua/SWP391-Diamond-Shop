@@ -2,7 +2,12 @@ import axios from "axios";
 
 export const getAllWarranties = async () => {
   try {
-    const response = await axios.get("http://localhost:8080/api/warranties");
+    const token = localStorage.getItem("jwt");
+    const response = await axios.get("http://localhost:8080/api/warranties/get-all",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching warranties:", error);
@@ -22,12 +27,15 @@ export const getWarrantyById = async (warrantyID) => {
   }
 };
 
-
 export const createWarranty = async (warranty) => {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await axios.post(
-      "http://localhost:8080/api/warranties/create",
-      warranty
+      "http://localhost:8080/api/warranties/manager/create",
+      warranty,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -38,9 +46,13 @@ export const createWarranty = async (warranty) => {
 
 export const updateWarranty = async (warrantyID, warranty) => {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await axios.put(
-      `http://localhost:8080/api/warranties/update/${warrantyID}`,
-      warranty
+      `http://localhost:8080/api/warranties/manager/update/${warrantyID}`,
+      warranty,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -51,9 +63,13 @@ export const updateWarranty = async (warrantyID, warranty) => {
 
 export async function deleteWarranty(warrantyIDs) {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await axios.delete(
-      `http://localhost:8080/api/warranties/delete`,
-      { data: warrantyIDs }
+      `http://localhost:8080/api/warranties/manager/delete`,
+      { 
+        headers: { Authorization: `Bearer ${token}` },
+        data: warrantyIDs 
+      },
     );
     return response.data;
   } catch (error) {
@@ -76,8 +92,12 @@ export const getWarrantyByPage = async (page, size) => {
 
 export const getWarrantyDiamondIDIsNull = async () => {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `http://localhost:8080/api/warranties/diamondIDIsNull`
+      `http://localhost:8080/api/warranties/diamondIDIsNull`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -88,8 +108,12 @@ export const getWarrantyDiamondIDIsNull = async () => {
 
 export const getWarrantyJewelryIDIsNull = async () => {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `http://localhost:8080/api/warranties/jewelryIDIsNull`
+      `http://localhost:8080/api/warranties/jewelryIDIsNull`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {

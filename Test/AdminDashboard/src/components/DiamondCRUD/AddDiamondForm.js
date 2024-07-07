@@ -9,7 +9,7 @@ function AddDiamondForm() {
     diamondName: '',
     diamondPrice: '',
     diamondImage: '',
-    carat_weight: '',
+    weight: '',
     caratSize: '',
     color: '',
     cut: '',
@@ -45,7 +45,7 @@ function AddDiamondForm() {
         <input name="diamondName" value={diamond.diamondName} onChange={handleChange} placeholder="diamond Name" />
         <input name="diamondPrice" value={diamond.diamondPrice} onChange={handleChange} placeholder="diamond Price" />
         <input name="diamondImage" value={diamond.diamondImage} onChange={handleChange} placeholder="diamond Image" />
-        <input name="carat_weight" value={diamond.carat_weight} onChange={handleChange} placeholder="carat weight" />
+        <input name="weight" value={diamond.weight} onChange={handleChange} placeholder="carat weight" />
         <input name="caratSize" value={diamond.caratSize} onChange={handleChange} placeholder="carat size" />
         <input name="color" value={diamond.color} onChange={handleChange} placeholder="color" />
         <input name="cut" value={diamond.cut} onChange={handleChange} placeholder="cut" />
