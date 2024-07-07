@@ -27,12 +27,12 @@ public class AccountControllerGuest {
     }
 
     @GetMapping("/home")
-    public String welcome_Guest() {
+    public String welcome() {
         return "Welcome to Diamond Store";
     }
 
     @PostMapping(value = "/register", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> register_Guest(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<Map<String, String>> register(@RequestBody RegisterRequest registerRequest) {
         Map<String, String> message;
         try {
             message = accountService.register(registerRequest);
@@ -43,7 +43,7 @@ public class AccountControllerGuest {
     }
 
     @PutMapping(value = "/verify-account", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> verifyAccount_Guest(@RequestParam String email, @RequestParam String otp) {
+    public ResponseEntity<Map<String, String>> verifyAccount(@RequestParam String email, @RequestParam String otp) {
         Map<String, String> response;
         try {
             response = accountService.verifyAccount(email, otp);
@@ -54,7 +54,7 @@ public class AccountControllerGuest {
     }
 
     @PutMapping(value = "/regenerate-otp", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> regenerateOtp_Guest(@RequestParam String email) {
+    public ResponseEntity<Map<String, String>> regenerateOtp(@RequestParam String email) {
         Map<String, String> response;
         try {
             response = accountService.regenerateOtp(email);
@@ -65,7 +65,7 @@ public class AccountControllerGuest {
     }
 
     @PostMapping(value = "/forget-password", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> forgetPassword_Guest(@RequestParam String email) {
+    public ResponseEntity<Map<String, String>> forgetPassword(@RequestParam String email) {
         try {
             Map<String, String> response = accountService.forgetPassword(email);
             return ResponseEntity.ok(response);
@@ -75,7 +75,7 @@ public class AccountControllerGuest {
     }
 
     @PutMapping(value = "/set-password", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> setPassword_Guest(@RequestParam String email, @RequestHeader String newPassword) {
+    public ResponseEntity<Map<String, String>> setPassword(@RequestParam String email, @RequestHeader String newPassword) {
         try {
             Map<String, String> response = accountService.setPassword(email, newPassword);
             return ResponseEntity.ok(response);
