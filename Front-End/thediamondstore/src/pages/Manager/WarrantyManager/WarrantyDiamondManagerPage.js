@@ -151,7 +151,7 @@ function WarrantyManagerPage() {
                   style={{ textDecoration: "none" }}
                   onClick={refreshTable}
                 >
-                  <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> REFRESH
+                  <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> Tải Lại
                 </Button>
                 <Button
                   variant="link"
@@ -210,42 +210,42 @@ function WarrantyManagerPage() {
                               onChange={(event) => handleCheckboxChange(event, warranty.warrantyID)}
                             />
                           </td>
-                        <td>{warranty.warrantyID}</td>
-                        <td>{warranty.diamondID || "N/A"}</td>
-                        <td>{warranty.expirationDate}</td>
-                        <td>
-                          <img
-                            src={warranty.warrantyImage}
-                            alt="Warranty"
-                            style={{
-                              width: "50px",
-                              height: "50px",
-                              cursor: "pointer",
-                            }}
-                            onClick={() =>
-                              handleShowImage(warranty.warrantyImage)
-                            }
-                          />
-                        </td>
-                        <td>{warranty.warrantyStatus}</td>
-                        <td>
-                          <Tooltip
-                            describeChild
-                            title="Cập nhật thông tin"
-                            arrow
-                            placement="top"
-                          >
-                            <Button
-                              variant="link"
-                              onClick={() => handleShowUpdate(warranty)}
+                          <td>{warranty.warrantyID}</td>
+                          <td>{warranty.diamondID || "N/A"}</td>
+                          <td>{warranty.expirationDate}</td>
+                          <td>
+                            <img
+                              src={warranty.warrantyImage}
+                              alt="Warranty"
+                              style={{
+                                width: "50px",
+                                height: "50px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                handleShowImage(warranty.warrantyImage)
+                              }
+                            />
+                          </td>
+                          <td>{warranty.warrantyStatus}</td>
+                          <td>
+                            <Tooltip
+                              describeChild
+                              title="Cập nhật thông tin"
+                              arrow
+                              placement="top"
                             >
-                              <EditIcon />
-                            </Button>
-                          </Tooltip>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                              <Button
+                                variant="link"
+                                onClick={() => handleShowUpdate(warranty)}
+                              >
+                                <EditIcon />
+                              </Button>
+                            </Tooltip>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </Table>
               </div>

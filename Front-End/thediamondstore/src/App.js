@@ -31,6 +31,8 @@ import Knowledge from "./pages/Knowledge/Knowledge";
 import OrderManagerPage from "./pages/Manager/OrderManager/OrderManagePager";
 import ProductManagerPage from "./pages/Manager/DiamondManager/DiamondManager";
 import SideBarAdmin from "./components/Sidebar/SidebarAdmin";
+import SideBarManager from "./components/Sidebar/SideBarManager";
+import SideBarSaleStaff from "./components/Sidebar/SideBarSaleStaff";
 import TransactionManagerPage from "./pages/Manager/TransactionManager/TransactionManagerPage";
 import CertificateManagerPage from "./pages/Manager/CertificateManager/CertificateManagerPage";
 import DiamondPriceManager from "./pages/Manager/PriceProductManager/DiamondPriceManagerPage";
@@ -44,6 +46,7 @@ import EmailConfirm from "./pages/EmailConfirm/EmailConfirm";
 import ResetPasswordForm from "./components/ResetPasswordForm/ResetPasswordForm";
 import DiamondPriceTable from "./components/TablePrice/DiamondPriceTable";
 import { PointsProvider } from "./components/PointsContext/PointsContext";
+
 
 function App() {
 
@@ -109,6 +112,32 @@ function App() {
             <Route path="transaction-manager" element={<TransactionManagerPage />} />
             <Route path="diamond/certificate-manager" element={<CertificateManagerPage />} />
           </Route>
+
+          {/* Manager Routes */}
+          <Route path="/manager/*" element={<SideBarManager />}>
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="diamond/diamond-manager" element={<ProductManagerPage />} />
+            <Route path="diamond/warranty-manager" element={<WarrantyDiamondManagerPage />} />
+            <Route path="jewelry/warranty-manager" element={<WarrantyJewelryManagerPage />} />
+            <Route path="account-manager" element={<><AccountManager /><CustomerManager/></>} />
+            <Route path="jewelry/jewelry-manager" element={<JewelryManagerPage />} />
+            <Route path="promotion-manager" element={<PromotionManagerPage />} />
+            <Route path="order-manager" element={<OrderManagerPage />} />
+            <Route path="jewelry/price/gold-price-manager" element={<GoldPriceManager />} />
+            <Route path="diamond/price/diamond-price-manager" element={<DiamondPriceManager />} />
+            <Route path="transaction-manager" element={<TransactionManagerPage />} />
+            <Route path="diamond/certificate-manager" element={<CertificateManagerPage />} />
+          </Route>
+
+          {/* Sale Staff Routes */}
+          <Route path="/sale-staff/*" element={<SideBarSaleStaff />}>
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="transaction-manager" element={<TransactionManagerPage />} />
+            <Route path="promotion-manager" element={<PromotionManagerPage />} />
+            <Route path="order-manager" element={<OrderManagerPage />} />
+          </Route>
+
         </Routes>
         </PointsProvider>
       </AuthProvider>

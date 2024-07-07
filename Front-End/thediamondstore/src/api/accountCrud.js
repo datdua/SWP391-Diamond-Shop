@@ -76,6 +76,24 @@ export async function updateAccount(accountID, accountDetails) {
   const token = getAuthToken();
   try {
     const response = await axios.put(
+      `http://localhost:8080/api/accounts/admin/update/${accountID}`,
+      accountDetails,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to update account");
+  }
+}
+
+export async function updateProfile(accountID, accountDetails) {
+  const token = getAuthToken();
+  try {
+    const response = await axios.put(
       `http://localhost:8080/api/accounts/update/${accountID}`,
       accountDetails,
       {
@@ -91,10 +109,11 @@ export async function updateAccount(accountID, accountDetails) {
 }
 
 
-
 export async function deleteAccounts(accountIDs) {
   try {
-    const response = await axios.delete("http://localhost:8080/api/accounts/delete", {
+    const token = localStorage.getItem("jwt");
+    const response = await axios.delete("http://localhost:8080/api/accounts/manager/delete", {
+      headers : { Authorization: `Bearer ${token}` },
       data: accountIDs,
     });
     return response.data;

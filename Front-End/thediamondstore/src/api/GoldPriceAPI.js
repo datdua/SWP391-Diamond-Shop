@@ -28,9 +28,13 @@ export const getGoldPriceById = async (goldPriceID) => {
 
 export const createGoldPrice = async (goldPrice) => {
   try {
+    const token = localStorage.getItem('jwt');
     const response = await axios.post(
-      "http://localhost:8080/api/goldPrices",
-      goldPrice
+      "http://localhost:8080/api/goldPrices/manager/create",
+      goldPrice,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -40,9 +44,13 @@ export const createGoldPrice = async (goldPrice) => {
 
 export const updateGoldPrice = async (goldPriceID, goldPrice) => {
   try {
+    const token = localStorage.getItem('jwt');
     const response = await axios.put(
-      `http://localhost:8080/api/goldPrices/${goldPriceID}`,
-      goldPrice
+      `http://localhost:8080/api/goldPrices/manager/${goldPriceID}`,
+      goldPrice,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -52,9 +60,12 @@ export const updateGoldPrice = async (goldPriceID, goldPrice) => {
 
 export const deleteGoldPrice = async (goldPriceIDs) => {
   try {
+    const token = localStorage.getItem('jwt');
     const response = await axios.delete(
-      `http://localhost:8080/api/goldPrices`
-      , { data: goldPriceIDs }
+      `http://localhost:8080/api/goldPrices/manager/delete`
+      , { 
+        headers: { Authorization: `Bearer ${token}` },
+        data: goldPriceIDs }
     );
     return response.data;
   } catch (error) {

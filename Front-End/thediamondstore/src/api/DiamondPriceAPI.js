@@ -34,7 +34,7 @@ export const createDiamondPrice = async (diamondPrice) => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.post(
-      "http://localhost:8080/api/diamondprices/admin/create",
+      "http://localhost:8080/api/diamondprices/manager/create",
       diamondPrice,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -50,7 +50,7 @@ export const updateDiamondPrice = async (diamondPriceID, diamondPrice) => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.put(
-      `http://localhost:8080/api/diamondprices/admin/${diamondPriceID}`,
+      `http://localhost:8080/api/diamondprices/manager/${diamondPriceID}`,
       diamondPrice,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -77,11 +77,10 @@ export const deleteDiamondPrice = async (diamondPriceIDs) => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.delete(
-      `http://localhost:8080/api/diamondprices/admin/delete`
-      , { data: diamondPriceIDs },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
+      `http://localhost:8080/api/diamondprices/manager/delete`
+      , { 
+        headers : { Authorization: `Bearer ${token}` },
+        data: diamondPriceIDs },
     );
     return response.data;
   } catch (error) {

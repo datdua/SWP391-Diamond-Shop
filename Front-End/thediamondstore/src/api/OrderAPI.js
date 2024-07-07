@@ -171,8 +171,14 @@ export async function fetchOrderDetail(orderID) {
 
 export async function updateOrder(orderId, updatedOrder) {
   try {
-    const url = `http://localhost:8080/api/orders/manager/update/${orderId}`;
-    const response = await axios.put(url, updatedOrder);
+    const token = getAuthToken();
+    const response = await axios.put(
+      `http://localhost:8080/api/orders/manager/update/${orderId}`,
+      updatedOrder,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
 
     if (response.status === 200) {
       return response.data; // Return data if needed

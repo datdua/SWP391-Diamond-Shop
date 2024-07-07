@@ -159,7 +159,7 @@ function CertificateManagerPage() {
                   style={{ textDecoration: "none" }}
                   onClick={refreshTable}
                 >
-                  <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> REFRESH
+                  <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> Tải Lại
                 </Button>
                 <Button
                   variant="link"
@@ -218,39 +218,39 @@ function CertificateManagerPage() {
                               onChange={(event) => handleCheckboxChange(event, certificate.certificateID)}
                             />
                           </td>
-                        <td>{certificate.certificateID}</td>
-                        <td>{certificate.expirationDate}</td>
-                        <td>
-                          <img
-                            src={certificate.certificateImage}
-                            alt="Certificate"
-                            style={{
-                              width: "50px",
-                              height: "50px",
-                              cursor: "pointer",
-                            }}
-                            onClick={() =>
-                              handleShowImage(certificate.certificateImage)
-                            }
-                          />
-                        </td>
-                        <td>{certificate.certificateStatus}</td>
-                        <td>
-                          <Tooltip
-                            describeChild
-                            title="Cập nhật thông tin"
-                            arrow
-                            placement="top"
-                          >
-                            <Button
-                              variant="link"
-                              onClick={() => handleShowUpdate(certificate)}
+                          <td>{certificate.certificateID}</td>
+                          <td>{certificate.expirationDate}</td>
+                          <td>
+                            <img
+                              src={certificate.certificateImage}
+                              alt="Certificate"
+                              style={{
+                                width: "50px",
+                                height: "50px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                handleShowImage(certificate.certificateImage)
+                              }
+                            />
+                          </td>
+                          <td>{certificate.certificateStatus}</td>
+                          <td>
+                            <Tooltip
+                              describeChild
+                              title="Cập nhật thông tin"
+                              arrow
+                              placement="top"
                             >
-                              <EditIcon />
-                            </Button>
-                          </Tooltip>
-                        </td>
-                      </tr>
+                              <Button
+                                variant="link"
+                                onClick={() => handleShowUpdate(certificate)}
+                              >
+                                <EditIcon />
+                              </Button>
+                            </Tooltip>
+                          </td>
+                        </tr>
                       );
                     })}
                   </tbody>

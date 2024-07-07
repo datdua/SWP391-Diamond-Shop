@@ -11,7 +11,7 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import { getAccountByID_AdminManager, updateAccount } from "../../api/accountCrud";
+import { getAccountByID_AdminManager, updateProfile } from "../../api/accountCrud";
 
 const ProfilePage = () => {
   const [account, setAccount] = useState(null);
@@ -49,7 +49,7 @@ const ProfilePage = () => {
 
   const handleSave = async () => {
     try {
-      await updateAccount(accountID, account);
+      await updateProfile(accountID, account);
       setIsEditing(false);
       setOpenSnackbar(true);
     } catch (error) {
@@ -111,17 +111,7 @@ const ProfilePage = () => {
         <Grid container spacing={2} sx={{ marginTop: 2 }}>
           <Grid item xs={12} sm={6}>
             <Typography variant="h6">Role</Typography>
-            {isEditing ? (
-              <TextField
-                label="Role"
-                name="role"
-                value={account.role}
-                onChange={handleChange}
-                fullWidth
-              />
-            ) : (
               <Typography>{account.role}</Typography>
-            )}
           </Grid>
           <Grid item xs={12} sm={6}>
             <Typography variant="h6">Phone Number</Typography>

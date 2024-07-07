@@ -169,7 +169,7 @@ function JewelryManagerPage() {
                   style={{ textDecoration: "none" }}
                   onClick={refreshTable}
                 >
-                  <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> REFRESH
+                  <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> Tải Lại
                 </Button>
                 <Button
                   variant="link"
@@ -231,24 +231,24 @@ function JewelryManagerPage() {
                               onChange={(event) => handleCheckboxChange(event, jewelry.jewelryID)}
                             />
                           </td>
-                        <td>{jewelry.jewelryID}</td>
-                        <td>{jewelry.jewelryName}</td>
-                        <td>{jewelry.gender}</td>
-                        <td>
-                          <img
-                            src={jewelry.jewelryImage}
-                            alt={jewelry.jewelryName}
-                            style={{
-                              width: "50px",
-                              height: "50px",
-                              cursor: "pointer",
-                            }}
-                            onClick={() =>
-                              handleShowImage(jewelry.jewelryImage)
-                            }
-                          />{" "}
-                        </td>
-                        <td>
+                          <td>{jewelry.jewelryID}</td>
+                          <td>{jewelry.jewelryName}</td>
+                          <td>{jewelry.gender}</td>
+                          <td>
+                            <img
+                              src={jewelry.jewelryImage}
+                              alt={jewelry.jewelryName}
+                              style={{
+                                width: "50px",
+                                height: "50px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                handleShowImage(jewelry.jewelryImage)
+                              }
+                            />{" "}
+                          </td>
+                          <td>
                             <a
                               href="#"
                               onClick={() =>
@@ -257,37 +257,37 @@ function JewelryManagerPage() {
                             >
                               {jewelry.warrantyID ? jewelry.warrantyID : "N/A"}
                             </a>
-                        </td>
-                        <td>
-                          {jewelry.jewelryEntryPrice
-                            ? jewelry.jewelryEntryPrice.toLocaleString() +
-                              " VNĐ"
-                            : "N/A"}
-                        </td>
-                        <td>
-                          {jewelry.grossJewelryPrice
-                            ? jewelry.grossJewelryPrice.toLocaleString() +
-                              " VNĐ"
-                            : "N/A"}
-                        </td>
-                        <td>
-                          <Tooltip
-                            describeChild
-                            title="Cập nhật thông tin"
-                            arrow
-                            placement="top"
-                          >
-                            <Button
-                              variant="link"
-                              onClick={() => handleShowUpdate(jewelry)}
-                            >
-                              <EditIcon />
-                            </Button>
-                          </Tooltip>
                           </td>
-                      </tr>
-                    );
-                  })}
+                          <td>
+                            {jewelry.jewelryEntryPrice
+                              ? jewelry.jewelryEntryPrice.toLocaleString() +
+                              " VNĐ"
+                              : "N/A"}
+                          </td>
+                          <td>
+                            {jewelry.grossJewelryPrice
+                              ? jewelry.grossJewelryPrice.toLocaleString() +
+                              " VNĐ"
+                              : "N/A"}
+                          </td>
+                          <td>
+                            <Tooltip
+                              describeChild
+                              title="Cập nhật thông tin"
+                              arrow
+                              placement="top"
+                            >
+                              <Button
+                                variant="link"
+                                onClick={() => handleShowUpdate(jewelry)}
+                              >
+                                <EditIcon />
+                              </Button>
+                            </Tooltip>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </Table>
               </div>
