@@ -3,7 +3,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { getDiamondPriceByCaratSize } from '../../api/DiamondPriceAPI';
 import './TablePrice.css';
 
-const caratSizes = [3.6, 3.9, 4.1, 4.5, 5.3, 7.2, 6.8, 7.2, 8.1, 9.0]; 
+const caratSizes = [0.43, 0.5, 0.6, 1.6, 2.0, 2.3, 3.6, 3.9, 4.1, 4.5, 5.3, 10.2 ]; 
 
 const DiamondPriceTable = () => {
     const [diamondPrices, setDiamondPrices] = useState({});

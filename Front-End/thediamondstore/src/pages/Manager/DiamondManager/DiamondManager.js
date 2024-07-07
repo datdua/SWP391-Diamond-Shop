@@ -310,7 +310,7 @@ function DiamondManagerPage() {
                               }
                             />
                           </td>
-                          <td>{diamond.carat_weight}</td>
+                          <td>{diamond.weight}</td>
                           <td>{diamond.caratSize}</td>
                           <td>{diamond.color}</td>
                           <td>{diamond.cut}</td>
