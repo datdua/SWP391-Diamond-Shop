@@ -206,5 +206,29 @@ export const countRevenue = async () => {
   }
 };
 
+export const regenerateOTP = async (email) => {
+  try {
+    // Make GET request to the API endpoint with email as a query parameter
+    const response = await axios.put(
+      `http://localhost:8080/api/accounts/guest/regenerate-otp`,
+      null, // Pass null as the data parameter for PUT request
+      {
+        params: {
+          email: email
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      return response.data; // Return response data if successful
+    } else {
+      throw new Error('Failed to regenerate OTP'); // Throw error if request fails
+    }
+  } catch (error) {
+    console.error('Error regenerating OTP:', error.message);
+    throw error; // Re-throw error to handle it in the calling code
+  }
+};
+
 
 
