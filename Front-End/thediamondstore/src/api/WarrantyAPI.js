@@ -10,10 +10,10 @@ export const getAllWarranties = async () => {
   }
 };
 
-export const getWarrantyById = async (warrantyId) => {
+export const getWarrantyById = async (warrantyID) => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/warranties/${warrantyId}`
+      `http://localhost:8080/api/warranties/${warrantyID}`
     );
     return response.data;
   } catch (error) {
@@ -21,6 +21,7 @@ export const getWarrantyById = async (warrantyId) => {
     throw error;
   }
 };
+
 
 export const createWarranty = async (warranty) => {
   try {
@@ -35,10 +36,10 @@ export const createWarranty = async (warranty) => {
   }
 };
 
-export const updateWarranty = async (warrantyId, warranty) => {
+export const updateWarranty = async (warrantyID, warranty) => {
   try {
     const response = await axios.put(
-      `http://localhost:8080/api/warranties/update/${warrantyId}`,
+      `http://localhost:8080/api/warranties/update/${warrantyID}`,
       warranty
     );
     return response.data;
@@ -48,18 +49,18 @@ export const updateWarranty = async (warrantyId, warranty) => {
   }
 };
 
-export const deleteWarranty = async (warrantyIDs) => {
+export async function deleteWarranty(warrantyIDs) {
   try {
     const response = await axios.delete(
-      `http://localhost:8080/api/warranties/delete`
-      , { data: warrantyIDs }
+      `http://localhost:8080/api/warranties/delete`,
+      { data: warrantyIDs }
     );
     return response.data;
   } catch (error) {
     console.error("Error deleting warranty:", error);
     throw error;
   }
-};
+}
 
 export const getWarrantyByPage = async (page, size) => {
   try {

@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import { createWarranty } from "../../api/WarrantyAPI.js";
 import { Form, Button } from "react-bootstrap";
 
-function AddWarrantyForm() {
+function AddWarrantyDiamondForm() {
   const [warranty, setWarranty] = useState({
     warrantyID: "",
     diamondID: "",
-    jewelryID: "",
     expirationDate: "",
     expirationTime: "",
     warrantyImage: "",
@@ -64,4 +63,4 @@ function AddWarrantyForm() {
   );
 }
 
-export default AddWarrantyForm;
+export default AddWarrantyDiamondForm;

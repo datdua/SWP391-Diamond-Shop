@@ -22,4 +22,6 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
     Cart findByAccountIDAndJewelryID(Integer accountID, String jewelryID);
 
     List<Cart> findByOrder(Order order);
+
+    Object deleteByAccountID(Integer accountID);
 }

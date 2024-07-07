@@ -9,4 +9,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     Customer findByAccountID(Integer accountID);
 
     long count();
+
+    Object deleteByAccountID(Integer accountID);
 }

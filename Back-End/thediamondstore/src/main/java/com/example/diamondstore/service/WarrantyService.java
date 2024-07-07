@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,7 +19,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.example.diamondstore.model.Diamond;
+import com.example.diamondstore.model.Jewelry;
 import com.example.diamondstore.model.Warranty;
+import com.example.diamondstore.repository.DiamondRepository;
+import com.example.diamondstore.repository.JewelryRepository;
 import com.example.diamondstore.repository.WarrantyRepository;
 import com.example.diamondstore.request.putRequest.WarrantyPutRequest;
 
@@ -26,11 +31,13 @@ import com.example.diamondstore.request.putRequest.WarrantyPutRequest;
 public class WarrantyService {
 
     @Autowired
-    private final WarrantyRepository warrantyRepository;
+    private WarrantyRepository warrantyRepository;
 
-    public WarrantyService(WarrantyRepository warrantyRepository) {
-        this.warrantyRepository = warrantyRepository;
-    }
+    @Autowired
+    private DiamondRepository diamondRepository;
+
+    @Autowired
+    private JewelryRepository jewelryRepository;
 
     public List<Warranty> getAllWarranties() {
         return warrantyRepository.findAll();
@@ -75,14 +82,34 @@ public class WarrantyService {
     }
 
     public ResponseEntity<Map<String, String>> createWarranty(Warranty warranty) {
-        Warranty existingWarranty = warrantyRepository.findByWarrantyID(warranty.getWarrantyID());
-        if (existingWarranty != null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Giấy bảo hành đã tồn tại"));
-        }
-        updateWarrantyStatus(warranty); // Cập nhật trạng thái trước khi lưu
-        warrantyRepository.save(warranty);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Giấy bảo hành đã được tạo thành công"));
+    // Thay thế chuỗi rỗng bằng null ngay từ đầu
+    if (warranty.getDiamondID() != null && warranty.getDiamondID().isEmpty()) {
+        warranty.setDiamondID(null);
     }
+    if (warranty.getJewelryID() != null && warranty.getJewelryID().isEmpty()) {
+        warranty.setJewelryID(null);
+    }
+
+    Warranty existingWarranty = warrantyRepository.findByWarrantyID(warranty.getWarrantyID());
+    if (existingWarranty != null) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Giấy bảo hành đã tồn tại"));
+    }
+
+    // Kiểm tra xem ít nhất một trong hai cột ID có giá trị không null
+    if (warranty.getDiamondID() == null && warranty.getJewelryID() == null) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Cần cung cấp ít nhất một ID cho kim cương hoặc trang sức"));
+    }
+
+    // Đảm bảo rằng chỉ một trong hai cột ID có giá trị
+    if (warranty.getDiamondID() != null && warranty.getJewelryID() != null) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Chỉ có thể có một trong hai ID cho kim cương hoặc trang sức"));
+    }
+
+    updateWarrantyStatus(warranty); // Cập nhật trạng thái trước khi lưu
+    warrantyRepository.save(warranty);
+    return ResponseEntity.ok(Collections.singletonMap("message", "Giấy bảo hành đã được tạo thành công"));
+    }
+
 
     public ResponseEntity<Map<String, String>> updateWarranty(String warrantyID, WarrantyPutRequest warrantyPutRequest) {
         Warranty existingWarranty = warrantyRepository.findByWarrantyID(warrantyID);
@@ -97,21 +124,37 @@ public class WarrantyService {
         return ResponseEntity.ok(Collections.singletonMap("message", "Giấy bảo hành đã được cập nhật thành công"));
     }
 
+     @Transactional
     public ResponseEntity<Map<String, String>> deleteWarranty(@RequestBody List<String> warrantyIDs) {
-        // Filter out non-existing diamonds
+        // Filter out non-existing warranties
         List<String> existingWarrantyIDs = warrantyIDs.stream()
                 .filter(warrantyID -> warrantyRepository.existsById(warrantyID))
                 .collect(Collectors.toList());
 
-        // Delete diamonds
-        if (!existingWarrantyIDs.isEmpty()) {
-            warrantyRepository.deleteAllById(existingWarrantyIDs);
-            return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các giá vàng thành công"));
-        } else {
+        // If no existing warranties are found
+        if (existingWarrantyIDs.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy giá vàng để xóa"));
         }
-    }
 
+        // Find and update diamonds and jewelry associated with the warranties
+        List<Diamond> diamondsToUpdate = diamondRepository.findAllByWarrantyIDIn(existingWarrantyIDs);
+        for (Diamond diamond : diamondsToUpdate) {
+            diamond.setWarrantyID(null);
+        }
+        diamondRepository.saveAll(diamondsToUpdate);
+
+        List<Jewelry> jewelryToUpdate = jewelryRepository.findAllByWarrantyIDIn(existingWarrantyIDs);
+        for (Jewelry jewelry : jewelryToUpdate) {
+            jewelry.setWarrantyID(null);
+        }
+        jewelryRepository.saveAll(jewelryToUpdate);
+
+        // Delete warranties
+        warrantyRepository.deleteAllById(existingWarrantyIDs);
+
+        return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các giá vàng thành công"));
+    }
+    
     public ResponseEntity<Map<String, String>> getWarrantyImg(String warrantyID) {
         Warranty warranty = warrantyRepository.findByWarrantyID(warrantyID);
         if (warranty == null) {

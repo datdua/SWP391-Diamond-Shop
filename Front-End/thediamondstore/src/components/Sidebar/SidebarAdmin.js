@@ -48,13 +48,13 @@ function SideBarAdmin() {
             <CIcon className="nav-icon" icon={cilUser} /> Thông tin cá nhân
           </NavLink>
 
-          <NavLink
+          {/* <NavLink
             to="/admin/dashboard"
             className="sidebar-nav-item"
             activeClassName="active"
           >
             <CIcon className="nav-icon" icon={cilSpeedometer} /> Dashboard
-          </NavLink>
+          </NavLink> */}
 
           <NavLink
             to="/admin/transaction-manager"
@@ -62,6 +62,14 @@ function SideBarAdmin() {
             activeClassName="active"
           >
             <CIcon className="nav-icon" icon={cilBank} /> Quản lý giao dịch
+          </NavLink>
+
+          <NavLink
+            to="/admin/order-manager"
+            className="sidebar-nav-item"
+            activeClassName="active"
+          >
+            <CIcon className="nav-icon" icon={cilInbox} /> Đơn hàng
           </NavLink>
 
           <CNavGroup
@@ -139,13 +147,6 @@ function SideBarAdmin() {
               activeClassName="active"
             >
               <CIcon className="nav-icon" icon={cilTextStrike} /> Mã giảm giá
-            </NavLink>
-            <NavLink
-              to="/admin/order-manager"
-              className="sidebar-nav-item-manager"
-              activeClassName="active"
-            >
-              <CIcon className="nav-icon" icon={cilInbox} /> Đơn hàng
             </NavLink>
           </CNavGroup>
         </CSidebarNav>

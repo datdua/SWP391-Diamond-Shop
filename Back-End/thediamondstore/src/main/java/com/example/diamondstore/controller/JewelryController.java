@@ -99,14 +99,9 @@ public class JewelryController {
         return ResponseEntity.ok(pageJewelrys);
     }
 
-    // admin
     @PostMapping(value = "/admin/create")
     public ResponseEntity<Map<String, String>> createJewelry_Admin(@RequestBody Jewelry jewelry) {
-        Map<String, String> response = jewelryService.createJewelry(jewelry);
-        if ("Trang sức đã tồn tại".equals(response.get("message"))) {
-            return ResponseEntity.badRequest().body(response);
-        }
-        return ResponseEntity.ok(response);
+        return jewelryService.createJewelry(jewelry);
     }
 
     // admin
@@ -119,15 +114,14 @@ public class JewelryController {
         return ResponseEntity.ok(response);
     }
 
-    // admin
     @DeleteMapping(value = "/admin/delete", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> deleteJewelrys_Admin(@RequestBody List<String> jewelryIDs) {
-        try {
-            jewelryService.deleteJewelrys(jewelryIDs);
-            return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
-        }
+    try {
+        jewelryService.deleteJewelry(jewelryIDs);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các trang sức thành công"));
+    } catch (RuntimeException e) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+    }
     }
 
     // guest

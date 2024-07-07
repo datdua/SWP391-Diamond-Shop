@@ -1,8 +1,11 @@
 package com.example.diamondstore.service;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,5 +68,20 @@ public class CustomerService {
             return true;
         }
         return false;
+    }
+
+    @Transactional
+    public ResponseEntity<Map<String, String>> deleteCustomer(Integer accountID) {
+        Optional<Account> optionalAccount = accountRepository.findById(accountID);
+        if (optionalAccount.isPresent()) {
+            Account account = optionalAccount.get();
+            Customer customer = account.getCustomer();
+            if (customer != null) {
+                customerRepository.delete(customer);
+            }
+            accountRepository.delete(account);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Xóa thành công"));
+        }
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
     }
 }

@@ -26,15 +26,15 @@ function ForgetPasswordModal({ isOpen, onClose }) {
     return (
         isOpen && (
             <div className="modal top fade show" tabIndex="-1" aria-labelledby="exampleModalLabel"
-                aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true" style={{ display: 'block' }}>
+                aria-hidden="true" data-mdb-backdrop="true" data-mdb-keyboard="true" style={{ display: 'block',  }}>
                 <div className="modal-dialog" style={{ width: '300px' }}>
                     <div className="modal-content text-center">
-                        <div className="modal-header h5 text-white bg-primary justify-content-center">
-                            Password Reset
+                        <div className="modal-header h5 text-white bg-primary justify-content-center" style={{backgroundColor:'#f2ba59'}}>
+                            Đặt lại mật khẩu
                         </div>
                         <div className="modal-body px-5">
                             <p className="py-2">
-                                Enter your email address and we'll send you an email with instructions to reset your password.
+                                Nhập địa chỉ email và chúng tôi sẽ gửi một email xác thực về tài khoản gmail dựa trên địa chỉ email của bạn
                             </p>
                             <div data-mdb-input-init className="form-outline">
                                 <input
@@ -50,6 +50,7 @@ function ForgetPasswordModal({ isOpen, onClose }) {
                                 className="btn btn-primary w-100"
                                 onClick={handleSubmit}
                                 disabled={loading}
+                                style={{backgroundColor:'#f2ba59'}}
                             >
                                 {loading ? 'Sending...' : 'Reset password'}
                             </button>

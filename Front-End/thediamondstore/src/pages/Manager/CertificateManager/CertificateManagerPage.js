@@ -108,8 +108,8 @@ function CertificateManagerPage() {
   const handleDeleteCertificate = async () => {
     if (window.confirm("Bạn có chắc muốn XÓA các chứng chỉ này?")) {
       try {
-        await deleteCertificate(selectedCertificate);
-        setCertificateData(certificateData.filter((certificate) => !selectedCertificate.includes(certificate.certificateID)));
+        await deleteCertificate(selected);
+        setCertificateData(certificateData.filter((certificate) => !selected.includes(certificate.certificateID)));
         setSelected([]);
         alert("Xóa thành công");
       } catch (error) {
@@ -195,11 +195,11 @@ function CertificateManagerPage() {
                           }
                         />
                       </th>
-                      <th>Certificate ID</th>
-                      <th>Expiration Date</th>
-                      <th>Certificate Image</th>
-                      <th>Status</th>
-                      <th>Action</th>
+                      <th>Mã Chứng Chỉ</th>
+                      <th>Ngày Hết Hạn</th>
+                      <th>Giấy</th>
+                      <th>Trạng Thái</th>
+                      <th>Thao Tác</th>
                     </tr>
                   </thead>
                   <tbody>

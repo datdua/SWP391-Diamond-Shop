@@ -30,7 +30,7 @@ public class Jewelry {
     @Column(name = "grossJewelryPrice", precision = 16, scale = 2)
     private BigDecimal grossJewelryPrice;
 
-    @Column(name = "warrantyID")
+    @Column(name = "warrantyID", nullable=true)
     private String warrantyID;
 
     public Jewelry() {

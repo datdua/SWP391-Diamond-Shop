@@ -29,7 +29,7 @@ function LoginRegisterPage() {
     try {
       
       const response = await axios.post(
-        "http://localhost:8080/login",
+        "http://localhost:8080/guest/login",
         {
           email: loginEmail,
           password: loginPassword,
@@ -196,18 +196,6 @@ function LoginRegisterPage() {
                         <button type="submit" className="tm-button">
                           Đăng Nhập
                         </button>
-                      </div>
-                      <div className="tm-form-field">
-                        <div className="tm-form-sociallogin">
-                          <h6>Hoặc, đăng nhập với :</h6>
-                          <ul>
-                            <li>
-                              <a href="#" className="google-btn">
-                                <i className="ion-social-google"></i>
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
                       </div>
                     </div>
                   </form>

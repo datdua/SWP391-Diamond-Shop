@@ -10,4 +10,6 @@ public interface GoldPriceRepository extends JpaRepository<GoldPrice, Integer>{
 
     GoldPrice findByJewelryID(String jewelryID);
 
+    void deleteByJewelryID(String jewelryID);
+
 }

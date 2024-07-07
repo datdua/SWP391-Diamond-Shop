@@ -27,4 +27,6 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     Integer countByStartorderDateBetween(LocalDateTime start, LocalDateTime end);
 
     List<Order> findAllByStartorderDateBetween(LocalDateTime start, LocalDateTime end);
+
+    Account deleteByAccount(Account account);
 }

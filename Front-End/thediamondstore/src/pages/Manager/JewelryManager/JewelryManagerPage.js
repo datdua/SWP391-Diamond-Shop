@@ -8,10 +8,9 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
-import { getAllJewelry, deleteJewelry } from "../../../api/JewelryAPI.js";
+import { getAllJewelry, deleteJewelry, getWarrantityImage } from "../../../api/JewelryAPI.js";
 import AddJewelryForm from "../../../components/JewelryCRUD/AddJewelryForm.js";
 import UpdateJewelryForm from "../../../components/JewelryCRUD/UpdateJewelryForm.js";
-import DeleteJewelryButton from "../../../components/JewelryCRUD/DeleteJewelryForm.js";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -25,6 +24,8 @@ function JewelryManagerPage() {
   const [selectedJewelry, setSelectedJewelry] = useState(null);
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
+  const [warrantyImg, setWarrantyImg] = useState(null);
+  const [showWarrantityModal, setShowWarrantityModal] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [selected, setSelected] = useState([]);
@@ -67,10 +68,20 @@ function JewelryManagerPage() {
     setSelectedImage("");
   };
 
-  const handleDelete = (jewelryID) => {
-    setJewelryData(
-      jewelryData.filter((jewelry) => jewelry.jewelryID !== jewelryID)
-    );
+  const handleShowWarrantity = async (warrantyID) => {
+    try {
+      const imageUrl = await getWarrantityImage(warrantyID);
+      console.log("Warrantity Image URL:", imageUrl);
+      setWarrantyImg(imageUrl);
+      setShowWarrantityModal(true);
+    } catch (error) {
+      console.error("Error fetching warranty image:", error);
+    }
+  }
+
+  const handleCloseWarrantityModal = () => {
+    setShowWarrantityModal(false);
+    setWarrantyImg(null);
   };
 
   const handleClick = (event, id) => {
@@ -194,13 +205,14 @@ function JewelryManagerPage() {
                           }
                         />
                       </th>
-                      <th>Jewelry ID</th>
-                      <th>Jewelry Name</th>
-                      <th>Gender</th>
-                      <th>Jewelry Image</th>
-                      <th>Jewelry Entry Price</th>
-                      <th>Jewelry Gross Price</th>
-                      <th>Action</th>
+                      <th>Mã Trang Sức</th>
+                      <th>Tên Trang Sức</th>
+                      <th>Giới Tính</th>
+                      <th>Hình Ảnh Trang Sức</th>
+                      <th>Bảo Hành</th>
+                      <th>Giá Nhập Trang Sức</th>
+                      <th>Giá Bán Trang Sức</th>
+                      <th>Thao Tác</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -235,6 +247,16 @@ function JewelryManagerPage() {
                               handleShowImage(jewelry.jewelryImage)
                             }
                           />{" "}
+                        </td>
+                        <td>
+                            <a
+                              href="#"
+                              onClick={() =>
+                                handleShowWarrantity(jewelry.warrantyID)
+                              }
+                            >
+                              {jewelry.warrantyID ? jewelry.warrantyID : "N/A"}
+                            </a>
                         </td>
                         <td>
                           {jewelry.jewelryEntryPrice
@@ -297,6 +319,28 @@ function JewelryManagerPage() {
             <AddJewelryForm onClose={handleClose} />
           )}
         </Modal.Body>
+      </Modal>
+
+      <Modal show={showWarrantityModal} onHide={handleCloseWarrantityModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Warrantity Image</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {warrantyImg ? (
+            <img
+              src={warrantyImg}
+              alt="Warranty"
+              style={{ width: "100%", height: "100%" }}
+            />
+          ) : (
+            <p>Loading...</p>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseWarrantityModal}>
+            Close
+          </Button>
+        </Modal.Footer>
       </Modal>
 
       <Modal show={showImageModal} onHide={handleCloseImageModal} centered>

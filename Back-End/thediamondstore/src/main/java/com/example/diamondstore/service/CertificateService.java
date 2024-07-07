@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,18 +20,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.diamondstore.model.Certificate;
+import com.example.diamondstore.model.Diamond;
 import com.example.diamondstore.repository.CertificateRepository;
+import com.example.diamondstore.repository.DiamondRepository;
 import com.example.diamondstore.request.putRequest.CertificatePutRequest;
 
 @Service
 public class CertificateService {
 
-    private final CertificateRepository certificateRepository;
+    @Autowired
+    private CertificateRepository certificateRepository;
 
     @Autowired
-    public CertificateService(CertificateRepository certificateRepository) {
-        this.certificateRepository = certificateRepository;
-    }
+    private DiamondRepository diamondRepository;
+
 
     public Iterable<Certificate> getAllCertificates() {
         return certificateRepository.findAll();
@@ -78,13 +81,26 @@ public class CertificateService {
         return certificateRepository.findAll(pageable);
     }
 
+    @Transactional
     public ResponseEntity<Map<String, String>> createCertificate(Certificate certificate) {
         Certificate existingCertificate = certificateRepository.findByCertificateID(certificate.getCertificateID());
         if (existingCertificate != null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Chứng chỉ đã tồn tại"));
         }
-        updateCertificateStatus(certificate); // Cập nhật trạng thái trước khi lưu
+
+        // Save the new certificate
         certificateRepository.save(certificate);
+
+        // Update the corresponding diamond's certificationID
+        Diamond diamond = diamondRepository.findById(certificate.getDiamondID()).orElse(null);
+        if (diamond != null) {
+            diamond.setCertificationID(certificate.getCertificateID());
+            diamondRepository.save(diamond);
+        } else {
+            // Rollback if the diamond does not exist
+            throw new RuntimeException("Viên kim cương không tồn tại");
+        }
+
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công"));
     }
 
@@ -101,19 +117,29 @@ public class CertificateService {
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }
 
+    @Transactional
     public ResponseEntity<Map<String, String>> deleteCertificates(@RequestBody List<String> certificateIDs) {
         // Filter out non-existing certificates
         List<String> existingCertificateIDs = certificateIDs.stream()
                 .filter(certificateID -> certificateRepository.existsById(certificateID))
                 .collect(Collectors.toList());
 
-        // Delete certificates
-        if (!existingCertificateIDs.isEmpty()) {
-            certificateRepository.deleteAllById(existingCertificateIDs);
-            return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các chứng chỉ thành công"));
-        } else {
+        // If no existing certificates are found
+        if (existingCertificateIDs.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy chứng chỉ để xóa"));
         }
+
+        // Find and update diamonds associated with the certificates
+        List<Diamond> diamondsToUpdate = diamondRepository.findAllByCertificationIDIn(existingCertificateIDs);
+        for (Diamond diamond : diamondsToUpdate) {
+            diamond.setCertificationID(null);
+        }
+        diamondRepository.saveAll(diamondsToUpdate);
+
+        // Delete certificates
+        certificateRepository.deleteAllById(existingCertificateIDs);
+
+        return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các chứng chỉ thành công"));
     }
 
     public ResponseEntity<?> getCertificateImg(String certificateID) {

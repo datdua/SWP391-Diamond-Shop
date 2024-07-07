@@ -178,14 +178,14 @@ function PromotionManagerPage() {
                             }
                           />
                         </th>
-                      <th>Promotion ID</th>
-                      <th>Promotion Code</th>
-                      <th>Start Date</th>
-                      <th>End Date</th>
-                      <th>Discount Amount</th>
-                      <th>Status</th>
-                      <th>Description</th>
-                      <th>Action</th>
+                      <th>Mã Khuyến Mãi</th>
+                      <th>Mã Code Khuyến Mãi</th>
+                      <th>Ngày Bắt Đầu</th>
+                      <th>Ngày Kết Thúc</th>
+                      <th>Số Tiền Giảm Giá</th>
+                      <th>Tình Trạng</th>
+                      <th>Mô Tả</th>
+                      <th>Thao tác</th>
                     </tr>
                   </thead>
                   <tbody>

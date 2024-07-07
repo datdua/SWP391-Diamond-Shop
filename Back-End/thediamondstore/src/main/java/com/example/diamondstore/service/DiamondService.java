@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.diamondstore.model.Diamond;
+import com.example.diamondstore.repository.CertificateRepository;
+import com.example.diamondstore.repository.DiamondPriceRepository;
 import com.example.diamondstore.repository.DiamondRepository;
+import com.example.diamondstore.repository.WarrantyRepository;
 import com.example.diamondstore.request.putRequest.DiamondPutRequest;
 import com.example.diamondstore.specification.DiamondSpecification;
 
@@ -26,6 +31,15 @@ public class DiamondService {
 
     @Autowired
     private DiamondRepository diamondRepository;
+
+    @Autowired
+    private CertificateRepository certificateRepository;
+
+    @Autowired
+    private WarrantyRepository warrantyRepository;
+
+    @Autowired
+    private DiamondPriceRepository diamondPriceRepository;
 
     public List<Diamond> getAllDiamonds() {
         return diamondRepository.findAll();
@@ -36,23 +50,34 @@ public class DiamondService {
     }
 
     public ResponseEntity<Map<String, String>> createDiamond(Diamond diamond) {
-        Diamond existingDiamond = diamondRepository.findByDiamondID(diamond.getDiamondID());
-        if (existingDiamond != null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Kim cương đã tồn tại"));
-        }
-
-        //nếu grossdiamondprice = null, thì gán nó bằng 0
-        if (diamond.getGrossDiamondPrice() == null) {
-            diamond.setGrossDiamondPrice(new BigDecimal(0));
-        }
-
-        //calculate gross diamond price = diamond price * 1.1
-        BigDecimal grossDiamondPrice = diamond.getDiamondEntryPrice().multiply(new BigDecimal(1.1));
-        diamond.setGrossDiamondPrice(grossDiamondPrice);
-
-        diamondRepository.save(diamond);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công"));
+    // Check if the diamond already exists by ID
+    Diamond existingDiamondByID = diamondRepository.findByDiamondID(diamond.getDiamondID());
+    if (existingDiamondByID != null) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Kim cương đã tồn tại"));
     }
+
+    // Check if the certificate is already assigned
+    if (diamond.getCertificationID() != null && diamondRepository.existsByCertificationID(diamond.getCertificationID())) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Chứng chỉ đã được gán cho một kim cương khác"));
+    }
+
+    // Check if the warranty is already assigned
+    if (diamond.getWarrantyID() != null && diamondRepository.existsByWarrantyID(diamond.getWarrantyID())) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Bảo hành đã được gán cho một kim cương khác"));
+    }
+
+    // If gross diamond price is null, set it to 0
+    if (diamond.getGrossDiamondPrice() == null) {
+        diamond.setGrossDiamondPrice(new BigDecimal(0));
+    }
+
+    // Calculate gross diamond price = diamond price * 1.1
+    BigDecimal grossDiamondPrice = diamond.getDiamondEntryPrice().multiply(new BigDecimal(1.1));
+    diamond.setGrossDiamondPrice(grossDiamondPrice);
+
+    diamondRepository.save(diamond);
+    return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công"));
+}
 
     public Map<String, String> updateDiamond(String diamondID, DiamondPutRequest diamondPutRequest) {
     Diamond existingDiamond = diamondRepository.findByDiamondID(diamondID);
@@ -85,20 +110,28 @@ public class DiamondService {
 }
 
 
+    @Transactional
     public ResponseEntity<Map<String, String>> deleteDiamonds(@RequestBody List<String> diamondIDs) {
-        // Filter out non-existing diamonds
-        List<String> existingDiamondIDs = diamondIDs.stream()
-                .filter(diamondID -> diamondRepository.existsById(diamondID))
-                .collect(Collectors.toList());
+    // Filter out non-existing diamonds
+    List<String> existingDiamondIDs = diamondIDs.stream()
+            .filter(diamondID -> diamondRepository.existsById(diamondID))
+            .collect(Collectors.toList());
+
+    if (!existingDiamondIDs.isEmpty()) {
+        // Delete related certificates first
+        existingDiamondIDs.forEach(diamondID -> certificateRepository.deleteByDiamondID(diamondID));
+        existingDiamondIDs.forEach(diamondID -> warrantyRepository.deleteByDiamondID(diamondID));
+        existingDiamondIDs.forEach(diamondID -> diamondPriceRepository.deleteByDiamondID(diamondID));
 
         // Delete diamonds
-        if (!existingDiamondIDs.isEmpty()) {
-            diamondRepository.deleteAllById(existingDiamondIDs);
-            return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các chứng chỉ thành công"));
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy chứng chỉ để xóa"));
-        }
+        diamondRepository.deleteAllById(existingDiamondIDs);
+
+        return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các viên kim cương thành công"));
+    } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy viên kim cương để xóa"));
     }
+}
+
 
     public Page<Diamond> getAllDiamondsPaged(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size);

@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,18 +19,24 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.diamondstore.model.Jewelry;
+import com.example.diamondstore.repository.GoldPriceRepository;
 import com.example.diamondstore.repository.JewelryRepository;
+import com.example.diamondstore.repository.WarrantyRepository;
 import com.example.diamondstore.request.putRequest.JewelryPutRequest;
 import com.example.diamondstore.specification.JewelrySpecification;
+
 
 @Service
 public class JewelryService {
 
-    private final JewelryRepository jewelryRepository;
+    @Autowired
+    private  JewelryRepository jewelryRepository;
 
-    public JewelryService(JewelryRepository jewelryRepository) {
-        this.jewelryRepository = jewelryRepository;
-    }
+    @Autowired
+    private  WarrantyRepository warrantyRepository;
+
+    @Autowired
+    private GoldPriceRepository goldPriceRepository;
 
     public List<Jewelry> getAllJewelry() {
         return jewelryRepository.findAll();
@@ -42,15 +51,19 @@ public class JewelryService {
         return jewelryRepository.findAll(pageable);
     }
 
-    public Map<String, String> createJewelry(Jewelry jewelry) {
+    public ResponseEntity<Map<String, String>> createJewelry(Jewelry jewelry) {
         Jewelry existingJewelry = jewelryRepository.findByJewelryID(jewelry.getJewelryID());
         if (existingJewelry != null) {
-            return Collections.singletonMap("message", "Trang sức đã tồn tại");
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Trang sức đã tồn tại"));
         }
 
         //nếu grossJewelryPrice = null, thì gán nó bằng 0
         if(jewelry.getGrossJewelryPrice() == null) {
             jewelry.setGrossJewelryPrice(new BigDecimal(0));
+        }
+
+        if (jewelry.getWarrantyID() != null && jewelryRepository.existsByWarrantyID(jewelry.getWarrantyID())) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Bảo hành đã được gán cho một trang sức khác"));
         }
         
         //calculate gross jewelry price = jewelry price * 1.1
@@ -58,7 +71,7 @@ public class JewelryService {
         jewelry.setGrossJewelryPrice(grossJewelryPrice);
         
         jewelryRepository.save(jewelry);
-        return Collections.singletonMap("message", "Tạo thành công");
+        return ResponseEntity.ok().body(Collections.singletonMap("message", "Tạo trang sức thành công"));
     }
 
     public Map<String, String> updateJewelry(String jewelryID, JewelryPutRequest jewelryPutRequest) {
@@ -80,7 +93,9 @@ public class JewelryService {
         return Collections.singletonMap("message", "Cập nhật thành công");
     }
 
-    public ResponseEntity<Map<String, String>> deleteJewelrys(@RequestBody List<String> jewelryIDs) {
+
+    @Transactional
+    public ResponseEntity<Map<String, String>> deleteJewelry(@RequestBody List<String> jewelryIDs) {
         // Filter out non-existing diamonds
         List<String> existingJewelryIDs = jewelryIDs.stream()
                 .filter(jewelryID -> jewelryRepository.existsById(jewelryID))
@@ -88,6 +103,9 @@ public class JewelryService {
 
         // Delete diamonds
         if (!existingJewelryIDs.isEmpty()) {
+            existingJewelryIDs.forEach(jewelryID -> warrantyRepository.deleteByJewelryID(jewelryID));
+            existingJewelryIDs.forEach(jewelryID -> goldPriceRepository.deleteByJewelryID(jewelryID));
+
             jewelryRepository.deleteAllById(existingJewelryIDs);
             return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các giá vàng thành công"));
         } else {
