@@ -1,4 +1,4 @@
-package com.example.diamondstore.controller;
+package com.example.diamondstore.controller.Cart;
 
 import java.math.BigDecimal;
 import java.util.Collections;
