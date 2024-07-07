@@ -6,7 +6,7 @@ import { createOrder, getPromotion } from "../../api/OrderAPI";
 import { toast } from "react-toastify";
 import { getContactInfo, getCustomerPoints } from "../../api/accountCrud";
 import { Button } from "react-bootstrap";
-
+import { Checkbox, FormControlLabel } from "@mui/material";
 
 function CheckoutPage() {
     const [cartItems, setCartItems] = useState([]);
@@ -19,6 +19,7 @@ function CheckoutPage() {
     const [promotionDescription, setPromotionDescription] = useState("");
     const [discountAmount, setDiscountAmount] = useState(0);
     const [usePoints, setUsePoints] = useState(false);
+    const [termsChecked, setTermsChecked] = useState(false);
     const { accountId } = useParams();
     const navigate = useNavigate();
 
@@ -114,8 +115,7 @@ function CheckoutPage() {
         try {
             let pointsToUse = usePoints ? pointsToRedeem : 0;
             let finalTotal = totalCart - discountAmount - (pointsToUse * 10000);
-    
-            // Update order status here
+
             const orderData = await createOrder(accountId, deliveryAddress, phoneNumber, pointsToUse, promotionCode);
     
             
@@ -139,7 +139,7 @@ function CheckoutPage() {
         setUsePoints(false);
     };
 
-    const pointsDiscount = usePoints ? pointsToRedeem * 10000 : 0; // Adjust pointsToRedeem calculation
+    const pointsDiscount = usePoints ? pointsToRedeem * 10000 : 0; 
     const finalTotal = totalCart - discountAmount - pointsDiscount;
 
     return (
@@ -151,7 +151,7 @@ function CheckoutPage() {
                             <form className="tm-form tm-checkout-form" onSubmit={handleApplyPromotion}>
                                 <div className="row">
                                     <div className="col-lg-6">
-                                        <h4 className="small-title">THÔNG TIN HOÁ ĐƠN</h4>
+                                        <h4 className="small-title">THÔNG TIN HOÁ ĐƠN </h4>
                                         <div className="tm-checkout-billingform">
                                             <div className="tm-form-inner">
                                                 <div className="tm-form-field">
@@ -165,7 +165,7 @@ function CheckoutPage() {
                                             </div>
                                             <div className="tm-cart-coupon">
                                                 <label htmlFor="coupon-field">Có mã giảm giá?</label>
-                                                <input type="text" id="coupon-field" value={promotionCode} onChange={(e) => setPromotionCode(e.target.value)} placeholder="Enter coupon code"  />
+                                                <input type="text" id="coupon-field" value={promotionCode} onChange={(e) => setPromotionCode(e.target.value)} placeholder="Nhập mã giảm giá tại đây"  />
                                                 <button type="submit" className="tm-button">Áp dụng</button>
                                             </div>
                                         </div>
@@ -238,29 +238,28 @@ function CheckoutPage() {
                                                             type="checkbox"
                                                             name="checkout-read-terms"
                                                             id="checkout-read-terms"
-                                                            checked={usePoints}
-                                                            onChange={(e) => setUsePoints(e.target.checked)}
+                                                            checked={termsChecked}
+                                                            onChange={(e) => setTermsChecked(e.target.checked)}
                                                         />
                                                         <Button type="button-hover" onClick={handleUsePoints}  style={{ background: "#f2ba59", border: "none", marginRight:'6.8rem', fontWeight:'bolder' }}>
                                                             Sử dụng điểm tích luỹ để thanh toán: {pointsToRedeem}
                                                         </Button>
-                                                        <Button type="button-hover" onClick={handleCancelUsePoints} style={{ background: "#f2ba59", border: "none", fontWeight:'bolder' }}>
+                                                        <Button type="button-hover" onClick={handleCancelUsePoints} style={{ background: "gray", border: "none", fontWeight:'bolder' }}>
                                                             Huỷ
                                                         </Button>
                                                     </div>
                                                     <p>
-                                                        Dữ liệu cá nhân của bạn sẽ được sử dụng để xử lý đơn hàng của bạn, hỗ trợ trải nghiệm của bạn trên toàn bộ trang web này, và cho các mục đích khác được mô tả trong chính sách bảo mật của chúng tôi.
+                                                        Tổng giá tiền thanh toán đã bao gồm thuế và phí gia công (chỉ áp dụng cho sản phẩm trang sức)
                                                     </p>
                                                 </div>
                                             </div>
                                             <div className="tm-checkout-paymentmethods">
                                                 <div className="tm-form-inner">
                                                     <div className="tm-form-field">
-                                                        <input type="radio" name="paymentmethod" id="paymentmethod-paypal" />
-                                                        <label htmlFor="paymentmethod-paypal">VNPay</label>
+                                                        <FormControlLabel required control={<Checkbox checked={termsChecked} onChange={(e) => setTermsChecked(e.target.checked)} />} label="VNPay" />
                                                     </div>
                                                     <div className="tm-form-field">
-                                                        <button type="button" className="tm-button tm-button-block" onClick={handlePlaceOrder}>Đặt hàng</button>
+                                                        <button type="button" className="tm-button tm-button-block" onClick={handlePlaceOrder} disabled={!termsChecked}>Đặt hàng</button>
                                                     </div>
                                                 </div>
                                             </div>

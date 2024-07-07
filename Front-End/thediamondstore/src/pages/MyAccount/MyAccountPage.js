@@ -255,20 +255,15 @@ function MyAccountPage() {
                               onChange={handleInputChange}
                             />
                           </div>
-                          <div className="tm-form-field">
-                            <label htmlFor="role">Role</label>
+                          <div className="tm-form-field">                           
                             <input
                               type="role"
                               id="role"
                               value={accountDetails.role}
                               onChange={handleInputChange}
                               disabled
+                              hidden
                             />
-                          </div>
-                          
-                          <div className="tm-form-field">
-                            <input type="checkbox" name="acdetails-agreeterms" id="acdetails-agreeterms" />
-                            <label htmlFor="acdetails-agreeterms">I have read and agree to the Privacy Policy</label>
                           </div>
                           <div className="tm-form-field">
                             <button type="submit" className="tm-button">Update</button>
