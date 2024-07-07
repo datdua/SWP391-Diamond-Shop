@@ -101,7 +101,7 @@ function DiamondDetailPage() {
                             </div>
                           </div>
                           <div className="col-lg-6 col-md-6 col-12">
-                          <h1 className="tm-prodetails-title">{diamond.diamondName}</h1>
+                          <h1 className="tm-prodetails-title" style={{fontSize:'25px'}}>{diamond.diamondName}</h1>
                             <div className="tm-prodetails-contents" style={{fontSize:'larger'}}>        
                               <span className="tm-prodetails-price">{diamond.diamondEntryPrice.toLocaleString()} VND</span>
                               <div className="tm-prodetails-infos" >
@@ -135,12 +135,11 @@ function DiamondDetailPage() {
                                 </div>
                               </div>
                               <div className="tm-prodetails-quantitycart" style={{marginBottom:'20px', marginTop:'20px'}}>
-                                <h4>Quantity </h4>
                                 <div className="input-group">
                                   <button className="decrease-button" onClick={decreaseQuantity}>-</button>
                                   <input type="text" value={quantity} readOnly style={{ maxWidth: "50px", textAlign: "center" }} />
                                   <button className="increase-button" onClick={increaseQuantity}>+</button>
-                                  <Button onClick={() => handleAddToCart(diamond)} style={{ background: "#f2ba59", borderRadius: "5px", textAlign: "center" }}>Add to cart</Button>
+                                  <Button onClick={() => handleAddToCart(diamond)} style={{ background: "#f2ba59", borderRadius: "5px", textAlign: "center", marginLeft:'30px' }}>Add to cart</Button>
                                 </div>
                               </div>
                             </div>
