@@ -96,7 +96,7 @@ function LoginRegisterPage() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/accounts/register",
+        "http://localhost:8080/api/accounts/guest/register",
         {
           accountName: registerName,
           email: registerEmail,

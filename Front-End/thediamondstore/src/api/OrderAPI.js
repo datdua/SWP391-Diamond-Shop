@@ -22,7 +22,7 @@ export const createOrder = async (
     if (promotionCode) data.append("promotionCode", promotionCode);
 
     const response = await axios.post(
-      "http://localhost:8080/api/orders/create",
+      "http://localhost:8080/api/orders/customer/create",
       data,
       {
         headers: {
@@ -46,8 +46,8 @@ export async function fetchOrders(accountID) {
 
   const token = getAuthToken();
   try {
-    const response = await fetch(
-      `http://localhost:8080/api/orders/account/${accountID}`,
+    const response = await axios.get(
+      `http://localhost:8080/api/orders/customer/account/${accountID}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -55,25 +55,23 @@ export async function fetchOrders(accountID) {
       }
     );
 
-    if (!response.ok) {
-      const errorDetail = await response.text(); // Get the response text for more details
-      throw new Error(
-        `Network response was not ok: ${response.status} - ${errorDetail}`
-      );
+    if (response.status !== 200) {
+      throw new Error(`Failed to fetch orders: ${response.status} - ${response.statusText}`);
     }
 
-    const data = await response.json();
-    return data;
+    // Axios automatically parses JSON response data
+    return response.data;
   } catch (error) {
-    console.error("Failed to fetch orders:", error);
+    console.error("Failed to fetch orders:", error.message);
     throw error; // Re-throw the error to handle it elsewhere if needed
   }
 }
 
+
 export async function createPayment(orderID) {
   try {
     // URL to make the GET request
-    const url = `http://localhost:8080/api/payment/createPayment?orderID=${orderID}`;
+    const url = `http://localhost:8080/api/payment/customer/createPayment?orderID=${orderID}`;
 
     // Retrieve the token from localStorage (or wherever you store it)
     const token = getAuthToken();
@@ -108,7 +106,7 @@ export const handleVnpayReturn = async (params) => {
   try {
     const token = getAuthToken();
     const response = await axios.get(
-      `http://localhost:8080/api/payment/vnpay_return`,
+      `http://localhost:8080/api/payment/customer/vnpay_return`,
       {
         params: params,
         headers: {
@@ -133,9 +131,14 @@ export const handleVnpayReturn = async (params) => {
   }
 };
 export const getPromotion = async (promotionCode) => {
+  const token = localStorage.getItem('jwt')
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/promotion/code/${promotionCode}`,
+      `http://localhost:8080/api/promotion/customer/code/${promotionCode}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
     );
     return response.data;
   } catch (error) {
@@ -148,7 +151,7 @@ export async function fetchOrderDetail(orderID) {
   const token = getAuthToken();
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/orderDetail/getOrderDetail?orderID=${orderID}`,
+      `http://localhost:8080/api/orderDetail/customer/getOrderDetail?orderID=${orderID}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -192,9 +195,14 @@ export async function updateOrder(orderId, updatedOrder) {
 }
 
 export const deleteOrder = async (orderId) => {
+  const token = localStorage.getItem('jwt')
   try {
-    const url = `http://localhost:8080/api/orders/cancel/${orderId}`;
-    const response = await axios.delete(url);
+    const url = `http://localhost:8080/api/orders/customer/cancel/${orderId}`;
+    const response = await axios.delete(url,{
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
 
     if (response.status === 200) {
       return response.data; // Return data if needed

@@ -1,4 +1,4 @@
-package com.example.diamondstore.controller;
+package com.example.diamondstore.controller.Account;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,14 +20,13 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
     
-    // guset
     @PostMapping(value = "/guest/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         return authenticationService.authenticate(authenticationRequest);
     }
 
-    @PostMapping(value = "/refresh", produces = "application/json")
+    @PostMapping(value = "/guest/refresh", produces = "application/json")
     public ResponseEntity<?> refreshAuthenticationToken(@RequestHeader("Authorization") String token) {
-        return authenticationService.refresh(token.substring(7)); // Remove "Bearer " prefix
+        return authenticationService.refresh(token.substring(0));
     }
 }

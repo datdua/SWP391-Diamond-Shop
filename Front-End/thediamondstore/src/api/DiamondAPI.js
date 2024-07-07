@@ -11,7 +11,7 @@ export async function getAllDiamond() {
   return response.data;
 }
 
-const BASE_URL = 'http://localhost:8080/api/diamonds/get';
+const BASE_URL = 'http://localhost:8080/api/diamonds/guest/get';
 
 export const getDiamondById = async (diamondId) => {
     try {
@@ -25,7 +25,7 @@ export const getDiamondById = async (diamondId) => {
 export async function getPage(page = 1, size = 9) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/diamonds/paged/diamonds?page=${page}&size=${size}`
+      `http://localhost:8080/api/diamonds/guest/paged/diamonds?page=${page}&size=${size}`
     );
     return response.data;
   } catch (error) {
@@ -116,7 +116,7 @@ export async function getWarrantityImage(warrantyID) {
 export async function searchDiamondByName(name) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/diamonds/search/filter?diamondNameLike=${name}`
+      `http://localhost:8080/api/diamonds/guest/search/filter?diamondNameLike=${name}`
     );
     if (response.status !== 200) {
       throw new Error("Failed to search diamonds by name");
@@ -138,7 +138,7 @@ export const searchDiamond = async (filters, page = 1, size = 9) => {
       .join("&");
 
     const response = await axios.get(
-      `http://localhost:8080/api/diamonds/search/filter/paged?${queryString}`
+      `http://localhost:8080/api/diamonds/guest/search/filter/paged?${queryString}`
     );
     if (response.status !== 200) {
       throw new Error("Failed to fetch diamonds");
@@ -148,5 +148,3 @@ export const searchDiamond = async (filters, page = 1, size = 9) => {
     throw new Error("Failed to fetch diamonds");
   }
 };
-
-

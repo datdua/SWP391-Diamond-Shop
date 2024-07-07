@@ -49,7 +49,7 @@ public class SecurityConfig {
     // customer urls: là những api mà chỉ customer mới được phép truy cập (/api/(tên
     // controller)/customer/**)
     private static final String[] CUSTOMER_URL = {"/customer/**","/api/accounts/customer/**", "/api/certificates/customer/**", "/api/cart/customer/**",
-        "/api/collections/customer/**", "/api/customers/admin/**", "/api/diamondprices/customer/**", "/api/goldPrices/customer/**", 
+        "/api/collections/customer/**", "/api/customers/customer/**", "/api/diamondprices/customer/**", "/api/goldPrices/customer/**", 
         "/api/jewelry/customer/**", "/api/orders/customer/**", "/api/orderDetail/customer/**", "/api/payment/customer/**", "/api/production/customer/**", "/api/promotion/customer/**", 
         "/api/warranties/customer/**"};
 
