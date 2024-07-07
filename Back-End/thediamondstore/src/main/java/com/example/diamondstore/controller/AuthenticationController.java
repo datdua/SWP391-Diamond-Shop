@@ -26,7 +26,7 @@ public class AuthenticationController {
         return authenticationService.authenticate(authenticationRequest);
     }
 
-    @PostMapping(value = "/refresh", produces = "application/json")
+    @PostMapping(value = "/guest/refresh", produces = "application/json")
     public ResponseEntity<?> refreshAuthenticationToken(@RequestHeader("Authorization") String token) {
         return authenticationService.refresh(token.substring(7)); // Remove "Bearer " prefix
     }

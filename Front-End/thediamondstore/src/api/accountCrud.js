@@ -57,7 +57,7 @@ export async function updateAccount(accountID, accountDetails) {
   const token = getAuthToken();
   try {
     const response = await axios.put(
-      `http://localhost:8080/api/accounts/update/${accountID}`,
+      `http://localhost:8080/api/accounts/customer/update/${accountID}`,
       accountDetails,
       {
         headers: {
@@ -98,7 +98,7 @@ export async function createAccount(account) {
 }
 export const getContactInfo = async (accountId) => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/accounts/contactInfo/${accountId}`);
+    const response = await axios.get(`http://localhost:8080/api/accounts/customer/contactInfo/${accountId}`);
     return response.data;
   } catch (error) {
     console.error('Error fetching contact info:', error);
@@ -109,7 +109,7 @@ export const getAccountIDByEmail = async (email) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `http://localhost:8080/api/accounts/getByEmail/${email}`,
+      `http://localhost:8080/api/accounts/customer/getByEmail/${email}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -124,7 +124,7 @@ export const getAccountIDByEmail = async (email) => {
 };
 export const getCustomerPoints = async (accountId) => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/customers/${accountId}`);
+    const response = await axios.get(`http://localhost:8080/api/customers/customer/${accountId}`);
     if (response.status === 200) {
       return response.data.point;
     } else {
@@ -138,7 +138,7 @@ export const getCustomerPoints = async (accountId) => {
 
 export const resetPassword = async (email) => {
   try {
-    const response = await axios.post(`http://localhost:8080/api/accounts/forget-password?email=${email}`,
+    const response = await axios.post(`http://localhost:8080/api/accounts/guest/forget-password?email=${email}`,
     );
     return response.data;
   } catch (error) {
@@ -151,7 +151,7 @@ export const resetPassword = async (email) => {
 
 export const setPassword = async (email, newPassword) => {
   try {
-    const response = await axios.put(`http://localhost:8080/api/accounts/set-password?email=${encodeURIComponent(email)}`, {}, {
+    const response = await axios.put(`http://localhost:8080/api/accounts/guest/set-password?email=${encodeURIComponent(email)}`, {}, {
       headers: {
         'Content-Type': 'application/json',
         'newPassword': newPassword, // Add newPassword to the headers

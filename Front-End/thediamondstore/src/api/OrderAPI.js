@@ -22,7 +22,7 @@ export const createOrder = async (
     if (promotionCode) data.append("promotionCode", promotionCode);
 
     const response = await axios.post(
-      "http://localhost:8080/api/orders/create",
+      "http://localhost:8080/api/orders/customer/create",
       data,
       {
         headers: {
@@ -46,8 +46,8 @@ export async function fetchOrders(accountID) {
 
   const token = getAuthToken();
   try {
-    const response = await fetch(
-      `http://localhost:8080/api/orders/account/${accountID}`,
+    const response = await axios.get(
+      `http://localhost:8080/api/orders/customer/account/${accountID}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -73,7 +73,7 @@ export async function fetchOrders(accountID) {
 export async function createPayment(orderID) {
   try {
     // URL to make the GET request
-    const url = `http://localhost:8080/api/payment/createPayment?orderID=${orderID}`;
+    const url = `http://localhost:8080/api/payment/customer/createPayment?orderID=${orderID}`;
 
     // Retrieve the token from localStorage (or wherever you store it)
     const token = getAuthToken();
@@ -108,7 +108,7 @@ export const handleVnpayReturn = async (params) => {
   try {
     const token = getAuthToken();
     const response = await axios.get(
-      `http://localhost:8080/api/payment/vnpay_return`,
+      `http://localhost:8080/api/payment/customer/vnpay_return`,
       {
         params: params,
         headers: {
@@ -135,7 +135,7 @@ export const handleVnpayReturn = async (params) => {
 export const getPromotion = async (promotionCode) => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/promotion/code/${promotionCode}`,
+      `http://localhost:8080/api/promotion/customer/code/${promotionCode}`,
     );
     return response.data;
   } catch (error) {
@@ -148,7 +148,7 @@ export async function fetchOrderDetail(orderID) {
   const token = getAuthToken();
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/orderDetail/getOrderDetail?orderID=${orderID}`,
+      `http://localhost:8080/api/orderDetail/customer/getOrderDetail?orderID=${orderID}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -187,7 +187,7 @@ export async function updateOrder(orderId, updatedOrder) {
 
 export const deleteOrder = async (orderId) => {
   try {
-    const url = `http://localhost:8080/api/orders/cancel/${orderId}`;
+    const url = `http://localhost:8080/api/customer/orders/cancel/${orderId}`;
     const response = await axios.delete(url);
 
     if (response.status === 200) {
