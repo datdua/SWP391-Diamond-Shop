@@ -1,4 +1,4 @@
-package com.example.diamondstore.controller;
+package com.example.diamondstore.controller.Account;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
