@@ -28,7 +28,7 @@ public class AccountControllerAdmin {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Map<String, String>> deleteAccounts_Admin(
+    public ResponseEntity<Map<String, String>> deleteAccounts(
             @RequestBody List<Integer> accountIDs,
             @RequestHeader("Authorization") String jwtToken) {
 
@@ -36,7 +36,7 @@ public class AccountControllerAdmin {
     }
 
     @PutMapping("/update/{accountID}")
-    public ResponseEntity<Account> updateAccount_Admin(
+    public ResponseEntity<Account> updateAccount(
             @PathVariable Integer accountID,
             @RequestBody AccountRequest accountRequest,
             @RequestHeader("Authorization") String jwtToken) {

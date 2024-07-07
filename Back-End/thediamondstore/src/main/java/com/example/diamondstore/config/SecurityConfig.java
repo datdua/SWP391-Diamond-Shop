@@ -59,6 +59,8 @@ public class SecurityConfig {
         "/api/orders/manager/**", "/api/orderDetail/manager/**", "/api/payment/manager/**", "/api/production/manager/**", "/api/promotion/manager/**", 
         "/api/warranties/manager/**"};
 
+    private static final  String[] ADMIN_MANGER_URL = {"/api/accounts/**"};
+
     @Autowired
     private final AccountService UserService;
 
@@ -82,6 +84,7 @@ public class SecurityConfig {
                 .antMatchers(ADMIN_URL).hasRole("ADMIN")
                 .antMatchers(CUSTOMER_URL).hasRole("CUSTOMER")
                 .antMatchers(MANAGER_URL).hasRole("MANAGER")
+                .antMatchers(ADMIN_MANGER_URL).hasAnyRole("ADMIN", "MANAGER")
                 .anyRequest().authenticated())
                 .exceptionHandling(e -> e
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
