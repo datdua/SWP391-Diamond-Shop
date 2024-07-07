@@ -4,7 +4,7 @@ export const getAllDiamondPrice = async () => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      "http://localhost:8080/api/diamondprices/getAll",
+      "http://localhost:8080/api/diamondprices/get-all",
       {
         headers: { Authorization: `Bearer ${token}` },
       }

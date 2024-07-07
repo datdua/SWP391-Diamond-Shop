@@ -11,10 +11,29 @@ export async function getAllAccount() {
   return response.data;
 }
 
+export async function getAccountByID_AdminManager(accountID) {
+  try {
+    const token = localStorage.getItem('jwt');
+    const response = await axios.get(
+      `http://localhost:8080/api/accounts/get/${accountID}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch account by ID");
+  }
+}
+
 export async function getAccountByID(accountID) {
   try {
+    const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      `http://localhost:8080/api/accounts/get/${accountID}`
+      `http://localhost:8080/api/accounts/get/${accountID}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -70,6 +89,7 @@ export async function updateAccount(accountID, accountDetails) {
     throw new Error("Failed to update account");
   }
 }
+
 
 
 export async function deleteAccounts(accountIDs) {

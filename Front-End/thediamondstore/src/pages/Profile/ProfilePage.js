@@ -11,7 +11,7 @@ import {
   Snackbar,
   Alert,
 } from "@mui/material";
-import { getAccountByID, updateAccount } from "../../api/accountCrud";
+import { getAccountByID_AdminManager, updateAccount } from "../../api/accountCrud";
 
 const ProfilePage = () => {
   const [account, setAccount] = useState(null);
@@ -28,7 +28,7 @@ const ProfilePage = () => {
 
     const fetchAccount = async () => {
       try {
-        const accountData = await getAccountByID(accountID);
+        const accountData = await getAccountByID_AdminManager(accountID);
         setAccount(accountData);
       } catch (error) {
         setError("Failed to fetch account");

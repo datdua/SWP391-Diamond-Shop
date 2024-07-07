@@ -2,7 +2,12 @@ import axios from "axios";
 
 export const getAllCertificates = async () => {
   try {
-    const response = await axios.get("http://localhost:8080/api/certificates");
+    const token = localStorage.getItem("jwt");
+    const response = await axios.get("http://localhost:8080/api/certificates/get-all",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching certificates:", error);

@@ -81,12 +81,6 @@ public class AccountController {
         return ResponseEntity.ok(accountRepository.findAll());
     }
 
-    // customer
-    @GetMapping("/customer/accounts")
-    public ResponseEntity<Iterable<Account>> getAccounts_Customer() {
-        return ResponseEntity.ok(accountRepository.findAll());
-    }
-
     // admin
     @GetMapping("/admin/{accountName}")
     public ResponseEntity<Account> getByAccountName_Admin(@PathVariable String accountName) {
@@ -187,7 +181,7 @@ public class AccountController {
     }
 
     // manager
-    @PutMapping(value = "/manger/update/{accountID}", produces = "application/json;charset=UTF-8")
+    @PutMapping(value = "/admin/update/{accountID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> updateAccount_Manger(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
         try {
             Account updatedAccount = accountService.updateAccount_Customer(accountID, accountRequest);
@@ -247,7 +241,7 @@ public class AccountController {
     }
 
     // admin
-    @GetMapping("/admin/get/{accountID}")
+    @GetMapping("/get/{accountID}")
     public ResponseEntity<?> getByAccountID_Admin(@PathVariable Integer accountID) {
         Account account = accountRepository.findByAccountID(accountID);
         if (account == null) {
@@ -257,7 +251,7 @@ public class AccountController {
     }
 
     // manager
-    @GetMapping("/manager/get/{accountID}")
+    @GetMapping("/customer/get/{accountID}")
     public ResponseEntity<?> getByAccountID_Manager(@PathVariable Integer accountID) {
         Account account = accountRepository.findByAccountID(accountID);
         if (account == null) {

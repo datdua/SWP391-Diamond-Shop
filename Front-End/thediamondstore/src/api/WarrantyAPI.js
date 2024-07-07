@@ -2,7 +2,12 @@ import axios from "axios";
 
 export const getAllWarranties = async () => {
   try {
-    const response = await axios.get("http://localhost:8080/api/warranties");
+    const token = localStorage.getItem("jwt");
+    const response = await axios.get("http://localhost:8080/api/warranties/get-all",
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching warranties:", error);
@@ -76,8 +81,12 @@ export const getWarrantyByPage = async (page, size) => {
 
 export const getWarrantyDiamondIDIsNull = async () => {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `http://localhost:8080/api/warranties/diamondIDIsNull`
+      `http://localhost:8080/api/warranties/diamondIDIsNull`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -88,8 +97,12 @@ export const getWarrantyDiamondIDIsNull = async () => {
 
 export const getWarrantyJewelryIDIsNull = async () => {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `http://localhost:8080/api/warranties/jewelryIDIsNull`
+      `http://localhost:8080/api/warranties/jewelryIDIsNull`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
