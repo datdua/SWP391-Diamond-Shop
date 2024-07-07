@@ -27,4 +27,7 @@ public interface DiamondRepository extends JpaRepository<Diamond, String>, JpaSp
     List<Diamond> findAllByCertificationIDIn(List<String> certificationIDs);
 
     List<Diamond> findAllByWarrantyIDIn(List<String> warrantyIDs);
+
+    // get all diamonds has cartSize = ?, color = ?, clarity = ?
+    List<Diamond> findAllByCaratSizeAndColorAndClarity(BigDecimal caratSize, String color, String clarity);
 }
