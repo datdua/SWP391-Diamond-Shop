@@ -107,22 +107,9 @@ function ProductPage() {
               <div className="row">
                 <div className="col-lg-9 col-12">
                   <form action="#" className="tm-shop-header">
-                    <div className="tm-shop-productview">
-                      <span>View:</span>
-                      <button data-view="grid" className="active" aria-label="Grid View"><i className="ion-android-apps"></i></button>
-                      <button data-view="list" aria-label="List View"><i className="ion-android-menu"></i></button>
-                    </div>
                     <p className="tm-shop-countview">
                       Showing {((currentPage - 1) * itemsPerPage * 2) + 1} to {((currentPage * 2) * (itemsPerPage))} of {products.length} products
                     </p>
-                    <label htmlFor="mySelect">My Select:</label>
-                    <select id="mySelect">
-                      <option value="default">Default Sorting</option>
-                      <option value="name">Name A-Z</option>
-                      <option value="date">Date</option>
-                      <option value="best">Best Sellers</option>
-                      <option value="trending">Trending</option>
-                    </select>
                   </form>
 
                   <div className="tm-shop-products">

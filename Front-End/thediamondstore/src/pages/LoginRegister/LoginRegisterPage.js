@@ -197,18 +197,6 @@ function LoginRegisterPage() {
                           Đăng Nhập
                         </button>
                       </div>
-                      <div className="tm-form-field">
-                        <div className="tm-form-sociallogin">
-                          <h6>Hoặc, đăng nhập với :</h6>
-                          <ul>
-                            <li>
-                              <a href="#" className="google-btn">
-                                <i className="ion-social-google"></i>
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
                     </div>
                   </form>
                 </div>
