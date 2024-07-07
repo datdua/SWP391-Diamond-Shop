@@ -37,7 +37,7 @@ public class CertificateController {
     }
 
     //admin
-    @GetMapping("/admin/{certificateID}")
+    @GetMapping("/manager/{certificateID}")
     public ResponseEntity<?> getCertificate_Admin(@PathVariable String certificateID) {
         return certificateService.getCertificateById(certificateID);
     }
@@ -55,19 +55,19 @@ public class CertificateController {
     }
 
     // admin
-    @PostMapping(value = "/admin/create", produces = "application/json;charset=UTF-8")
+    @PostMapping(value = "/manager/create", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> createCertificate_Admin(@RequestBody Certificate certificate) {
         return certificateService.createCertificate(certificate);
     }
 
     // admin
-    @PutMapping(value = "/admin/update/{certificateID}", produces = "application/json;charset=UTF-8")
+    @PutMapping(value = "/manager/update/{certificateID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> updateCertificate_Admin(@PathVariable String certificateID, @RequestBody CertificatePutRequest certificatePutRequest) {
         return certificateService.updateCertificate(certificateID, certificatePutRequest);
     }
 
     // admin
-    @DeleteMapping(value = "/admin/delete", produces = "application/json;charset=UTF-8")
+    @DeleteMapping(value = "/manager/delete", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> deleteCertificates_Admin(@RequestBody List<String> certificateIDs) {
     try {
         certificateService.deleteCertificates(certificateIDs);
@@ -83,6 +83,12 @@ public class CertificateController {
         return certificateService.getCertificateImg(certificateID);
     }
 
+    // manager
+    @GetMapping(value = "/manager/get/certificateImg/{certificateID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getCertificateImg_Manager(@PathVariable String certificateID) {
+        return certificateService.getCertificateImg(certificateID);
+    }
+
     // customer
     @GetMapping(value = "/customer/get/certificateImg/{certificateID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getCertificateImg_Customer(@PathVariable String certificateID) {
@@ -90,8 +96,8 @@ public class CertificateController {
     }
 
     // admin
-    @PostMapping("/admin/update-statuses")
-    public ResponseEntity<Map<String, String>> updateCertificateStatusesAuto_Admin() {
+    @PostMapping("/manager/update-statuses")
+    public ResponseEntity<Map<String, String>> updateCertificateStatusesAuto_Manager() {
         certificateService.updateCertificateStatusesAuto();
         return ResponseEntity.ok(Collections.singletonMap("message", "Trạng thái chứng chỉ đã được cập nhật"));
     }

@@ -52,19 +52,19 @@ public class DiamondPriceController {
     }
 
     // admin
-    @PostMapping(value = "/admin/create")
+    @PostMapping(value = "/manager/create")
     public ResponseEntity<?> addDiamondPrice_Admin(@RequestBody DiamondPriceRequest diamondPriceRequest) {
         return diamondPriceService.addDiamondPrice(diamondPriceRequest);
     }
 
     // admin
-    @PutMapping("/admin/{diamondPriceID}")
+    @PutMapping("/manager/{diamondPriceID}")
     public ResponseEntity<Map<String, String>> updateDiamondPrice_Admin(@PathVariable Integer diamondPriceID, @RequestBody DiamondPriceRequest diamondPriceRequest) {
         return diamondPriceService.updateDiamondPrice(diamondPriceID, diamondPriceRequest);
     }
 
     // admin
-    @DeleteMapping(value = "/admin/delete", produces = "application/json;charset=UTF-8")
+    @DeleteMapping(value = "/manager/delete", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> deleteDiamondPrices_Admin(@RequestBody List<Integer> diamondPriceIDs) {
     try {
         diamondPriceService.deleteDiamondPrices(diamondPriceIDs);
@@ -81,7 +81,7 @@ public class DiamondPriceController {
     }
 
     // admin
-    @GetMapping("/admin/{diamondPriceID}")
+    @GetMapping("/manager/{diamondPriceID}")
     public DiamondPrice getDiamondPriceById_Admin(@PathVariable Integer diamondPriceID) {
         return diamondPriceService.getDiamondPriceById(diamondPriceID);
     }
@@ -93,19 +93,19 @@ public class DiamondPriceController {
     }
 
     // guest
-    @GetMapping("/carat/{caratSize}")
+    @GetMapping("/manager/carat/{caratSize}")
     public List<DiamondPrice> getDiamondPriceByCaratSize(@PathVariable BigDecimal caratSize) {
         return diamondPriceService.getDiamondPricesByCaratSize(caratSize);
     }
 
-    @GetMapping("/diamondPrices")
+    @GetMapping("/guest/diamondPrices")
     public List<DiamondPrice> getDiamondPrices(@RequestParam(required = false) String clarity,
                                                @RequestParam(required = false) String color,
                                                @RequestParam(required = false) BigDecimal caratSize) {
         return diamondPriceService.findByCriteria(clarity, color, caratSize);
     }
 
-    @GetMapping("/prices/{caratSize}")
+    @GetMapping("/guest/prices/{caratSize}")
     public Map<String, Map<String, BigDecimal>> getDiamondPrices(@PathVariable BigDecimal caratSize) {
         List<DiamondPrice> diamondPrices = diamondPriceService.getDiamondPricesByCaratSize(caratSize);
 

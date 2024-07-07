@@ -76,14 +76,8 @@ public class AccountController {
     }
 
     // admin
-    @GetMapping("/admin/accounts")
+    @GetMapping("/get-all")
     public ResponseEntity<Iterable<Account>> getAccounts_Admin() {
-        return ResponseEntity.ok(accountRepository.findAll());
-    }
-
-    //manager 
-    @GetMapping("/manager/accounts")
-    public ResponseEntity<Iterable<Account>> getAccounts_Manager() {
         return ResponseEntity.ok(accountRepository.findAll());
     }
 
@@ -159,8 +153,8 @@ public class AccountController {
         }
     }
 
-    @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> deleteAccounts(@RequestBody List<Integer> accountIDs, @RequestHeader("Authorization") String token) {
+    @DeleteMapping(value = "/admin/delete", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> deleteAccounts_Admin(@RequestBody List<Integer> accountIDs, @RequestHeader("Authorization") String token) {
     try {
         accountService.deleteAccounts(accountIDs, token);
         return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
@@ -300,7 +294,7 @@ public class AccountController {
     }
     
     //get account by role
-    @GetMapping("/manager/getByRole/{role}")
+    @GetMapping("/getByRole/{role}")
     public ResponseEntity<?> getByAccountRole_Manager(@PathVariable String role) {
         List<Account> accounts = accountRepository.findByRole(role);
         if (accounts.isEmpty()) {

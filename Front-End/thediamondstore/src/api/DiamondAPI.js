@@ -37,9 +37,13 @@ export async function getPage(page = 1, size = 9) {
 
 export async function createDiamond(diamond) {
   try {
+    const token = localStorage.getItem('jwt');
     const response = await axios.post(
       "http://localhost:8080/api/diamonds/create",
-      diamond
+      diamond,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -49,9 +53,13 @@ export async function createDiamond(diamond) {
 
 export async function updateDiamond(diamondID, diamond) {
   try {
+    const token = localStorage.getItem('jwt');
     const response = await axios.put(
       `http://localhost:8080/api/diamonds/update/${diamondID}`,
-      diamond
+      diamond,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -61,9 +69,13 @@ export async function updateDiamond(diamondID, diamond) {
 
 export async function deleteDiamond(diamondIDs) {
   try {
+    const token = localStorage.getItem('jwt');
     const response = await axios.delete(
       `http://localhost:8080/api/diamonds/delete`
-      , { data: diamondIDs }
+      , { data: diamondIDs },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -73,8 +85,12 @@ export async function deleteDiamond(diamondIDs) {
 
 export async function getCertificateImage(certificationID) {
   try {
+    const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      `http://localhost:8080/api/certificates/get/certificateImg/${certificationID}`
+      `http://localhost:8080/api/certificates/get/certificateImg/${certificationID}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     console.log("API Response:", response.data); // Debug line
     return response.data.certificateImage; // Correctly extract the certificateImage URL
@@ -85,8 +101,12 @@ export async function getCertificateImage(certificationID) {
 
 export async function getWarrantityImage(warrantyID) {
   try {
+    const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      `http://localhost:8080/api/warranties/get/warrantyImg/${warrantyID}`
+      `http://localhost:8080/api/warranties/get/warrantyImg/${warrantyID}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     console.log("API Response:", response.data); // Debug line
     return response.data.warrantyImage; // Correctly extract the warrantityImage URL
