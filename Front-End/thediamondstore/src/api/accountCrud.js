@@ -12,9 +12,14 @@ export async function getAllAccount() {
 }
 
 export async function getAccountByID(accountID) {
+  const token = localStorage.getItem('jwt')
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/accounts/get/${accountID}`
+      `http://localhost:8080/api/accounts/get/${accountID}`,{
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
     );
     return response.data;
   } catch (error) {
@@ -97,8 +102,13 @@ export async function createAccount(account) {
   }
 }
 export const getContactInfo = async (accountId) => {
+  const token = localStorage.getItem('jwt')
   try {
-    const response = await axios.get(`http://localhost:8080/api/accounts/customer/contactInfo/${accountId}`);
+    const response = await axios.get(`http://localhost:8080/api/accounts/customer/customer/contactInfo/${accountId}`,{
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
     return response.data;
   } catch (error) {
     console.error('Error fetching contact info:', error);
@@ -123,8 +133,13 @@ export const getAccountIDByEmail = async (email) => {
   }
 };
 export const getCustomerPoints = async (accountId) => {
+  const token = localStorage.getItem('jwt')
   try {
-    const response = await axios.get(`http://localhost:8080/api/customers/customer/${accountId}`);
+    const response = await axios.get(`http://localhost:8080/api/customers/customer/${accountId}`,{
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
     if (response.status === 200) {
       return response.data.point;
     } else {

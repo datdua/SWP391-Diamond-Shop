@@ -6,10 +6,15 @@ export const getAuthToken = () => {
 };
 
 export async function getAllProduct() {
+  const token = getAuthToken();
     try {
 // Logging token for debugging
         const response = await axios.get(
-          "http://localhost:8080/api/production/customer/all",
+          "http://localhost:8080/api/production/customer/all",{
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
         );
         console.log('Response:', response); // Logging entire response object for inspection
 

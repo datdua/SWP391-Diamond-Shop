@@ -55,20 +55,18 @@ export async function fetchOrders(accountID) {
       }
     );
 
-    if (!response.ok) {
-      const errorDetail = await response.text(); // Get the response text for more details
-      throw new Error(
-        `Network response was not ok: ${response.status} - ${errorDetail}`
-      );
+    if (response.status !== 200) {
+      throw new Error(`Failed to fetch orders: ${response.status} - ${response.statusText}`);
     }
 
-    const data = await response.json();
-    return data;
+    // Axios automatically parses JSON response data
+    return response.data;
   } catch (error) {
-    console.error("Failed to fetch orders:", error);
+    console.error("Failed to fetch orders:", error.message);
     throw error; // Re-throw the error to handle it elsewhere if needed
   }
 }
+
 
 export async function createPayment(orderID) {
   try {
@@ -133,9 +131,14 @@ export const handleVnpayReturn = async (params) => {
   }
 };
 export const getPromotion = async (promotionCode) => {
+  const token = localStorage.getItem('jwt')
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/promotion/customer/code/${promotionCode}`,
+      `http://localhost:8080/api/promotion/customer/code/${promotionCode}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
     );
     return response.data;
   } catch (error) {
@@ -186,9 +189,14 @@ export async function updateOrder(orderId, updatedOrder) {
 }
 
 export const deleteOrder = async (orderId) => {
+  const token = localStorage.getItem('jwt')
   try {
-    const url = `http://localhost:8080/api/customer/orders/cancel/${orderId}`;
-    const response = await axios.delete(url);
+    const url = `http://localhost:8080/api/orders/customer/cancel/${orderId}`;
+    const response = await axios.delete(url,{
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
 
     if (response.status === 200) {
       return response.data; // Return data if needed
