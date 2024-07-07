@@ -136,13 +136,13 @@ function MyAccountPage() {
   return (
     <>
       <div>
-        <div className="tm-breadcrumb-area tm-padding-section bg-grey">
+        <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/the-diamond-store-423602.appspot.com/o/img-banner%2Fimg-banner2.png?alt=media&token=13ceeebc-e94b-4e57-95d7-ec5dbb2fa30e)`}}>    
           <div className="container">
             <div className="tm-breadcrumb">
-              <h2>My Account</h2>
-              <ul>
-                <li><Link to="/home">Home</Link></li>
-                <li>My Account</li>
+              <h2>Tài Khoản</h2>
+              <ul className="add-back">
+                <li><Link to="/">Trang Chủ</Link></li>
+                <li>Tài Khoản</li>
               </ul>
             </div>
           </div>
@@ -156,11 +156,11 @@ function MyAccountPage() {
                 <li className="nav-item">
                     <a className="nav-link active" id="account-acdetails-tab" data-toggle="tab"
                       href="#account-acdetails" role="tab" aria-controls="account-acdetails"
-                      aria-selected="false">Account Details</a>
+                      aria-selected="false">Thông tin chi tiết</a>
                   </li>
                   <li className="nav-item">
                     <a className="nav-link " id="account-orders-tab" data-toggle="tab" href="#account-orders"
-                      role="tab" aria-controls="account-orders" aria-selected="false">Orders</a>
+                      role="tab" aria-controls="account-orders" aria-selected="false">Đơn hàng</a>
                   </li>               
                 </ul>
                 <div className="tab-content" id="account-content">
@@ -180,12 +180,12 @@ function MyAccountPage() {
                         <table className="table table-bordered mb-0">
                           <thead>
                             <tr>
-                              <th className="tm-myaccount-orders-col-id">ORDER ID</th>
-                              <th className="tm-myaccount-orders-col-date">DATE</th>
-                              <th className="tm-myaccount-orders-col-status">STATUS</th>
-                              <th className="tm-myaccount-orders-col-total">TOTAL</th>
-                              <th className="tm-myaccount-orders-col-view">View</th>
-                              <th className="tm-myaccount-orders-col-action">Action</th>
+                              <th className="tm-myaccount-orders-col-id">ID</th>
+                              <th className="tm-myaccount-orders-col-date">NGÀY</th>
+                              <th className="tm-myaccount-orders-col-status">TRẠNG THÁI</th>
+                              <th className="tm-myaccount-orders-col-total">TỔNG</th>
+                              <th className="tm-myaccount-orders-col-view">XEM</th>
+                              <th className="tm-myaccount-orders-col-action">HÀNH ĐỘNG</th>
                             </tr>
                           </thead>
                           <tbody>

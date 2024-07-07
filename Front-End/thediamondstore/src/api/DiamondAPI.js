@@ -3,7 +3,7 @@ import axios from 'axios';
 // Diamond API functions
 export async function getAllDiamond() {
   const response = await axios.get(
-    "http://localhost:8080/api/diamonds"
+    "http://localhost:8080/api/diamonds/guest"
   );
   if (response.status !== 200) {
     throw new Error("Failed to fetch diamond data");
@@ -11,7 +11,7 @@ export async function getAllDiamond() {
   return response.data;
 }
 
-const BASE_URL = 'http://localhost:8080/api/diamonds/get';
+const BASE_URL = 'http://localhost:8080/api/diamonds/guest/get';
 
 export const getDiamondById = async (diamondId) => {
     try {
@@ -25,7 +25,7 @@ export const getDiamondById = async (diamondId) => {
 export async function getPage(page = 1, size = 9) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/diamonds/paged/diamonds?page=${page}&size=${size}`
+      `http://localhost:8080/api/diamonds/guest/paged/diamonds?page=${page}&size=${size}`
     );
     return response.data;
   } catch (error) {
@@ -74,7 +74,7 @@ export async function deleteDiamond(diamondIDs) {
 export async function getCertificateImage(certificationID) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/certificates/get/certificateImg/${certificationID}`
+      `http://localhost:8080/api/certificates/customer/get/certificateImg/${certificationID}`
     );
     console.log("API Response:", response.data); // Debug line
     return response.data.certificateImage; // Correctly extract the certificateImage URL
@@ -86,7 +86,7 @@ export async function getCertificateImage(certificationID) {
 export async function getWarrantityImage(warrantyID) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/warranties/get/warrantyImg/${warrantyID}`
+      `http://localhost:8080/api/warranties/customer/get/warrantyImg/${warrantyID}`
     );
     console.log("API Response:", response.data); // Debug line
     return response.data.warrantyImage; // Correctly extract the warrantityImage URL
@@ -98,7 +98,7 @@ export async function getWarrantityImage(warrantyID) {
 export async function searchDiamondByName(name) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/diamonds/search/filter?diamondNameLike=${name}`
+      `http://localhost:8080/api/diamonds/guest/search/filter?diamondNameLike=${name}`
     );
     if (response.status !== 200) {
       throw new Error("Failed to search diamonds by name");
@@ -120,7 +120,7 @@ export const searchDiamond = async (filters, page = 1, size = 9) => {
       .join("&");
 
     const response = await axios.get(
-      `http://localhost:8080/api/diamonds/search/filter/paged?${queryString}`
+      `http://localhost:8080/api/diamonds/guest/search/filter/paged?${queryString}`
     );
     if (response.status !== 200) {
       throw new Error("Failed to fetch diamonds");
@@ -130,5 +130,3 @@ export const searchDiamond = async (filters, page = 1, size = 9) => {
     throw new Error("Failed to fetch diamonds");
   }
 };
-
-
