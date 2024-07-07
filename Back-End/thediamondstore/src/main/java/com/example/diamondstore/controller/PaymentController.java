@@ -26,10 +26,12 @@ import com.example.diamondstore.DTO.PaymentResDTO;
 import com.example.diamondstore.DTO.TransactionStatusDTO;
 import com.example.diamondstore.config.PaymentConfig;
 import com.example.diamondstore.model.Cart;
+import com.example.diamondstore.model.Customer;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.model.OrderDetail;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.CartRepository;
+import com.example.diamondstore.repository.CustomerRepository;
 import com.example.diamondstore.repository.OrderDetailRepository;
 import com.example.diamondstore.repository.OrderRepository;
 
@@ -48,6 +50,9 @@ public class PaymentController {
 
     @Autowired
     private OrderDetailRepository orderDetailRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     // customer
     @GetMapping("/customer/createPayment")
@@ -143,6 +148,11 @@ public class PaymentController {
             order.setOrderStatus("Đã thanh toán");
             order.setTransactionNo(transactionNo);
             orderRepository.save(order);
+
+            Integer accountID = order.getAccount().getAccountID();
+            Customer customer = customerRepository.findById(accountID).orElseThrow(() -> new IllegalArgumentException("Khách hàng không tồn tại"));
+            customer.setPoint(customer.getPoint() + 100);
+            customerRepository.save(customer);
 
             // Chuyển các mục giỏ hàng thành OrderDetail và lưu
             List<Cart> cartItems = cartRepository.findByOrder(order);

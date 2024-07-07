@@ -82,12 +82,6 @@ public class OrderService {
         order.setDeliveryDate(LocalDateTime.now().plusDays(7));
         order.setOrderStatus("Đang xử lý");
 
-        // if (account.getPhoneNumber() == null) {
-        //     account.setPhoneNumber(phoneNumber);
-        // }
-        // if (account.getAddressAccount() == null) {
-        //     account.setAddressAccount(deliveryAddress);
-        // }
         accountRepository.save(account);
 
         // Lưu Order trước
@@ -143,10 +137,6 @@ public class OrderService {
 
         // Lưu Order một lần nữa để cập nhật totalOrder
         order = orderRepository.save(order);
-
-        Customer customer = customerRepository.findById(accountID).orElseThrow(() -> new IllegalArgumentException("Khách hàng không tồn tại"));
-        customer.setPoint(customer.getPoint() + 100);
-        customerRepository.save(customer);
         return order;
     }
 
