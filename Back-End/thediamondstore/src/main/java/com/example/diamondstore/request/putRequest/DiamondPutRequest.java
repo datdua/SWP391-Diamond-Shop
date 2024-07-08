@@ -6,9 +6,9 @@ public class DiamondPutRequest {
 
     private String warrantyID;
     private String certificationID;
-    private Float caratSize;
+    private BigDecimal caratSize;
     private BigDecimal diamondEntryPrice;
-    private Float carat_weight;
+    private BigDecimal weight;
     private String color;
     private String cut;
     private String clarity;
@@ -20,9 +20,9 @@ public class DiamondPutRequest {
     public DiamondPutRequest() {
     }
 
-    public DiamondPutRequest(Float caratSize, Float carat_weight, String certificationID, String clarity, String color, String cut, String diamondImage, String diamondName, BigDecimal diamondEntryPrice, String origin, String shape, String warrantyID) {
+    public DiamondPutRequest(BigDecimal caratSize, BigDecimal weight, String certificationID, String clarity, String color, String cut, String diamondImage, String diamondName, BigDecimal diamondEntryPrice, String origin, String shape, String warrantyID) {
         this.caratSize = caratSize;
-        this.carat_weight = carat_weight;
+        this.weight = weight;
         this.certificationID = certificationID;
         this.clarity = clarity;
         this.color = color;
@@ -51,11 +51,11 @@ public class DiamondPutRequest {
         this.certificationID = certificationID;
     }
 
-    public Float getCaratSize() {
+    public BigDecimal getCaratSize() {
         return caratSize;
     }
 
-    public void setCaratSize(Float caratSize) {
+    public void setCaratSize(BigDecimal caratSize) {
         this.caratSize = caratSize;
     }
 
@@ -67,12 +67,12 @@ public class DiamondPutRequest {
         this.diamondEntryPrice = diamondEntryPrice;
     }
 
-    public Float getCarat_weight() {
-        return carat_weight;
+    public BigDecimal getWeight() {
+        return weight;
     }
 
-    public void setCarat_weight(Float carat_weight) {
-        this.carat_weight = carat_weight;
+    public void setWeight(BigDecimal weight) {
+        this.weight = weight;
     }
 
     public String getColor() {

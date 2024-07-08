@@ -22,7 +22,7 @@ public class Diamond {
     private String certificationID;
 
     @Column(name = "caratSize")
-    private Float caratSize;
+    private BigDecimal caratSize;
 
     @Column(name = "diamondEntryPrice", precision = 16, scale = 2)
     private BigDecimal diamondEntryPrice;
@@ -30,8 +30,8 @@ public class Diamond {
     @Column(name = "grossDiamondPrice", precision = 16, scale = 2)
     private BigDecimal grossDiamondPrice;
 
-    @Column(name = "carat_weight")
-    private Float carat_weight;
+    @Column(name = "weight")
+    private BigDecimal weight;
 
     @Column(name = "color")
     private String color;
@@ -57,13 +57,13 @@ public class Diamond {
     public Diamond() {
     }
 
-    public Diamond(String diamondID, String warrantyID, String certificationID, Float caratSize, BigDecimal diamondEntryPrice, Float carat_weight, String color, String cut, String clarity, String diamondImage, String shape, String diamondName, String origin, BigDecimal grossDiamondPrice) {
+    public Diamond(String diamondID, String warrantyID, String certificationID, BigDecimal caratSize, BigDecimal diamondEntryPrice, BigDecimal weight, String color, String cut, String clarity, String diamondImage, String shape, String diamondName, String origin, BigDecimal grossDiamondPrice) {
         this.diamondID = diamondID;
         this.warrantyID = warrantyID;
         this.certificationID = certificationID;
         this.caratSize = caratSize;
         this.diamondEntryPrice = diamondEntryPrice;
-        this.carat_weight = carat_weight;
+        this.weight = weight;
         this.color = color;
         this.cut = cut;
         this.clarity = clarity;
@@ -106,11 +106,11 @@ public class Diamond {
         this.certificationID = certificationID;
     }
 
-    public Float getCaratSize() {
+    public BigDecimal getCaratSize() {
         return caratSize;
     }
 
-    public void setCaratSize(Float caratSize) {
+    public void setCaratSize(BigDecimal caratSize) {
         this.caratSize = caratSize;
     }
 
@@ -122,12 +122,12 @@ public class Diamond {
         this.diamondEntryPrice = diamondEntryPrice;
     }
 
-    public Float getCarat_weight() {
-        return carat_weight;
+    public BigDecimal getWeight() {
+        return weight;
     }
 
-    public void setCarat_weight(Float carat_weight) {
-        this.carat_weight = carat_weight;
+    public void setWeight(BigDecimal weight) {
+        this.weight = weight;
     }
 
     public String getColor() {
