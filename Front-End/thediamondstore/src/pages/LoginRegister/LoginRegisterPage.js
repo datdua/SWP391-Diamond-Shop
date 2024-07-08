@@ -29,7 +29,7 @@ function LoginRegisterPage() {
     try {
       
       const response = await axios.post(
-        "https://www.thediamondstore.site/guest/login",
+        "http://localhost:8080/guest/login",
         {
           email: loginEmail,
           password: loginPassword,
@@ -96,7 +96,7 @@ function LoginRegisterPage() {
 
     try {
       const response = await axios.post(
-        "https://www.thediamondstore.site/api/accounts/guest/register",
+        "http://localhost:8080/api/accounts/guest/register",
         {
           accountName: registerName,
           email: registerEmail,
