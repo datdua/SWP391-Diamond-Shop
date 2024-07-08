@@ -69,6 +69,11 @@ public class CertificateService {
     }
 
     public ResponseEntity<?> getCertificateById(String certificateID) {
+        // validate certificateID
+        if (!validateCertificateID(certificateID)) {
+            return new ResponseEntity<>(Collections.singletonMap("message", "Mã chứng chỉ không hợp lệ"), HttpStatus.BAD_REQUEST);
+        }
+
         Certificate certificate = certificateRepository.findByCertificateID(certificateID);
         if (certificate == null) {
             return new ResponseEntity<>(Collections.singletonMap("message", "ID không tồn tại"), HttpStatus.NOT_FOUND);
@@ -83,6 +88,12 @@ public class CertificateService {
 
     @Transactional
     public ResponseEntity<Map<String, String>> createCertificate(Certificate certificate) {
+        // validate certificateID
+        String certificateID = certificate.getCertificateID();
+        if (!validateCertificateID(certificateID)) {
+            return new ResponseEntity<>(Collections.singletonMap("message", "Mã chứng chỉ không hợp lệ"), HttpStatus.BAD_REQUEST);
+        }
+
         Certificate existingCertificate = certificateRepository.findByCertificateID(certificate.getCertificateID());
         if (existingCertificate != null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Chứng chỉ đã tồn tại"));
@@ -119,6 +130,18 @@ public class CertificateService {
 
     @Transactional
     public ResponseEntity<Map<String, String>> deleteCertificates(@RequestBody List<String> certificateIDs) {
+        // check certificateIDs isEmpty()
+        if (certificateIDs.isEmpty()) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không có mã chứng chỉ để xóa"));
+        }
+
+        // validate certificateIDs
+        for (String certificateID : certificateIDs) {
+            if (!validateCertificateID(certificateID)) {
+                return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã chứng chỉ không hợp lệ"));
+            }
+        }
+
         // Filter out non-existing certificates
         List<String> existingCertificateIDs = certificateIDs.stream()
                 .filter(certificateID -> certificateRepository.existsById(certificateID))
@@ -143,10 +166,24 @@ public class CertificateService {
     }
 
     public ResponseEntity<?> getCertificateImg(String certificateID) {
+        // validate certificateID
+        if (!validateCertificateID(certificateID)) {
+            return new ResponseEntity<>(Collections.singletonMap("message", "Mã chứng chỉ không hợp lệ"), HttpStatus.BAD_REQUEST);
+        }
+
         Certificate certificate = certificateRepository.findByCertificateID(certificateID);
         if (certificate == null) {
             return new ResponseEntity<>(Collections.singletonMap("message", "ID không tồn tại"), HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(Collections.singletonMap("certificateImage", certificate.getcertificateImage()));
+    }
+
+    //validate certificateID
+    public boolean validateCertificateID(String certificateID) {
+        // jewelry has form: JID-
+        if (!certificateID.startsWith("CID-")) {
+            return false;
+        }
+        return true;
     }
 }

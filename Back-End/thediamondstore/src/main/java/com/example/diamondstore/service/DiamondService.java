@@ -43,8 +43,12 @@ public class DiamondService {
     @Autowired
     private DiamondPriceRepository diamondPriceRepository;
 
+    @Autowired
+    private CertificateService certificateService;
+
     public List<Diamond> getAllDiamonds() {
-        return diamondRepository.findAll();
+        List<Diamond> diamonds = diamondRepository.findAllByGrossDiamondPriceNotNull();        
+        return diamonds;
     }
 
     public Diamond getDiamondById(String diamondID) {
@@ -58,34 +62,62 @@ public class DiamondService {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Kim cương đã tồn tại"));
         }
 
-        // size (mm) = sqrt(weight) * 0.65
-        // => weight = (size / 0.65) ^ 2
-        // diamond.setWeight(diamond.getCaratSize().divide(new BigDecimal(0.65)).pow(2));
-        BigDecimal sizeDividedBy = diamond.getCaratSize().divide(new BigDecimal(0.65), MathContext.DECIMAL128);
+        if (validateDiamondID(diamond.getDiamondID()) == false) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã kim cương không hợp lệ"));
+        }
+
+        // size (mm) = sqrt(weight) * 6.5
+        // => weight = (size / 6.5) ^ 2
+        BigDecimal sizeDividedBy = diamond.getCaratSize().divide(new BigDecimal(6.5), MathContext.DECIMAL128);
         diamond.setWeight(sizeDividedBy.pow(2));
 
         BigDecimal diamondEntryPriceInput = diamond.getDiamondEntryPrice();
+        if (diamondEntryPriceInput == null) {
+            diamond.setDiamondEntryPrice(diamondEntryPriceInput);
+            diamond.setGrossDiamondPrice(null);
+        }
+
         DiamondPrice diamondPrice = diamondPriceRepository.findAllByCaratSizeAndColorAndClarity(diamond.getCaratSize(), diamond.getColor(), diamond.getClarity());
         if (diamondPrice == null && diamondEntryPriceInput == null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy giá kim cương"));
         }
 
         if (diamondPrice != null) {
-            BigDecimal diamondEntryPriceDB = diamondPrice.getDiamondEntryPrice(); // diamondEntryPriceDB không tồn tại / không đúng 
+            BigDecimal diamondEntryPriceDB = diamondPrice.getDiamondEntryPrice(); // diamondEntryPriceDB null/ incorrect
 
-            // so sánh diamondEntryPriceInput ?? diamondEntryPriceDB
+            // compare diamondEntryPriceInput to diamondEntryPriceDB
             if (diamondEntryPriceInput.equals(diamondEntryPriceDB)) {
                 diamond.setDiamondEntryPrice(diamondEntryPriceInput);
             } else {
                 return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Có sự chênh lệch giá giữa giá nhập và giá trong bảng.")); // báo manager để check lại bảng giá/ giá nhập
             }
         } else {
-            diamond.setDiamondEntryPrice(diamondEntryPriceInput);          
+            diamond.setDiamondEntryPrice(diamondEntryPriceInput);
+        }
+
+        // check if certificationID input is null
+        if (diamond.getCertificationID() == null) {
+            diamond.setCertificationID(null);
+        }
+
+        // validate certificationID input
+        if (certificateService.validateCertificateID(diamond.getCertificationID()) == false) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã chứng chỉ không hợp lệ"));
         }
 
         // Check if the certificate is already assigned
         if (diamond.getCertificationID() != null && diamondRepository.existsByCertificationID(diamond.getCertificationID())) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Chứng chỉ đã được gán cho một kim cương khác"));
+        }
+
+        // check if warrantyID input is null
+        if (diamond.getWarrantyID() == null) {
+            diamond.setWarrantyID(null);
+        }
+
+        // validate warrantyID input
+        if (certificateService.validateCertificateID(diamond.getWarrantyID()) == false) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã bảo hành không hợp lệ"));
         }
 
         // Check if the warranty is already assigned
@@ -107,22 +139,34 @@ public class DiamondService {
     }
 
     public Map<String, String> updateDiamond(String diamondID, DiamondPutRequest diamondPutRequest) {
+        if (validateDiamondID(diamondID) == false) {
+            return Collections.singletonMap("message", "Mã kim cương không hợp lệ");
+        }
+
         Diamond existingDiamond = diamondRepository.findByDiamondID(diamondID);
         if (existingDiamond == null) {
             return Collections.singletonMap("message", "Không tìm thấy kim cương");
         }
 
+        // validate certificationID input
+        if (certificateService.validateCertificateID(diamondPutRequest.getCertificationID()) == false) {
+            return Collections.singletonMap("message", "Mã chứng chỉ không hợp lệ");
+        }
+
+        // validate warrantyID input
+        if (certificateService.validateCertificateID(diamondPutRequest.getWarrantyID()) == false) {
+            return Collections.singletonMap("message", "Mã bảo hành không hợp lệ");
+        }
+
         existingDiamond.setWarrantyID(diamondPutRequest.getWarrantyID());
         existingDiamond.setCertificationID(diamondPutRequest.getCertificationID());
         existingDiamond.setDiamondName(diamondPutRequest.getDiamondName());
-        // existingDiamond.setDiamondEntryPrice(diamondPutRequest.getDiamondEntryPrice());
         existingDiamond.setDiamondImage(diamondPutRequest.getDiamondImage());
         existingDiamond.setOrigin(diamondPutRequest.getOrigin());
         existingDiamond.setCut(diamondPutRequest.getCut());
         existingDiamond.setShape(diamondPutRequest.getShape());
         existingDiamond.setColor(diamondPutRequest.getColor());
         existingDiamond.setCaratSize(diamondPutRequest.getCaratSize());
-        // existingDiamond.setWeight(diamondPutRequest.getWeight());
         existingDiamond.setClarity(diamondPutRequest.getClarity());
 
         // size (mm) = sqrt(weight) * 0.65
@@ -130,7 +174,7 @@ public class DiamondService {
         existingDiamond.setWeight(diamondPutRequest.getCaratSize().divide(new BigDecimal(0.65)).pow(2));
 
         // diamondEntryPrice = diamondPriceService.getDiamondPrice(weight, size, clarity, color).getDiamondEntryPrice();
-        // Cập nhật grossDiamondPrice nếu diamondEntryPrice thay đổi
+        // update diamondEntryPrice and grossDiamondPrice
         if (diamondPutRequest.getDiamondEntryPrice() != null) {
             BigDecimal newDiamondEntryPrice = diamondPutRequest.getDiamondEntryPrice();
             BigDecimal newGrossDiamondPrice = newDiamondEntryPrice.multiply(new BigDecimal(1.1));
@@ -143,6 +187,15 @@ public class DiamondService {
 
     @Transactional
     public ResponseEntity<Map<String, String>> deleteDiamonds(@RequestBody List<String> diamondIDs) {
+        // validate diamondIDs
+        if (diamondIDs.isEmpty()) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không có mã kim cương để xóa"));
+        }
+        // case diamondIDs have a diamondID that is not valid
+        if (diamondIDs.stream().anyMatch(diamondID -> !validateDiamondID(diamondID))) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã kim cương không hợp lệ"));
+        }
+
         // Filter out non-existing diamonds
         List<String> existingDiamondIDs = diamondIDs.stream()
                 .filter(diamondID -> diamondRepository.existsById(diamondID))
@@ -282,4 +335,13 @@ public class DiamondService {
         return diamondRepository.findAll(spec, pageable);
     }
 
+    // validate diamondID
+    public boolean validateDiamondID(String diamondID) {
+        // diamondID has prefix KCV-
+        if (!diamondID.startsWith("KCV-")) {
+            return false;
+        }
+
+        return true;
+    }
 }

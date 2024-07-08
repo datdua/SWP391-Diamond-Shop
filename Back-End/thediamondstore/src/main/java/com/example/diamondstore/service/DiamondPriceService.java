@@ -77,9 +77,9 @@ public class DiamondPriceService {
         diamondPrice.setCaratSize(diamondPriceRequest.getCaratSize());
         diamondPrice.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
 
-        // size (mm) = sqrt(weight) * 0.65
-        // => weight = (size / 0.65) ^ 2
-        BigDecimal weight = new BigDecimal(Math.pow(diamondPriceRequest.getCaratSize().doubleValue() / 0.65, 2));
+        // size (mm) = sqrt(weight) * 6.5
+        // => weight = (size / 6.5) ^ 2
+        BigDecimal weight = new BigDecimal(Math.pow(diamondPriceRequest.getCaratSize().doubleValue() / 6.5, 2));
         diamondPrice.setWeight(weight);
 
         // find diamond has the same size, clarity, color

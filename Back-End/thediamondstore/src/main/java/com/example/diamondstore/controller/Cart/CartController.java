@@ -44,7 +44,7 @@ public class CartController {
             @RequestParam(required = false) Integer sizeJewelry,
             @RequestParam Integer quantity) {
         cartService.addItemToCart(accountID, diamondID, jewelryID, sizeJewelry, quantity);
-        //nếu size null thì trả về message "Vui lòng nhập size
+        // Check jewelryID and sizeJewelry
         if (sizeJewelry == null && jewelryID != null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Vui lòng nhập size"));
         }

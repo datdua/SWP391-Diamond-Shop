@@ -25,7 +25,7 @@ public class OrderControllerManager {
         this.orderService = orderService;
     }
 
-    //api lấy số lượng đơn hàng đã thanh toán của order
+    // api get totalOrder by orderID
     @GetMapping(value = "/totalOrder/{orderID}")
     public ResponseEntity<?> getTotalOrder_Admin(@PathVariable Integer orderID) {
         try {
