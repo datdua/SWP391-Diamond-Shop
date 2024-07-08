@@ -149,7 +149,7 @@ function PromotionManagerPage() {
                   style={{ textDecoration: "none" }}
                   onClick={() => setShowModal(true)}
                 >
-                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> ADD
+                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> Thêm Mã Khuyến Mãi
                 </Button>
                 {selected.length > 0 && (
                   <Tooltip describeChild title="Xóa các mã khuyến mãi đã chọn" arrow placement="top">

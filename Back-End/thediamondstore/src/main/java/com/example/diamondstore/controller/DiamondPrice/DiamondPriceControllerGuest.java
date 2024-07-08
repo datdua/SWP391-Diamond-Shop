@@ -48,6 +48,21 @@ public class DiamondPriceControllerGuest {
         return diamondPriceService.findByCriteria(clarity, color, caratSize);
     }
 
+    @GetMapping("/api/clarity")
+    public List<String> getClarity() {
+        return diamondPriceService.getClarity();
+    }
+
+    @GetMapping("/api/caratsize")
+    public List<BigDecimal> getCaratSize() {
+        return diamondPriceService.getCaratSize();
+    }
+
+    @GetMapping("/api/color")
+    public List<String> getColor() {
+        return diamondPriceService.getColor();
+    }
+
     @GetMapping("/prices/{caratSize}")
     public Map<String, Map<String, BigDecimal>> getDiamondPrices(@PathVariable BigDecimal caratSize) {
         List<DiamondPrice> diamondPrices = diamondPriceService.getDiamondPricesByCaratSize(caratSize);

@@ -145,7 +145,7 @@ function DiamondPriceManager() {
                   style={{ textDecoration: "none" }}
                   onClick={handleShowAdd}
                 >
-                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> ADD
+                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> Thêm Giá Kim Cương
                 </Button>
                 {selected.length > 0 && (
                   <Tooltip describeChild title="Xóa các giá kim cương đã chọn" arrow placement="top">
@@ -176,8 +176,8 @@ function DiamondPriceManager() {
                         />
                       </th>
                       <th>Mã Giá Kim Cương</th>
-                      <th>Mã Kim Cương</th>
                       <th>Giá Kim Cương</th>
+                      <th>Trọng Lượng</th>
                       <th>Độ Trong</th>
                       <th>Màu Sắc</th>
                       <th>Kích Cỡ Carat</th>
@@ -201,13 +201,13 @@ function DiamondPriceManager() {
                             />
                           </td>
                           <td>{diamondPrice.diamondPriceID}</td>
-                          <td>{diamondPrice.diamondID}</td>
                           <td>
                             {diamondPrice.diamondEntryPrice
                               ? diamondPrice.diamondEntryPrice.toLocaleString() +
                               " VNĐ"
-                              : "N/a"}
+                              : "N/A"}
                           </td>
+                          <td>{diamondPrice.weight ? diamondPrice.weight : "N/A"}</td>
                           <td>{diamondPrice.clarity}</td>
                           <td>{diamondPrice.color}</td>
                           <td>{diamondPrice.caratSize}</td>

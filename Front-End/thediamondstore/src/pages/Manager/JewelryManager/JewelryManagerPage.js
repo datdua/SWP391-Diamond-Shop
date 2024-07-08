@@ -176,7 +176,7 @@ function JewelryManagerPage() {
                   style={{ textDecoration: "none" }}
                   onClick={handleShowAdd}
                 >
-                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> ADD
+                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> Thêm Trang Sức
                 </Button>
                 {selected.length > 0 && (
                   <Tooltip describeChild title="Xóa các trang sức đã chọn" arrow placement="top">

@@ -3,16 +3,20 @@ package com.example.diamondstore.controller.Order;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.diamondstore.DTO.OrderSummaryDTO;
+import com.example.diamondstore.request.putRequest.OrderPutRequest;
 import com.example.diamondstore.service.OrderService;
 
 @RestController
@@ -35,10 +39,6 @@ public class OrderControllerManager {
         }
     }
 
-    @GetMapping(value = "/getOrderHaveTransactionNo", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> getOrdersHaveTransactionNo() {
-        return ResponseEntity.ok(orderService.getOrdersHaveTransactionNo());
-    }
 
     @GetMapping(value = "/getByStatus/{orderStatus}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrdersByStatus_Admin(@PathVariable String orderStatus) {
@@ -49,6 +49,15 @@ public class OrderControllerManager {
     public ResponseEntity<BigDecimal> getTotalOrderPaid() {
         BigDecimal totalOrderPaid = orderService.getTotalOrderByOrderStatusPaid();
         return ResponseEntity.ok(totalOrderPaid);
+    }
+
+    @PutMapping(value = "/update/{orderID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> updateOrder_Manager(@PathVariable Integer orderID, @RequestBody OrderPutRequest orderPutRequest) {
+        Map<String, String> response = orderService.updateOrder(orderID, orderPutRequest);
+        if (response.get("message").equals("Cập nhật thất bại")) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/totalOrder")
