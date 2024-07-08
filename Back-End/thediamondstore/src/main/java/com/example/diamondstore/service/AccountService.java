@@ -24,9 +24,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.example.diamondstore.model.Account;
-import com.example.diamondstore.model.Customer;
+import com.example.diamondstore.model.AccumulatePoints;
 import com.example.diamondstore.repository.AccountRepository;
-import com.example.diamondstore.repository.CustomerRepository;
+import com.example.diamondstore.repository.AccumulatePointsRepository;
 import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.request.AccountRequest;
 import com.example.diamondstore.request.RegisterRequest;
@@ -43,7 +43,7 @@ public class AccountService implements UserDetailsService {
     private AccountRepository accountRepository;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private AccumulatePointsRepository accumulatePointsRepository;
 
     @Autowired
     private OrderRepository orderRepository;
@@ -105,8 +105,8 @@ public class AccountService implements UserDetailsService {
         Account account = new Account(null, accountName, password, "ROLE_CUSTOMER", null, email, null, otp, LocalDateTime.now(), false);
         accountRepository.save(account);
 
-        Customer customer = new Customer(account.getAccountID(), 0);
-        customerRepository.save(customer);
+        AccumulatePoints accumulatePoints = new AccumulatePoints(account.getAccountID(), 0);
+        accumulatePointsRepository.save(accumulatePoints);
 
         // return "Đăng ký thành công. Vui lòng kiểm tra email để xác nhận tài khoản.";
         return Collections.singletonMap("message", "Đăng ký thành công. Vui lòng kiểm tra email để xác nhận tài khoản.");

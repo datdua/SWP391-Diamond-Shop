@@ -1,4 +1,4 @@
-package com.example.diamondstore.controller.Customer;
+package com.example.diamondstore.controller.AccumulatePoints;
 
 import java.util.Collections;
 import java.util.Map;
@@ -14,25 +14,25 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.diamondstore.model.Customer;
-import com.example.diamondstore.request.CustomerRequest;
-import com.example.diamondstore.service.CustomerService;
+import com.example.diamondstore.model.AccumulatePoints;
+import com.example.diamondstore.request.AccumulatePointsRequest;
+import com.example.diamondstore.service.AccumulatePointsService;
 
 @RestController
 @RequestMapping("/api/customers/admin")
-public class CustomerControllerAdmin {
+public class AccumulatePointsControllerAdmin {
     
-    private final CustomerService customerService;
+    private final AccumulatePointsService accumulatePointsService;
 
-    public CustomerControllerAdmin(CustomerService customerService) {
-        this.customerService = customerService;
+    public AccumulatePointsControllerAdmin(AccumulatePointsService accumulatePointsService) {
+        this.accumulatePointsService = accumulatePointsService;
     }
 
     @GetMapping("/{accountID}")
-    public ResponseEntity<Customer> getCustomerById_Admin(@PathVariable Integer accountID) {
-        Optional<Customer> customer = customerService.getCustomerById(accountID);
-        if (customer.isPresent()) {
-            return ResponseEntity.ok(customer.get());
+    public ResponseEntity<AccumulatePoints> getCustomerById_Admin(@PathVariable Integer accountID) {
+        Optional<AccumulatePoints> accumulatePoints = accumulatePointsService.getAccumulatePointsById(accountID);
+        if (accumulatePoints.isPresent()) {
+            return ResponseEntity.ok(accumulatePoints.get());
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -40,13 +40,13 @@ public class CustomerControllerAdmin {
 
     @GetMapping("/total")
     public ResponseEntity<Long> getTotalCustomers() {
-        long totalCustomers = customerService.getTotalCustomers();
+        long totalCustomers = accumulatePointsService.getTotalAccumulatePoints();
         return new ResponseEntity<>(totalCustomers, HttpStatus.OK);
     }
 
     @PutMapping(value = "/update/{accountID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> updateCustomer(@PathVariable Integer accountID, @RequestBody CustomerRequest updatedCustomerRequest) {
-        boolean isUpdated = customerService.updateCustomer(accountID, updatedCustomerRequest);
+    public ResponseEntity<?> updateCustomer(@PathVariable Integer accountID, @RequestBody AccumulatePointsRequest updatedAccumulatePointsRequest) {
+        boolean isUpdated = accumulatePointsService.updateAccumulatePoints(accountID, updatedAccumulatePointsRequest);
         if (isUpdated) {
             return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
         } else {
@@ -56,6 +56,6 @@ public class CustomerControllerAdmin {
 
     @DeleteMapping("/{accountID}")
     public ResponseEntity<Map<String, String>> deleteCustomer(@PathVariable Integer accountID) {
-        return customerService.deleteCustomer(accountID);
+        return accumulatePointsService.deleteAccumulatePoints(accountID);
     }
 }

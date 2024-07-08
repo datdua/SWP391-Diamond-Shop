@@ -1,16 +1,16 @@
 package com.example.diamondstore.request;
 
-public class CustomerRequest {
+public class AccumulatePointsRequest {
 
     private Integer point;
     private String accountName;
     private String password;
     private String phoneNumber;
 
-    public CustomerRequest() {
+    public AccumulatePointsRequest() {
     }
 
-    public CustomerRequest(Integer point, String accountName, String password, String phoneNumber) {
+    public AccumulatePointsRequest(Integer point, String accountName, String password, String phoneNumber) {
         this.point = point;
         this.accountName = accountName;
         this.password = password;
