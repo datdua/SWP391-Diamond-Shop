@@ -3,7 +3,7 @@ import { getAuthToken } from "./OrderAPI";
 
 export async function getAllAccount() {
   const response = await axios.get(
-    "http://localhost:8080/api/accounts/accounts"
+    "https://www.thediamondstore.site/api/accounts/accounts"
   );
   if (response.status !== 200) {
     throw new Error("Failed to fetch account data");
@@ -15,7 +15,7 @@ export async function getAccountByID_AdminManager(accountID) {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      `http://localhost:8080/api/accounts/get/${accountID}`,
+      `https://www.thediamondstore.site/api/accounts/get/${accountID}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -31,7 +31,7 @@ export async function getAccountByID(accountID) {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      `http://localhost:8080/api/customers/customer/${accountID}`,{
+      `https://www.thediamondstore.site/api/customers/customer/${accountID}`,{
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -47,7 +47,7 @@ export async function getAccountHaveNotRoleCustomer() {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      `http://localhost:8080/api/accounts/all-except-customer`,
+      `https://www.thediamondstore.site/api/accounts/all-except-customer`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -63,7 +63,7 @@ export async function getAccountByRoleCustomer() {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      `http://localhost:8080/api/accounts/getByRole/ROLE_CUSTOMER`,
+      `https://www.thediamondstore.site/api/accounts/getByRole/ROLE_CUSTOMER`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -115,7 +115,7 @@ export async function updateProfile(accountID, accountDetails) {
 export async function deleteAccounts(accountIDs) {
   try {
     const token = localStorage.getItem("jwt");
-    const response = await axios.delete("http://localhost:8080/api/accounts/manager/delete", {
+    const response = await axios.delete("https://www.thediamondstore.site/api/accounts/admin/delete", {
       headers : { Authorization: `Bearer ${token}` },
       data: accountIDs,
     });
@@ -130,7 +130,7 @@ export async function deleteAccounts(accountIDs) {
 export async function createAccount(account) {
   try {
     const response = await axios.post(
-      "http://localhost:8080/api/accounts/create",
+      "https://www.thediamondstore.site/api/accounts/create",
       account
     );
     return response.data;
@@ -156,7 +156,7 @@ export const getAccountIDByEmail = async (email) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `http://localhost:8080/api/accounts/customer/getByEmail/${email}`,
+      `https://www.thediamondstore.site/api/accounts/customer/getByEmail/${email}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -172,7 +172,7 @@ export const getAccountIDByEmail = async (email) => {
 export const getCustomerPoints = async (accountId) => {
   const token = localStorage.getItem('jwt')
   try {
-    const response = await axios.get(`http://localhost:8080/api/customers/customer/${accountId}`,{
+    const response = await axios.get(`https://www.thediamondstore.site/api/customers/customer/${accountId}`,{
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -190,7 +190,7 @@ export const getCustomerPoints = async (accountId) => {
 
 export const resetPassword = async (email) => {
   try {
-    const response = await axios.post(`http://localhost:8080/api/accounts/guest/forget-password?email=${email}`,
+    const response = await axios.post(`https://www.thediamondstore.site/api/accounts/guest/forget-password?email=${email}`,
     );
     return response.data;
   } catch (error) {
@@ -203,7 +203,7 @@ export const resetPassword = async (email) => {
 
 export const setPassword = async (email, newPassword) => {
   try {
-    const response = await axios.put(`http://localhost:8080/api/accounts/guest/set-password?email=${encodeURIComponent(email)}`, {}, {
+    const response = await axios.put(`https://www.thediamondstore.site/api/accounts/guest/set-password?email=${encodeURIComponent(email)}`, {}, {
       headers: {
         'Content-Type': 'application/json',
         'newPassword': newPassword, // Add newPassword to the headers
@@ -223,7 +223,7 @@ export const setPassword = async (email, newPassword) => {
 
 export const countCustomer = async () => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/customers/total`,
+    const response = await axios.get(`https://www.thediamondstore.site/api/customers/total`,
     );
     return response.data;
   } catch (error) {
@@ -234,7 +234,7 @@ export const countCustomer = async () => {
 
 export const countRevenue = async () => {
   try {
-    const response = await axios.get(`http://localhost:8080/api/orders/totalOrderPaid`,
+    const response = await axios.get(`https://www.thediamondstore.site/api/orders/totalOrderPaid`,
     );
     return response.data;
   } catch (error) {
@@ -247,7 +247,7 @@ export const regenerateOTP = async (email) => {
   try {
     // Make GET request to the API endpoint with email as a query parameter
     const response = await axios.put(
-      `http://localhost:8080/api/accounts/guest/regenerate-otp`,
+      `https://www.thediamondstore.site/api/accounts/guest/regenerate-otp`,
       null, // Pass null as the data parameter for PUT request
       {
         params: {

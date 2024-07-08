@@ -149,7 +149,7 @@ function PromotionManagerPage() {
                   style={{ textDecoration: "none" }}
                   onClick={() => setShowModal(true)}
                 >
-                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> ADD
+                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> Thêm Mã Khuyến Mãi
                 </Button>
                 {selected.length > 0 && (
                   <Tooltip describeChild title="Xóa các mã khuyến mãi đã chọn" arrow placement="top">
@@ -224,12 +224,6 @@ function PromotionManagerPage() {
                                 <EditIcon />
                               </Button>
                             </Tooltip>
-                            <DeletePromotionForm
-                              promotionID={promotion.promotionID}
-                              onDelete={() => handleDelete(promotion.promotionID)}
-                            >
-                              <DeleteIcon />
-                            </DeletePromotionForm>
                           </td>
                         </tr>
                       );
@@ -252,7 +246,7 @@ function PromotionManagerPage() {
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {isUpdating ? "Update Promotion" : "Add Promotion"}
+            {isUpdating ? "Cập nhật mã giảm giá" : "Thêm mã giảm giá"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

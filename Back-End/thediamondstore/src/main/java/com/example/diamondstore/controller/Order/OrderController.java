@@ -16,12 +16,17 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping(value = "/admin/getAll", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/get-all", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getAllOrders() {
         return ResponseEntity.ok(orderService.getAllOrders());
     }
 
-    @GetMapping(value = "/admin/getOrder/paged", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/getOrderHaveTransactionNo", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getOrdersHaveTransactionNo() {
+        return ResponseEntity.ok(orderService.getOrdersHaveTransactionNo());
+    }
+
+    @GetMapping(value = "/getOrder/paged", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrdersPaged(@RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(orderService.getAllOrdersPaged(page, size));
     }

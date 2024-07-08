@@ -92,11 +92,12 @@ public class AccountController {
     }
 
     @PutMapping("/update/{accountID}")
-    public ResponseEntity<Account> updateAccount(
+    public ResponseEntity<Account> updateAccount_Admin(
             @PathVariable Integer accountID,
             @RequestBody AccountRequest accountRequest,
-            @RequestHeader("Authorization") String jwtToken) {
+            @RequestHeader("Authorization") String token) {
 
+        String jwtToken = token.substring(7); // Remove "Bearer " prefix
         Account updatedAccount = accountService.updateAccountProfile(accountID, accountRequest, jwtToken);
         return ResponseEntity.ok(updatedAccount);
     }

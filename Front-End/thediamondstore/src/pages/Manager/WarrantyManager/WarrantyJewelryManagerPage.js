@@ -165,7 +165,7 @@ function WarrantyManagerPage() {
                   style={{ textDecoration: "none" }}
                   onClick={() => setShowModal(true)}
                 >
-                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> ADD
+                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> Thêm Giấy Bảo Hành
                 </Button>
                 {selected.length > 0 && (
                   <Tooltip describeChild title="Xóa các giấy bảo hành đã chọn" arrow placement="top">
@@ -271,7 +271,7 @@ function WarrantyManagerPage() {
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {isUpdating ? "Update Warranty" : "Add Warranty"}
+            {isUpdating ? "Cập nhật giấy bảo hành" : "Thêm giấy bảo hành"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

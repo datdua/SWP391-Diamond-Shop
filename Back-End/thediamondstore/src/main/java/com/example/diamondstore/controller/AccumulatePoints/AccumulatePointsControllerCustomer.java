@@ -1,4 +1,4 @@
-package com.example.diamondstore.controller.Customer;
+package com.example.diamondstore.controller.AccumulatePoints;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -7,22 +7,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.diamondstore.model.Customer;
-import com.example.diamondstore.service.CustomerService;
+import com.example.diamondstore.model.AccumulatePoints;
+import com.example.diamondstore.service.AccumulatePointsService;
 
 @RestController
 @RequestMapping("/api/customers/customer")
-public class CustomerControllerCustomer {
+public class AccumulatePointsControllerCustomer {
 
-    private final CustomerService customerService;
+    private final AccumulatePointsService customerService;
 
-    public CustomerControllerCustomer(CustomerService customerService) {
+    public AccumulatePointsControllerCustomer(AccumulatePointsService customerService) {
         this.customerService = customerService;
     }
     
     @GetMapping("/{accountID}")
-    public ResponseEntity<Customer> getCustomerById_Customer(@PathVariable Integer accountID) {
-        Optional<Customer> customer = customerService.getCustomerById(accountID);
+    public ResponseEntity<AccumulatePoints> getAccumulatePointsById_Customer(@PathVariable Integer accountID) {
+        Optional<AccumulatePoints> customer = customerService.getAccumulatePointsById(accountID);
         if (customer.isPresent()) {
             return ResponseEntity.ok(customer.get());
         } else {

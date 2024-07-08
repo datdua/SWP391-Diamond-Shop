@@ -153,7 +153,7 @@ function CertificateManagerPage() {
           <Card>
             <Card.Header>
               <Card.Title as="h4">
-                Certificate List
+                Danh sách chứng chỉ
                 <Button
                   variant="link"
                   style={{ textDecoration: "none" }}
@@ -166,7 +166,7 @@ function CertificateManagerPage() {
                   style={{ textDecoration: "none" }}
                   onClick={() => setShowModal(true)}
                 >
-                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> ADD
+                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> Thêm Chứng Chỉ
                 </Button>
                 {selected.length > 0 && (
                   <Tooltip describeChild title="Xóa các chứng chỉ đã chọn" arrow placement="top">
@@ -271,7 +271,7 @@ function CertificateManagerPage() {
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {isUpdating ? "Update Certificate" : "Add Certificate"}
+            {isUpdating ? "Cập nhật chứng chỉ" : "Thêm chứng chỉ"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -288,7 +288,7 @@ function CertificateManagerPage() {
 
       <Modal show={showImageModal} onHide={handleCloseImageModal} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Certificate Image</Modal.Title>
+          <Modal.Title>Giấy chứng chỉ</Modal.Title>
         </Modal.Header>
         <Modal.Body className="text-center">
           <img
