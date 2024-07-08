@@ -36,10 +36,18 @@ function AddDiamondPriceForm() {
     event.preventDefault();
     try {
       const response = await createDiamondPrice(diamondPrice);
-      console.log(response);
-      setMessage("Tạo mới Giá Kim Cương thành công");
+      if (response.status === 200) {
+        console.log(response);
+        setMessage("Tạo mới Giá Kim Cương thành công");
+      } else {
+        // Handle non-200 responses, assuming the API returns a meaningful message
+        console.error(response);
+        const errorMessage = response.data?.message || "Có lỗi xảy ra khi tạo mới Giá Kim Cương";
+        setMessage(errorMessage);
+      }
     } catch (error) {
       console.error(error);
+      // Handle network errors or other issues not caught by response status
       setMessage("Tạo mới Giá Kim Cương thất bại");
     }
   };
