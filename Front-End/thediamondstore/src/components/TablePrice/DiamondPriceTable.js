@@ -3,7 +3,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { getDiamondPriceByCaratSize } from '../../api/DiamondPriceAPI';
 import './TablePrice.css';
 
-const caratSizes = [3.6, 3.9, 4.1, 4.5, 5.3, 7.2, 6.8, 7.2, 8.1, 9.0]; 
+const caratSizes = [0.43, 0.5, 0.6, 1.6, 2.0, 2.3, 3.6, 3.9, 4.1, 4.5, 5.3, 10.2 ]; 
 
 const DiamondPriceTable = () => {
     const [diamondPrices, setDiamondPrices] = useState({});
@@ -21,6 +21,7 @@ const DiamondPriceTable = () => {
     }, []);
 
     const clarityLevels = ["IF", "VVS1", "VVS2", "VS1", "VS2"];
+    const colours = ["D", "F", "J", "E"];
 
     if (Object.keys(diamondPrices).length === 0) return <div>Loading...</div>;
 
@@ -35,24 +36,26 @@ const DiamondPriceTable = () => {
             {caratSizes.map(caratSize => (
                 <TableContainer component={Paper} className="tablePriceContainer" key={caratSize}>
                     <Typography variant="h6" component="div" className="tablePriceTypography">
-                        Giá Kim Cương với {caratSize}
+                        Giá Kim Cương với {caratSize} ly
                     </Typography>
                     <Table aria-label="diamond prices table">
                         <TableHead>
                             <TableRow>
-                                <TableCell align="center" className="headerPriceCell">{caratSize} ly</TableCell>
+                                <TableCell align="center" className="headerPriceCell">{caratSize}</TableCell>
                                 {clarityLevels.map(clarity => (
                                     <TableCell key={clarity} align="center" className="headerPriceCell">{clarity}</TableCell>
                                 ))}
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {diamondPrices[caratSize] && Object.keys(diamondPrices[caratSize]).map(color => (
+                            {colours.map(color => (
                                 <TableRow key={color}>
-                                    <TableCell component="th" scope="row" className="bodyPriceCell">{color}</TableCell>
+                                    <TableCell component="th" scope="row" align="center" className="bodyPriceCell">{color}</TableCell>
                                     {clarityLevels.map(clarity => (
                                         <TableCell key={clarity} align="center" className="bodyPriceCell">
-                                            {diamondPrices[caratSize][color][clarity] ? diamondPrices[caratSize][color][clarity].toLocaleString() : '-'}
+                                            {diamondPrices[caratSize] && diamondPrices[caratSize][color] && diamondPrices[caratSize][color][clarity]
+                                                ? diamondPrices[caratSize][color][clarity].toLocaleString()
+                                                : '-'}
                                         </TableCell>
                                     ))}
                                 </TableRow>

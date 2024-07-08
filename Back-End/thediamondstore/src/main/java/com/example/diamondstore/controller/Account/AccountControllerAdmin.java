@@ -1,11 +1,13 @@
 package com.example.diamondstore.controller.Account;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -28,20 +30,30 @@ public class AccountControllerAdmin {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Map<String, String>> deleteAccounts_Admin(
+    public ResponseEntity<Map<String, String>> deleteAccounts(
             @RequestBody List<Integer> accountIDs,
             @RequestHeader("Authorization") String jwtToken) {
 
         return accountService.deleteAccounts(accountIDs, jwtToken);
     }
 
-    @PutMapping("/update/{accountID}")
-    public ResponseEntity<Account> updateAccount_Admin(
-            @PathVariable Integer accountID,
-            @RequestBody AccountRequest accountRequest,
-            @RequestHeader("Authorization") String jwtToken) {
+    @PostMapping("/create")
+    public ResponseEntity<Map<String, String>> createAccount_Admin(@RequestBody AccountRequest accountRequest) {
+        try {
+            accountService.createAccount(accountRequest);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Tạo tài khoản thành công"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+        }
+    }
 
-        Account updatedAccount = accountService.updateAccount_Admin(accountID, accountRequest, jwtToken);
-        return ResponseEntity.ok(updatedAccount);
+    @PutMapping(value = "/update/{accountID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> updateAccount_Manger(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
+        try {
+            Account updatedAccount = accountService.updateAccount_Customer(accountID, accountRequest);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+        }
     }
 }

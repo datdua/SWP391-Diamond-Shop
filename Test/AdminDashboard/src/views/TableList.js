@@ -305,7 +305,7 @@ function TableList() {
                               style={{ width: "100px", height: "100px" }}
                             />
                           </td>
-                          <td>{diamond.carat_weight}</td>
+                          <td>{diamond.weight}</td>
                           <td>{diamond.caratSize}</td>
                           <td>{diamond.color}</td>
                           <td>{diamond.cut}</td>

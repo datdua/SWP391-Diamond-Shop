@@ -49,62 +49,53 @@ public class DiamondPriceService {
         existingDiamondPrice.setClarity(diamondPriceRequest.getClarity());
         existingDiamondPrice.setColor(diamondPriceRequest.getColor());
         existingDiamondPrice.setCaratSize(diamondPriceRequest.getCaratSize());
-        existingDiamondPrice.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
 
+        // size (mm) = sqrt(weight) * 0.65
+        // => weight = (size / 0.65) ^ 2
+        BigDecimal weight = new BigDecimal(Math.pow(diamondPriceRequest.getCaratSize().doubleValue() / 0.65, 2));
+        existingDiamondPrice.setWeight(weight);
+
+        // find diamond has the same size, clarity, color
+        List<Diamond> diamonds = diamondRepository.findAllByCaratSizeAndColorAndClarity(diamondPriceRequest.getCaratSize(), diamondPriceRequest.getClarity(), 
+            diamondPriceRequest.getColor());
+        // cập nhật giá diamondEntryPrice và grossDiamondPrice vào diamond
+        for (Diamond diamond : diamonds) {
+            diamond.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
+            diamond.setGrossDiamondPrice(diamondPriceRequest.getDiamondEntryPrice().multiply(new BigDecimal("1.1")));
+            diamondRepository.save(diamond);
+        }
+        // trường hợp diamonds null thì bỏ qua
         diamondPriceRepository.save(existingDiamondPrice);
-
-        Diamond diamond = diamondRepository.findById(diamondPriceRequest.getDiamondID()).orElse(null);
-        if (diamond == null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy Diamond với ID này"));
-        }
-
-        DiamondPrice diamondPriceWithDiamondID = diamondPriceRepository.findByDiamondID(diamondPriceRequest.getDiamondID());
-        if (diamondPriceWithDiamondID != null && !diamondPriceWithDiamondID.getDiamondPriceID().equals(existingDiamondPrice.getDiamondPriceID())) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Kim cương này đã có giá"));
-        }
-        // Update the diamondEntryPrice and grossDiamondPrice
-        diamond.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
-        // Assuming the grossDiamondPrice is calculated as some function of the diamondEntryPrice
-        diamond.setGrossDiamondPrice(diamondPriceRequest.getDiamondEntryPrice().multiply(new BigDecimal("1.1")));
-
-        // Save the updated Diamond
-        diamondRepository.save(diamond);
 
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }
 
     public ResponseEntity<?> addDiamondPrice(DiamondPriceRequest diamondPriceRequest) {
-        Diamond diamond = diamondRepository.findById(diamondPriceRequest.getDiamondID()).orElse(null);
-        if (diamond == null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy Diamond với ID này"));
-        }
-
-        DiamondPrice existingDiamondPrice = diamondPriceRepository.findByDiamondID(diamondPriceRequest.getDiamondID());
-        if (existingDiamondPrice != null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Giá kim cương này đã tồn tại"));
-        }
-
         DiamondPrice diamondPrice = new DiamondPrice();
-        diamondPrice.setDiamondID(diamondPriceRequest.getDiamondID());
         diamondPrice.setClarity(diamondPriceRequest.getClarity());
         diamondPrice.setColor(diamondPriceRequest.getColor());
         diamondPrice.setCaratSize(diamondPriceRequest.getCaratSize());
         diamondPrice.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
 
+        // size (mm) = sqrt(weight) * 6.5
+        // => weight = (size / 6.5) ^ 2
+        BigDecimal weight = new BigDecimal(Math.pow(diamondPriceRequest.getCaratSize().doubleValue() / 6.5, 2));
+        diamondPrice.setWeight(weight);
+
+        // find diamond has the same size, clarity, color
+        List<Diamond> diamonds = diamondRepository.findAllByCaratSizeAndColorAndClarity(diamondPriceRequest.getCaratSize(), diamondPriceRequest.getClarity(), 
+            diamondPriceRequest.getColor());
+        // cập nhật giá diamondEntryPrice và grossDiamondPrice vào diamond
+        for (Diamond diamond : diamonds) {
+            diamond.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
+            diamond.setGrossDiamondPrice(diamondPriceRequest.getDiamondEntryPrice().multiply(new BigDecimal("1.1")));
+            diamondRepository.save(diamond);
+        }
+        // trường hợp diamonds null thì bỏ qua
         diamondPriceRepository.save(diamondPrice);
-
-        // Update the diamondEntryPrice and grossDiamondPrice
-        diamond.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
-        // Assuming the grossDiamondPrice is calculated as some function of the diamondEntryPrice
-        diamond.setGrossDiamondPrice(diamondPriceRequest.getDiamondEntryPrice().multiply(new BigDecimal("1.1")));
-
-        // Save the updated Diamond
-        diamondRepository.save(diamond);
-
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công"));
-        
     }
-        
+
     public DiamondPrice getDiamondPriceById(Integer diamondPriceID) {
         return diamondPriceRepository.findById(diamondPriceID).orElseThrow(() -> new RuntimeException("DiamondPrice not found"));
     }
@@ -131,7 +122,6 @@ public class DiamondPriceService {
 
         diamondRepository.save(diamond);
     }
-
 
     public List<DiamondPrice> getDiamondPricesByCaratSize(BigDecimal caratSize) {
         return diamondPriceRepository.findByCaratSize(caratSize);

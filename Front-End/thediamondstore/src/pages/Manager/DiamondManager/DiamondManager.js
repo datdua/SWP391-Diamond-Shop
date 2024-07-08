@@ -193,7 +193,7 @@ function DiamondManagerPage() {
                   style={{ textDecoration: "none" }}
                   onClick={refreshTable}
                 >
-                  <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> REFRESH
+                  <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> Tải Lại
                 </Button>
                 <Button
                   variant="link"
@@ -310,7 +310,7 @@ function DiamondManagerPage() {
                               }
                             />
                           </td>
-                          <td>{diamond.carat_weight}</td>
+                          <td>{diamond.weight}</td>
                           <td>{diamond.caratSize}</td>
                           <td>{diamond.color}</td>
                           <td>{diamond.cut}</td>

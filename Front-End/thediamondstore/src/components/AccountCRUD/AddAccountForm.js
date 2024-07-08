@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { createAccount } from "../../api/accountCrud"; // Adjust the import path as necessary
-import { Form, Button } from "react-bootstrap";
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
 
 function AddAccountForm() {
     const [account, setAccount] = useState({
@@ -12,6 +15,14 @@ function AddAccountForm() {
     });
 
     const [message, setMessage] = useState("");
+
+    const labels = {
+        accountName: "Tên tài khoản",
+        email: "Email",
+        password: "Mật khẩu",
+        phoneNumber: "Số điện thoại",
+        role: "Vai trò",
+    };
 
     const handleChange = (event) => {
         setAccount({ ...account, [event.target.name]: event.target.value });
@@ -31,25 +42,31 @@ function AddAccountForm() {
 
     return (
         <div>
-            <Form onSubmit={handleSubmit}>
+            <Box
+                component="form"
+                sx={{
+                    '& > :not(style)': { m: 1, width: '25ch' },
+                }}
+                noValidate
+                autoComplete="off"
+                onSubmit={handleSubmit}
+            >
                 {Object.keys(account).map((key) => (
-                    <Form.Group controlId={key} key={key}>
-                        <Form.Label>{key}</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name={key}
-                            value={account[key]}
-                            onChange={handleChange}
-                            placeholder={key}
-                            required={key !== "phoneNumber"}
-                        />
-                    </Form.Group>
+                    <TextField
+                        key={key}
+                        id="outlined-basic"
+                        label={labels[key]}
+                        variant="outlined"
+                        name={key}
+                        value={account[key]}
+                        onChange={handleChange}
+                        type="text"
+                        required={key !== "phoneNumber"}
+                    />
                 ))}
-                <Button variant="primary" type="submit">
-                    Create account
-                </Button>
-            </Form>
-            {message && <p>{message}</p>}
+                <Button type="submit" variant="contained" color="success">Tạo tài khoản</Button>
+                {message && <p style={{ color: '#F2BA59', fontWeight: 'bold' }}>{message}</p>}
+            </Box>
         </div>
     );
 }

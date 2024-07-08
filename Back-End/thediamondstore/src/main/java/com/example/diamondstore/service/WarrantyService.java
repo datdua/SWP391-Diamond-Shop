@@ -72,7 +72,7 @@ public class WarrantyService {
         }
     }
 
-     private void updateWarrantyStatus(Warranty warranty) {
+    private void updateWarrantyStatus(Warranty warranty) {
         LocalDateTime now = LocalDateTime.now();
         if (warranty.getExpirationDate().isBefore(now)) {
             warranty.setWarrantyStatus("Hết Hạn");
@@ -82,36 +82,59 @@ public class WarrantyService {
     }
 
     public ResponseEntity<Map<String, String>> createWarranty(Warranty warranty) {
-    // Thay thế chuỗi rỗng bằng null ngay từ đầu
-    if (warranty.getDiamondID() != null && warranty.getDiamondID().isEmpty()) {
-        warranty.setDiamondID(null);
-    }
-    if (warranty.getJewelryID() != null && warranty.getJewelryID().isEmpty()) {
-        warranty.setJewelryID(null);
-    }
+        // validate warrantyID
+        if (!validateWarrantyID(warranty.getWarrantyID())) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã bảo hành không hợp lệ"));
+        }
 
-    Warranty existingWarranty = warrantyRepository.findByWarrantyID(warranty.getWarrantyID());
-    if (existingWarranty != null) {
-        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Giấy bảo hành đã tồn tại"));
-    }
+        // Thay thế chuỗi rỗng bằng null ngay từ đầu
+        if (warranty.getDiamondID() != null && warranty.getDiamondID().isEmpty()) {
+            warranty.setDiamondID(null);
+        }
+        if (warranty.getJewelryID() != null && warranty.getJewelryID().isEmpty()) {
+            warranty.setJewelryID(null);
+        }
 
-    // Kiểm tra xem ít nhất một trong hai cột ID có giá trị không null
-    if (warranty.getDiamondID() == null && warranty.getJewelryID() == null) {
-        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Cần cung cấp ít nhất một ID cho kim cương hoặc trang sức"));
-    }
+        Warranty existingWarranty = warrantyRepository.findByWarrantyID(warranty.getWarrantyID());
+        if (existingWarranty != null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Giấy bảo hành đã tồn tại"));
+        }
 
-    // Đảm bảo rằng chỉ một trong hai cột ID có giá trị
-    if (warranty.getDiamondID() != null && warranty.getJewelryID() != null) {
-        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Chỉ có thể có một trong hai ID cho kim cương hoặc trang sức"));
-    }
+        // Kiểm tra xem ít nhất một trong hai cột ID có giá trị không null
+        if (warranty.getDiamondID() == null && warranty.getJewelryID() == null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Cần cung cấp ít nhất một ID cho kim cương hoặc trang sức"));
+        }
+
+        // Đảm bảo rằng chỉ một trong hai cột ID có giá trị
+        if (warranty.getDiamondID() != null && warranty.getJewelryID() != null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Chỉ có thể có một trong hai ID cho kim cương hoặc trang sức"));
+        }
 
     updateWarrantyStatus(warranty); // Cập nhật trạng thái trước khi lưu
     warrantyRepository.save(warranty);
+
+    Diamond diamond = diamondRepository.findByDiamondID(warranty.getDiamondID());
+    Jewelry jewelry = jewelryRepository.findByJewelryID(warranty.getJewelryID());
+
+    if (diamond != null) {
+        diamond.setWarrantyID(warranty.getWarrantyID());
+        diamondRepository.save(diamond);
+    } else if (jewelry != null) {
+        jewelry.setWarrantyID(warranty.getWarrantyID());
+        jewelryRepository.save(jewelry);
+    } else {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "ID không tồn tại"));
+    }
+
     return ResponseEntity.ok(Collections.singletonMap("message", "Giấy bảo hành đã được tạo thành công"));
     }
 
-
     public ResponseEntity<Map<String, String>> updateWarranty(String warrantyID, WarrantyPutRequest warrantyPutRequest) {
+        // validate warrantyID
+        if (!validateWarrantyID(warrantyID)) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã giấy bảo hành không hợp lệ"));
+        }
+
         Warranty existingWarranty = warrantyRepository.findByWarrantyID(warrantyID);
         if (existingWarranty == null) {
             return ResponseEntity.notFound().build();
@@ -124,8 +147,20 @@ public class WarrantyService {
         return ResponseEntity.ok(Collections.singletonMap("message", "Giấy bảo hành đã được cập nhật thành công"));
     }
 
-     @Transactional
+    @Transactional
     public ResponseEntity<Map<String, String>> deleteWarranty(@RequestBody List<String> warrantyIDs) {
+        // check if warrantyIDs is empty
+        if (warrantyIDs.isEmpty()) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không có mã giấy bảo hành để xóa"));
+        }
+
+        // validate
+        for (String warrantyID : warrantyIDs) {
+            if (!validateWarrantyID(warrantyID)) {
+                return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã giấy bảo hành không hợp lệ"));
+            }
+        }
+
         // Filter out non-existing warranties
         List<String> existingWarrantyIDs = warrantyIDs.stream()
                 .filter(warrantyID -> warrantyRepository.existsById(warrantyID))
@@ -154,8 +189,13 @@ public class WarrantyService {
 
         return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các giá vàng thành công"));
     }
-    
+
     public ResponseEntity<Map<String, String>> getWarrantyImg(String warrantyID) {
+        // validate warrantyID
+        if (!validateWarrantyID(warrantyID)) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã bảo hành không hợp lệ"));
+        }
+
         Warranty warranty = warrantyRepository.findByWarrantyID(warrantyID);
         if (warranty == null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "ID không tồn tại"));
@@ -171,4 +211,12 @@ public class WarrantyService {
         return warrantyRepository.findByJewelryIDIsNull();
     }
 
+    // validate warrantyID
+    public boolean validateWarrantyID(String warrantyID) {
+        // warrantyID has prefix "WID"
+        if (!warrantyID.startsWith("WID-")) {
+            return false;
+        }
+        return true;
+    }
 }

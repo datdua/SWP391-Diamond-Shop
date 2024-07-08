@@ -38,6 +38,9 @@ public class JewelryService {
     @Autowired
     private GoldPriceRepository goldPriceRepository;
 
+    @Autowired
+    private WarrantyService warrantyService;
+
     public List<Jewelry> getAllJewelry() {
         return jewelryRepository.findAll();
     }
@@ -52,22 +55,34 @@ public class JewelryService {
     }
 
     public ResponseEntity<Map<String, String>> createJewelry(Jewelry jewelry) {
+        // validate jewelryID
+        if (!validateJewelryID(jewelry.getJewelryID())) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã trang sức không hợp lệ"));
+        }
+
         Jewelry existingJewelry = jewelryRepository.findByJewelryID(jewelry.getJewelryID());
         if (existingJewelry != null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Trang sức đã tồn tại"));
         }
 
-        //nếu grossJewelryPrice = null, thì gán nó bằng 0
+        // if grossJewelryPrice is null, set it to 0
         if(jewelry.getGrossJewelryPrice() == null) {
             jewelry.setGrossJewelryPrice(new BigDecimal(0));
+        }
+
+        // if warrantyID is not null, validate it
+        if (jewelry.getWarrantyID() != null) {
+            if (!warrantyService.validateWarrantyID(jewelry.getWarrantyID())) {
+                return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã bảo hành không hợp lệ"));
+            }
         }
 
         if (jewelry.getWarrantyID() != null && jewelryRepository.existsByWarrantyID(jewelry.getWarrantyID())) {
         return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Bảo hành đã được gán cho một trang sức khác"));
         }
         
-        //calculate gross jewelry price = jewelry price * 1.1
-        BigDecimal grossJewelryPrice = jewelry.getJewelryEntryPrice().multiply(new BigDecimal(1.1));
+        //calculate gross jewelry price = jewelry price * 1.2 (tax: 10%, wage: 10%)
+        BigDecimal grossJewelryPrice = jewelry.getJewelryEntryPrice().multiply(new BigDecimal(1.2));
         jewelry.setGrossJewelryPrice(grossJewelryPrice);
         
         jewelryRepository.save(jewelry);
@@ -75,6 +90,11 @@ public class JewelryService {
     }
 
     public Map<String, String> updateJewelry(String jewelryID, JewelryPutRequest jewelryPutRequest) {
+        // validate jewelryID
+        if (!validateJewelryID(jewelryID)) {
+            return Collections.singletonMap("message", "Mã trang sức không hợp lệ");
+        }
+
         Jewelry existingJewelry = jewelryRepository.findByJewelryID(jewelryID);
         if (existingJewelry == null) {
             return Collections.singletonMap("message", "Trang sức không tồn tại");
@@ -84,9 +104,9 @@ public class JewelryService {
         existingJewelry.setjewelryImage(jewelryPutRequest.getJewelryImage());
         existingJewelry.setJewelryEntryPrice(jewelryPutRequest.getJewelryEntryPrice());
 
-        // Cập nhật grossJewelryPrice nếu jewelryEntryPrice thay đổi
+        // update gross jewelry price follow the formula: grossJewelryPrice = jewelryEntryPrice * 1.2
         if (jewelryPutRequest.getJewelryEntryPrice() != null) {
-            BigDecimal grossJewelryPrice = jewelryPutRequest.getJewelryEntryPrice().multiply(new BigDecimal(1.1));
+            BigDecimal grossJewelryPrice = jewelryPutRequest.getJewelryEntryPrice().multiply(new BigDecimal(1.2));
             existingJewelry.setGrossJewelryPrice(grossJewelryPrice);
         }
         jewelryRepository.save(existingJewelry);
@@ -96,6 +116,16 @@ public class JewelryService {
 
     @Transactional
     public ResponseEntity<Map<String, String>> deleteJewelry(@RequestBody List<String> jewelryIDs) {
+        // validate diamondIDs
+        if (jewelryIDs.isEmpty()) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không có mã kim cương để xóa"));
+        }
+
+        // case diamondIDs have a diamondID that is not valid
+        if (jewelryIDs.stream().anyMatch(jewelryID -> !validateJewelryID(jewelryID))) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã kim cương không hợp lệ"));
+        }
+
         // Filter out non-existing diamonds
         List<String> existingJewelryIDs = jewelryIDs.stream()
                 .filter(jewelryID -> jewelryRepository.existsById(jewelryID))
@@ -164,13 +194,12 @@ public class JewelryService {
         return jewelryRepository.findAll(spec, pageable);
     }
 
-    // // tính tổng số nhẫn nam
-    // public int countMaleJewelry() {
-    //     return jewelryRepository.countMaleJewelry();
-    // }
-
-    // // tính tổng số nhẫn nữ 
-    // public int countFemaleJewelry() {
-    //     return jewelryRepository.countFemaleJewelry();
-    // }
+    // validate jewelryID
+    public boolean validateJewelryID(String jewelryID) {
+        // jewelry has form: JID-
+        if (!jewelryID.startsWith("JID-")) {
+            return false;
+        }
+        return true;
+    }
 }

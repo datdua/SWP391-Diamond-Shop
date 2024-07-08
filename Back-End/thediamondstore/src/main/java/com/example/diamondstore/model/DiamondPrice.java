@@ -18,9 +18,9 @@ public class DiamondPrice {
     @Column(name = "diamondPriceID")
     private Integer diamondPriceID;
 
-    @Column(name = "diamondID")
-    private String diamondID;
-    
+    @Column(name = "weight")
+    private BigDecimal weight;
+
     @Column(name = "diamondEntryPrice", precision = 16, scale = 2)
     private BigDecimal diamondEntryPrice;
 
@@ -36,11 +36,11 @@ public class DiamondPrice {
     public DiamondPrice() {
     }
 
-    public DiamondPrice(Integer diamondPriceID, String diamondID, BigDecimal diamondEntryPrice, String clarity,
+    public DiamondPrice(Integer diamondPriceID, BigDecimal weight, BigDecimal diamondEntryPrice, String clarity,
             String color, BigDecimal caratSize) {
 
         this.diamondPriceID = diamondPriceID;
-        this.diamondID = diamondID;
+        this.weight = weight;
         this.diamondEntryPrice = diamondEntryPrice;
         this.clarity = clarity;
         this.color = color;
@@ -55,12 +55,12 @@ public class DiamondPrice {
         this.diamondPriceID = diamondPriceID;
     }
 
-    public String getDiamondID() {
-        return diamondID;
+    public BigDecimal getWeight() {
+        return weight;
     }
 
-    public void setDiamondID(String diamondID) {
-        this.diamondID = diamondID;
+    public void setWeight(BigDecimal weight) {
+        this.weight = weight;
     }
 
     public BigDecimal getDiamondEntryPrice() {
@@ -94,6 +94,4 @@ public class DiamondPrice {
     public void setCaratSize(BigDecimal caratSize) {
         this.caratSize = caratSize;
     }
-
-
 }

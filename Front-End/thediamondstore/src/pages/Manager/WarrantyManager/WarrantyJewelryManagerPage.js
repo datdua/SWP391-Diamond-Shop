@@ -17,7 +17,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddWarrantyJewelryForm from "../../../components/WarrantyCRUD/AddWarrantyJewelryForm";
-import UpdateWarrantyDiamondForm from "../../../components/WarrantyCRUD/UpdateWarrantyDiamondForm";
+import UpdateWarrantyJewelryForm from "../../../components/WarrantyCRUD/UpdateWarrantyJewelryForm";
 import DeleteWarrantyForm from "../../../components/WarrantyCRUD/DeleteWarrantyForm";
 import { Pagination, Tooltip, Checkbox, FormControlLabel } from "@mui/material";
 import "../ProductManager.css";
@@ -158,7 +158,7 @@ function WarrantyManagerPage() {
                   style={{ textDecoration: "none" }}
                   onClick={refreshTable}
                 >
-                  <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> REFRESH
+                  <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> Tải Lại
                 </Button>
                 <Button
                   variant="link"
@@ -276,7 +276,7 @@ function WarrantyManagerPage() {
         </Modal.Header>
         <Modal.Body>
           {isUpdating ? (
-            <UpdateWarrantyDiamondForm
+            <UpdateWarrantyJewelryForm
               warranty={selectedWarranty}
               onClose={handleClose}
             />

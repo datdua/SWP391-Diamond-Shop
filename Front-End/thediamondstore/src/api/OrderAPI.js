@@ -174,8 +174,14 @@ export async function fetchOrderDetail(orderID) {
 
 export async function updateOrder(orderId, updatedOrder) {
   try {
-    const url = `http://localhost:8080/api/orders/update/${orderId}`;
-    const response = await axios.put(url, updatedOrder);
+    const token = getAuthToken();
+    const response = await axios.put(
+      `http://localhost:8080/api/orders/manager/update/${orderId}`,
+      updatedOrder,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
 
     if (response.status === 200) {
       return response.data; // Return data if needed
@@ -222,19 +228,42 @@ export const fetchOrderByPaged = async (page, size) => {
 };
 
 export async function getAllOrder() {
-  const response = await axios.get("http://localhost:8080/api/orders/getAll");
+  try{
+  const token = getAuthToken();
+  const response = await axios.get("http://localhost:8080/api/orders/get-all",
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+  );
   if (response.status !== 200) {
     throw new Error("Failed to fetch jewelry data");
   }
   return response.data;
+} catch (error) {
+  console.error("Error fetching orders:", error);
+  throw error;
+}
 }
 
 export async function getOrdersHaveTransactionNo() {
+  try{
+  const token = getAuthToken();
   const response = await axios.get(
-    "http://localhost:8080/api/orders/getOrderHaveTransactionNo"
+    "http://localhost:8080/api/orders/getOrderHaveTransactionNo",
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
   );
   if (response.status !== 200) {
     throw new Error("Failed to fetch order data");
   }
   return response.data;
+} catch (error) {
+  console.error("Error fetching orders:", error);
+  throw error;
+}
 }

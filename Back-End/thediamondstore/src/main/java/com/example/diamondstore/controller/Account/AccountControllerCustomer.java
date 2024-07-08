@@ -38,7 +38,7 @@ public class AccountControllerCustomer {
     }
     
     @GetMapping("/{accountName}")
-    public ResponseEntity<Account> getByAccountName_Customer(@PathVariable String accountName) {
+    public ResponseEntity<Account> getByAccountName(@PathVariable String accountName) {
         Account account = accountRepository.findByAccountName(accountName);
         if (account == null) {
             return ResponseEntity.notFound().build();
@@ -46,8 +46,8 @@ public class AccountControllerCustomer {
         return ResponseEntity.ok(account);
     }
 
-    @PutMapping(value = "/customer/update/{accountID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> updateAccount_Customer(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
+    @PutMapping(value = "/update/{accountID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> updateAccount(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
         try {
             Account updatedAccount = accountService.updateAccount_Customer(accountID, accountRequest);
             return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
@@ -57,8 +57,8 @@ public class AccountControllerCustomer {
     }
 
     //get phoneNumber, addressAccount by accountID
-    @GetMapping("/customer/contactInfo/{accountID}")
-    public ResponseEntity<?> getContactInfoByAccountID_Customer(@PathVariable Integer accountID) {
+    @GetMapping("/contactInfo/{accountID}")
+    public ResponseEntity<?> getContactInfoByAccountID(@PathVariable Integer accountID) {
         Optional<Account> accountOpt = accountRepository.findById(accountID);
         if (accountOpt.isEmpty()) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy tài khoản"));
@@ -92,7 +92,7 @@ public class AccountControllerCustomer {
     }
 
     @GetMapping("/getByEmail/{email}")
-    public ResponseEntity<?> getByAccountEmail_Customer(@PathVariable String email) {
+    public ResponseEntity<?> getByAccountEmail(@PathVariable String email) {
         Optional<Account> account = accountRepository.findByEmail(email);
         if (account.isPresent()) {
             return ResponseEntity.ok(account.get());
