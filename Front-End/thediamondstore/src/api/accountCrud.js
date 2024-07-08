@@ -15,7 +15,7 @@ export async function getAccountByID(accountID) {
   const token = localStorage.getItem('jwt')
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/accounts/get/${accountID}`,{
+      `http://localhost:8080/api/customers/customer/${accountID}`,{
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -62,7 +62,7 @@ export async function updateAccount(accountID, accountDetails) {
   const token = getAuthToken();
   try {
     const response = await axios.put(
-      `http://localhost:8080/api/accounts/customer/update/${accountID}`,
+      `http://localhost:8080/api/api/customers/customer/update/${accountID}`,
       accountDetails,
       {
         headers: {
