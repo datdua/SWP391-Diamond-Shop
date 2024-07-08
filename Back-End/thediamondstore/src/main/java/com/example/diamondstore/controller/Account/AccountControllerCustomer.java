@@ -1,6 +1,7 @@
 package com.example.diamondstore.controller.Account;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -47,10 +48,9 @@ public class AccountControllerCustomer {
     }
 
     @PutMapping(value = "/update/{accountID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> updateAccount(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
+    public ResponseEntity<Map<String, String>> updateAccount(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
         try {
-            Account updatedAccount = accountService.updateAccount_Customer(accountID, accountRequest);
-            return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
+            return accountService.updateAccount_Customer(accountID, accountRequest);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
         }

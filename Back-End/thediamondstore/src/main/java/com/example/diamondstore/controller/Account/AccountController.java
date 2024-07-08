@@ -2,9 +2,9 @@ package com.example.diamondstore.controller.Account;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -90,14 +90,14 @@ public class AccountController {
     public List<Account> getAllAccountsExceptCustomer() {
         return accountService.getAllAccountsExcludingRoleCustomer();
     }
-
+    
     @PutMapping("/update/{accountID}")
-    public ResponseEntity<Account> updateAccount(
+    public ResponseEntity<Map<String, String>> updateAccount(
             @PathVariable Integer accountID,
             @RequestBody AccountRequest accountRequest,
             @RequestHeader("Authorization") String jwtToken) {
 
-        Account updatedAccount = accountService.updateAccountProfile(accountID, accountRequest, jwtToken);
-        return ResponseEntity.ok(updatedAccount);
+        accountService.updateAccountProfile(accountID, accountRequest, jwtToken);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật tài khoản thành công"));
     }
 }
