@@ -30,4 +30,6 @@ public interface DiamondRepository extends JpaRepository<Diamond, String>, JpaSp
 
     // get all diamonds has cartSize = ?, color = ?, clarity = ?
     List<Diamond> findAllByCaratSizeAndColorAndClarity(BigDecimal caratSize, String color, String clarity);
+
+    List<Diamond> findAllByGrossDiamondPriceNotNull();
 }
