@@ -47,10 +47,11 @@ public class AccountControllerAdmin {
     }
 
     @PutMapping("/updateCustomer/{accountID}")
-    public ResponseEntity<Map<String, String>> updateAccountCustomer(
+    public ResponseEntity<Map<String, String>> updateAccountProfile(
             @PathVariable Integer accountID,
-            @RequestBody AccountRequest accountRequest) {
+            @RequestBody AccountRequest accountRequest,
+            @RequestHeader("Authorization") String jwtToken) {
 
-        return accountService.updateAccount_Customer(accountID, accountRequest);
+        return accountService.updateAccountProfile(accountID, accountRequest, jwtToken);
     }
 }
