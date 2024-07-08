@@ -7,7 +7,8 @@ import { AuthContext } from "../../components/Auth/AuthContext";
 import OrderSidebar from "../../components/OrderSidebar/OrderSidebar";
 import { toast } from "react-toastify";
 import { PointsContext } from "../../components/PointsContext/PointsContext";
-
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import DeleteIcon from '@mui/icons-material/Delete';
 function MyAccountPage() {
   const { accountName } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
@@ -103,8 +104,8 @@ function MyAccountPage() {
 
     return (
       orderStatus !== "Đã thanh toán" && (
-        <button onClick={handlePayment} className="tm-button tm-button-small">
-          Pay
+        <button onClick={handlePayment} className="tm-button tm-button-small" style={{backgroundColor:'#005aaa'}}>
+          <AccountBalanceIcon/>
         </button>
       )
     );
@@ -167,13 +168,6 @@ function MyAccountPage() {
                   </li>
                 </ul>
                 <div className="tab-content" id="account-content">
-                  <div className="tab-pane fade" id="account-dashboard" role="tabpanel"
-                    aria-labelledby="account-dashboard-tab">
-                    <div className="tm-myaccount-dashboard">
-                      <p>Hello <b>{accountName}</b></p>
-                      <p>From your account dashboard you can view your recent orders, manage your shipping and billing addresses, and edit your password and account details.</p>
-                    </div>
-                  </div>
                   <div className="tab-pane fade" id="account-orders" role="tabpanel"
                     aria-labelledby="account-orders-tab">
                     <div className="tm-myaccount-orders">
@@ -197,17 +191,17 @@ function MyAccountPage() {
                                   <td>{order.orderID}</td>
                                   <td>{order.deliveryDate}</td>
                                   <td>{order.orderStatus}</td>
-                                  <td>{order.totalOrder !== undefined && order.totalOrder !== null ? order.totalOrder.toLocaleString() : 'N/A'}</td>
-                                  <td><button onClick={() => handleViewOrder(order.orderID)} className="tm-button tm-button-small">View</button></td>
+                                  <td>{order.totalOrder !== undefined && order.totalOrder !== null ? order.totalOrder.toLocaleString() : 'N/A'}</td>                                   
+                                  <td><button onClick={() => handleViewOrder(order.orderID)} className="tm-button tm-button-small"><i className="ion-eye"></i></button></td>
                                   <td>
                                     <PaymentButton orderID={order.orderID} orderStatus={order.orderStatus} />
-                                    {order.orderStatus === "Đang xử lý" && <button onClick={() => handleDeleteOrder(order.orderID)} className="tm-button tm-button-small">Delete</button>}
+                                    {order.orderStatus === "Đang xử lý" && <button onClick={() => handleDeleteOrder(order.orderID)} className="tm-button tm-button-small" style={{backgroundColor:'red', marginLeft:'10px'}}><DeleteIcon/></button>}
                                   </td>
                                 </tr>
                               ))
                             ) : (
                               <tr>
-                                <td colSpan="6">No orders found.</td>
+                                <td colSpan="6">Không có đơn hàng.</td>
                               </tr>
                             )}
                           </tbody>
@@ -258,7 +252,7 @@ function MyAccountPage() {
                             />
                           </div>
                           <div className="tm-form-field">
-                            <label htmlFor="point">Point</label>
+                            <label htmlFor="point">Điểm tích luỹ</label>
                             <input
                               type="number"
                               id="point"

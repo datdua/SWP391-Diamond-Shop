@@ -135,7 +135,7 @@ function LoginRegisterPage() {
   };
 
   const handleRegenerateButtonClick = () => {
-    setCountdown(60); // Reset countdown timer
+    setCountdown(300); // Reset countdown timer
     handleRegenerateOTP(); // Start OTP regeneration process immediately
   };
 
@@ -144,7 +144,7 @@ function LoginRegisterPage() {
     if (countdown > 0) {
       timer = setTimeout(() => {
         setCountdown(countdown - 1);
-      }, 5000);
+      }, 1000);
     }
 
     return () => clearTimeout(timer); // Cleanup timer on component unmount or re-render
@@ -306,13 +306,13 @@ function LoginRegisterPage() {
                           </button>
                           {registrationSuccessful && (
                             <button
-                              className="btn w-100 btn-link my-2 text-black"
-                              onClick={handleRegenerateButtonClick} // Handle regeneration on button click
-                              disabled={countdown > 0} // Disable while countdown is running
-                              style={{ flexShrink: 0 }} // Prevent the button from shrinking
-                            >
-                              {countdown > 0 ? `Chưa nhận được OTP ? Vui lòng chờ ${countdown}s` : 'Gửi lại mã OTP'}
-                            </button>
+                            className="btn w-100 btn-link my-2 text-black underline-button"
+                            onClick={handleRegenerateButtonClick} // Handle regeneration on button click
+                            disabled={countdown > 0} // Disable while countdown is running
+                            style={{ flexShrink: 0, fontWeight:'bold' }} // Remove inline textDecoration
+                          >
+                            {countdown > 0 ? `Chưa nhận được OTP ? Vui lòng chờ ${countdown}s` : 'Gửi lại mã OTP'}
+                          </button>
                           )}
                         </div>
                       </div>

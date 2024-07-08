@@ -33,8 +33,8 @@ function ForgetPasswordModal({ isOpen, onClose }) {
                 <div className="modal-dialog" style={{ width: '300px' }}>
                     <div className="modal-content text-center">
                         <div className="modal-header text-white justify-content-between" style={{ backgroundColor: '#f2ba59', display: 'flex', alignItems: 'center' }}>
-                            <h5 className="modal-title text-white" id="exampleModalLabel">Đặt lại mật khẩu</h5>
-                            <button type="button" className="btn" onClick={onClose} style={{ padding: 0 }}>
+                            <h5 className="modal-title text-white" id="exampleModalLabel" style={{marginLeft:'50px'}}>Đặt lại mật khẩu</h5>
+                            <button type="button" className="btn" onClick={onClose} style={{ padding: 0,  }}>
                                 <Close />
                             </button>
                         </div>
