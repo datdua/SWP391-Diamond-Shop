@@ -115,7 +115,7 @@ export async function updateProfile(accountID, accountDetails) {
 export async function deleteAccounts(accountIDs) {
   try {
     const token = localStorage.getItem("jwt");
-    const response = await axios.delete("http://localhost:8080/api/accounts/manager/delete", {
+    const response = await axios.delete("http://localhost:8080/api/accounts/admin/delete", {
       headers : { Authorization: `Bearer ${token}` },
       data: accountIDs,
     });

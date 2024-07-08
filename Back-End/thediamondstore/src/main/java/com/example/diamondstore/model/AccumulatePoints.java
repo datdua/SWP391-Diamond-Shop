@@ -12,8 +12,8 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
-@Table(name = "Customer")
-public class Customer {
+@Table(name = "AccumulatePoints")
+public class AccumulatePoints {
 
     @Id
     @Column(name = "accountID")
@@ -27,10 +27,10 @@ public class Customer {
     @PrimaryKeyJoinColumn
     private Account account;
 
-    public Customer() {
+    public AccumulatePoints() {
     }
 
-    public Customer(Integer accountID, Integer point) {
+    public AccumulatePoints(Integer accountID, Integer point) {
         this.accountID = accountID;
         this.point = point;
     }

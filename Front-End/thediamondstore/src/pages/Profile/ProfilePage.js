@@ -110,11 +110,11 @@ const ProfilePage = () => {
         </Box>
         <Grid container spacing={2} sx={{ marginTop: 2 }}>
           <Grid item xs={12} sm={6}>
-            <Typography variant="h6">Role</Typography>
+            <Typography variant="h6">Vai Trò</Typography>
               <Typography>{account.role}</Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="h6">Phone Number</Typography>
+            <Typography variant="h6">Số Điện Thoại</Typography>
             {isEditing ? (
               <TextField
                 label="Phone Number"
@@ -128,7 +128,7 @@ const ProfilePage = () => {
             )}
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="h6">Address</Typography>
+            <Typography variant="h6">Địa Chỉ</Typography>
             {isEditing ? (
               <TextField
                 label="Address"
@@ -142,7 +142,7 @@ const ProfilePage = () => {
             )}
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="h6">Password</Typography>
+            <Typography variant="h6">Mật Khẩu</Typography>
             {isEditing ? (
               <TextField
                 name="password"
@@ -156,7 +156,7 @@ const ProfilePage = () => {
             )}
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="h6">Active</Typography>
+            <Typography variant="h6">Trạng Thái</Typography>
             <Typography>{account.active ? "Đã kích họat" : "Khóa tài khoản"}</Typography>
           </Grid>
         </Grid>

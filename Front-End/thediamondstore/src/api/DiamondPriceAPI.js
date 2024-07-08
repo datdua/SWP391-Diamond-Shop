@@ -4,7 +4,7 @@ export const getAllDiamondPrice = async () => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      "http://localhost:8080/api/diamondprices/get-all",
+      "http://localhost:8080/api/diamondprices/guest/getAll",
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -62,10 +62,43 @@ export const updateDiamondPrice = async (diamondPriceID, diamondPrice) => {
   }
 };
 
-export const  getDiamondPriceByCaratSize= async (caratSize) => {
-  try{
+export const getDiamondPriceByCaratSize = async (caratSize) => {
+  try {
     const response = await axios.get(
       `http://localhost:8080/api/diamondprices/guest/prices/${caratSize}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export const getAllClarity = async () => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/diamondprices/guest/api/clarity`
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export const getAllColor = async () => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/diamondprices/guest/api/color`
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export const getAllCaratSize = async () => {
+  try {
+    const response = await axios.get(
+      `http://localhost:8080/api/diamondprices/guest/api/caratsize`
     );
     return response.data;
   } catch (error) {
@@ -78,9 +111,10 @@ export const deleteDiamondPrice = async (diamondPriceIDs) => {
     const token = localStorage.getItem('jwt');
     const response = await axios.delete(
       `http://localhost:8080/api/diamondprices/manager/delete`
-      , { 
-        headers : { Authorization: `Bearer ${token}` },
-        data: diamondPriceIDs },
+      , {
+        headers: { Authorization: `Bearer ${token}` },
+        data: diamondPriceIDs
+      },
     );
     return response.data;
   } catch (error) {

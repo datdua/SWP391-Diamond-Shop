@@ -22,14 +22,14 @@ import com.example.diamondstore.DTO.OrderSummaryDTO;
 import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.Cart;
 import com.example.diamondstore.model.Certificate;
-import com.example.diamondstore.model.Customer;
+import com.example.diamondstore.model.AccumulatePoints;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.model.Promotion;
 import com.example.diamondstore.model.Warranty;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.CertificateRepository;
-import com.example.diamondstore.repository.CustomerRepository;
+import com.example.diamondstore.repository.AccumulatePointsRepository;
 import com.example.diamondstore.repository.DiamondRepository;
 import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.repository.PromotionRepository;
@@ -49,7 +49,7 @@ public class OrderService {
     private PromotionRepository promotionRepository;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private AccumulatePointsRepository accumulatePointsRepository;
 
     @Autowired
     private WarrantyRepository warrantyRepository;
@@ -122,15 +122,15 @@ public class OrderService {
         }
 
         if (pointsToRedeem != null && pointsToRedeem > 0) {
-            Customer customer = customerRepository.findById(accountID).orElseThrow(() -> new IllegalArgumentException("Khách hàng không tồn tại"));
-            int availablePoints = customer.getPoint();
+            AccumulatePoints accumulatePoints = accumulatePointsRepository.findById(accountID).orElseThrow(() -> new IllegalArgumentException("Khách hàng không tồn tại"));
+            int availablePoints = accumulatePoints.getPoint();
             if (pointsToRedeem > availablePoints) {
                 throw new IllegalArgumentException("Điểm không đủ");
             }
             BigDecimal discount = BigDecimal.valueOf(pointsToRedeem / 100.0);
             totalOrder = totalOrder.subtract(discount.multiply(BigDecimal.valueOf(1000000)));
-            customer.setPoint(availablePoints - pointsToRedeem);
-            customerRepository.save(customer);
+            accumulatePoints.setPoint(availablePoints - pointsToRedeem);
+            accumulatePointsRepository.save(accumulatePoints);
         }
 
         order.settotalOrder(totalOrder);

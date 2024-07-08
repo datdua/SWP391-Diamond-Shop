@@ -200,7 +200,7 @@ function DiamondManagerPage() {
                   style={{ textDecoration: "none" }}
                   onClick={handleShowAdd}
                 >
-                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> ADD
+                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> Thêm Kim Cương
                 </Button>
                 {selected.length > 0 && (
                   <Tooltip describeChild title="Xóa các kim cương đã chọn" arrow placement="top">
