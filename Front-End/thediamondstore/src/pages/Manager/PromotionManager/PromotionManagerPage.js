@@ -224,12 +224,6 @@ function PromotionManagerPage() {
                                 <EditIcon />
                               </Button>
                             </Tooltip>
-                            <DeletePromotionForm
-                              promotionID={promotion.promotionID}
-                              onDelete={() => handleDelete(promotion.promotionID)}
-                            >
-                              <DeleteIcon />
-                            </DeletePromotionForm>
                           </td>
                         </tr>
                       );

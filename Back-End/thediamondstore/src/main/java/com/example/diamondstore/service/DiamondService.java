@@ -64,7 +64,8 @@ public class DiamondService {
 
         boolean priceMismatch = false;
         BigDecimal diamondEntryPriceInput = diamond.getDiamondEntryPrice();
-        DiamondPrice diamondPrice = diamondPriceRepository.findAllByCaratSizeAndColorAndClarity(diamond.getCaratSize(), diamond.getColor(), diamond.getClarity());
+        DiamondPrice diamondPrice = diamondPriceRepository.findAllByCaratSizeAndColorAndClarity(
+                diamond.getCaratSize(), diamond.getColor(), diamond.getClarity());
 
         // If no matching diamond price is found
         if (diamondPrice == null) {
@@ -75,8 +76,12 @@ public class DiamondService {
         } else {
             BigDecimal diamondEntryPriceDB = diamondPrice.getDiamondEntryPrice();
 
+            // Debug: Print values for comparison
+            System.out.println("diamondEntryPriceInput: " + diamondEntryPriceInput);
+            System.out.println("diamondEntryPriceDB: " + diamondEntryPriceDB);
+
             // If diamond price input is provided and differs from database
-            if (diamondEntryPriceInput != null && !diamondEntryPriceInput.equals(diamondEntryPriceDB)) {
+            if (diamondEntryPriceInput != null && diamondEntryPriceInput.compareTo(diamondEntryPriceDB) != 0) {
                 priceMismatch = true;
                 diamond.setDiamondEntryPrice(null);
                 diamond.setGrossDiamondPrice(null);
@@ -147,8 +152,12 @@ public class DiamondService {
         } else {
             BigDecimal diamondEntryPriceDB = diamondPrice.getDiamondEntryPrice();
 
+            // Debug: Print values for comparison
+            System.out.println("diamondEntryPriceInput: " + diamondEntryPriceInput);
+            System.out.println("diamondEntryPriceDB: " + diamondEntryPriceDB);
+
             // If diamond price input is provided and differs from database
-            if (diamondEntryPriceInput != null && !diamondEntryPriceInput.equals(diamondEntryPriceDB)) {
+            if (diamondEntryPriceInput != null && diamondEntryPriceInput.compareTo(diamondEntryPriceDB) != 0) {
                 priceMismatch = true;
                 existingDiamond.setDiamondEntryPrice(null);
                 existingDiamond.setGrossDiamondPrice(null);

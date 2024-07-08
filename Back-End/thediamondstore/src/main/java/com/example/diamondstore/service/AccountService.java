@@ -19,7 +19,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -85,8 +84,7 @@ public class AccountService implements UserDetailsService {
             throw new RuntimeException("Vui lòng nhập đầy đủ thông tin");
         }
 
-        // Kiểm tra email hợp lệ theo form chuẩn @gmail
-        if (!email.matches("^[a-zA-Z0-9._%+-]+@gmail.com$")) {
+        if (!email.matches("^[a-zA-Z0-9._%+-]+@gmail.com$") && !email.matches("^[a-zA-Z0-9._%+-]+@fpt.edu.vn$")) {
             throw new RuntimeException("Email không hợp lệ");
         }
 
@@ -242,10 +240,10 @@ public class AccountService implements UserDetailsService {
                 .filter(accountID -> accountRepository.existsById(accountID))
                 .filter(accountID -> {
                     Account account = accountRepository.findById(accountID).orElse(null);
-                    return account != null &&
-                            !accountID.equals(currentAccountID) &&
-                            !account.getRole().equals("ROLE_ADMIN") &&
-                            !account.getRole().equals("ROLE_MANAGER");
+                    return account != null
+                            && !accountID.equals(currentAccountID)
+                            && !account.getRole().equals("ROLE_ADMIN")
+                            && !account.getRole().equals("ROLE_MANAGER");
                 })
                 .collect(Collectors.toList());
 
@@ -270,10 +268,10 @@ public class AccountService implements UserDetailsService {
         existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
         existingAccount.setRole(accountRequest.getRole());
         existingAccount.setAddressAccount(accountRequest.getAddressAccount());
-        
+
         // Only update the password if a new password is provided
-        if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty() &&
-            !accountRequest.getPassword().equals(existingAccount.getPassword())) {
+        if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty()
+                && !accountRequest.getPassword().equals(existingAccount.getPassword())) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(accountRequest.getPassword());
             existingAccount.setPassword(encodedPassword);

@@ -97,7 +97,7 @@ export async function updateProfile(accountID, accountDetails) {
   const token = getAuthToken();
   try {
     const response = await axios.put(
-      `http://localhost:8080/api/accounts/customer/update/${accountID}`,
+      `http://localhost:8080/api/accounts/update/${accountID}`,
       accountDetails,
       {
         headers: {
@@ -115,7 +115,7 @@ export async function updateProfile(accountID, accountDetails) {
 export async function deleteAccounts(accountIDs) {
   try {
     const token = localStorage.getItem("jwt");
-    const response = await axios.delete("http://localhost:8080/api/accounts/manager/delete", {
+    const response = await axios.delete("http://localhost:8080/api/accounts/admin/delete", {
       headers : { Authorization: `Bearer ${token}` },
       data: accountIDs,
     });
