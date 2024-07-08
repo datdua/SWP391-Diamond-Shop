@@ -1,5 +1,6 @@
 package com.example.diamondstore.controller.Diamond;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -51,16 +52,16 @@ public class DiamondControllerGuest {
             @RequestParam(required = false) String cut,
             @RequestParam(required = false) String shape,
             @RequestParam(required = false) String color,
-            @RequestParam(required = false) Float minCaratSize,
-            @RequestParam(required = false) Float maxCaratSize,
-            @RequestParam(required = false) Float minCaratWeight,
-            @RequestParam(required = false) Float maxCaratWeight,
+            @RequestParam(required = false) BigDecimal minCaratSize,
+            @RequestParam(required = false) BigDecimal maxCaratSize,
+            @RequestParam(required = false) BigDecimal minWeight,
+            @RequestParam(required = false) BigDecimal maxWeight,
             @RequestParam(required = false) String clarity,
             @RequestParam(required = false) String diamondNameLike) {
 
         List<Diamond> diamonds = diamondService.searchDiamondsWithFilters(
                 minDiamondPrice, maxDiamondPrice, origin, cut, shape, color,
-                minCaratSize, maxCaratSize, minCaratWeight, maxCaratWeight, clarity, diamondNameLike);
+                minCaratSize, maxCaratSize, minWeight, maxWeight, clarity, diamondNameLike);
 
         return ResponseEntity.ok(diamonds);
     }
@@ -73,10 +74,10 @@ public class DiamondControllerGuest {
             @RequestParam(required = false) String cut,
             @RequestParam(required = false) String shape,
             @RequestParam(required = false) String color,
-            @RequestParam(required = false) Float minCaratSize,
-            @RequestParam(required = false) Float maxCaratSize,
-            @RequestParam(required = false) Float minCaratWeight,
-            @RequestParam(required = false) Float maxCaratWeight,
+            @RequestParam(required = false) BigDecimal minCaratSize,
+            @RequestParam(required = false) BigDecimal maxCaratSize,
+            @RequestParam(required = false) BigDecimal minWeight,
+            @RequestParam(required = false) BigDecimal maxWeight,
             @RequestParam(required = false) String clarity,
             @RequestParam(required = false) String diamondName,
             @RequestParam(defaultValue = "1") int page,
@@ -84,7 +85,7 @@ public class DiamondControllerGuest {
 
         Page<Diamond> pageDiamonds = diamondService.searchDiamondsWithFiltersPaged(
                 minDiamondPrice, maxDiamondPrice, origin, cut, shape, color,
-                minCaratSize, maxCaratSize, minCaratWeight, maxCaratWeight, clarity, diamondName,
+                minCaratSize, maxCaratSize, maxWeight, maxWeight, clarity, diamondName,
                 page, size);
 
         return ResponseEntity.ok(pageDiamonds);

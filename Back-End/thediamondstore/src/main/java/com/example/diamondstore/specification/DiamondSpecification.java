@@ -1,5 +1,7 @@
 package com.example.diamondstore.specification;
 
+import java.math.BigDecimal;
+
 import org.springframework.data.jpa.domain.Specification;
 
 import com.example.diamondstore.model.Diamond;
@@ -21,20 +23,20 @@ public class DiamondSpecification {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("shape"), shape);
     }
 
-    public static Specification<Diamond> hasMinCaratSize(Float minCaratSize) {
+    public static Specification<Diamond> hasMinCaratSize(BigDecimal minCaratSize) {
         return (root, query, builder) -> builder.greaterThanOrEqualTo(root.get("caratSize"), minCaratSize);
     }
 
-    public static Specification<Diamond> hasMaxCaratSize(Float maxCaratSize) {
+    public static Specification<Diamond> hasMaxCaratSize(BigDecimal maxCaratSize) {
         return (root, query, builder) -> builder.lessThanOrEqualTo(root.get("caratSize"), maxCaratSize);
     }
     
-    public static Specification<Diamond> hasMinCaratWeight(Float minCaratWeight) {
-        return (root, query, builder) -> builder.greaterThanOrEqualTo(root.get("carat_weight"), minCaratWeight);
+    public static Specification<Diamond> hasMinCaratWeight(BigDecimal minWeight) {
+        return (root, query, builder) -> builder.greaterThanOrEqualTo(root.get("weight"), minWeight);
     }
 
-    public static Specification<Diamond> hasMaxCaratWeight(Float maxCaratWeight) {
-        return (root, query, builder) -> builder.lessThanOrEqualTo(root.get("carat_weight"), maxCaratWeight);
+    public static Specification<Diamond> hasMaxCaratWeight(BigDecimal maxWeight) {
+        return (root, query, builder) -> builder.lessThanOrEqualTo(root.get("weight"), maxWeight);
     }
 
     public static Specification<Diamond> hasMinDiamondEntryPrice(Float mindiamondEntryPrice) {

@@ -4,30 +4,30 @@ import java.math.BigDecimal;
 
 public class DiamondPricePutRequest {
     
-    private String diamondID;
+    private BigDecimal weight;
     private String clarity;
     private String color;
-    private Float caratSize;
+    private BigDecimal caratSize;
     private BigDecimal diamondEntryPrice;
 
 
     public DiamondPricePutRequest() {
     }
 
-    public DiamondPricePutRequest(String diamondID, String clarity, String color, Float caratSize, BigDecimal diamondEntryPrice) {
-        this.diamondID = diamondID;
+    public DiamondPricePutRequest(BigDecimal weight, String clarity, String color, BigDecimal caratSize, BigDecimal diamondEntryPrice) {
+        this.weight = weight;
         this.clarity = clarity;
         this.color = color;
         this.caratSize = caratSize;
         this.diamondEntryPrice = diamondEntryPrice;
     }
 
-    public String getDiamondID() {
-        return diamondID;
+    public BigDecimal getweight() {
+        return weight;
     }
 
-    public void setDiamondID(String diamondID) {
-        this.diamondID = diamondID;
+    public void setweight(BigDecimal weight) {
+        this.weight = weight;
     }
 
     public String getClarity() {
@@ -46,11 +46,11 @@ public class DiamondPricePutRequest {
         this.color = color;
     }
 
-    public Float getCaratSize() {
+    public BigDecimal getCaratSize() {
         return caratSize;
     }
 
-    public void setCaratSize(Float caratSize) {
+    public void setCaratSize(BigDecimal caratSize) {
         this.caratSize = caratSize;
     }
 
