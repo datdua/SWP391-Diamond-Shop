@@ -83,11 +83,11 @@ function MyAccountPage() {
     e.preventDefault();
     try {
       await updateAccount(accountId, accountDetails);
-      toast.success("Account details updated successfully");
+      toast.success("Cập nhật thông tin thành công");
       await getAccountDetails();
     } catch (error) {
       console.error('Failed to update account details:', error);
-      toast.error("Failed to update account details");
+      toast.error("Cập nhật thông tin thất bại");
     }
   };
 
@@ -178,7 +178,6 @@ function MyAccountPage() {
                     aria-labelledby="account-orders-tab">
                     <div className="tm-myaccount-orders">
                       {loading && <p>Loading...</p>}
-                      {error && <p className="error">{error}</p>}
                       <div className="table-responsive">
                         <table className="table table-bordered mb-0">
                           <thead>
@@ -222,7 +221,7 @@ function MyAccountPage() {
                       <form onSubmit={handleSubmit}>
                         <div className="tm-form-inner">
                           <div className="tm-form-field">
-                            <label htmlFor="accountName">Account Name</label>
+                            <label htmlFor="accountName">Tên tài khoản</label>
                             <input
                               type="text"
                               id="accountName"
@@ -231,7 +230,7 @@ function MyAccountPage() {
                             />
                           </div>
                           <div className="tm-form-field">
-                            <label htmlFor="addressAccount">Address</label>
+                            <label htmlFor="addressAccount">Địa chỉ</label>
                             <input
                               type="text"
                               id="addressAccount"
@@ -240,7 +239,7 @@ function MyAccountPage() {
                             />
                           </div>
                           <div className="tm-form-field">
-                            <label htmlFor="email">Email address</label>
+                            <label htmlFor="email">Email</label>
                             <input
                               type="email"
                               id="email"
@@ -250,22 +249,12 @@ function MyAccountPage() {
                             />
                           </div>
                           <div className="tm-form-field">
-                            <label htmlFor="phoneNumber">Phone</label>
+                            <label htmlFor="phoneNumber">Số điện thoại</label>
                             <input
                               type="tel"
                               id="phoneNumber"
                               value={accountDetails.phoneNumber}
                               onChange={handleInputChange}
-                            />
-                          </div>
-                          <div className="tm-form-field">
-                            <input
-                              type="role"
-                              id="role"
-                              value={accountDetails.role}
-                              onChange={handleInputChange}
-                              disabled
-                              hidden
                             />
                           </div>
                           <div className="tm-form-field">
@@ -278,7 +267,17 @@ function MyAccountPage() {
                             />
                           </div>
                           <div className="tm-form-field">
-                            <button type="submit" className="tm-button">Update</button>
+                            <input
+                              type="role"
+                              id="role"
+                              value={accountDetails.role}
+                              onChange={handleInputChange}
+                              disabled
+                              hidden
+                            />
+                          </div>                        
+                          <div className="tm-form-field">
+                            <button type="submit" className="tm-button">Cập nhật</button>
                           </div>
                         </div>
                       </form>

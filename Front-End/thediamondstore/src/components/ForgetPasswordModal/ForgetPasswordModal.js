@@ -7,7 +7,7 @@ import Close from '@mui/icons-material/Close';
 function ForgetPasswordModal({ isOpen, onClose }) {
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
-    const [countdown, setCountdown] = useState(60); // Countdown timer in seconds
+     // Countdown timer in seconds
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -15,39 +15,16 @@ function ForgetPasswordModal({ isOpen, onClose }) {
 
         try {
             await resetPassword(email);
-            toast.success('Password reset email sent successfully');
+            toast.success('Email đặt lại mật khẩu đã gửi thành công');
             onClose(); // Close modal on success
         } catch (error) {
-            toast.error('Failed to send password reset email');
+            toast.error('Email đặt lại mật khẩu đã gửi thất bại');
         } finally {
             setLoading(false);
         }
     };
 
-    const handleRegenerateOTP = async () => {
-        try {
-            await regenerateOTP(email); // Call the regenerateOTP function with the current email
-            toast.success('OTP regenerated successfully');
-        } catch (error) {
-            toast.error('Failed to regenerate OTP');
-        }
-    };
 
-    const handleRegenerateButtonClick = () => {
-        setCountdown(60); // Reset countdown timer
-        handleRegenerateOTP(); // Start OTP regeneration process immediately
-    };
-
-    useEffect(() => {
-        let timer = null;
-        if (countdown > 0) {
-            timer = setTimeout(() => {
-                setCountdown(countdown - 1);
-            }, 1000);
-        }
-
-        return () => clearTimeout(timer); // Cleanup timer on component unmount or re-render
-    }, [countdown]); // Effect runs when countdown changes
 
     return (
         isOpen && (
@@ -83,13 +60,7 @@ function ForgetPasswordModal({ isOpen, onClose }) {
                             >
                                 {loading ? 'Đang gửi...' : 'Gửi email xác thực'}
                             </button>
-                            <button
-                                className="btn w-100 btn-link my-2 text-black"
-                                onClick={handleRegenerateButtonClick} // Handle regeneration on button click
-                                disabled={countdown > 0} // Disable while countdown is running
-                            >
-                                {countdown > 0 ? `Chưa nhận được OTP ? Vui lòng chờ ${countdown}s` : 'Gửi lại mã OTP'}
-                            </button>
+                            
                         </div>
                     </div>
                 </div>
