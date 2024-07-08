@@ -152,7 +152,7 @@ function WarrantyManagerPage() {
           <Card>
             <Card.Header>
               <Card.Title as="h4">
-                Warranty List
+                Danh Sách Giấy Bảo Hành
                 <Button
                   variant="link"
                   style={{ textDecoration: "none" }}
@@ -271,7 +271,7 @@ function WarrantyManagerPage() {
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {isUpdating ? "Update Warranty" : "Add Warranty"}
+            {isUpdating ? "Cập nhật giấy bảo hành" : "Thêm giấy bảo hành"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

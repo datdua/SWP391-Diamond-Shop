@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import Modal from "react-modal";
-import { searchJewelry } from "../../api/JewelryAPI";
+import { getAllJewelry, getPage, searchJewelry } from "../../api/JewelryAPI";
 import { Pagination } from "@mui/material";
-
+import CircularProgress from '@mui/material/CircularProgress';
 Modal.setAppElement("#root");
 
 const customModalStyles = {
@@ -36,12 +36,17 @@ function JewelryPage() {
   const [searchResults, setSearchResults] = useState([]);
   const resultsPerPage = 9;
   const { jewelryId } = useParams();
-  const genders = ["All", "male", "female"];
+  const genders = ["All", "Male", "Female"];
 
-  const fetchJewelryPage = async (page, filtersToUse = {}) => {
+  const fetchJewelryPage = async (page = 1, filtersToUse = {}) => {
     try {
       setLoading(true);
-      const data = await searchJewelry({ ...filtersToUse, page, size: resultsPerPage });
+      let data;
+      if (Object.keys(filtersToUse).length > 0) {
+        data = await searchJewelry(page, filtersToUse);
+      } else {
+        data = await getPage(page);
+      }
       setJewelry(data.content);
       setTotalPages(data.totalPages);
       setLoading(false);
@@ -85,37 +90,26 @@ function JewelryPage() {
     setCurrentPage(1);
     setLoading(true);
     try {
-      let filtersToUse = { ...filters, page: 1, size: resultsPerPage };
-  
-      // Convert min and max price filters to integers if they are defined and not empty
+      let filtersToUse = { ...filters };
       if (filtersToUse.minjewelryEntryPrice !== undefined && filtersToUse.minjewelryEntryPrice !== '') {
         filtersToUse.minjewelryEntryPrice = parseInt(filtersToUse.minjewelryEntryPrice);
       } else {
-        delete filtersToUse.minjewelryEntryPrice; // Remove the key if it's empty
+        delete filtersToUse.minjewelryEntryPrice;
       }
-  
       if (filtersToUse.maxjewelryEntryPrice !== undefined && filtersToUse.maxjewelryEntryPrice !== '') {
         filtersToUse.maxjewelryEntryPrice = parseInt(filtersToUse.maxjewelryEntryPrice);
       } else {
-        delete filtersToUse.maxjewelryEntryPrice; // Remove the key if it's empty
+        delete filtersToUse.maxjewelryEntryPrice;
       }
   
-      // Handle gender filter "All" case explicitly
-      if (filtersToUse.gender === 'All') {
-        delete filtersToUse.gender; // Remove the gender filter if it's "All"
-      }
-  
-      const data = await searchJewelry(filtersToUse);
-      setJewelry(data.content);
-      setTotalPages(data.totalPages);
-      setLoading(false);
-      window.scrollTo(0, 0);
+      await fetchJewelryPage(1, filtersToUse); 
     } catch (error) {
       setError(error.message);
       setLoading(false);
     }
   };
   
+
   const handlePageChange = async (event, page) => {
     setCurrentPage(page);
   };
@@ -184,7 +178,7 @@ function JewelryPage() {
                   <div className="tm-shop-products">
                     <div className="row mt-30-reverse">
                       {loading ? (
-                        <div>Loading...</div>
+                        <CircularProgress color="success" />
                       ) : error ? (
                         <div>Error: {error}</div>
                       ) : (

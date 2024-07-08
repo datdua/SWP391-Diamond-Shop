@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
 import { getAllClarity, getAllColor, getAllCaratSize, getDiamondPriceByCaratSize } from '../../api/DiamondPriceAPI';
+import CircularProgress from '@mui/material/CircularProgress';
 import './TablePrice.css';
 
 const DiamondPriceTable = () => {
@@ -38,7 +39,7 @@ const DiamondPriceTable = () => {
     }, [caratSizes]);
 
     if (Object.keys(diamondPrices).length === 0 || caratSizes.length === 0 || clarityLevels.length === 0 || colours.length === 0) {
-        return <div>Loading...</div>;
+        return <CircularProgress color="success" />;
     }
 
     return (
@@ -47,7 +48,7 @@ const DiamondPriceTable = () => {
                 Bảng Giá Kim Cương
             </Typography>
             <Typography variant="body1" component="div" className="description">
-                Chào mừng quý khách đến với bảng giá kim cương của chúng tôi. Dưới đây là thông tin chi tiết về giá kim cương theo từng kích thước carat, màu sắc và độ trong. Chúng tôi hy vọng quý khách sẽ tìm thấy những viên kim cương ưng ý.
+                Chào mừng quý khách đến với bảng giá kim cương của chúng tôi. Dưới đây là thông tin chi tiết về giá kim cương theo từng kích thước, màu sắc và độ trong suốt. Chúng tôi hy vọng quý khách sẽ tìm thấy những viên kim cương ưng ý.
             </Typography>
             {caratSizes.map(caratSize => (
                 <TableContainer component={Paper} className="tablePriceContainer" key={caratSize}>

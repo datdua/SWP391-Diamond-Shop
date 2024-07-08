@@ -14,7 +14,7 @@ function CheckoutPage() {
     const [deliveryAddress, setDeliveryAddress] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
     const [pointsToRedeem, setPointsToRedeem] = useState(0); // Value to be redeemed
-    const [totalAccumulatedPoints, setTotalAccumulatedPoints] = useState(100); // Static value
+    const [totalAccumulatedPoints, setTotalAccumulatedPoints] = useState(0); // Dynamic value
     const [promotionCode, setPromotionCode] = useState("");
     const [promotionDescription, setPromotionDescription] = useState("");
     const [discountAmount, setDiscountAmount] = useState(0);
@@ -59,7 +59,7 @@ function CheckoutPage() {
             try {
                 if (accountId) {
                     const points = await getCustomerPoints(accountId);
-                    setPointsToRedeem(points); 
+                    setTotalAccumulatedPoints(points);
                 } else {
                     console.error("Account ID is undefined");
                 }
@@ -102,7 +102,7 @@ function CheckoutPage() {
                 toast.error("Mã giảm giá không hợp lệ");
             }
         } catch (error) {
-            
+            console.error("Error applying promotion:", error);
         }
     };
 
@@ -118,10 +118,9 @@ function CheckoutPage() {
 
             const orderData = await createOrder(accountId, deliveryAddress, phoneNumber, pointsToUse, promotionCode);
     
-            
             if (orderData.orderStatus === "Đã thanh toán") {
-                pointsToUse += totalAccumulatedPoints; 
-                setPointsToRedeem(pointsToUse); 
+                const updatedPoints = totalAccumulatedPoints - pointsToUse;
+                setTotalAccumulatedPoints(updatedPoints);
             }
     
             toast.success("Đặt hàng thành công");
@@ -215,8 +214,8 @@ function CheckoutPage() {
                                                             <td>- {discountAmount.toLocaleString()} VND</td>
                                                         </tr>
                                                         <tr className="tm-checkout-points">
-                                                            <td>Điểm tích luỹ</td>
-                                                            <td>+ {totalAccumulatedPoints}</td>
+                                                            <td>Điểm tích luỹ khả dụng</td>
+                                                            <td>{totalAccumulatedPoints}</td>
                                                         </tr>
                                                         {usePoints && (
                                                             <tr className="tm-checkout-points-discount">
@@ -241,8 +240,8 @@ function CheckoutPage() {
                                                             checked={termsChecked}
                                                             onChange={(e) => setTermsChecked(e.target.checked)}
                                                         />
-                                                        <Button type="button-hover" onClick={handleUsePoints}  style={{ background: "#f2ba59", border: "none", marginRight:'6.8rem', fontWeight:'bolder' }}>
-                                                            Sử dụng điểm tích luỹ để thanh toán: {pointsToRedeem}
+                                                        <Button type="button-hover" onClick={handleUsePoints} style={{ background: "#f2ba59", border: "none", marginRight:'6.8rem', fontWeight:'bolder' }}>
+                                                            Sử dụng điểm tích luỹ để thanh toán: {totalAccumulatedPoints}
                                                         </Button>
                                                         <Button type="button-hover" onClick={handleCancelUsePoints} style={{ background: "gray", border: "none", fontWeight:'bolder' }}>
                                                             Huỷ

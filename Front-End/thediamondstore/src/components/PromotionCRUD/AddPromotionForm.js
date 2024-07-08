@@ -24,7 +24,7 @@ function AddPromotionForm() {
     startTime: "Giờ Bắt Đầu",
     endDate: "Ngày Kết Thúc",
     endTime: "Giờ Kết Thúc",
-    discountAmount: "Giảm Giá",
+    discountAmount: "Số Tiền Giảm Giá",
     description: "Mô Tả",
   };
 
@@ -76,6 +76,9 @@ function AddPromotionForm() {
                   ? "time"
                   : "text"
             }
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
         ))}
         <Button type="submit" variant="contained" color="success">Tạo Mã Giảm Giá</Button>

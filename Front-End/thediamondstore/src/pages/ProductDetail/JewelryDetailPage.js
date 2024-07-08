@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import SizeInstructionModal from "../../components/SizeInstructionModal/SizeInstructionModal";
 import { getAccountIDByEmail } from "../../api/accountCrud";
 import Button from "react-bootstrap/esm/Button";
-
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 function JewelryDetailPage() {
@@ -124,7 +124,7 @@ function JewelryDetailPage() {
                 <li>
                   <Link to="/sanpham">Sản phẩm</Link>
                 </li>
-                <li>{jewelry ? jewelry.jewelryName : "Loading..."}</li>
+                <li>{jewelry ? jewelry.jewelryName : "Đang tải..."}</li>
               </ul>
             </div>
           </div>

@@ -136,7 +136,7 @@ function PromotionManagerPage() {
           <Card>
             <Card.Header>
               <Card.Title as="h4">
-                Promotion List
+                Danh Sách Mã Giảm Giá
                 <Button
                   variant="link"
                   style={{ textDecoration: "none" }}
@@ -178,7 +178,6 @@ function PromotionManagerPage() {
                           }
                         />
                       </th>
-                      <th>Mã Khuyến Mãi</th>
                       <th>Mã Code Khuyến Mãi</th>
                       <th>Ngày Bắt Đầu</th>
                       <th>Ngày Kết Thúc</th>
@@ -204,7 +203,6 @@ function PromotionManagerPage() {
                               onChange={(event) => handleCheckboxChange(event, promotion.promotionID)}
                             />
                           </td>
-                          <td>{promotion.promotionID}</td>
                           <td>{promotion.promotionCode}</td>
                           <td>{promotion.startDate}</td>
                           <td>{promotion.endDate}</td>
@@ -246,7 +244,7 @@ function PromotionManagerPage() {
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {isUpdating ? "Update Promotion" : "Add Promotion"}
+            {isUpdating ? "Cập nhật mã giảm giá" : "Thêm mã giảm giá"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

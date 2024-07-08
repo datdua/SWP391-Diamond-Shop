@@ -16,6 +16,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Pagination, Tooltip, Checkbox, FormControlLabel } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
 import "../ProductManager.css";
 
 function JewelryManagerPage() {
@@ -163,7 +164,7 @@ function JewelryManagerPage() {
           <Card>
             <Card.Header>
               <Card.Title as="h4">
-                Jewelry List
+                Danh sách trang sức
                 <Button
                   variant="link"
                   style={{ textDecoration: "none" }}
@@ -306,7 +307,7 @@ function JewelryManagerPage() {
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {isUpdating ? "Update Jewelry" : "Add Jewelry"}
+            {isUpdating ? "Cập nhật trang sức" : "Thêm trang sức"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -333,7 +334,7 @@ function JewelryManagerPage() {
               style={{ width: "100%", height: "100%" }}
             />
           ) : (
-            <p>Loading...</p>
+            <CircularProgress color="success" />
           )}
         </Modal.Body>
         <Modal.Footer>

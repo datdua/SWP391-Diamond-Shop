@@ -25,7 +25,7 @@ function UpdateJewelryForm({ jewelry }) {
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group>
-        <Form.Label>Jewelry Name</Form.Label>
+        <Form.Label>Tên trang sức</Form.Label>
         <Form.Control
           type="text"
           name="jewelryName"
@@ -34,16 +34,14 @@ function UpdateJewelryForm({ jewelry }) {
         />
       </Form.Group>
       <Form.Group>
-        <Form.Label>Gender</Form.Label>
-        <Form.Control
-          type="text"
-          name="gender"
-          value={updatedJewelry.gender}
-          onChange={handleChange}
-        />
+        <Form.Label>Giới tính</Form.Label>
+        <Form.Control as="select" name="gender" value={updatedJewelry.gender} onChange={handleChange}>
+          <option value="Nam">Nam</option>
+          <option value="Nữ">Nữ</option>
+        </Form.Control>
       </Form.Group>
       <Form.Group>
-        <Form.Label>Entry Price</Form.Label>
+        <Form.Label>Giá nhập</Form.Label>
         <Form.Control
           type="text"
           name="jewelryEntryPrice"
@@ -52,7 +50,7 @@ function UpdateJewelryForm({ jewelry }) {
         />
       </Form.Group>
       <Form.Group>
-        <Form.Label>Jewelry Image</Form.Label>
+        <Form.Label>Giấy trang sức</Form.Label>
         <Form.Control
           type="text"
           name="jewelryImage"
@@ -60,8 +58,8 @@ function UpdateJewelryForm({ jewelry }) {
           onChange={handleChange}
         />
       </Form.Group>
-      <Button variant="primary" type="submit">
-        Update
+      <Button variant="primary" type="submit" style={{marginTop: '10px'}}>
+        Cập nhật
       </Button>
     </Form>
   );
