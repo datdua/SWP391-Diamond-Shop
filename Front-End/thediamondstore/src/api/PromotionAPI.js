@@ -3,7 +3,7 @@ import axios from "axios";
 export const getAllPromotions = async () => {
   try {
     const token = localStorage.getItem('jwt');
-    const response = await axios.get("https://www.thediamondstore.site/api/promotion/get-all",
+    const response = await axios.get("http://localhost:8080/api/promotion/get-all",
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -18,7 +18,7 @@ export const getAllPromotions = async () => {
 export const getPromotionById = async (promotionID) => {
   try {
     const response = await axios.get(
-      `https://www.thediamondstore.site/api/promotion/${promotionID}`
+      `http://localhost:8080/api/promotion/${promotionID}`
     );
     return response.data;
   } catch (error) {
@@ -30,7 +30,7 @@ export const getPromotionById = async (promotionID) => {
 export const createPromotion = async (promotion) => {
   try {
     const response = await axios.post(
-      "https://www.thediamondstore.site/api/promotion/create",
+      "http://localhost:8080/api/promotion/create",
       promotion
     );
     return response.data;
@@ -43,7 +43,7 @@ export const createPromotion = async (promotion) => {
 export const updatePromotion = async (promotionID, promotion) => {
   try {
     const response = await axios.put(
-      `https://www.thediamondstore.site/api/promotion/update/${promotionID}`,
+      `http://localhost:8080/api/promotion/update/${promotionID}`,
       promotion
     );
     return response.data;
@@ -56,7 +56,7 @@ export const updatePromotion = async (promotionID, promotion) => {
 export const deletePromotion = async (promotionIDs) => {
   try {
     const response = await axios.delete(
-      `https://www.thediamondstore.site/api/promotion/delete`
+      `http://localhost:8080/api/promotion/delete`
       , { data: promotionIDs }
     );
     return response.data;

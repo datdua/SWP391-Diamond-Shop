@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +43,7 @@ public class DiamondPriceService {
         return diamondPriceRepository.findAll(DiamondPriceSpecification.filterBy(clarity, color, caratSize));
     }
 
+    @Transactional
     public ResponseEntity<Map<String, String>> updateDiamondPrice(@PathVariable Integer diamondPriceID, @RequestBody DiamondPriceRequest diamondPriceRequest) {
         DiamondPrice existingDiamondPrice = diamondPriceRepository.findByDiamondPriceID(diamondPriceID);
         if (existingDiamondPrice == null) {
@@ -63,6 +66,7 @@ public class DiamondPriceService {
         existingDiamondPrice.setClarity(diamondPriceRequest.getClarity());
         existingDiamondPrice.setColor(diamondPriceRequest.getColor());
         existingDiamondPrice.setCaratSize(diamondPriceRequest.getCaratSize());
+        existingDiamondPrice.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
 
         // size (mm) = sqrt(weight) * 6.5 => weight = (size / 6.5) ^ 2
         BigDecimal weight = new BigDecimal(Math.pow(diamondPriceRequest.getCaratSize().doubleValue() / 6.5, 2));

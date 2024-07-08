@@ -10,7 +10,7 @@ export async function getAllProduct() {
     try {
 // Logging token for debugging
         const response = await axios.get(
-          "https://www.thediamondstore.site/api/production/customer/all",{
+          "http://localhost:8080/api/production/customer/all",{
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -37,7 +37,7 @@ export async function getProductPage(page = 1, size = 4) {
       page = typeof page === 'object' ? 1 : Number(page);
 
       const response = await axios.get(
-        `https://www.thediamondstore.site/api/production/guest/paged?page=${page}&size=${size}`,
+        `http://localhost:8080/api/production/guest/paged?page=${page}&size=${size}`,
       );
       
       if (response.status !== 200) {
@@ -53,7 +53,7 @@ export async function getProductPage(page = 1, size = 4) {
 export const searchProductionByName = async (name, page = 1, size = 9) => {
   try {
     const response = await axios.get(
-      `https://www.thediamondstore.site/api/production/guest/search/filter/page`,
+      `http://localhost:8080/api/production/guest/search/filter/page`,
       {
         params: {
           name: name,
