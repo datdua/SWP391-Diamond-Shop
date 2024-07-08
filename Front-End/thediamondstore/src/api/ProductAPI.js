@@ -52,17 +52,13 @@ export async function getProductPage(page = 1, size = 4) {
 }
 export const searchProductionByName = async (name, page = 1, size = 9) => {
   try {
-    const token = getAuthToken();
     const response = await axios.get(
-      `http://localhost:8080/api/production/customer/search/filter/page`,
+      `http://localhost:8080/api/production/guest/search/filter/page`,
       {
         params: {
           name: name,
           page: page,
           size: size,
-        },
-        headers: {
-          Authorization: `Bearer ${token}`,
         },
       }
     );
