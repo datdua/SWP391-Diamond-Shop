@@ -120,18 +120,18 @@ export const addToCart = async (accountId, jewelryId, quantity, size) => {
   }
 };
 
-export async function searchJewelry(filters, page = 1, size = 9) {
+export async function searchJewelry(page = 1, filters = {}) {
   try {
     // Construct the query parameters including filters and pagination
     const params = new URLSearchParams({
       ...filters, // Spread the filters object to include its properties as individual parameters
-      page, // Add the page parameter
-      size, // Add the size parameter
+      page, 
+      size: 9, 
     });
 
     const response = await axios.get(
-      "http://localhost:8080/api/jewelry/guest/search/filter/paged", // Updated URL to match the provided one
-      { params } // Pass the constructed query parameters
+      "http://localhost:8080/api/jewelry/guest/search/filter/paged",
+      { params }
     );
 
     if (response.status !== 200) {
@@ -142,4 +142,5 @@ export async function searchJewelry(filters, page = 1, size = 9) {
   } catch (error) {
     throw new Error("Failed to fetch jewelry");
   }
-};
+}
+

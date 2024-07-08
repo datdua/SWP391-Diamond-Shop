@@ -39,8 +39,8 @@ function DiamondPage() {
         clarity: 'All',
         shape: 'All',
         origin: 'All',
-        minPrice: '',
-        maxPrice: '',
+        minDiamondPrice: '',
+        maxDiamondPrice: '',
         minCaratSize: '',
         maxCaratSize: '',
         minCaratWeight: '',
@@ -55,32 +55,9 @@ function DiamondPage() {
     const shapes = ['All', 'Radiant', 'Around', 'Pear'];
     const origins = ['All', 'GIA']
 
-    function openModal(item) {
-        setSelectedItem(item);
-        setIsOpen(true);
-    }
-
-    function closeModal() {
-        setIsOpen(false);
-        setSelectedItem(null);
-    }
-
-    const fetchDiamonds = async (page) => {
-        setLoading(true);
-        try {
-            const data = await getPage(page);
-            setDiamonds(data.content);
-            setTotalPages(data.totalPages);
-            setLoading(false);
-        } catch (error) {
-            setError(error.message);
-            setLoading(false);
-        }
-    };
-
     useEffect(() => {
         fetchDiamonds(currentPage);
-    }, [currentPage]);
+    }, [currentPage, filterApplied]);
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -93,50 +70,84 @@ function DiamondPage() {
     }, [location]);
 
     const resultsPerPage = 9;
+    const fetchDiamonds = async (page) => {
+        setLoading(true);
+        try {
+            let apiParams = {
+                page: page,
+                size: resultsPerPage
+            };
+
+            if (filterApplied) {
+                // Only include non-empty and non-'All' filters
+                Object.entries(filters).forEach(([key, value]) => {
+                    if (value !== '' && value !== 'All') {
+                        apiParams[key] = value;
+                    }
+                });
+
+                const { content, totalPages } = await searchDiamond(apiParams);
+                setDiamonds(content);
+                setTotalPages(totalPages);
+            } else {
+                const data = await getPage(page, resultsPerPage);
+                setDiamonds(data.content);
+                setTotalPages(data.totalPages);
+            }
+            setLoading(false);
+            window.scrollTo(0, 0);
+        } catch (error) {
+            setError(error.message);
+            setLoading(false);
+        }
+    };
+
+
 
     const handleSearch = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const filtersToUse = { ...filters };
-            if (filters.cut === 'All') {
-                delete filtersToUse.cut;
-            }
-            if (filters.color === 'All') {
-                delete filtersToUse.color;
-            }
-            if (filters.clarity === 'All') {
-                delete filtersToUse.clarity;
-            }
-            if (filters.shape === 'All') {
-                delete filtersToUse.shape;
-            }
-            if (filters.origin === 'All') {
-                delete filtersToUse.origin;
-            }
-            const { content, totalPages } = await searchDiamond(filtersToUse, currentPage, resultsPerPage);
-            setTotalPages(totalPages);
+            let filtersToUse = {
+                page: 1,
+                size: resultsPerPage
+            };
+
+            // Include only non-empty and non-'All' filters
+            Object.entries(filters).forEach(([key, value]) => {
+                if (value !== '' && value !== 'All') {
+                    filtersToUse[key] = value;
+                }
+            });
+
+            const { content, totalPages } = await searchDiamond(filtersToUse);
             setDiamonds(content);
+            setTotalPages(totalPages);
+
             setLoading(false);
             window.scrollTo(0, 0);
             closeModal();
+            setFilterApplied(true); // Filters are now applied
         } catch (error) {
             setError(error.message);
             setLoading(false);
         }
-    }
+    };
+
 
     const handlePageChange = async (page) => {
-        try {
-            const data = await searchDiamond(filters, page);
-            setSearchResults(data.content);
-            setCurrentPage(data.pageable.pageNumber + 1);
-            setTotalPages(data.totalPages);
-            window.scrollTo(0, 0);
-        } catch (error) {
-            console.error(error);
-        }
+        setCurrentPage(page); // Update currentPage state
     };
+
+    function openModal(item) {
+        setSelectedItem(item);
+        setIsOpen(true);
+    }
+
+    function closeModal() {
+        setIsOpen(false);
+        setSelectedItem(null);
+    }
 
     return (
         <div>
@@ -156,7 +167,7 @@ function DiamondPage() {
                     <div className="tm-products-area tm-section tm-padding-section bg-white">
                         <div className="container">
                             <div className="row">
-                                <button className="btn btn-primary mb-4 " onClick={openModal} style={{backgroundColor:'#f2ba59', maxWidth:'10%',  }}><FilterAltIcon/>Nâng cao</button>
+                                <button className="btn btn-primary mb-4 " onClick={openModal} style={{ backgroundColor: '#f2ba59', maxWidth: '10%', }}><FilterAltIcon />Nâng cao</button>
                                 <Modal
                                     isOpen={modalIsOpen}
                                     onRequestClose={closeModal}
@@ -300,8 +311,8 @@ function DiamondPage() {
                                                                                             className="form-control"
                                                                                             id="minPrice"
                                                                                             placeholder="Min Price"
-                                                                                            value={filters.minPrice}
-                                                                                            onChange={(e) => setFilters({ ...filters, minPrice: e.target.value })}
+                                                                                            value={filters.minDiamondPrice}
+                                                                                            onChange={(e) => setFilters({ ...filters, minDiamondPrice: e.target.value })}
                                                                                         />
                                                                                     </div>
                                                                                     <div className="form-group col-md-6">
@@ -311,8 +322,8 @@ function DiamondPage() {
                                                                                             className="form-control"
                                                                                             id="maxPrice"
                                                                                             placeholder="Max Price"
-                                                                                            value={filters.maxPrice}
-                                                                                            onChange={(e) => setFilters({ ...filters, maxPrice: e.target.value })}
+                                                                                            value={filters.maxDiamondPrice}
+                                                                                            onChange={(e) => setFilters({ ...filters, maxDiamondPrice: e.target.value })}
                                                                                         />
                                                                                     </div>
                                                                                 </div>
@@ -391,7 +402,7 @@ function DiamondPage() {
                                                                 <div className="mt-auto w-100">
                                                                     <div className="card-footer bg-white d-flex justify-content-end">
                                                                         <button className="btn btn-secondary px-4 mb-2 mr-5" type="button" onClick={closeModal}>Cancel</button>
-                                                                        <button className="btn  ml-5" onClick={handleSearch} style={{backgroundColor:'#f2ba59'}}>
+                                                                        <button className="btn  ml-5" onClick={handleSearch} style={{ backgroundColor: '#f2ba59' }}>
                                                                             <span className="fa fa-filter"></span> &nbsp;&nbsp;Apply Filter
                                                                         </button>
                                                                     </div>
@@ -453,7 +464,11 @@ function DiamondPage() {
                                                 </div>
                                             </div>
                                             <div className="tm-pagination mt-50">
-                                                <Pagination count={totalPages} page={currentPage} onChange={(event, page) => handlePageChange(page)} />
+                                                <Pagination
+                                                    count={totalPages}
+                                                    page={currentPage}
+                                                    onChange={(event, page) => handlePageChange(page)}
+                                                />
                                             </div>
                                         </div>
                                         <div className="col-lg-3">
