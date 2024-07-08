@@ -43,8 +43,12 @@ public class DiamondService {
     @Autowired
     private DiamondPriceRepository diamondPriceRepository;
 
+    @Autowired
+    private CertificateService certificateService;
+
     public List<Diamond> getAllDiamonds() {
-        return diamondRepository.findAll();
+        List<Diamond> diamonds = diamondRepository.findAllByGrossDiamondPriceNotNull();        
+        return diamonds;
     }
 
     public Diamond getDiamondById(String diamondID) {
@@ -57,7 +61,7 @@ public class DiamondService {
         if (existingDiamondByID != null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Kim cương đã tồn tại"));
         }
-
+      
         // Calculate weight based on carat size
         BigDecimal sizeDividedBy = diamond.getCaratSize().divide(new BigDecimal(6.5), MathContext.DECIMAL128);
         diamond.setWeight(sizeDividedBy.pow(2));
@@ -113,7 +117,6 @@ public class DiamondService {
         if (priceMismatch) {
             return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công nhưng có sự chênh lệch giá giữa giá nhập và giá trong bảng. Giá không được lưu"));
         }
-
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công"));
     }
 
@@ -323,5 +326,5 @@ public class DiamondService {
         Pageable pageable = PageRequest.of(page - 1, size);
         return diamondRepository.findAll(spec, pageable);
     }
-
+  
 }

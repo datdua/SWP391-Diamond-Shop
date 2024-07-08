@@ -22,6 +22,7 @@ public class Diamond {
     @Column(name = "certificationID", nullable = true)
     private String certificationID;
 
+
     @Column(name = "caratSize", precision = 16, scale = 2)
     private BigDecimal caratSize;
 

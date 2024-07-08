@@ -63,7 +63,6 @@ public class DiamondPriceService {
         existingDiamondPrice.setClarity(diamondPriceRequest.getClarity());
         existingDiamondPrice.setColor(diamondPriceRequest.getColor());
         existingDiamondPrice.setCaratSize(diamondPriceRequest.getCaratSize());
-        existingDiamondPrice.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
 
         // size (mm) = sqrt(weight) * 6.5 => weight = (size / 6.5) ^ 2
         BigDecimal weight = new BigDecimal(Math.pow(diamondPriceRequest.getCaratSize().doubleValue() / 6.5, 2));

@@ -62,7 +62,7 @@ public class DiamondPrice {
 
     public void setWeight(BigDecimal weight) {
     this.weight = weight.setScale(2, RoundingMode.HALF_UP);
-}
+    }
 
     public BigDecimal getDiamondEntryPrice() {
         return diamondEntryPrice;
