@@ -166,7 +166,7 @@ function CertificateManagerPage() {
                   style={{ textDecoration: "none" }}
                   onClick={() => setShowModal(true)}
                 >
-                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> ADD
+                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> Thêm Chứng Chỉ
                 </Button>
                 {selected.length > 0 && (
                   <Tooltip describeChild title="Xóa các chứng chỉ đã chọn" arrow placement="top">

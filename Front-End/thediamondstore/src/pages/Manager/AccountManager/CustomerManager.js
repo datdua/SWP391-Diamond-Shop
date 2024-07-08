@@ -145,7 +145,7 @@ function CustomerManager() {
                                     style={{ textDecoration: "none" }}
                                     onClick={handleShowAdd}
                                 >
-                                    <AddIcon style={{ margin: "0 5px 5px 0" }} /> ADD
+                                    <AddIcon style={{ margin: "0 5px 5px 0" }} /> Thêm Tài Khoản
                                 </Button>
                                 {selected.length > 0 && (
                                     <Tooltip describeChild title="Xóa các tài khoản đã chọn" arrow placement="top">

@@ -19,14 +19,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.example.diamondstore.model.Account;
-import com.example.diamondstore.model.Customer;
+import com.example.diamondstore.model.AccumulatePoints;
 import com.example.diamondstore.repository.AccountRepository;
-import com.example.diamondstore.repository.CustomerRepository;
+import com.example.diamondstore.repository.AccumulatePointsRepository;
 import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.request.AccountRequest;
 import com.example.diamondstore.request.RegisterRequest;
@@ -43,7 +42,7 @@ public class AccountService implements UserDetailsService {
     private AccountRepository accountRepository;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private AccumulatePointsRepository accumulatePointsRepository;
 
     @Autowired
     private OrderRepository orderRepository;
@@ -85,8 +84,7 @@ public class AccountService implements UserDetailsService {
             throw new RuntimeException("Vui lòng nhập đầy đủ thông tin");
         }
 
-        // Kiểm tra email hợp lệ theo form chuẩn @gmail
-        if (!email.matches("^[a-zA-Z0-9._%+-]+@gmail.com$")) {
+        if (!email.matches("^[a-zA-Z0-9._%+-]+@gmail.com$") && !email.matches("^[a-zA-Z0-9._%+-]+@fpt.edu.vn$")) {
             throw new RuntimeException("Email không hợp lệ");
         }
 
@@ -105,8 +103,8 @@ public class AccountService implements UserDetailsService {
         Account account = new Account(null, accountName, password, "ROLE_CUSTOMER", null, email, null, otp, LocalDateTime.now(), false);
         accountRepository.save(account);
 
-        Customer customer = new Customer(account.getAccountID(), 0);
-        customerRepository.save(customer);
+        AccumulatePoints accumulatePoints = new AccumulatePoints(account.getAccountID(), 0);
+        accumulatePointsRepository.save(accumulatePoints);
 
         // return "Đăng ký thành công. Vui lòng kiểm tra email để xác nhận tài khoản.";
         return Collections.singletonMap("message", "Đăng ký thành công. Vui lòng kiểm tra email để xác nhận tài khoản.");
@@ -242,10 +240,10 @@ public class AccountService implements UserDetailsService {
                 .filter(accountID -> accountRepository.existsById(accountID))
                 .filter(accountID -> {
                     Account account = accountRepository.findById(accountID).orElse(null);
-                    return account != null &&
-                            !accountID.equals(currentAccountID) &&
-                            !account.getRole().equals("ROLE_ADMIN") &&
-                            !account.getRole().equals("ROLE_MANAGER");
+                    return account != null
+                            && !accountID.equals(currentAccountID)
+                            && !account.getRole().equals("ROLE_ADMIN")
+                            && !account.getRole().equals("ROLE_MANAGER");
                 })
                 .collect(Collectors.toList());
 
@@ -270,10 +268,10 @@ public class AccountService implements UserDetailsService {
         existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
         existingAccount.setRole(accountRequest.getRole());
         existingAccount.setAddressAccount(accountRequest.getAddressAccount());
-        
+
         // Only update the password if a new password is provided
-        if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty() &&
-            !accountRequest.getPassword().equals(existingAccount.getPassword())) {
+        if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty()
+                && !accountRequest.getPassword().equals(existingAccount.getPassword())) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(accountRequest.getPassword());
             existingAccount.setPassword(encodedPassword);

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.diamondstore.model.Diamond;
@@ -40,32 +41,47 @@ public class DiamondPriceService {
         return diamondPriceRepository.findAll(DiamondPriceSpecification.filterBy(clarity, color, caratSize));
     }
 
-    public ResponseEntity<Map<String, String>> updateDiamondPrice(Integer diamondPriceID, DiamondPriceRequest diamondPriceRequest) {
-        DiamondPrice existingDiamondPrice = diamondPriceRepository.findById(diamondPriceID).orElse(null);
+    public ResponseEntity<Map<String, String>> updateDiamondPrice(@PathVariable Integer diamondPriceID, @RequestBody DiamondPriceRequest diamondPriceRequest) {
+        DiamondPrice existingDiamondPrice = diamondPriceRepository.findByDiamondPriceID(diamondPriceID);
         if (existingDiamondPrice == null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy DiamondPrice"));
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy giá kim cương để cập nhật"));
         }
 
+        // Check if the new diamond price already exists with the same attributes
+        boolean priceExists = diamondPriceRepository.existsByCaratSizeAndColorAndClarity(
+                diamondPriceRequest.getCaratSize(),
+                diamondPriceRequest.getColor(),
+                diamondPriceRequest.getClarity()
+        );
+
+        // If it exists and the ID is different, return an error message
+        if (priceExists && !existingDiamondPrice.getDiamondPriceID().equals(diamondPriceID)) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Đã tồn tại giá cho loại kim cương này"));
+        }
+
+        // Update fields in existing diamond price
         existingDiamondPrice.setClarity(diamondPriceRequest.getClarity());
         existingDiamondPrice.setColor(diamondPriceRequest.getColor());
         existingDiamondPrice.setCaratSize(diamondPriceRequest.getCaratSize());
 
-        // size (mm) = sqrt(weight) * 0.65
-        // => weight = (size / 0.65) ^ 2
-        BigDecimal weight = new BigDecimal(Math.pow(diamondPriceRequest.getCaratSize().doubleValue() / 0.65, 2));
+        // size (mm) = sqrt(weight) * 6.5 => weight = (size / 6.5) ^ 2
+        BigDecimal weight = new BigDecimal(Math.pow(diamondPriceRequest.getCaratSize().doubleValue() / 6.5, 2));
         existingDiamondPrice.setWeight(weight);
 
-        // find diamond has the same size, clarity, color
-        List<Diamond> diamonds = diamondRepository.findAllByCaratSizeAndColorAndClarity(diamondPriceRequest.getCaratSize(), diamondPriceRequest.getClarity(), 
-            diamondPriceRequest.getColor());
-        // cập nhật giá diamondEntryPrice và grossDiamondPrice vào diamond
+        diamondPriceRepository.save(existingDiamondPrice);
+
+        // Find diamonds with the same attributes and update their prices
+        List<Diamond> diamonds = diamondRepository.findAllByCaratSizeAndColorAndClarity(
+                diamondPriceRequest.getCaratSize(), diamondPriceRequest.getColor(), diamondPriceRequest.getClarity());
+
+        // Update diamondEntryPrice and grossDiamondPrice for matching diamonds
         for (Diamond diamond : diamonds) {
             diamond.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
-            diamond.setGrossDiamondPrice(diamondPriceRequest.getDiamondEntryPrice().multiply(new BigDecimal("1.1")));
+            // Assuming grossDiamondPrice is 10% more than diamondEntryPrice
+            BigDecimal grossDiamondPrice = diamondPriceRequest.getDiamondEntryPrice().multiply(new BigDecimal("1.1"));
+            diamond.setGrossDiamondPrice(grossDiamondPrice);
             diamondRepository.save(diamond);
         }
-        // trường hợp diamonds null thì bỏ qua
-        diamondPriceRepository.save(existingDiamondPrice);
 
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
     }
@@ -77,22 +93,33 @@ public class DiamondPriceService {
         diamondPrice.setCaratSize(diamondPriceRequest.getCaratSize());
         diamondPrice.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
 
-        // size (mm) = sqrt(weight) * 6.5
-        // => weight = (size / 6.5) ^ 2
+        //in DB already have a diamondPrice already have input caratSize, color, clarity 
+        if (diamondPriceRepository.existsByCaratSizeAndColorAndClarity(diamondPriceRequest.getCaratSize(), diamondPriceRequest.getColor(),
+                diamondPriceRequest.getClarity())) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Đã tồn tại Giá cho loại kim cương này"));
+        }
+
+        // Calculate weight based on caratSize
         BigDecimal weight = new BigDecimal(Math.pow(diamondPriceRequest.getCaratSize().doubleValue() / 6.5, 2));
         diamondPrice.setWeight(weight);
 
-        // find diamond has the same size, clarity, color
-        List<Diamond> diamonds = diamondRepository.findAllByCaratSizeAndColorAndClarity(diamondPriceRequest.getCaratSize(), diamondPriceRequest.getClarity(), 
-            diamondPriceRequest.getColor());
-        // cập nhật giá diamondEntryPrice và grossDiamondPrice vào diamond
+        // Save the new DiamondPrice
+        diamondPriceRepository.save(diamondPrice);
+
+        // Find diamonds with the same caratSize, color, and clarity
+        List<Diamond> diamonds = diamondRepository.findAllByCaratSizeAndColorAndClarity(
+                diamondPriceRequest.getCaratSize(), diamondPriceRequest.getColor(), diamondPriceRequest.getClarity());
+
+        // Update diamondEntryPrice and grossDiamondPrice for matching diamonds
         for (Diamond diamond : diamonds) {
             diamond.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
-            diamond.setGrossDiamondPrice(diamondPriceRequest.getDiamondEntryPrice().multiply(new BigDecimal("1.1")));
+            // Assuming grossDiamondPrice is 10% more than diamondEntryPrice
+            BigDecimal grossDiamondPrice = diamondPriceRequest.getDiamondEntryPrice().multiply(new BigDecimal("1.1"));
+            diamond.setGrossDiamondPrice(grossDiamondPrice);
             diamondRepository.save(diamond);
         }
-        // trường hợp diamonds null thì bỏ qua
-        diamondPriceRepository.save(diamondPrice);
+
+        // Return success response
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công"));
     }
 
@@ -125,5 +152,26 @@ public class DiamondPriceService {
 
     public List<DiamondPrice> getDiamondPricesByCaratSize(BigDecimal caratSize) {
         return diamondPriceRepository.findByCaratSize(caratSize);
+    }
+
+    public List<String> getClarity() {
+        return diamondPriceRepository.findAll().stream()
+                .map(DiamondPrice::getClarity)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    public List<BigDecimal> getCaratSize() {
+        return diamondPriceRepository.findAll().stream()
+                .map(DiamondPrice::getCaratSize)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getColor() {
+        return diamondPriceRepository.findAll().stream()
+                .map(DiamondPrice::getColor)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }
