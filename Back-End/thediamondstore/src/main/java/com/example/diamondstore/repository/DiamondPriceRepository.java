@@ -16,4 +16,6 @@ public interface  DiamondPriceRepository extends  JpaRepository<DiamondPrice, In
 
     // get diamondPrice has cartSize = ?, color = ?, clarity = ?
     DiamondPrice findAllByCaratSizeAndColorAndClarity(BigDecimal caratSize, String color, String clarity);
+
+    boolean existsByCaratSizeAndColorAndClarity(BigDecimal caratSize, String color, String clarity);
 }
