@@ -3,9 +3,9 @@ import { createDiamondPrice } from "../../api/DiamondPriceAPI.js";
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import Stack from '@mui/material/Stack';
+import MenuItem from '@mui/material/MenuItem';
 
-function AddCertificateForm() {
+function AddDiamondPriceForm() {
   const [diamondPrice, setDiamondPrice] = useState({
     diamondEntryPrice: "",
     clarity: "",
@@ -20,6 +20,12 @@ function AddCertificateForm() {
     clarity: "Độ trong",
     color: "Màu sắc",
     caratSize: "Kích thước",
+  };
+
+  const options = {
+    caratSize: [3.6, 3.9, 4.1, 4.5],
+    color: ["F", "E", "J", "D"],
+    clarity: ["VS1", "VS2", "VVS1", "VVS2"],
   };
 
   const handleChange = (event) => {
@@ -50,16 +56,35 @@ function AddCertificateForm() {
         onSubmit={handleSubmit}
       >
         {Object.keys(diamondPrice).map((key) => (
-          <TextField
-            key={key}
-            id="outlined-basic"
-            label={labels[key]}
-            variant="outlined"
-            name={key}
-            value={diamondPrice[key]}
-            onChange={handleChange}
-            type="text"
-          />
+          options[key] ? (
+            <TextField
+              key={key}
+              id={`select-${key}`}
+              select
+              label={labels[key]}
+              value={diamondPrice[key]}
+              onChange={handleChange}
+              name={key}
+              variant="outlined"
+            >
+              {options[key].map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </TextField>
+          ) : (
+            <TextField
+              key={key}
+              id="outlined-basic"
+              label={labels[key]}
+              variant="outlined"
+              name={key}
+              value={diamondPrice[key]}
+              onChange={handleChange}
+              type="text"
+            />
+          )
         ))}
         <Button type="submit" variant="contained" color="success">Thêm giá</Button>
         {message && <p style={{ color: '#F2BA59', fontWeight: 'bold' }}>{message}</p>}
@@ -68,4 +93,4 @@ function AddCertificateForm() {
   );
 }
 
-export default AddCertificateForm;
+export default AddDiamondPriceForm;
