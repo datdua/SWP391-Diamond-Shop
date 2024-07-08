@@ -138,7 +138,7 @@ function DiamondPriceManager() {
                   style={{ textDecoration: "none" }}
                   onClick={refreshTable}
                 >
-                  <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> REFRESH
+                  <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> Tải Lại
                 </Button>
                 <Button
                   variant="link"

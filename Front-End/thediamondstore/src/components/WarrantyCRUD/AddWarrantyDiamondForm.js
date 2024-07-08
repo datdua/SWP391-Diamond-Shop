@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { createWarranty } from "../../api/WarrantyAPI.js";
-import { Form, Button } from "react-bootstrap";
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
 
 function AddWarrantyDiamondForm() {
   const [warranty, setWarranty] = useState({
@@ -12,6 +15,14 @@ function AddWarrantyDiamondForm() {
   });
 
   const [message, setMessage] = useState("");
+
+  const labels = {
+    warrantyID: "Mã giấy bảo hành",
+    diamondID: "Mã kim cương",
+    expirationDate: "Ngày hết hạn",
+    expirationTime: "Giờ hết hạn",
+    warrantyImage: "Hình ảnh giấy bảo hành",
+  };
 
   const handleChange = (event) => {
     setWarranty({ ...warranty, [event.target.name]: event.target.value });
@@ -35,30 +46,30 @@ function AddWarrantyDiamondForm() {
 
   return (
     <div>
-      <Form onSubmit={handleSubmit}>
+      <Box
+        component="form"
+        sx={{
+          '& > :not(style)': { m: 1, width: '25ch' },
+        }}
+        noValidate
+        autoComplete="off"
+        onSubmit={handleSubmit}
+      >
         {Object.keys(warranty).map((key) => (
-          <Form.Group controlId={key} key={key}>
-            <Form.Label>{key}</Form.Label>
-            <Form.Control
-              type={
-                key.includes("Date")
-                  ? "date"
-                  : key.includes("Time")
-                  ? "time"
-                  : "text"
-              }
-              name={key}
-              value={warranty[key]}
-              onChange={handleChange}
-              placeholder={key}
-            />
-          </Form.Group>
+          <TextField
+            key={key}
+            id="outlined-basic"
+            label={labels[key]}
+            variant="outlined"
+            name={key}
+            value={warranty[key]}
+            onChange={handleChange}
+            type={key.includes("Date") ? "date" : key.includes("Time") ? "time" : "text"}
+          />
         ))}
-        <Button variant="primary" type="submit">
-          Create warranty
-        </Button>
-      </Form>
-      {message && <p>{message}</p>}
+        <Button type="submit" variant="contained" color="success">Hoàn thành</Button>
+        {message && <p style={{ color: '#F2BA59', fontWeight: 'bold' }}>{message}</p>}
+      </Box>
     </div>
   );
 }

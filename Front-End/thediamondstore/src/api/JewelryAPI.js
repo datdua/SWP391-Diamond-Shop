@@ -3,7 +3,7 @@ import axios from "axios";
 // Jewelry API functions
 export async function getAllJewelry() {
   const response = await axios.get(
-    "http://localhost:8080/api/jewelry"
+    "http://localhost:8080/api/jewelry/guest"
   );
   if (response.status !== 200) {
     throw new Error("Failed to fetch jewelry data");
@@ -11,12 +11,12 @@ export async function getAllJewelry() {
   return response.data;
 }
 
-export async function searchJewelryByName(name) {
+export async function searchJewelryByName(name , page = 1, size = 9) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/jewelry/searchByName?name=${name}`
+      `http://localhost:8080/api/jewelry/guest/search/filter/paged?jewelryName=${name}&page=${page}&size=${size}`
     );
-    console.log(response.data); // Log the response data
+    console.log(response.data); 
     return response.data;
   } catch (error) {
     throw new Error("Failed to search jewelry by name");
@@ -25,8 +25,12 @@ export async function searchJewelryByName(name) {
 
 export async function getWarrantityImage(warrantyID) {
   try {
+    const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      `http://localhost:8080/api/warranties/get/warrantyImg/${warrantyID}`
+      `http://localhost:8080/api/warranties/get/warrantyImg/${warrantyID}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     console.log("API Response:", response.data); // Debug line
     return response.data.warrantyImage; // Correctly extract the warrantityImage URL
@@ -38,7 +42,7 @@ export async function getWarrantityImage(warrantyID) {
 export async function getJewelryById(jewelryId) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/jewelry/get/${jewelryId}`
+      `http://localhost:8080/api/jewelry/guest/get/${jewelryId}`
     );
     return response.data;
   } catch (error) {
@@ -49,7 +53,7 @@ export async function getJewelryById(jewelryId) {
 export async function getPage(page = 1, size = 9) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/jewelry/paged/jewelrys?page=${page}&size=${size}`
+      `http://localhost:8080/api/jewelry/guest/paged/jewelrys?page=${page}&size=${size}`
     );
     return response.data;
   } catch (error) {
@@ -59,9 +63,13 @@ export async function getPage(page = 1, size = 9) {
 
 export async function createJewelry(jewelry) {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await axios.post(
-      "http://localhost:8080/api/jewelry/create",
-      jewelry
+      "http://localhost:8080/api/jewelry/manager/create",
+      jewelry,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -71,9 +79,13 @@ export async function createJewelry(jewelry) {
 
 export async function updateJewelry(jewelryID, jewelry) {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await axios.put(
-      `http://localhost:8080/api/jewelry/update/${jewelryID}`,
-      jewelry
+      `http://localhost:8080/api/jewelry/manager/update/${jewelryID}`,
+      jewelry,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -83,9 +95,12 @@ export async function updateJewelry(jewelryID, jewelry) {
 
 export async function deleteJewelry(jewelryIDs) {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await axios.delete(
-      `http://localhost:8080/api/jewelry/delete`
-      , { data: jewelryIDs }
+      `http://localhost:8080/api/jewelry/manager/delete`
+      , { 
+        headers: { Authorization: `Bearer ${token}` },
+        data: jewelryIDs }
     );
     return response.data;
   } catch (error) {
@@ -97,7 +112,7 @@ export async function deleteJewelry(jewelryIDs) {
 export const addToCart = async (accountId, jewelryId, quantity, size) => {
   try {
     const response = await axios.post(
-      `http://localhost:8080/api/cart/add?accountID=${accountId}&jewelryID=${jewelryId}&quantity=${quantity}&sizeJewelry=${size}`
+      `http://localhost:8080/api/cart/customer/add?accountID=${accountId}&jewelryID=${jewelryId}&quantity=${quantity}&sizeJewelry=${size}`
     );
     return response.data;
   } catch (error) {
@@ -105,13 +120,18 @@ export const addToCart = async (accountId, jewelryId, quantity, size) => {
   }
 };
 
-export async function searchJewelry(filters) {
+export async function searchJewelry(filters, page = 1, size = 9) {
   try {
+    // Construct the query parameters including filters and pagination
+    const params = new URLSearchParams({
+      ...filters, // Spread the filters object to include its properties as individual parameters
+      page, // Add the page parameter
+      size, // Add the size parameter
+    });
+
     const response = await axios.get(
-      "http://localhost:8080/api/jewelry/search/filter",
-      {
-        params: filters,
-      }
+      "http://localhost:8080/api/jewelry/guest/search/filter/paged", // Updated URL to match the provided one
+      { params } // Pass the constructed query parameters
     );
 
     if (response.status !== 200) {
@@ -120,7 +140,6 @@ export async function searchJewelry(filters) {
 
     return response.data;
   } catch (error) {
-    console.error("Error searching for jewelry:", error);
     throw new Error("Failed to fetch jewelry");
   }
-}
+};

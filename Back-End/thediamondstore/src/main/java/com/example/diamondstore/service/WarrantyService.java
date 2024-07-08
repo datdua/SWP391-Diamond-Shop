@@ -110,9 +110,23 @@ public class WarrantyService {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Chỉ có thể có một trong hai ID cho kim cương hoặc trang sức"));
         }
 
-        updateWarrantyStatus(warranty); // Cập nhật trạng thái trước khi lưu
-        warrantyRepository.save(warranty);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Giấy bảo hành đã được tạo thành công"));
+    updateWarrantyStatus(warranty); // Cập nhật trạng thái trước khi lưu
+    warrantyRepository.save(warranty);
+
+    Diamond diamond = diamondRepository.findByDiamondID(warranty.getDiamondID());
+    Jewelry jewelry = jewelryRepository.findByJewelryID(warranty.getJewelryID());
+
+    if (diamond != null) {
+        diamond.setWarrantyID(warranty.getWarrantyID());
+        diamondRepository.save(diamond);
+    } else if (jewelry != null) {
+        jewelry.setWarrantyID(warranty.getWarrantyID());
+        jewelryRepository.save(jewelry);
+    } else {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "ID không tồn tại"));
+    }
+
+    return ResponseEntity.ok(Collections.singletonMap("message", "Giấy bảo hành đã được tạo thành công"));
     }
 
     public ResponseEntity<Map<String, String>> updateWarranty(String warrantyID, WarrantyPutRequest warrantyPutRequest) {

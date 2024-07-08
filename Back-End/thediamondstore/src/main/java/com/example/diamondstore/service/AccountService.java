@@ -179,11 +179,7 @@ public class AccountService implements UserDetailsService {
         // Create a new account entity
         Account account = new Account();
         account.setAccountName(accountName);
-
-        // Encrypt the password using BCrypt
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(password);
-        account.setPassword(encodedPassword);
+        account.setPassword(password);
 
         account.setRole(role);
         account.setPhoneNumber(phoneNumber);
@@ -285,7 +281,7 @@ public class AccountService implements UserDetailsService {
         return accountRepository.save(existingAccount);
     }
 
-    public Account updateAccount_Admin(Integer accountID, AccountRequest accountRequest, String token) {
+    public Account updateAccountProfile(Integer accountID, AccountRequest accountRequest, String token) {
         Account existingAccount = accountRepository.findById(accountID).orElse(null);
         if (existingAccount == null) {
             throw new RuntimeException("Không tìm thấy tài khoản");
@@ -310,9 +306,7 @@ public class AccountService implements UserDetailsService {
         // Only update the password if a new password is provided
         if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty()
                 && !accountRequest.getPassword().equals(existingAccount.getPassword())) {
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String encodedPassword = passwordEncoder.encode(accountRequest.getPassword());
-            existingAccount.setPassword(encodedPassword);
+            existingAccount.setPassword(accountRequest.getPassword());
         }
 
         return accountRepository.save(existingAccount);

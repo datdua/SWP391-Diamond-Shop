@@ -56,9 +56,14 @@ function LoginRegisterPage() {
         setIsLoggedIn(true);
         toast.success("Đăng nhập thành công!");
 
-        if (decodedToken.role === "ROLE_ADMIN" || decodedToken.role === "ROLE_MANAGER") {
+        if (decodedToken.role === "ROLE_ADMIN") {
           navigate("/admin/profile");
-        } else {
+        } else if (decodedToken.role === "ROLE_MANAGER") {
+          navigate("/manager/profile");
+        } else if (decodedToken.role === "ROLE_SALE-STAFF") {
+          navigate("/sale-staff/profile");
+        }
+        else {
           navigate("/trangchu");
           window.location.reload();
           window.scrollTo(0, 0);
@@ -91,7 +96,7 @@ function LoginRegisterPage() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/accounts/register",
+        "http://localhost:8080/api/accounts/guest/register",
         {
           accountName: registerName,
           email: registerEmail,

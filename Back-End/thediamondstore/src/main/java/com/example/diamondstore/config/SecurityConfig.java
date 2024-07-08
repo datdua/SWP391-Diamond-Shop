@@ -53,7 +53,13 @@ public class SecurityConfig {
         "/api/orders/manager/**", "/api/orderDetail/manager/**", "/api/payment/manager/**", "/api/production/manager/**", "/api/promotion/manager/**", 
         "/api/warranties/manager/**"};
 
-    private static final  String[] ADMIN_MANGER_URL = {"/api/accounts/**"};
+    //Admin and Manager urls
+    private static final String[] ADMIN_MANAGER_URL = {"/api/accounts/get-all", "/api/accounts/all-except-customer", "/api/accounts/getByRole/**", "/api/certificates/get-all", "/api/certificates/getById/**", "/api/certificates/get/certificateImg/**", "/api/diamonds/get-all", "/api/diamondprices/get-all",
+         "/api/goldPrices/get-all", "/api/jewelry/get-all", "/api/orders/getByStatus/**", "/api/orders/totalRevenue", "/api/orders/totalOrder", "/api/orders/totalTransaction", "/api/warranties/get-all", "/api/warranties/get/warrantyImg/**",
+         "/api/warranties/diamondIDIsNull", "/api/warranties/jewelryIDIsNull" };
+
+    private static final String[] ADMIN_MANAGER_SALESTAFF_URL ={"/api/accounts/get/**", "/api/orders/get-all", "/api/orders/getOrderHaveTransactionNo", "/api/promotion/get-all", "/api/accounts/update/**"};
+
 
     @Autowired
     private final AccountService UserService;
@@ -78,7 +84,8 @@ public class SecurityConfig {
                 .antMatchers(ADMIN_URL).hasRole("ADMIN")
                 .antMatchers(CUSTOMER_URL).hasRole("CUSTOMER")
                 .antMatchers(MANAGER_URL).hasRole("MANAGER")
-                .antMatchers(ADMIN_MANGER_URL).hasAnyRole("ADMIN", "MANAGER")
+                .antMatchers(ADMIN_MANAGER_URL).hasAnyRole("ADMIN", "MANAGER")
+                .antMatchers(ADMIN_MANAGER_SALESTAFF_URL).hasAnyRole("ADMIN", "MANAGER", "SALE-STAFF")
                 .anyRequest().authenticated())
                 .exceptionHandling(e -> e
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
