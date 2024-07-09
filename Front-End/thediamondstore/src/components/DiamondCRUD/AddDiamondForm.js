@@ -13,7 +13,6 @@ function AddDiamondForm() {
     diamondName: "",
     diamondEntryPrice: "",
     diamondImage: "",
-    weight: "",
     caratSize: "",
     color: "",
     cut: "",
@@ -55,10 +54,15 @@ function AddDiamondForm() {
     try {
       const response = await createDiamond(diamond);
       console.log(response);
-      setMessage("Tạo mới Kim Cương thành công");
+      setMessage(response.message || "Tạo mới Kim Cương thành công");
     } catch (error) {
-      console.error(error);
-      setMessage("Tạo mới Kim Cương thất bại");
+      let errorMessage = "Tạo mới Kim Cương thất bại";
+      if (error.response && error.response.data && error.response.data.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      setMessage(errorMessage);
     }
   };
 

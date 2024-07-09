@@ -46,9 +46,13 @@ public class DiamondService {
     @Autowired
     private CertificateService certificateService;
 
-    public List<Diamond> getAllDiamonds() {
+    public List<Diamond> getAllDiamondsGrossPriceIsNull() {
         List<Diamond> diamonds = diamondRepository.findAllByGrossDiamondPriceNotNull();        
         return diamonds;
+    }
+
+    public List<Diamond> getAllDiamonds() {
+        return diamondRepository.findAll();
     }
 
     public Diamond getDiamondById(String diamondID) {
