@@ -97,7 +97,6 @@ function CheckoutPage() {
                 setPromotionDescription(promotion.description);
                 const discount = totalCart * promotion.discountAmount; // Calculate discount based on totalCart * discountAmount
                 setDiscountAmount(discount);
-                
             } else {
                 toast.error("Mã giảm giá không hợp lệ");
             }
@@ -111,14 +110,13 @@ function CheckoutPage() {
             toast.error("Xin cung cấp địa chỉ giao hàng và số điện thoại");
             return;
         }
-    
+
         try {
             let pointsToUse = usePoints ? pointsToRedeem : 0;
             let finalTotal = totalCart - discountAmount - (pointsToUse * 10000);
 
             const orderData = await createOrder(accountId, deliveryAddress, phoneNumber, pointsToUse, promotionCode);
 
-    
             toast.success("Đặt hàng thành công");
             navigate(`/account/${accountId}`);
         } catch (error) {
@@ -139,7 +137,7 @@ function CheckoutPage() {
         setPointsToRedeem(0);
     };
 
-    const pointsDiscount = usePoints ? pointsToRedeem * 10000 : 0; 
+    const pointsDiscount = usePoints ? totalAccumulatedPoints * 10000 : 0;
     const finalTotal = totalCart - discountAmount - pointsDiscount;
 
     return (
@@ -234,13 +232,10 @@ function CheckoutPage() {
                                             <div className="tm-checkout-submit">
                                                 <div className="tm-form-inner">
                                                     <div className="tm-form-field">
-                                                        <FormControlLabel required control={<Checkbox checked={termsChecked} name="paymentMethod" onChange={(e) => setTermsChecked(e.target.checked)} />} label="VNPay" />
-                                                    </div>
-                                                    <div className="tm-form-field">
-                                                        <Button type="button-hover" onClick={handleUsePoints} style={{ background: "#f2ba59", border: "none", marginRight:'6.8rem', fontWeight:'bolder' }}>
+                                                        <Button type="button" onClick={handleUsePoints} style={{ background: "#f2ba59", border: "none", marginRight: '6.8rem', fontWeight: 'bolder' }}>
                                                             Sử dụng điểm tích luỹ để thanh toán: {totalAccumulatedPoints}
                                                         </Button>
-                                                        <Button type="button-hover" onClick={handleCancelUsePoints} style={{ background: "gray", border: "none", fontWeight:'bolder' }}>
+                                                        <Button type="button" onClick={handleCancelUsePoints} style={{ background: "gray", border: "none", fontWeight: 'bolder' }}>
                                                             Huỷ
                                                         </Button>
                                                     </div>
@@ -251,6 +246,20 @@ function CheckoutPage() {
                                             </div>
                                             <div className="tm-checkout-paymentmethods">
                                                 <div className="tm-form-inner">
+                                                    <div className="tm-form-field">
+                                                        <FormControlLabel
+                                                            required
+                                                            control={
+                                                                <Checkbox
+                                                                    id="paymentMethod"
+                                                                    checked={termsChecked}
+                                                                    name="paymentMethods"
+                                                                    onChange={(e) => setTermsChecked(e.target.checked)}
+                                                                />
+                                                            }
+                                                            label="VNPay"
+                                                        />
+                                                    </div>
                                                     <div className="tm-form-field">
                                                         <button type="submit" className="tm-button tm-button-block" disabled={!termsChecked}>Đặt hàng</button>
                                                     </div>
