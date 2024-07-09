@@ -15,7 +15,7 @@ function AddDiamondForm() {
     diamondImage: "",
     caratSize: "",
     color: "",
-    cut: "",
+    cut: "Excellent",
     clarity: "",
     shape: "",
     origin: "",
@@ -43,6 +43,7 @@ function AddDiamondForm() {
     caratSize: [3.6, 3.9, 4.1, 4.5],
     color: ["F", "E", "J", "D"],
     clarity: ["VS1", "VS2", "VVS1", "VVS2"],
+    shape: ["Round", "Pear", "Radiant"],
   };
 
   const handleChange = (event) => {
@@ -88,6 +89,9 @@ function AddDiamondForm() {
               onChange={handleChange}
               name={key}
               variant="outlined"
+              InputLabelProps={{
+                shrink: true,
+              }}
             >
               {options[key].map((option) => (
                 <MenuItem key={option} value={option}>
@@ -95,6 +99,17 @@ function AddDiamondForm() {
                 </MenuItem>
               ))}
             </TextField>
+          ) : key === "cut" ? (
+            <TextField
+              key={key}
+              id="outlined-read-only-input"
+              label={labels[key]}
+              defaultValue="Excellent"
+              InputProps={{
+                readOnly: true,
+              }}
+              variant="outlined"
+            />
           ) : (
             <TextField
               key={key}
