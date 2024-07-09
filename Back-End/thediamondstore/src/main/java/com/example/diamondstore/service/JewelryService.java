@@ -55,39 +55,39 @@ public class JewelryService {
     }
 
     public ResponseEntity<Map<String, String>> createJewelry(Jewelry jewelry) {
-        // validate jewelryID
-        if (!validateJewelryID(jewelry.getJewelryID())) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã trang sức không hợp lệ"));
-        }
-
-        Jewelry existingJewelry = jewelryRepository.findByJewelryID(jewelry.getJewelryID());
-        if (existingJewelry != null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Trang sức đã tồn tại"));
-        }
-
-        // if grossJewelryPrice is null, set it to 0
-        if(jewelry.getGrossJewelryPrice() == null) {
-            jewelry.setGrossJewelryPrice(new BigDecimal(0));
-        }
-
-        // if warrantyID is not null, validate it
-        if (jewelry.getWarrantyID() != null) {
-            if (!warrantyService.validateWarrantyID(jewelry.getWarrantyID())) {
-                return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã bảo hành không hợp lệ"));
-            }
-        }
-
-        if (jewelry.getWarrantyID() != null && jewelryRepository.existsByWarrantyID(jewelry.getWarrantyID())) {
-        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Bảo hành đã được gán cho một trang sức khác"));
-        }
-        
-        //calculate gross jewelry price = jewelry price * 1.2 (tax: 10%, wage: 10%)
-        BigDecimal grossJewelryPrice = jewelry.getJewelryEntryPrice().multiply(new BigDecimal(1.2));
-        jewelry.setGrossJewelryPrice(grossJewelryPrice);
-        
-        jewelryRepository.save(jewelry);
-        return ResponseEntity.ok().body(Collections.singletonMap("message", "Tạo trang sức thành công"));
+    // validate jewelryID
+    if (!validateJewelryID(jewelry.getJewelryID())) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã trang sức không hợp lệ"));
     }
+
+    Jewelry existingJewelry = jewelryRepository.findByJewelryID(jewelry.getJewelryID());
+    if (existingJewelry != null) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Trang sức đã tồn tại"));
+    }
+
+    // if grossJewelryPrice is null, set it to 0
+    if(jewelry.getGrossJewelryPrice() == null) {
+        jewelry.setGrossJewelryPrice(new BigDecimal(0));
+    }
+
+    // if warrantyID is not null and not empty, validate it
+    if (jewelry.getWarrantyID() != null && !jewelry.getWarrantyID().isEmpty()) {
+        if (!warrantyService.validateWarrantyID(jewelry.getWarrantyID())) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã bảo hành không hợp lệ"));
+        }
+
+        if (jewelryRepository.existsByWarrantyID(jewelry.getWarrantyID())) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Bảo hành đã được gán cho một trang sức khác"));
+        }
+    }
+    
+    //calculate gross jewelry price = jewelry price * 1.2 (tax: 10%, wage: 10%)
+    BigDecimal grossJewelryPrice = jewelry.getJewelryEntryPrice().multiply(new BigDecimal(1.2));
+    jewelry.setGrossJewelryPrice(grossJewelryPrice);
+    
+    jewelryRepository.save(jewelry);
+    return ResponseEntity.ok().body(Collections.singletonMap("message", "Tạo trang sức thành công"));
+}
 
     public Map<String, String> updateJewelry(String jewelryID, JewelryPutRequest jewelryPutRequest) {
         // validate jewelryID

@@ -46,9 +46,13 @@ public class DiamondService {
     @Autowired
     private CertificateService certificateService;
 
-    public List<Diamond> getAllDiamonds() {
-        List<Diamond> diamonds = diamondRepository.findAllByGrossDiamondPriceNotNull();        
+    public List<Diamond> getAllDiamondsGrossPriceIsNull() {
+        List<Diamond> diamonds = diamondRepository.findAllByGrossDiamondPriceNotNull();
         return diamonds;
+    }
+
+    public List<Diamond> getAllDiamonds() {
+        return diamondRepository.findAll();
     }
 
     public Diamond getDiamondById(String diamondID) {
@@ -61,7 +65,7 @@ public class DiamondService {
         if (existingDiamondByID != null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Kim cương đã tồn tại"));
         }
-      
+
         // Calculate weight based on carat size
         BigDecimal sizeDividedBy = diamond.getCaratSize().divide(new BigDecimal(6.5), MathContext.DECIMAL128);
         diamond.setWeight(sizeDividedBy.pow(2));
@@ -149,23 +153,17 @@ public class DiamondService {
         // If no matching diamond price is found
         if (diamondPrice == null) {
             if (diamondEntryPriceInput == null) {
-                return Collections.singletonMap("message", "Không tìm thấy giá kim cương và giá nhập không được cung cấp");
+                existingDiamond.setDiamondEntryPrice(null); // Set to null if no input price and no matching price
+            } else {
+                existingDiamond.setDiamondEntryPrice(diamondEntryPriceInput); // Use input price if provided
             }
-            existingDiamond.setDiamondEntryPrice(diamondEntryPriceInput);
         } else {
             BigDecimal diamondEntryPriceDB = diamondPrice.getDiamondEntryPrice();
+            existingDiamond.setDiamondEntryPrice(diamondEntryPriceDB); // Always use DB price if a match is found
 
-            // Debug: Print values for comparison
-            System.out.println("diamondEntryPriceInput: " + diamondEntryPriceInput);
-            System.out.println("diamondEntryPriceDB: " + diamondEntryPriceDB);
-
-            // If diamond price input is provided and differs from database
+            // Check for price mismatch only if input price is provided
             if (diamondEntryPriceInput != null && diamondEntryPriceInput.compareTo(diamondEntryPriceDB) != 0) {
                 priceMismatch = true;
-                existingDiamond.setDiamondEntryPrice(null);
-                existingDiamond.setGrossDiamondPrice(null);
-            } else {
-                existingDiamond.setDiamondEntryPrice(diamondEntryPriceDB);
             }
         }
 
@@ -174,7 +172,7 @@ public class DiamondService {
             BigDecimal grossDiamondPrice = existingDiamond.getDiamondEntryPrice().multiply(new BigDecimal(1.1));
             existingDiamond.setGrossDiamondPrice(grossDiamondPrice);
         } else {
-            existingDiamond.setGrossDiamondPrice(null);
+            existingDiamond.setGrossDiamondPrice(null); // Ensure gross price is null if entry price is null
         }
 
         diamondRepository.save(existingDiamond);
@@ -326,5 +324,5 @@ public class DiamondService {
         Pageable pageable = PageRequest.of(page - 1, size);
         return diamondRepository.findAll(spec, pageable);
     }
-  
+
 }

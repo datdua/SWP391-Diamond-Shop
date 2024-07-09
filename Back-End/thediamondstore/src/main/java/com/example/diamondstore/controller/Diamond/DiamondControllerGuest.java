@@ -26,7 +26,7 @@ public class DiamondControllerGuest {
 
     @GetMapping
     public ResponseEntity<List<Diamond>> getDiamonds_Guest() {
-        return ResponseEntity.ok(diamondService.getAllDiamonds());
+        return ResponseEntity.ok(diamondService.getAllDiamondsGrossPriceIsNull());
     }
 
     @GetMapping("/get/{diamondID}")
