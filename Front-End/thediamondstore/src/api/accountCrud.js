@@ -78,7 +78,7 @@ export async function updateAccount(accountID, accountDetails) {
   const token = getAuthToken();
   try {
     const response = await axios.put(
-      `http://localhost:8080/api/api/customers/customer/update/${accountID}`,
+      `http://localhost:8080/api/accounts/customer/update/${accountID}`,
       accountDetails,
       {
         headers: {
@@ -97,7 +97,7 @@ export async function updateProfile(accountID, accountDetails) {
   const token = getAuthToken();
   try {
     const response = await axios.put(
-      `http://localhost:8080/api/api/customers/customer/update/${accountID}`,
+      `http://localhost:8080/api/customers/customer/update/${accountID}`,
       accountDetails,
       {
         headers: {
@@ -141,7 +141,7 @@ export async function createAccount(account) {
 export const getContactInfo = async (accountId) => {
   const token = localStorage.getItem('jwt')
   try {
-    const response = await axios.get(`http://localhost:8080/api/accounts/customer/customer/contactInfo/${accountId}`,{
+    const response = await axios.get(`http://localhost:8080/api/accounts/customer/contactInfo/${accountId}`,{
       headers: {
         Authorization: `Bearer ${token}`
       }
