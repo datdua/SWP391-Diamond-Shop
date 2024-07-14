@@ -150,7 +150,7 @@ function JewelryPage() {
                 <div className="col-lg-9 col-12">
                   <form className="tm-shop-header" onSubmit={handleSearch}>
                     <div className="tm-shop-productview">
-                      <span>View:</span>
+                      <span>Bố cục:</span>
                       <button
                         data-view="grid"
                         className="active"
@@ -163,16 +163,8 @@ function JewelryPage() {
                       </button>
                     </div>
                     <p className="tm-shop-countview">
-                      Showing 1 to {resultsPerPage} of {jewelry.length}{" "}
+                      Hiển thị 1 đến {resultsPerPage} của {jewelry.length}{" "}
                     </p>
-                    <label htmlFor="mySelect">My Select:</label>
-                    <select id="mySelect">
-                      <option value="default">Default Sorting</option>
-                      <option value="name">Name A-Z</option>
-                      <option value="date">Date</option>
-                      <option value="best">Best Sellers</option>
-                      <option value="trending">Trending</option>
-                    </select>
                   </form>
 
                   <div className="tm-shop-products">
@@ -206,28 +198,26 @@ function JewelryPage() {
                                       to={`/product-detail/jewelry/${item.jewelryID}`}
                                     >
                                       <i className="ion-android-cart"></i> Thêm giỏ hàng
-                                      </Link>
+                                    </Link>
                                   </li>
                                   <li>
-                                    <button
-                                      onClick={() => openModal(item)}
-                                      aria-label="Product Quickview"
-                                    >
+                                    <button disabled>
                                       <i className="ion-eye"></i>
                                     </button>
                                   </li>
                                   <li>
-                                    <a href="#">
+                                    <a href="#" onClick={(e) => e.preventDefault()}>
                                       <i className="ion-heart"></i>
                                     </a>
                                   </li>
+
                                 </ul>
                                 <div className="tm-product-badges">
                                   <span className="tm-product-badges-new">
-                                    New
+                                    Mới
                                   </span>
                                   <span className="tm-product-badges-sale">
-                                    Sale
+                                    Hot
                                   </span>
                                 </div>
                               </div>
@@ -277,7 +267,7 @@ function JewelryPage() {
                 <div className="col-lg-3 col-12">
                   <div className="widgets">
                     <div className="single-widget widget-categories">
-                      <h6 className="widget-title">Categories</h6>
+                      <h6 className="widget-title">Danh Mục</h6>
                       <ul>
                         <li>
                           <Link to="/trangsuc">Trang Sức</Link>
@@ -289,7 +279,7 @@ function JewelryPage() {
                     </div>
                     <form onSubmit={handleSearch}>
                       <div className="single-widget widget-colorfilter">
-                        <h6 className="widget-title">Filter by Gender</h6>
+                        <h6 className="widget-title">Lọc Theo Giới Tínhr</h6>
                         <select
                           id="colorSearch"
                           value={filters.gender || "All"}
@@ -305,9 +295,9 @@ function JewelryPage() {
                         </select>
                       </div>
                       <div className="single-widget widget-pricefilter">
-                        <h6 className="widget-title">Filter by Price</h6>
+                        <h6 className="widget-title">Lọc Theo Giá</h6>
                         <div>
-                          <label>Min Jewelry Price:</label>
+                          <label>Giá tối thiểu: </label>
                           <input
                             type="number"
                             value={filters.minjewelryEntryPrice || ""}
@@ -320,7 +310,7 @@ function JewelryPage() {
                           />
                         </div>
                         <div>
-                          <label>Max Jewelry Price:</label>
+                          <label>Giá tối đa: </label>
                           <input
                             type="number"
                             value={filters.maxjewelryEntryPrice || ""}
@@ -333,7 +323,7 @@ function JewelryPage() {
                           />
                         </div>
                       </div>
-                      <button type="submit">Search</button>
+                      <button style={{marginTop: '10px', color: '#f2ba59'}} type="submit">Lọc</button>
                     </form>
                   </div>
                 </div>

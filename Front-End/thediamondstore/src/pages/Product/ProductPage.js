@@ -109,7 +109,7 @@ function ProductPage() {
                 <div className="col-lg-9 col-12">
                   <form action="#" className="tm-shop-header">
                     <p className="tm-shop-countview">
-                      Showing {((currentPage - 1) * itemsPerPage * 2) + 1} to {((currentPage * 2) * (itemsPerPage))} of {products.length} products
+                      Hiển thị {((currentPage - 1) * itemsPerPage * 2) + 1} đến {((currentPage * 2) * (itemsPerPage))} của {products.length} sản phẩm
                     </p>
                   </form>
 
@@ -134,8 +134,8 @@ function ProductPage() {
                                   <li><a><i className="ion-heart" style={{color:'white'}}></i></a></li>
                                 </ul>
                                 <div className="tm-product-badges">
-                                  <span className="tm-product-badges-new">New</span>
-                                  <span className="tm-product-badges-sale">Sale</span>
+                                  <span className="tm-product-badges-new">Mới</span>
+                                  <span className="tm-product-badges-sale">Hot</span>
                                 </div>
                               </div>
                               <div className="tm-product-bottomside">
@@ -175,7 +175,7 @@ function ProductPage() {
                   {/* Sidebar Widgets */}
                   <div className="widgets">
                     <div className="single-widget widget-categories">
-                      <h6 className="widget-title">Categories</h6>
+                      <h6 className="widget-title">Danh Mục</h6>
                       <ul>
                         <li>
                           <Link to="/trangsuc">Trang Sức</Link>
