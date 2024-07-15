@@ -9,7 +9,7 @@ import {
   Col,
 } from "react-bootstrap";
 import {
-  getAllDiamond,
+  getAllDiamond_Manager,
   getCertificateImage,
   getWarrantityImage,
   deleteDiamond
@@ -21,6 +21,7 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Tooltip, Pagination, Checkbox, FormControlLabel } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
 import "../ProductManager.css";
 
 function DiamondManagerPage() {
@@ -167,13 +168,13 @@ function DiamondManagerPage() {
   };
 
   const refreshTable = () => {
-    getAllDiamond().then((data) => {
+    getAllDiamond_Manager().then((data) => {
       setDiamondData(data);
     });
   };
 
   useEffect(() => {
-    getAllDiamond()
+    getAllDiamond_Manager()
       .then((data) => setDiamondData(data))
       .catch((error) => console.error(error));
   }, []);
@@ -187,7 +188,7 @@ function DiamondManagerPage() {
           <Card>
             <Card.Header>
               <Card.Title as="h4" style={{ marginRight: "10px" }}>
-                Diamond List
+                Danh Sách Kim Cương
                 <Button
                   variant="link"
                   style={{ textDecoration: "none" }}
@@ -200,7 +201,7 @@ function DiamondManagerPage() {
                   style={{ textDecoration: "none" }}
                   onClick={handleShowAdd}
                 >
-                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> ADD
+                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> Thêm Kim Cương
                 </Button>
                 {selected.length > 0 && (
                   <Tooltip describeChild title="Xóa các kim cương đã chọn" arrow placement="top">
@@ -233,11 +234,11 @@ function DiamondManagerPage() {
                       <th>Mã Giấy Bảo Hành</th>
                       <th>Mã Chứng Chỉ</th>
                       <th>Tên Kim Cương</th>
-                      <th>Giá Nhập Km Cương</th>
+                      <th>Giá Nhập Kim Cương</th>
                       <th>Giá Bán Kim Cương</th>
                       <th>Hình Ảnh Kim Cương</th>
-                      <th>Trọng Lượng Carat</th>
-                      <th>Kích Cỡ Carat</th>
+                      <th>Trọng lượng</th>
+                      <th>Kích cỡ</th>
                       <th>Màu Sắc</th>
                       <th>Vết Cắt</th>
                       <th>Độ Trong</th>
@@ -353,7 +354,7 @@ function DiamondManagerPage() {
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {isUpdating ? "Update Diamond" : "Add Diamond"}
+            {isUpdating ? "Cập nhật kim cương" : "Thêm kim cương"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -379,7 +380,7 @@ function DiamondManagerPage() {
               style={{ width: "100%", height: "100%" }}
             />
           ) : (
-            <p>Loading...</p>
+            <CircularProgress color="success" />
           )}
         </Modal.Body>
         <Modal.Footer>
@@ -400,7 +401,7 @@ function DiamondManagerPage() {
               style={{ width: "100%", height: "100%" }}
             />
           ) : (
-            <p>Loading...</p>
+            <CircularProgress color="success" />
           )}
         </Modal.Body>
         <Modal.Footer>

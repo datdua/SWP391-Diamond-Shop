@@ -5,6 +5,7 @@ import { getAllDiamond, getPage, searchDiamond } from "../../api/DiamondAPI";
 import { Pagination } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import CircularProgress from '@mui/material/CircularProgress';
 Modal.setAppElement('#root');
 
 const customModalStyles = {
@@ -34,13 +35,13 @@ function DiamondPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [filters, setFilters] = useState({
-        color: 'All',
-        cut: 'All',
-        clarity: 'All',
-        shape: 'All',
-        origin: 'All',
-        minPrice: '',
-        maxPrice: '',
+        color: 'Tất cả',
+        cut: 'Tất cả',
+        clarity: 'Tất cả',
+        shape: 'Tất cả',
+        origin: 'Tất cả',
+        minDiamondPrice: '',
+        maxDiamondPrice: '',
         minCaratSize: '',
         maxCaratSize: '',
         minCaratWeight: '',
@@ -49,38 +50,15 @@ function DiamondPage() {
     const location = useLocation();
     const [searchResults, setSearchResults] = useState([]);
     const [filterApplied, setFilterApplied] = useState(false);
-    const colors = ['All', 'E', 'J', 'F', 'D'];
-    const cuts = ['All', 'Excellent'];
-    const clarities = ['All', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2', 'I1', 'I2', 'I3'];
-    const shapes = ['All', 'Radiant', 'Around', 'Pear'];
-    const origins = ['All', 'GIA']
-
-    function openModal(item) {
-        setSelectedItem(item);
-        setIsOpen(true);
-    }
-
-    function closeModal() {
-        setIsOpen(false);
-        setSelectedItem(null);
-    }
-
-    const fetchDiamonds = async (page) => {
-        setLoading(true);
-        try {
-            const data = await getPage(page);
-            setDiamonds(data.content);
-            setTotalPages(data.totalPages);
-            setLoading(false);
-        } catch (error) {
-            setError(error.message);
-            setLoading(false);
-        }
-    };
+    const colors = ['Tất cả', 'E', 'J', 'F', 'D'];
+    const cuts = ['Tất cả', 'Excellent'];
+    const clarities = ['Tất cả', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2', 'I1', 'I2', 'I3'];
+    const shapes = ['Tất cả', 'Radiant', 'Around', 'Pear'];
+    const origins = ['Tất cả', 'GIA']
 
     useEffect(() => {
         fetchDiamonds(currentPage);
-    }, [currentPage]);
+    }, [currentPage, filterApplied]);
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -93,50 +71,84 @@ function DiamondPage() {
     }, [location]);
 
     const resultsPerPage = 9;
+    const fetchDiamonds = async (page) => {
+        setLoading(true);
+        try {
+            let apiParams = {
+                page: page,
+                size: resultsPerPage
+            };
+
+            if (filterApplied) {
+                // Only include non-empty and non-'All' filters
+                Object.entries(filters).forEach(([key, value]) => {
+                    if (value !== '' && value !== 'All') {
+                        apiParams[key] = value;
+                    }
+                });
+
+                const { content, totalPages } = await searchDiamond(apiParams);
+                setDiamonds(content);
+                setTotalPages(totalPages);
+            } else {
+                const data = await getPage(page, resultsPerPage);
+                setDiamonds(data.content);
+                setTotalPages(data.totalPages);
+            }
+            setLoading(false);
+            window.scrollTo(0, 0);
+        } catch (error) {
+            setError(error.message);
+            setLoading(false);
+        }
+    };
+
+
 
     const handleSearch = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const filtersToUse = { ...filters };
-            if (filters.cut === 'All') {
-                delete filtersToUse.cut;
-            }
-            if (filters.color === 'All') {
-                delete filtersToUse.color;
-            }
-            if (filters.clarity === 'All') {
-                delete filtersToUse.clarity;
-            }
-            if (filters.shape === 'All') {
-                delete filtersToUse.shape;
-            }
-            if (filters.origin === 'All') {
-                delete filtersToUse.origin;
-            }
-            const { content, totalPages } = await searchDiamond(filtersToUse, currentPage, resultsPerPage);
-            setTotalPages(totalPages);
+            let filtersToUse = {
+                page: 1,
+                size: resultsPerPage
+            };
+
+            // Include only non-empty and non-'All' filters
+            Object.entries(filters).forEach(([key, value]) => {
+                if (value !== '' && value !== 'All') {
+                    filtersToUse[key] = value;
+                }
+            });
+
+            const { content, totalPages } = await searchDiamond(filtersToUse);
             setDiamonds(content);
+            setTotalPages(totalPages);
+
             setLoading(false);
             window.scrollTo(0, 0);
             closeModal();
+            setFilterApplied(true); // Filters are now applied
         } catch (error) {
             setError(error.message);
             setLoading(false);
         }
-    }
+    };
+
 
     const handlePageChange = async (page) => {
-        try {
-            const data = await searchDiamond(filters, page);
-            setSearchResults(data.content);
-            setCurrentPage(data.pageable.pageNumber + 1);
-            setTotalPages(data.totalPages);
-            window.scrollTo(0, 0);
-        } catch (error) {
-            console.error(error);
-        }
+        setCurrentPage(page); // Update currentPage state
     };
+
+    function openModal(item) {
+        setSelectedItem(item);
+        setIsOpen(true);
+    }
+
+    function closeModal() {
+        setIsOpen(false);
+        setSelectedItem(null);
+    }
 
     return (
         <div>
@@ -156,7 +168,7 @@ function DiamondPage() {
                     <div className="tm-products-area tm-section tm-padding-section bg-white">
                         <div className="container">
                             <div className="row">
-                                <button className="btn btn-primary mb-4 " onClick={openModal} style={{backgroundColor:'#f2ba59', maxWidth:'10%',  }}><FilterAltIcon/>Nâng cao</button>
+                                <button className="btn btn-primary mb-4 " onClick={openModal} style={{ backgroundColor: '#f2ba59', maxWidth: '10%', }}><FilterAltIcon />Nâng cao</button>
                                 <Modal
                                     isOpen={modalIsOpen}
                                     onRequestClose={closeModal}
@@ -170,18 +182,18 @@ function DiamondPage() {
                                                     <div className="col-md-12">
                                                         <div className="card border-0">
                                                             <div className="card-header bg-white d-flex justify-content-between align-items-center">
-                                                                <h4 className="mb-0">Advanced Search and Filter</h4>
+                                                                <h4 className="mb-0">Lọc Nâng Cao</h4>
                                                                 <button type="button" className="btn btn-link" onClick={closeModal}><CloseIcon /></button>
                                                             </div>
                                                             <div className="card-body px-4 px-md-5 py-4">
 
-                                                                <h5>FILTER LIST</h5>
+                                                                <h5>LỌC THEO CÁC TÙY CHỌN</h5>
 
                                                                 <div className="row">
                                                                     <div className="col-md-2 mb-4">
                                                                         <div className="card">
                                                                             <div className="card-header">
-                                                                                <h6><span className="fa fa-filter mr-3"></span>Color</h6>
+                                                                                <h6><span className="fa fa-filter mr-3"></span>Màu</h6>
                                                                             </div>
                                                                             <div className="card-body">
                                                                                 <select
@@ -202,7 +214,7 @@ function DiamondPage() {
                                                                     <div className="col-md-2 mb-4">
                                                                         <div className="card">
                                                                             <div className="card-header">
-                                                                                <h6><span className="fa fa-filter mr-3"></span>Cut</h6>
+                                                                                <h6><span className="fa fa-filter mr-3"></span>Vết cắt</h6>
                                                                             </div>
                                                                             <div className="card-body">
                                                                                 <select
@@ -223,7 +235,7 @@ function DiamondPage() {
                                                                     <div className="col-md-2 mb-4">
                                                                         <div className="card">
                                                                             <div className="card-header">
-                                                                                <h6><span className="fa fa-filter mr-3"></span>Clarity</h6>
+                                                                                <h6><span className="fa fa-filter mr-3"></span>Độ tinh khiết</h6>
                                                                             </div>
                                                                             <div className="card-body">
                                                                                 <select
@@ -245,7 +257,7 @@ function DiamondPage() {
                                                                     <div className="col-md-2 mb-4">
                                                                         <div className="card">
                                                                             <div className="card-header">
-                                                                                <h6><span className="fa fa-filter mr-3"></span>Shape</h6>
+                                                                                <h6><span className="fa fa-filter mr-3"></span>Hình dạng</h6>
                                                                             </div>
                                                                             <div className="card-body">
                                                                                 <select
@@ -266,7 +278,7 @@ function DiamondPage() {
                                                                     <div className="col-md-2 mb-4">
                                                                         <div className="card">
                                                                             <div className="card-header">
-                                                                                <h6><span className="fa fa-filter mr-3"></span>Origin</h6>
+                                                                                <h6><span className="fa fa-filter mr-3"></span>Xuất xứ</h6>
                                                                             </div>
                                                                             <div className="card-body">
                                                                                 <select
@@ -289,30 +301,28 @@ function DiamondPage() {
                                                                     <div className="col-md-4 mb-4">
                                                                         <div className="card">
                                                                             <div className="card-header">
-                                                                                <h6><span className="fa fa-filter mr-3"></span>Price</h6>
+                                                                                <h6><span className="fa fa-filter mr-3"></span>Giá tiền</h6>
                                                                             </div>
                                                                             <div className="card-body">
                                                                                 <div className="form-row">
                                                                                     <div className="form-group col-md-6">
-                                                                                        <label htmlFor="minPrice">Min Price</label>
+                                                                                        <label htmlFor="minPrice">Tối thiểu</label>
                                                                                         <input
                                                                                             type="number"
                                                                                             className="form-control"
                                                                                             id="minPrice"
-                                                                                            placeholder="Min Price"
-                                                                                            value={filters.minPrice}
-                                                                                            onChange={(e) => setFilters({ ...filters, minPrice: e.target.value })}
+                                                                                            value={filters.minDiamondPrice}
+                                                                                            onChange={(e) => setFilters({ ...filters, minDiamondPrice: e.target.value })}
                                                                                         />
                                                                                     </div>
                                                                                     <div className="form-group col-md-6">
-                                                                                        <label htmlFor="maxPrice">Max Price</label>
+                                                                                        <label htmlFor="maxPrice">Tối đa</label>
                                                                                         <input
                                                                                             type="number"
                                                                                             className="form-control"
                                                                                             id="maxPrice"
-                                                                                            placeholder="Max Price"
-                                                                                            value={filters.maxPrice}
-                                                                                            onChange={(e) => setFilters({ ...filters, maxPrice: e.target.value })}
+                                                                                            value={filters.maxDiamondPrice}
+                                                                                            onChange={(e) => setFilters({ ...filters, maxDiamondPrice: e.target.value })}
                                                                                         />
                                                                                     </div>
                                                                                 </div>
@@ -322,28 +332,26 @@ function DiamondPage() {
                                                                     <div className="col-md-4 mb-4">
                                                                         <div className="card">
                                                                             <div className="card-header">
-                                                                                <h6><span className="fa fa-filter mr-3"></span>Carat Size</h6>
+                                                                                <h6><span className="fa fa-filter mr-3"></span>Kích thước</h6>
                                                                             </div>
                                                                             <div className="card-body">
                                                                                 <div className="form-row">
                                                                                     <div className="form-group col-md-6">
-                                                                                        <label htmlFor="minCaratSize">Min Carat Size</label>
+                                                                                        <label htmlFor="minCaratSize">Tối thiểu</label>
                                                                                         <input
                                                                                             type="number"
                                                                                             className="form-control"
                                                                                             id="minCaratSize"
-                                                                                            placeholder="Min Carat Size"
                                                                                             value={filters.minCaratSize}
                                                                                             onChange={(e) => setFilters({ ...filters, minCaratSize: e.target.value })}
                                                                                         />
                                                                                     </div>
                                                                                     <div className="form-group col-md-6">
-                                                                                        <label htmlFor="maxCaratSize">Max Carat Size</label>
+                                                                                        <label htmlFor="maxCaratSize">Tối đa</label>
                                                                                         <input
                                                                                             type="number"
                                                                                             className="form-control"
                                                                                             id="maxCaratSize"
-                                                                                            placeholder="Max Carat Size"
                                                                                             value={filters.maxCaratSize}
                                                                                             onChange={(e) => setFilters({ ...filters, maxCaratSize: e.target.value })}
                                                                                         />
@@ -355,28 +363,26 @@ function DiamondPage() {
                                                                     <div className="col-md-4 mb-4">
                                                                         <div className="card">
                                                                             <div className="card-header">
-                                                                                <h6><span className="fa fa-filter mr-3"></span>Carat Weight</h6>
+                                                                                <h6><span className="fa fa-filter mr-3"></span>Trọng lượng</h6>
                                                                             </div>
                                                                             <div className="card-body">
                                                                                 <div className="form-row">
                                                                                     <div className="form-group col-md-6">
-                                                                                        <label htmlFor="minCaratWeight">Min Carat Weight</label>
+                                                                                        <label htmlFor="minCaratWeight">Tối thiểu</label>
                                                                                         <input
                                                                                             type="number"
                                                                                             className="form-control"
                                                                                             id="minCaratWeight"
-                                                                                            placeholder="Min Carat Weight"
                                                                                             value={filters.minCaratWeight}
                                                                                             onChange={(e) => setFilters({ ...filters, minCaratWeight: e.target.value })}
                                                                                         />
                                                                                     </div>
                                                                                     <div className="form-group col-md-6">
-                                                                                        <label htmlFor="maxCaratWeight">Max Carat Weight</label>
+                                                                                        <label htmlFor="maxCaratWeight">Tối đa</label>
                                                                                         <input
                                                                                             type="number"
                                                                                             className="form-control"
                                                                                             id="maxCaratWeight"
-                                                                                            placeholder="Max Carat Weight"
                                                                                             value={filters.maxCaratWeight}
                                                                                             onChange={(e) => setFilters({ ...filters, maxCaratWeight: e.target.value })}
                                                                                         />
@@ -390,9 +396,9 @@ function DiamondPage() {
                                                             <div className="col-md-12 d-flex flex-column">
                                                                 <div className="mt-auto w-100">
                                                                     <div className="card-footer bg-white d-flex justify-content-end">
-                                                                        <button className="btn btn-secondary px-4 mb-2 mr-5" type="button" onClick={closeModal}>Cancel</button>
-                                                                        <button className="btn  ml-5" onClick={handleSearch} style={{backgroundColor:'#f2ba59'}}>
-                                                                            <span className="fa fa-filter"></span> &nbsp;&nbsp;Apply Filter
+                                                                        <button className="btn btn-secondary px-4 mb-2 mr-5" type="button" onClick={closeModal}>Hủy</button>
+                                                                        <button className="btn  ml-5" onClick={handleSearch} style={{ backgroundColor: '#f2ba59' }}>
+                                                                            <span className="fa fa-filter"></span> &nbsp;&nbsp;Áp Dụng
                                                                         </button>
                                                                     </div>
                                                                 </div>
@@ -404,7 +410,7 @@ function DiamondPage() {
                                         </form>
                                     </div>
                                 </Modal>
-                                <p className="tm-shop-countview">Showing 1 to {diamonds.length} of {diamonds.length}</p>
+                                <p className="tm-shop-countview">Hiển thị 1 đến {diamonds.length} của {diamonds.length}</p>
                                 <div className="col-12">
                                     <div className="row">
                                         <div className="col-lg-9">
@@ -412,7 +418,7 @@ function DiamondPage() {
 
                                                 <div className="row mt-30-reverse">
                                                     {loading ? (
-                                                        <div>Loading...</div>
+                                                        <CircularProgress color="success" />
                                                     ) : error ? (
                                                         <div>Error: {error}</div>
                                                     ) : (
@@ -425,13 +431,22 @@ function DiamondPage() {
                                                                         </div>
                                                                         <ul className="tm-product-actions">
                                                                             {showNotification && <p>Please log in to add items to the cart.</p>}
-                                                                            <li><Link to={`/product-detail/diamond/${item.diamondID}`}><i className="ion-android-cart"></i> Add to cart</Link></li>
-                                                                            <li><button onClick={() => openModal(item)} aria-label="Product Quickview"><i className="ion-eye"></i></button></li>
-                                                                            <li><a href="#"><i className="ion-heart"></i></a></li>
+                                                                            <li><Link to={`/product-detail/diamond/${item.diamondID}`}><i className="ion-android-cart"></i>Thêm giỏ hàng</Link></li>
+                                                                            <li>
+                                                                                <button disabled>
+                                                                                    <i className="ion-eye"></i>
+                                                                                </button>
+                                                                            </li>
+                                                                            <li>
+                                                                                <a href="#" onClick={(e) => e.preventDefault()}>
+                                                                                    <i className="ion-heart"></i>
+                                                                                </a>
+                                                                            </li>
+
                                                                         </ul>
                                                                         <div className="tm-product-badges">
-                                                                            <span className="tm-product-badges-new">New</span>
-                                                                            <span className="tm-product-badges-sale">Sale</span>
+                                                                            <span className="tm-product-badges-new">Mới</span>
+                                                                            <span className="tm-product-badges-sale">Giảm giá</span>
                                                                         </div>
                                                                     </div>
                                                                     <div className="tm-product-bottomside">
@@ -453,13 +468,17 @@ function DiamondPage() {
                                                 </div>
                                             </div>
                                             <div className="tm-pagination mt-50">
-                                                <Pagination count={totalPages} page={currentPage} onChange={(event, page) => handlePageChange(page)} />
+                                                <Pagination
+                                                    count={totalPages}
+                                                    page={currentPage}
+                                                    onChange={(event, page) => handlePageChange(page)}
+                                                />
                                             </div>
                                         </div>
                                         <div className="col-lg-3">
                                             <div className="widgets">
                                                 <div className="single-widget widget-categories">
-                                                    <h6 className="widget-title">Categories</h6>
+                                                    <h6 className="widget-title">Danh Mục</h6>
                                                     <ul>
                                                         <li><Link to="/trangsuc">Trang Sức</Link></li>
                                                         <li><Link to="/kimcuong">Kim Cương</Link></li>

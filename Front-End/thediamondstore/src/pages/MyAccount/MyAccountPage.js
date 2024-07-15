@@ -7,7 +7,9 @@ import { AuthContext } from "../../components/Auth/AuthContext";
 import OrderSidebar from "../../components/OrderSidebar/OrderSidebar";
 import { toast } from "react-toastify";
 import { PointsContext } from "../../components/PointsContext/PointsContext";
-
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { CircularProgress } from "@mui/material";
 function MyAccountPage() {
   const { accountName } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
@@ -18,15 +20,17 @@ function MyAccountPage() {
     addressAccount: "",
     email: "",
     phoneNumber: "",
-    role: ""
+    role: "",
+    point: 0  // Include points in state
   });
   const { accountId } = useParams();
 
   // State for managing the sidebar visibility and selected order
   const [showSidebar, setShowSidebar] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
-  const {totalAccumulatedPoints} = useState(100);
-  const {pointsToRedeem, updatePointsToRedeem} = useContext(PointsContext)
+
+  const { totalAccumulatedPoints, updatePointsToRedeem } = useContext(PointsContext);
+
   useEffect(() => {
     if (!accountId) {
       console.error("Account ID is not available in params");
@@ -42,11 +46,12 @@ function MyAccountPage() {
     try {
       const accountData = await getAccountByID(accountId);
       setAccountDetails({
-        accountName: accountData.accountName,
-        addressAccount: accountData.addressAccount,
-        email: accountData.email,
-        phoneNumber: accountData.phoneNumber,
-        role: accountData.role
+        accountName: accountData.account.accountName,
+        addressAccount: accountData.account.addressAccount,
+        email: accountData.account.email,
+        phoneNumber: accountData.account.phoneNumber,
+        role: accountData.account.role,
+        point: accountData.point  // Update points in state
       });
     } catch (error) {
       console.error('Failed to fetch account details:', error);
@@ -80,11 +85,11 @@ function MyAccountPage() {
     e.preventDefault();
     try {
       await updateAccount(accountId, accountDetails);
-      toast.success("Account details updated successfully");
-      await getAccountDetails(); 
+      toast.success("Cập nhật thông tin thành công");
+      await getAccountDetails();
     } catch (error) {
       console.error('Failed to update account details:', error);
-      toast.error("Failed to update account details");
+      toast.error("Cập nhật thông tin thất bại");
     }
   };
 
@@ -100,8 +105,8 @@ function MyAccountPage() {
 
     return (
       orderStatus !== "Đã thanh toán" && (
-        <button onClick={handlePayment} className="tm-button tm-button-small">
-          Pay
+        <button onClick={handlePayment} className="tm-button tm-button-small" style={{backgroundColor:'#005aaa'}}>
+          <AccountBalanceIcon/>
         </button>
       )
     );
@@ -120,9 +125,9 @@ function MyAccountPage() {
   const handleDeleteOrder = async (orderID) => {
     try {
       await deleteOrder(orderID);
+      // Update local orders state
       setOrders(orders.filter(order => order.orderID !== orderID));
-      toast.success('Xoá đơn hàng thành công');
-      updatePointsToRedeem(-totalAccumulatedPoints);
+      toast.success('Xoá đ+ơn hàng thành công');
     } catch (error) {
       console.error('Failed to delete order:', error);
     }
@@ -136,7 +141,7 @@ function MyAccountPage() {
   return (
     <>
       <div>
-        <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/the-diamond-store-423602.appspot.com/o/img-banner%2Fimg-banner2.png?alt=media&token=13ceeebc-e94b-4e57-95d7-ec5dbb2fa30e)`}}>    
+        <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/the-diamond-store-423602.appspot.com/o/img-banner%2Fimg-banner2.png?alt=media&token=13ceeebc-e94b-4e57-95d7-ec5dbb2fa30e)` }}>
           <div className="container">
             <div className="tm-breadcrumb">
               <h2>Tài Khoản</h2>
@@ -153,29 +158,21 @@ function MyAccountPage() {
             <div className="container">
               <div className="tm-myaccount">
                 <ul className="nav tm-tabgroup" id="account" role="tablist">
-                <li className="nav-item">
+                  <li className="nav-item">
                     <a className="nav-link active" id="account-acdetails-tab" data-toggle="tab"
                       href="#account-acdetails" role="tab" aria-controls="account-acdetails"
                       aria-selected="false">Thông tin chi tiết</a>
                   </li>
                   <li className="nav-item">
-                    <a className="nav-link " id="account-orders-tab" data-toggle="tab" href="#account-orders"
+                    <a className="nav-link" id="account-orders-tab" data-toggle="tab" href="#account-orders"
                       role="tab" aria-controls="account-orders" aria-selected="false">Đơn hàng</a>
-                  </li>               
+                  </li>
                 </ul>
                 <div className="tab-content" id="account-content">
-                  <div className="tab-pane fade" id="account-dashboard" role="tabpanel"
-                    aria-labelledby="account-dashboard-tab">
-                    <div className="tm-myaccount-dashboard">
-                      <p>Hello <b>{accountName}</b></p>
-                      <p>From your account dashboard you can view your recent orders, manage your shipping and billing addresses, and edit your password and account details.</p>
-                    </div>
-                  </div>
-                  <div className="tab-pane fade " id="account-orders" role="tabpanel"
+                  <div className="tab-pane fade" id="account-orders" role="tabpanel"
                     aria-labelledby="account-orders-tab">
                     <div className="tm-myaccount-orders">
-                      {loading && <p>Thông tin chi tiết của đơn hàng sẽ được hiển thị khi bạn đã thanh toán thành công</p>}
-                      {error && <p className="error">{error}</p>}
+                      {loading && <CircularProgress color="success" />}
                       <div className="table-responsive">
                         <table className="table table-bordered mb-0">
                           <thead>
@@ -195,17 +192,17 @@ function MyAccountPage() {
                                   <td>{order.orderID}</td>
                                   <td>{order.deliveryDate}</td>
                                   <td>{order.orderStatus}</td>
-                                  <td>{order.totalOrder !== undefined && order.totalOrder !== null ? order.totalOrder.toLocaleString() : 'N/A'}</td>
-                                  <td><button onClick={() => handleViewOrder(order.orderID)} className="tm-button tm-button-small">View</button></td>
+                                  <td>{order.totalOrder !== undefined && order.totalOrder !== null ? order.totalOrder.toLocaleString() : 'N/A'}</td>                                   
+                                  <td><button onClick={() => handleViewOrder(order.orderID)} className="tm-button tm-button-small"><i className="ion-eye"></i></button></td>
                                   <td>
                                     <PaymentButton orderID={order.orderID} orderStatus={order.orderStatus} />
-                                    {order.orderStatus === "Đang xử lý" && <button onClick={() => handleDeleteOrder(order.orderID)} className="tm-button tm-button-small">Delete</button>}
+                                    {order.orderStatus === "Đang xử lý" && <button onClick={() => handleDeleteOrder(order.orderID)} className="tm-button tm-button-small" style={{backgroundColor:'red', marginLeft:'10px'}}><DeleteIcon/></button>}
                                   </td>
                                 </tr>
                               ))
                             ) : (
                               <tr>
-                                <td colSpan="6">No orders found.</td>
+                                <td colSpan="6">Không có đơn hàng.</td>
                               </tr>
                             )}
                           </tbody>
@@ -219,7 +216,7 @@ function MyAccountPage() {
                       <form onSubmit={handleSubmit}>
                         <div className="tm-form-inner">
                           <div className="tm-form-field">
-                            <label htmlFor="accountName">Account Name</label>
+                            <label htmlFor="accountName">Tên tài khoản</label>
                             <input
                               type="text"
                               id="accountName"
@@ -228,7 +225,7 @@ function MyAccountPage() {
                             />
                           </div>
                           <div className="tm-form-field">
-                            <label htmlFor="addressAccount">Address</label>
+                            <label htmlFor="addressAccount">Địa chỉ</label>
                             <input
                               type="text"
                               id="addressAccount"
@@ -237,7 +234,7 @@ function MyAccountPage() {
                             />
                           </div>
                           <div className="tm-form-field">
-                            <label htmlFor="email">Email address</label>
+                            <label htmlFor="email">Email</label>
                             <input
                               type="email"
                               id="email"
@@ -247,7 +244,7 @@ function MyAccountPage() {
                             />
                           </div>
                           <div className="tm-form-field">
-                            <label htmlFor="phoneNumber">Phone</label>
+                            <label htmlFor="phoneNumber">Số điện thoại</label>
                             <input
                               type="tel"
                               id="phoneNumber"
@@ -255,7 +252,16 @@ function MyAccountPage() {
                               onChange={handleInputChange}
                             />
                           </div>
-                          <div className="tm-form-field">                           
+                          <div className="tm-form-field">
+                            <label htmlFor="point">Điểm tích luỹ</label>
+                            <input
+                              type="number"
+                              id="point"
+                              value={accountDetails.point} // Display points here 
+                              disabled
+                            />
+                          </div>
+                          <div className="tm-form-field">
                             <input
                               type="role"
                               id="role"
@@ -264,9 +270,9 @@ function MyAccountPage() {
                               disabled
                               hidden
                             />
-                          </div>
+                          </div>                        
                           <div className="tm-form-field">
-                            <button type="submit" className="tm-button">Update</button>
+                            <button type="submit" className="tm-button">Cập nhật</button>
                           </div>
                         </div>
                       </form>

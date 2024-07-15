@@ -1,29 +1,46 @@
 import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
-import { getDiamondPriceByCaratSize } from '../../api/DiamondPriceAPI';
+import { getAllClarity, getAllColor, getAllCaratSize, getDiamondPriceByCaratSize } from '../../api/DiamondPriceAPI';
+import CircularProgress from '@mui/material/CircularProgress';
 import './TablePrice.css';
-
-const caratSizes = [0.43, 0.5, 0.6, 1.6, 2.0, 2.3, 3.6, 3.9, 4.1, 4.5, 5.3, 10.2 ]; 
 
 const DiamondPriceTable = () => {
     const [diamondPrices, setDiamondPrices] = useState({});
+    const [caratSizes, setCaratSizes] = useState([]);
+    const [clarityLevels, setClarityLevels] = useState([]);
+    const [colours, setColours] = useState([]);
+
+    useEffect(() => {
+        const fetchStaticData = async () => {
+            const clarityData = await getAllClarity();
+            const colorData = await getAllColor();
+            const caratSizeData = await getAllCaratSize();
+            setClarityLevels(clarityData);
+            setColours(colorData);
+            setCaratSizes(caratSizeData.map(size => size.toString())); // Assuming the API returns BigDecimal, convert to string if necessary
+        };
+
+        fetchStaticData();
+    }, []);
 
     useEffect(() => {
         const fetchPrices = async () => {
             const prices = {};
             for (let size of caratSizes) {
-                const data = await getDiamondPriceByCaratSize(size);
+                const data = await getDiamondPriceByCaratSize(parseFloat(size)); // Convert back to number if necessary
                 prices[size] = data;
             }
             setDiamondPrices(prices);
         };
-        fetchPrices();
-    }, []);
 
-    const clarityLevels = ["IF", "VVS1", "VVS2", "VS1", "VS2"];
-    const colours = ["D", "F", "J", "E"];
+        if (caratSizes.length > 0) {
+            fetchPrices();
+        }
+    }, [caratSizes]);
 
-    if (Object.keys(diamondPrices).length === 0) return <div>Loading...</div>;
+    if (Object.keys(diamondPrices).length === 0 || caratSizes.length === 0 || clarityLevels.length === 0 || colours.length === 0) {
+        return <CircularProgress color="success" />;
+    }
 
     return (
         <div className="tablePriceWrapper">
@@ -31,7 +48,7 @@ const DiamondPriceTable = () => {
                 Bảng Giá Kim Cương
             </Typography>
             <Typography variant="body1" component="div" className="description">
-                Chào mừng quý khách đến với bảng giá kim cương của chúng tôi. Dưới đây là thông tin chi tiết về giá kim cương theo từng kích thước carat, màu sắc và độ trong. Chúng tôi hy vọng quý khách sẽ tìm thấy những viên kim cương ưng ý.
+                Chào mừng quý khách đến với bảng giá kim cương của chúng tôi. Dưới đây là thông tin chi tiết về giá kim cương theo từng kích thước, màu sắc và độ trong suốt. Chúng tôi hy vọng quý khách sẽ tìm thấy những viên kim cương ưng ý.
             </Typography>
             {caratSizes.map(caratSize => (
                 <TableContainer component={Paper} className="tablePriceContainer" key={caratSize}>

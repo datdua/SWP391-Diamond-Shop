@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { createCertificate } from "../../api/CertificateAPI.js";
-import { Form, Button } from "react-bootstrap";
 import { createDiamondPrice } from "../../api/DiamondPriceAPI.js";
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
 
-function AddCertificateForm() {
-  const [diamondPrice, setCertificate] = useState({
-    diamondID: "",
+function AddDiamondPriceForm() {
+  const [diamondPrice, setDiamondPrice] = useState({
     diamondEntryPrice: "",
     clarity: "",
     color: "",
@@ -14,64 +15,90 @@ function AddCertificateForm() {
 
   const [message, setMessage] = useState("");
 
+  const labels = {
+    diamondEntryPrice: "Giá Kim Cương",
+    clarity: "Độ trong",
+    color: "Màu sắc",
+    caratSize: "Kích thước",
+  };
+
+  const options = {
+    caratSize: [3.6, 3.9, 4.1, 4.5],
+    color: ["F", "E", "J", "D"],
+    clarity: ["VS1", "VS2", "VVS1", "VVS2"],
+  };
+
   const handleChange = (event) => {
-    setCertificate({
-      ...diamondPrice,
-      [event.target.name]: event.target.value,
-    });
+    setDiamondPrice({ ...diamondPrice, [event.target.name]: event.target.value });
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const response = await createDiamondPrice(diamondPrice);
-      console.log(response);
       if (response.status === 200) {
-        alert("Tạo mới Giá Kim Cương thành công"); // Set the message on success
+        console.log(response);
+        setMessage("Tạo mới Giá Kim Cương thành công");
       } else {
-        alert(response.data.message); // Set the message from the server response
+        // Handle non-200 responses, assuming the API returns a meaningful message
+        console.error(response);
+        const errorMessage = response.data?.message || "Có lỗi xảy ra khi tạo mới Giá Kim Cương";
+        setMessage(errorMessage);
       }
     } catch (error) {
       console.error(error);
-      if (
-        error.response &&
-        error.response.data.message === "Giá kim cương này đã tồn tại"
-      ) {
-        alert("Giá cho kim cương đã tồn tại"); // Set the message if diamond price already exists
-      } else {
-        alert("Tạo mới Giá Kim Cương thất bại"); // Set the message on failure
-      }
+      // Handle network errors or other issues not caught by response status
+      setMessage("Tạo mới Giá Kim Cương thất bại");
     }
   };
 
   return (
     <div>
-      <Form onSubmit={handleSubmit}>
+      <Box
+        component="form"
+        sx={{
+          '& > :not(style)': { m: 1, width: '25ch' },
+        }}
+        noValidate
+        autoComplete="off"
+        onSubmit={handleSubmit}
+      >
         {Object.keys(diamondPrice).map((key) => (
-          <Form.Group controlId={key} key={key}>
-            <Form.Label>{key}</Form.Label>
-            <Form.Control
-              type={
-                key.includes("Date")
-                  ? "date"
-                  : key.includes("Time")
-                    ? "time"
-                    : "text"
-              }
+          options[key] ? (
+            <TextField
+              key={key}
+              id={`select-${key}`}
+              select
+              label={labels[key]}
+              value={diamondPrice[key]}
+              onChange={handleChange}
+              name={key}
+              variant="outlined"
+            >
+              {options[key].map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </TextField>
+          ) : (
+            <TextField
+              key={key}
+              id="outlined-basic"
+              label={labels[key]}
+              variant="outlined"
               name={key}
               value={diamondPrice[key]}
               onChange={handleChange}
-              placeholder={key}
+              type="text"
             />
-          </Form.Group>
+          )
         ))}
-        <Button variant="primary" type="submit">
-          Create diamondPrice
-        </Button>
-      </Form>
-      {message && <p>{message}</p>}
+        <Button type="submit" variant="contained" color="success">Thêm giá</Button>
+        {message && <p style={{ color: '#F2BA59', fontWeight: 'bold' }}>{message}</p>}
+      </Box>
     </div>
   );
 }
 
-export default AddCertificateForm;
+export default AddDiamondPriceForm;

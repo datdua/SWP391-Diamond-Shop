@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import SizeInstructionModal from "../../components/SizeInstructionModal/SizeInstructionModal";
 import { getAccountIDByEmail } from "../../api/accountCrud";
 import Button from "react-bootstrap/esm/Button";
-
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 function JewelryDetailPage() {
@@ -124,7 +124,7 @@ function JewelryDetailPage() {
                 <li>
                   <Link to="/sanpham">Sản phẩm</Link>
                 </li>
-                <li>{jewelry ? jewelry.jewelryName : "Loading..."}</li>
+                <li>{jewelry ? jewelry.jewelryName : "Đang tải..."}</li>
               </ul>
             </div>
           </div>
@@ -164,14 +164,14 @@ function JewelryDetailPage() {
                                 {jewelry.jewelryID}
                               </div>
                               <div className="tm-prodetails-singleinfo" style={{marginTop:'20px', marginBottom:'20px'}}>
-                                <b>Size: </b>
+                                <b>Chọn Kích Cỡ: </b>
                                 <select
                                   value={sizeJewelry}
                                   onChange={handleSizeChange}
                                   style={{ maxWidth: "150px" }}
                                 >
                                   {[
-                                    'Select Size', 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
+                                    'Chọn kích thước: ', 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
                                     18, 19, 20,
                                   ].map((sizeOption) => (
                                     <option key={sizeOption} value={sizeOption}>
@@ -182,11 +182,11 @@ function JewelryDetailPage() {
                                 <Button
                                   onClick={() => setModalShow(true)}
                                   style={{ marginLeft: "10px", background:"#f2ba59", borderRadius:"5px", textAlign:"center" }}
-                                >Hướng dẫn đo ni
+                                >Cách đo ni
                                 </Button>
                               </div>
                               <div className="tm-prodetails-singleinfo">
-                                <b>Gender : </b>                               
+                                <b>Giới tính: </b>                               
                                   {jewelry.gender}
                               </div>
                             </div>                           
@@ -211,7 +211,7 @@ function JewelryDetailPage() {
                                 onClick={() => handleAddToCart(jewelry)}
                                 style={{ background:"#f2ba59", borderRadius:"5px", textAlign:"center", marginLeft:'30px' }}
                               >
-                                Add to cart
+                                Thêm vào giỏ hàng
                               </Button>
                               </div>
                             </div>

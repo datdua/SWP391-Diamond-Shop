@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import Modal from "react-modal";
-import { searchJewelry } from "../../api/JewelryAPI";
+import { getAllJewelry, getPage, searchJewelry } from "../../api/JewelryAPI";
 import { Pagination } from "@mui/material";
-
+import CircularProgress from '@mui/material/CircularProgress';
 Modal.setAppElement("#root");
 
 const customModalStyles = {
@@ -36,12 +36,17 @@ function JewelryPage() {
   const [searchResults, setSearchResults] = useState([]);
   const resultsPerPage = 9;
   const { jewelryId } = useParams();
-  const genders = ["All", "male", "female"];
+  const genders = ["All", "Male", "Female"];
 
-  const fetchJewelryPage = async (page, filtersToUse = {}) => {
+  const fetchJewelryPage = async (page = 1, filtersToUse = {}) => {
     try {
       setLoading(true);
-      const data = await searchJewelry({ ...filtersToUse, page, size: resultsPerPage });
+      let data;
+      if (Object.keys(filtersToUse).length > 0) {
+        data = await searchJewelry(page, filtersToUse);
+      } else {
+        data = await getPage(page);
+      }
       setJewelry(data.content);
       setTotalPages(data.totalPages);
       setLoading(false);
@@ -85,37 +90,26 @@ function JewelryPage() {
     setCurrentPage(1);
     setLoading(true);
     try {
-      let filtersToUse = { ...filters, page: 1, size: resultsPerPage };
-  
-      // Convert min and max price filters to integers if they are defined and not empty
+      let filtersToUse = { ...filters };
       if (filtersToUse.minjewelryEntryPrice !== undefined && filtersToUse.minjewelryEntryPrice !== '') {
         filtersToUse.minjewelryEntryPrice = parseInt(filtersToUse.minjewelryEntryPrice);
       } else {
-        delete filtersToUse.minjewelryEntryPrice; // Remove the key if it's empty
+        delete filtersToUse.minjewelryEntryPrice;
       }
-  
       if (filtersToUse.maxjewelryEntryPrice !== undefined && filtersToUse.maxjewelryEntryPrice !== '') {
         filtersToUse.maxjewelryEntryPrice = parseInt(filtersToUse.maxjewelryEntryPrice);
       } else {
-        delete filtersToUse.maxjewelryEntryPrice; // Remove the key if it's empty
+        delete filtersToUse.maxjewelryEntryPrice;
       }
   
-      // Handle gender filter "All" case explicitly
-      if (filtersToUse.gender === 'All') {
-        delete filtersToUse.gender; // Remove the gender filter if it's "All"
-      }
-  
-      const data = await searchJewelry(filtersToUse);
-      setJewelry(data.content);
-      setTotalPages(data.totalPages);
-      setLoading(false);
-      window.scrollTo(0, 0);
+      await fetchJewelryPage(1, filtersToUse); 
     } catch (error) {
       setError(error.message);
       setLoading(false);
     }
   };
   
+
   const handlePageChange = async (event, page) => {
     setCurrentPage(page);
   };
@@ -156,7 +150,7 @@ function JewelryPage() {
                 <div className="col-lg-9 col-12">
                   <form className="tm-shop-header" onSubmit={handleSearch}>
                     <div className="tm-shop-productview">
-                      <span>View:</span>
+                      <span>Bố cục:</span>
                       <button
                         data-view="grid"
                         className="active"
@@ -169,22 +163,14 @@ function JewelryPage() {
                       </button>
                     </div>
                     <p className="tm-shop-countview">
-                      Showing 1 to {resultsPerPage} of {jewelry.length}{" "}
+                      Hiển thị 1 đến {resultsPerPage} của {jewelry.length}{" "}
                     </p>
-                    <label htmlFor="mySelect">My Select:</label>
-                    <select id="mySelect">
-                      <option value="default">Default Sorting</option>
-                      <option value="name">Name A-Z</option>
-                      <option value="date">Date</option>
-                      <option value="best">Best Sellers</option>
-                      <option value="trending">Trending</option>
-                    </select>
                   </form>
 
                   <div className="tm-shop-products">
                     <div className="row mt-30-reverse">
                       {loading ? (
-                        <div>Loading...</div>
+                        <CircularProgress color="success" />
                       ) : error ? (
                         <div>Error: {error}</div>
                       ) : (
@@ -204,36 +190,34 @@ function JewelryPage() {
                                 <ul className="tm-product-actions">
                                   {isLoggedIn ? null : (
                                     <p>
-                                      Please log in to add items to the cart.
+                                      Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.
                                     </p>
                                   )}
                                   <li>
                                     <Link
                                       to={`/product-detail/jewelry/${item.jewelryID}`}
                                     >
-                                      <i className="ion-android-cart"></i> Add to cart
-                                      </Link>
+                                      <i className="ion-android-cart"></i> Thêm giỏ hàng
+                                    </Link>
                                   </li>
                                   <li>
-                                    <button
-                                      onClick={() => openModal(item)}
-                                      aria-label="Product Quickview"
-                                    >
+                                    <button disabled>
                                       <i className="ion-eye"></i>
                                     </button>
                                   </li>
                                   <li>
-                                    <a href="#">
+                                    <a href="#" onClick={(e) => e.preventDefault()}>
                                       <i className="ion-heart"></i>
                                     </a>
                                   </li>
+
                                 </ul>
                                 <div className="tm-product-badges">
                                   <span className="tm-product-badges-new">
-                                    New
+                                    Mới
                                   </span>
                                   <span className="tm-product-badges-sale">
-                                    Sale
+                                    Hot
                                   </span>
                                 </div>
                               </div>
@@ -283,7 +267,7 @@ function JewelryPage() {
                 <div className="col-lg-3 col-12">
                   <div className="widgets">
                     <div className="single-widget widget-categories">
-                      <h6 className="widget-title">Categories</h6>
+                      <h6 className="widget-title">Danh Mục</h6>
                       <ul>
                         <li>
                           <Link to="/trangsuc">Trang Sức</Link>
@@ -295,7 +279,7 @@ function JewelryPage() {
                     </div>
                     <form onSubmit={handleSearch}>
                       <div className="single-widget widget-colorfilter">
-                        <h6 className="widget-title">Filter by Gender</h6>
+                        <h6 className="widget-title">Lọc Theo Giới Tínhr</h6>
                         <select
                           id="colorSearch"
                           value={filters.gender || "All"}
@@ -311,9 +295,9 @@ function JewelryPage() {
                         </select>
                       </div>
                       <div className="single-widget widget-pricefilter">
-                        <h6 className="widget-title">Filter by Price</h6>
+                        <h6 className="widget-title">Lọc Theo Giá</h6>
                         <div>
-                          <label>Min Jewelry Price:</label>
+                          <label>Giá tối thiểu: </label>
                           <input
                             type="number"
                             value={filters.minjewelryEntryPrice || ""}
@@ -326,7 +310,7 @@ function JewelryPage() {
                           />
                         </div>
                         <div>
-                          <label>Max Jewelry Price:</label>
+                          <label>Giá tối đa: </label>
                           <input
                             type="number"
                             value={filters.maxjewelryEntryPrice || ""}
@@ -339,7 +323,7 @@ function JewelryPage() {
                           />
                         </div>
                       </div>
-                      <button type="submit">Search</button>
+                      <button style={{marginTop: '10px', color: '#f2ba59'}} type="submit">Lọc</button>
                     </form>
                   </div>
                 </div>

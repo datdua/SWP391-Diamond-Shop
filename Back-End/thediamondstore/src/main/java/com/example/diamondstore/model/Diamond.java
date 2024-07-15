@@ -1,6 +1,7 @@
 package com.example.diamondstore.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,16 +22,16 @@ public class Diamond {
     @Column(name = "certificationID", nullable = true)
     private String certificationID;
 
-    @Column(name = "caratSize")
+    @Column(name = "caratSize", precision = 16, scale = 2)
     private BigDecimal caratSize;
 
-    @Column(name = "diamondEntryPrice", precision = 16, scale = 2)
+    @Column(name = "diamondEntryPrice", precision = 16, scale = 2, nullable = true)
     private BigDecimal diamondEntryPrice;
 
-    @Column(name = "grossDiamondPrice", precision = 16, scale = 2)
+    @Column(name = "grossDiamondPrice", precision = 16, scale = 2, nullable = true)
     private BigDecimal grossDiamondPrice;
 
-    @Column(name = "weight")
+    @Column(name = "weight", precision = 16, scale = 2, nullable = true)
     private BigDecimal weight;
 
     @Column(name = "color")
@@ -127,7 +128,7 @@ public class Diamond {
     }
 
     public void setWeight(BigDecimal weight) {
-        this.weight = weight;
+    this.weight = weight.setScale(2, RoundingMode.HALF_UP);
     }
 
     public String getColor() {

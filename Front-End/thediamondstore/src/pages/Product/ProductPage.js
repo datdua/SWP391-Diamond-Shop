@@ -3,6 +3,7 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import Modal from "react-modal";
 import { getAllProduct, getProductPage } from "../../api/ProductAPI"; // Ensure this API call is correct
 import { Pagination } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
 
 Modal.setAppElement("#root"); // Ensure this matches your app's root element
 
@@ -108,14 +109,14 @@ function ProductPage() {
                 <div className="col-lg-9 col-12">
                   <form action="#" className="tm-shop-header">
                     <p className="tm-shop-countview">
-                      Showing {((currentPage - 1) * itemsPerPage * 2) + 1} to {((currentPage * 2) * (itemsPerPage))} of {products.length} products
+                      Hiển thị {((currentPage - 1) * itemsPerPage * 2) + 1} đến {((currentPage * 2) * (itemsPerPage))} của {products.length} sản phẩm
                     </p>
                   </form>
 
                   <div className="tm-shop-products">
                     <div className="row mt-30-reverse">
                       {loading ? (
-                        <div>Loading...</div>
+                        <CircularProgress color="success" />
                       ) : error ? (
                         <div>Error: {error}</div>
                       ) : products.length === 0 ? (
@@ -130,11 +131,11 @@ function ProductPage() {
                                 </div>
                                 <ul className="tm-product-actions">
                                   <li><button onClick={() => openModal(item)} aria-label="Product Quickview"><i className="ion-eye"></i></button></li>
-                                  <li><a href="#"><i className="ion-heart"></i></a></li>
+                                  <li><a><i className="ion-heart" style={{color:'white'}}></i></a></li>
                                 </ul>
                                 <div className="tm-product-badges">
-                                  <span className="tm-product-badges-new">New</span>
-                                  <span className="tm-product-badges-sale">Sale</span>
+                                  <span className="tm-product-badges-new">Mới</span>
+                                  <span className="tm-product-badges-sale">Hot</span>
                                 </div>
                               </div>
                               <div className="tm-product-bottomside">
@@ -174,7 +175,7 @@ function ProductPage() {
                   {/* Sidebar Widgets */}
                   <div className="widgets">
                     <div className="single-widget widget-categories">
-                      <h6 className="widget-title">Categories</h6>
+                      <h6 className="widget-title">Danh Mục</h6>
                       <ul>
                         <li>
                           <Link to="/trangsuc">Trang Sức</Link>

@@ -6,6 +6,7 @@ import "./HomePage.css";
 import { toast } from "react-toastify";
 import { getAllProduct } from "../../api/ProductAPI"; // Updated import
 import { Modal } from "@mui/material";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const customModalStyles = {
     content: {
@@ -126,7 +127,7 @@ function HomePage() {
                             </div>
                             <div className="row mt-50-reverse">
                                 {loading ? (
-                                    <div>Loading...</div>
+                                    <CircularProgress color="success" />
                                 ) : error ? (
                                     <div>Error: {error}</div>
                                 ) : products.length === 0 ? (
@@ -152,8 +153,8 @@ function HomePage() {
                                                         </li>
                                                     </ul>
                                                     <div className="tm-product-badges">
-                                                        <span className="tm-product-badges-new">New</span>
-                                                        <span className="tm-product-badges-sale">Sale</span>
+                                                        <span className="tm-product-badges-new">Mới</span>
+                                                        <span className="tm-product-badges-sale">Giảm giá</span>
                                                     </div>
                                                 </div>
                                                 <div className="tm-product-bottomside">

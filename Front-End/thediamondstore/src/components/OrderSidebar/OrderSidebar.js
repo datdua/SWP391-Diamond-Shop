@@ -14,8 +14,8 @@ function OrderSidebar({ order, show, onHide }) {
           <>
             {/* Account Information */}
             <div className="order-section">
-              <h5>Account Information</h5>
-              <p><span className="detail-title">Account Name:</span> <span className="detail-info">{order[0].order.account?.accountName}</span></p>
+              <h5>Thông tin tài khoản</h5>
+              <p><span className="detail-title">Tên Tài Khoản:</span> <span className="detail-info">{order[0].order.account?.accountName}</span></p>
               <p><span className="detail-title">Phone Number:</span> <span className="detail-info">{order[0].order.account?.phoneNumber}</span></p>
               <p><span className="detail-title">Email:</span> <span className="detail-info">{order[0].order.account?.email}</span></p>
               <p><span className="detail-title">Address:</span> <span className="detail-info">{order[0].order.account?.addressAccount}</span></p>
@@ -27,9 +27,9 @@ function OrderSidebar({ order, show, onHide }) {
               <h5>Order Information</h5>
               <p><span className="detail-title">Order ID:</span> <span className="detail-info">{order[0].order.orderID}</span></p>
               <p><span className="detail-title">Start Order Date:</span> <span className="detail-info">{order[0].order.startorderDate}</span></p>
-              <p><span className="detail-title">Delivery Date:</span> <span className="detail-info">{order[0].order.deliveryDate}</span></p>
+              <p><span className="detail-title">Ngày giao hàng:</span> <span className="detail-info">{order[0].order.deliveryDate}</span></p>
               <p><span className="detail-title">Status:</span> <span className="detail-info">{order[0].order.orderStatus}</span></p>
-              <p><span className="detail-title">Delivery Address:</span> <span className="detail-info">{order[0].order.deliveryAddress}</span></p>
+              <p><span className="detail-title">Địa chỉ giao hàng:</span> <span className="detail-info">{order[0].order.deliveryAddress}</span></p>
             </div>
             <hr />
 

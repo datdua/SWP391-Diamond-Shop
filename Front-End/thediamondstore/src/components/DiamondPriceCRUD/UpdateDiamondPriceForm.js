@@ -1,9 +1,22 @@
 import React, { useState } from "react";
 import { updateDiamondPrice } from "../../api/DiamondPriceAPI.js";
-import { Form, Button } from "react-bootstrap";
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
 
 function UpdateDiamondPriceForm({ diamondPrice }) {
   const [updatedDiamondPrice, setUpdateDiamondPrice] = useState(diamondPrice);
+
+  const labels = {
+    diamondEntryPrice: "Giá Kim Cương",
+    clarity: "Độ trong",
+    color: "Màu sắc",
+    caratSize: "Trọng lượng",
+  };
 
   const handleChange = (event) => {
     setUpdateDiamondPrice({
@@ -22,67 +35,78 @@ function UpdateDiamondPriceForm({ diamondPrice }) {
       alert("Cập nhật thông tin Giá Kim Cương thành công");
     } catch (error) {
       console.error(error);
-      if (
-        error.response &&
-        error.response.data.message === "Giá kim cương này đã tồn tại"
-      ) {
-        alert("Giá kim cương này đã tồn tại");
-      }
       alert("Cập nhật thông tin Giá Kim Cương thất bại");
     }
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Form.Group>
-        <Form.Label>Diamond ID</Form.Label>
-        <Form.Control
-          type="text"
-          name="diamondID"
-          value={updatedDiamondPrice.diamondID}
-          onChange={handleChange}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Diamond Entry Price</Form.Label>
-        <Form.Control
-          type="text"
+    <div>
+      <Box
+        component="form"
+        sx={{
+          '& > :not(style)': { m: 1, width: '25ch' },
+        }}
+        noValidate
+        autoComplete="off"
+        onSubmit={handleSubmit}
+      >
+        <TextField
+          id="outlined-basic"
+          label={labels.diamondEntryPrice}
+          variant="outlined"
           name="diamondEntryPrice"
           value={updatedDiamondPrice.diamondEntryPrice}
           onChange={handleChange}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Clarity</Form.Label>
-        <Form.Control
           type="text"
-          name="clarity"
-          value={updatedDiamondPrice.clarity}
-          onChange={handleChange}
         />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Colour</Form.Label>
-        <Form.Control
-          type="text"
-          name="color"
-          value={updatedDiamondPrice.color}
-          onChange={handleChange}
-        />
-      </Form.Group>
-      <Form.Group>
-        <Form.Label>Carat Size</Form.Label>
-        <Form.Control
-          type="text"
-          name="caratSize"
-          value={updatedDiamondPrice.caratSize}
-          onChange={handleChange}
-        />
-      </Form.Group>
-      <Button variant="primary" type="submit">
-        Update
-      </Button>
-    </Form>
+        <FormControl fullWidth>
+          <InputLabel id="color-select-label">{labels.color}</InputLabel>
+          <Select
+            labelId="color-select-label"
+            id="color-select"
+            value={updatedDiamondPrice.color}
+            label={labels.color}
+            name="color"
+            onChange={handleChange}
+          >
+            {['F', 'E', 'J', 'D'].map((color) => (
+              <MenuItem key={color} value={color}>{color}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <InputLabel id="clarity-select-label">{labels.clarity}</InputLabel>
+          <Select
+            labelId="clarity-select-label"
+            id="clarity-select"
+            value={updatedDiamondPrice.clarity}
+            label={labels.clarity}
+            name="clarity"
+            onChange={handleChange}
+          >
+            {['VS1', 'VS2', 'VVS1', 'VVS2'].map((clarity) => (
+              <MenuItem key={clarity} value={clarity}>{clarity}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <InputLabel id="caratSize-select-label">{labels.caratSize}</InputLabel>
+          <Select
+            labelId="caratSize-select-label"
+            id="caratSize-select"
+            value={updatedDiamondPrice.caratSize}
+            label={labels.caratSize}
+            name="caratSize"
+            onChange={handleChange}
+          >
+            {[3.6, 3.9, 4.1, 4.5].map((size) => (
+              <MenuItem key={size} value={size}>{size}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Button type="submit" variant="contained" color="success">Cập nhật</Button>
+      </Box>
+    </div>
   );
 }
 export default UpdateDiamondPriceForm;

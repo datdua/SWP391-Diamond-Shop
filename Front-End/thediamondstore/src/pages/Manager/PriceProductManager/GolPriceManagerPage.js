@@ -151,7 +151,7 @@ function GoldPriceManager() {
                   style={{ textDecoration: "none" }}
                   onClick={handleShowAdd}
                 >
-                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> ADD
+                  <AddIcon style={{ margin: "0 5px 5px 0" }} /> Thêm Giá Vàng
                 </Button>
                 {selected.length > 0 && (
                   <Tooltip describeChild title="Xóa các giá kim cương đã chọn" arrow placement="top">
@@ -254,7 +254,7 @@ function GoldPriceManager() {
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            {isUpdating ? "Update Gold Price" : "Add Gold Price"}
+            {isUpdating ? "Cập Nhật Giá Vàng" : "Thêm Giá Vàng"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

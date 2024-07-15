@@ -56,7 +56,7 @@ public class Account {
     @JsonBackReference
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     @PrimaryKeyJoinColumn
-    private Customer customer;
+    private AccumulatePoints accumulatePoints;
 
     @Transient
     private String unencryptedPassword; 
@@ -160,11 +160,11 @@ public class Account {
         this.email = email;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public AccumulatePoints getAccumulatePoints() {
+        return accumulatePoints;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setAccumulatePoints(AccumulatePoints accumulatePoints) {
+        this.accumulatePoints = accumulatePoints;
     }
 }
