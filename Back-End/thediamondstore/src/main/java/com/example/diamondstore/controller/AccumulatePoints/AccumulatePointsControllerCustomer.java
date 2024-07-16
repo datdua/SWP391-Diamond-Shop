@@ -1,4 +1,5 @@
 package com.example.diamondstore.controller.AccumulatePoints;
+
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class AccumulatePointsControllerCustomer {
     public AccumulatePointsControllerCustomer(AccumulatePointsService customerService) {
         this.customerService = customerService;
     }
-    
+
     @GetMapping("/{accountID}")
     public ResponseEntity<AccumulatePoints> getAccumulatePointsById_Customer(@PathVariable Integer accountID) {
         Optional<AccumulatePoints> customer = customerService.getAccumulatePointsById(accountID);

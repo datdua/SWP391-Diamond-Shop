@@ -17,7 +17,7 @@ public class CertificateControllerCustomer {
     public CertificateControllerCustomer(CertificateService certificateService) {
         this.certificateService = certificateService;
     }
-   
+
     @GetMapping(value = "/get-certificate-image/{certificateID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getCertificateImg(@PathVariable String certificateID) {
         return certificateService.getCertificateImg(certificateID);

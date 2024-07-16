@@ -13,7 +13,7 @@ import com.example.diamondstore.service.DiamondService;
 @RestController
 @RequestMapping("/api/diamonds")
 public class DiamondController {
-    
+
     private final DiamondService diamondService;
 
     public DiamondController(DiamondService diamondService) {
@@ -24,5 +24,5 @@ public class DiamondController {
     public ResponseEntity<List<Diamond>> getDiamonds() {
         return ResponseEntity.ok(diamondService.getAllDiamonds());
     }
-    
+
 }
