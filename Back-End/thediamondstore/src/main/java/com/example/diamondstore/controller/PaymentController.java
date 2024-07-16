@@ -25,18 +25,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.diamondstore.DTO.PaymentResDTO;
 import com.example.diamondstore.DTO.TransactionStatusDTO;
 import com.example.diamondstore.config.PaymentConfig;
-import com.example.diamondstore.model.Cart;
 import com.example.diamondstore.model.AccumulatePoints;
+import com.example.diamondstore.model.Cart;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.model.OrderDetail;
 import com.example.diamondstore.repository.AccountRepository;
-import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.AccumulatePointsRepository;
+import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.OrderDetailRepository;
 import com.example.diamondstore.repository.OrderRepository;
 
 @RestController
-@RequestMapping("/api/payment")
+@RequestMapping("/api")
 public class PaymentController {
 
     @Autowired
@@ -55,7 +55,7 @@ public class PaymentController {
     private AccumulatePointsRepository accumulatePointsRepository;
 
     // customer
-    @GetMapping("/customer/createPayment")
+    @GetMapping(value = "/customer/payment-management/payments/createPayment", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> createPayment_Customer(@RequestParam Integer orderID) throws UnsupportedEncodingException {
 
         String vnp_Version = "2.1.0";
@@ -128,7 +128,7 @@ public class PaymentController {
     }
 
     // customer
-    @GetMapping(value = "/customer/vnpay_return")
+    @GetMapping(value = "/customer/payment-management/payments/vnpay_return", produces = "application/json;charset=UTF-8")
     public ResponseEntity<TransactionStatusDTO> vnpayReturn(
             @RequestParam(value = "vnp_BankCode") String bankCode,
             @RequestParam(value = "vnp_OrderInfo") Integer orderID,
@@ -139,12 +139,12 @@ public class PaymentController {
         TransactionStatusDTO transactionStatusDTO = new TransactionStatusDTO();
 
         if (responseCode.equals("00")) {
-            // Thanh toán thành công
+            // payment success
             transactionStatusDTO.setStatus("Ok");
             transactionStatusDTO.setMessage("Thanh toán thành công");
             transactionStatusDTO.setData("");
 
-             // Cập nhật trạng thái đơn hàng
+            // Update order status
             order.setOrderStatus("Đã thanh toán");
             order.setTransactionNo(transactionNo);
             orderRepository.save(order);
@@ -154,7 +154,7 @@ public class PaymentController {
             accumulatePoints.setPoint(accumulatePoints.getPoint() + 100);
             accumulatePointsRepository.save(accumulatePoints);
 
-            // Chuyển các mục giỏ hàng thành OrderDetail và lưu
+            // save order detail
             List<Cart> cartItems = cartRepository.findByOrder(order);
             for (Cart cart : cartItems) {
                 OrderDetail orderDetail = new OrderDetail();
@@ -170,16 +170,16 @@ public class PaymentController {
                 orderDetail.setSizeJewelry(cart.getsizeJewelry());
                 orderDetail.setPrice(cart.getPrice());
                 orderDetail.setGrossCartPrice(cart.getGrossCartPrice());
-                // Lưu thông tin tổng giá
+                // sum total price
                 BigDecimal totalPrice = cart.getGrossCartPrice().multiply(BigDecimal.valueOf(cart.getQuantity()));
                 orderDetail.setTotalPrice(totalPrice);
                 orderDetailRepository.save(orderDetail);
 
-                // Xóa giỏ hàng
+                // delete cart
                 cartRepository.delete(cart);
             }
         } else {
-            // Thanh toán thất bại
+            // payment fail
             transactionStatusDTO.setStatus("No");
             transactionStatusDTO.setMessage("Thanh toán thất bại");
             transactionStatusDTO.setData("");

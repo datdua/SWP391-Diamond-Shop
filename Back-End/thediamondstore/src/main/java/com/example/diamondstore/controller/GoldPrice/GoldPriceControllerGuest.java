@@ -12,7 +12,7 @@ import com.example.diamondstore.model.GoldPrice;
 import com.example.diamondstore.service.GoldPriceService;
 
 @RestController
-@RequestMapping("/api/goldPrices/guest")
+@RequestMapping("/api/guest/gold-price-management/gold-prices")
 public class GoldPriceControllerGuest {
 
     @Autowired
@@ -22,12 +22,12 @@ public class GoldPriceControllerGuest {
         this.goldPriceService = goldPriceService;
     }
 
-    @GetMapping
+    @GetMapping(value = "/get-all", produces = "application/json;charset=UTF-8")
     public List<GoldPrice> getAllGoldPrices() {
         return goldPriceService.getAll();
     }
 
-    @GetMapping("/{goldPriceID}")
+    @GetMapping(value = "/{goldPriceID}", produces = "application/json;charset=UTF-8")
     public GoldPrice getGoldPriceById(@PathVariable Integer goldPriceID) {
         return goldPriceService.getGoldPriceById(goldPriceID);
     }
