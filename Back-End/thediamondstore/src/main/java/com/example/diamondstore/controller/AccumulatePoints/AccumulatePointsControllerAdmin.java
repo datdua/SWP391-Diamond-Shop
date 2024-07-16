@@ -21,7 +21,7 @@ import com.example.diamondstore.service.AccumulatePointsService;
 @RestController
 @RequestMapping("/api/admin/accumulate-points")
 public class AccumulatePointsControllerAdmin {
-    
+
     private final AccumulatePointsService accumulatePointsService;
 
     public AccumulatePointsControllerAdmin(AccumulatePointsService accumulatePointsService) {

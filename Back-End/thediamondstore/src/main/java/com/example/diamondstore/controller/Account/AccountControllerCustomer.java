@@ -20,7 +20,6 @@ import com.example.diamondstore.request.AccountRequest;
 import com.example.diamondstore.service.AccountService;
 import com.example.diamondstore.service.OrderService;
 
-
 @RestController
 @RequestMapping("/api/customer/accounts")
 public class AccountControllerCustomer {
@@ -36,7 +35,7 @@ public class AccountControllerCustomer {
         this.orderService = orderService;
         this.orderRepository = orderRepository;
     }
-    
+
     @GetMapping("/get-by-name/{accountName}")
     public ResponseEntity<Account> getByAccountName(@PathVariable String accountName) {
         Account account = accountRepository.findByAccountName(accountName);

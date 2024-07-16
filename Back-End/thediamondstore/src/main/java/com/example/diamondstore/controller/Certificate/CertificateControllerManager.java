@@ -21,7 +21,7 @@ import com.example.diamondstore.service.CertificateService;
 @RestController
 @RequestMapping("/api/manager/certificates")
 public class CertificateControllerManager {
-    
+
     private final CertificateService certificateService;
 
     public CertificateControllerManager(CertificateService certificateService) {

@@ -27,7 +27,7 @@ public class AccountControllerSalesStaff {
         this.accountRepository = accountRepository;
         this.accountService = accountService;
     }
-    
+
     @GetMapping("/{accountID}")
     public ResponseEntity<?> getByAccountID(@PathVariable Integer accountID) {
         Account account = accountRepository.findByAccountID(accountID);

@@ -21,5 +21,3 @@ public class AccumulatePointsController {
         return ResponseEntity.ok(accumulatePointsService.getAllAccumulatePointss());
     }
 }
-
-

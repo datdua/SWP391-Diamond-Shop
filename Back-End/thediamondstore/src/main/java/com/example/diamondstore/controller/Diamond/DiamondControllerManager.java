@@ -20,7 +20,7 @@ import com.example.diamondstore.service.DiamondService;
 @RestController
 @RequestMapping("/api/manager/diamonds")
 public class DiamondControllerManager {
-    
+
     private final DiamondService diamondService;
 
     public DiamondControllerManager(DiamondService diamondService) {

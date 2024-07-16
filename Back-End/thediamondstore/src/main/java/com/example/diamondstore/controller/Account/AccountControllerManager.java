@@ -13,7 +13,6 @@ import com.example.diamondstore.model.Account;
 import com.example.diamondstore.request.AccountRequest;
 import com.example.diamondstore.service.AccountService;
 
-
 @RestController
 @RequestMapping("/api/manager/accounts")
 public class AccountControllerManager {

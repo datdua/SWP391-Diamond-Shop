@@ -65,7 +65,7 @@ public class WarrantyController {
     }
 
     // admin
-    @GetMapping("/admin/get-paging")
+    @GetMapping(value = "/admin/get-paging", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Page<Warranty>> getAllWarrantiesPaged_Admin(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(warrantyService.getAllWarrantiesPaged(page, size));
     }
