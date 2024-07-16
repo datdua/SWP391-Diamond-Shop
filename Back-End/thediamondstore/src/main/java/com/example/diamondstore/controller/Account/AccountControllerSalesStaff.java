@@ -17,7 +17,7 @@ import com.example.diamondstore.request.AccountRequest;
 import com.example.diamondstore.service.AccountService;
 
 @RestController
-@RequestMapping("/api/accounts/salesstaff")
+@RequestMapping("/api/sales-staff/accounts")
 public class AccountControllerSalesStaff {
 
     private final AccountRepository accountRepository;
@@ -28,7 +28,7 @@ public class AccountControllerSalesStaff {
         this.accountService = accountService;
     }
     
-    @GetMapping("/get/{accountID}")
+    @GetMapping("/{accountID}")
     public ResponseEntity<?> getByAccountID(@PathVariable Integer accountID) {
         Account account = accountRepository.findByAccountID(accountID);
         if (account == null) {
@@ -37,7 +37,7 @@ public class AccountControllerSalesStaff {
         return ResponseEntity.ok(account);
     }
 
-    @GetMapping("/getByEmail/{email}")
+    @GetMapping("/get-by-email/{email}")
     public ResponseEntity<?> getByAccountEmail(@PathVariable String email) {
         Optional<Account> account = accountRepository.findByEmail(email);
         if (account.isPresent()) {

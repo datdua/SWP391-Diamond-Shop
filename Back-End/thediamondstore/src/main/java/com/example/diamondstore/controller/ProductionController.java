@@ -72,7 +72,7 @@ public class ProductionController {
     }
 
     // guest
-    @GetMapping("/guest/paged")
+    @GetMapping("/guest/get-paging")
     public Map<String, Object> getPagedProduction(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -80,7 +80,7 @@ public class ProductionController {
     }
 
     // admin
-    @GetMapping("/admin/paged")
+    @GetMapping("/admin/get-paging")
     public Map<String, Object> getPagedProduction_Admin(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -88,7 +88,7 @@ public class ProductionController {
     }
 
     // customer
-    @GetMapping("/customer/paged")
+    @GetMapping("/customer/get-paging")
     public Map<String, Object> getPagedProduction_Customer(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {

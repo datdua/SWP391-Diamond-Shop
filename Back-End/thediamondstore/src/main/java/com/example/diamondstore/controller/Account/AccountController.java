@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +30,6 @@ public class AccountController {
 
     private final AccountRepository accountRepository;
 
-
     public AccountController(AccountService accountService, AccountRepository accountRepository) {
         this.accountService = accountService;
         this.accountRepository = accountRepository;
@@ -42,7 +40,7 @@ public class AccountController {
         return ResponseEntity.ok(accountRepository.findAll());
     }
 
-    @GetMapping("/{accountName}")
+    @GetMapping("/get-by-account-name/{accountName}")
     public ResponseEntity<Account> getByAccountName(@PathVariable String accountName) {
         Account account = accountRepository.findByAccountName(accountName);
         if (account == null) {
@@ -51,14 +49,14 @@ public class AccountController {
         return ResponseEntity.ok(account);
     }
 
-    @GetMapping("/paged")
+    @GetMapping("/get-paging")
     public ResponseEntity<Page<Account>> getAllAccountsPaged(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Account> pageAccount = accountRepository.findAll(pageable);
         return ResponseEntity.ok(pageAccount);
     }
 
-    @GetMapping("/get/{accountID}")
+    @GetMapping("/{accountID}")
     public ResponseEntity<?> getByAccountID(@PathVariable Integer accountID) {
         Account account = accountRepository.findByAccountID(accountID);
         if (account == null) {
@@ -67,7 +65,7 @@ public class AccountController {
         return ResponseEntity.ok(account);
     }
 
-    @GetMapping("/getByEmail/{email}")
+    @GetMapping("/get-by-account-email/{email}")
     public ResponseEntity<?> getByAccountEmail(@PathVariable String email) {
         Optional<Account> account = accountRepository.findByEmail(email);
         if (account.isPresent()) {
@@ -77,7 +75,7 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/getByRole/{role}")
+    @GetMapping("/get-by-account-role/{role}")
     public ResponseEntity<?> getByAccountRole(@PathVariable String role) {
         List<Account> accounts = accountRepository.findByRole(role);
         if (accounts.isEmpty()) {
@@ -86,7 +84,7 @@ public class AccountController {
         return ResponseEntity.ok(accounts);
     }
 
-     @GetMapping("/all-except-customer")
+    @GetMapping("/get-all-except-customer")
     public List<Account> getAllAccountsExceptCustomer() {
         return accountService.getAllAccountsExcludingRoleCustomer();
     }
