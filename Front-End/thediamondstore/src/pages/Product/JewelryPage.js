@@ -36,7 +36,7 @@ function JewelryPage() {
   const [searchResults, setSearchResults] = useState([]);
   const resultsPerPage = 9;
   const { jewelryId } = useParams();
-  const genders = ["All", "Male", "Female"];
+  const genders = ["Tất cả", "Nam", "Nữ"];
 
   const fetchJewelryPage = async (page = 1, filtersToUse = {}) => {
     try {
@@ -101,7 +101,11 @@ function JewelryPage() {
       } else {
         delete filtersToUse.maxjewelryEntryPrice;
       }
-  
+
+      if (filtersToUse.gender === "Tất cả") {
+        delete filtersToUse.gender;
+      }
+
       await fetchJewelryPage(1, filtersToUse); 
     } catch (error) {
       setError(error.message);
@@ -148,33 +152,11 @@ function JewelryPage() {
             <div className="container">
               <div className="row">
                 <div className="col-lg-9 col-12">
-                  <form className="tm-shop-header" onSubmit={handleSearch}>
-                    <div className="tm-shop-productview">
-                      <span>View:</span>
-                      <button
-                        data-view="grid"
-                        className="active"
-                        aria-label="Grid View"
-                      >
-                        <i className="ion-android-apps"></i>
-                      </button>
-                      <button data-view="list" aria-label="List View">
-                        <i className="ion-android-menu"></i>
-                      </button>
-                    </div>
+                  <form className="tm-shop-header" onSubmit={handleSearch}>                 
                     <p className="tm-shop-countview">
-                      Showing 1 to {resultsPerPage} of {jewelry.length}{" "}
-                    </p>
-                    <label htmlFor="mySelect">My Select:</label>
-                    <select id="mySelect">
-                      <option value="default">Default Sorting</option>
-                      <option value="name">Name A-Z</option>
-                      <option value="date">Date</option>
-                      <option value="best">Best Sellers</option>
-                      <option value="trending">Trending</option>
-                    </select>
+                      Hiển thị sản phẩm 1 đến {resultsPerPage} trong {jewelry.length} sản phẩm{" "}
+                    </p>                
                   </form>
-
                   <div className="tm-shop-products">
                     <div className="row mt-30-reverse">
                       {loading ? (
@@ -277,7 +259,7 @@ function JewelryPage() {
                 <div className="col-lg-3 col-12">
                   <div className="widgets">
                     <div className="single-widget widget-categories">
-                      <h6 className="widget-title">Categories</h6>
+                      <h6 className="widget-title">Danh mục</h6>
                       <ul>
                         <li>
                           <Link to="/trangsuc">Trang Sức</Link>
@@ -289,10 +271,10 @@ function JewelryPage() {
                     </div>
                     <form onSubmit={handleSearch}>
                       <div className="single-widget widget-colorfilter">
-                        <h6 className="widget-title">Filter by Gender</h6>
+                        <h6 className="widget-title">Lọc theo giới tính</h6>
                         <select
                           id="colorSearch"
-                          value={filters.gender || "All"}
+                          value={filters.gender || "Tất cả"}
                           onChange={(e) =>
                             setFilters({ ...filters, gender: e.target.value })
                           }
@@ -305,9 +287,9 @@ function JewelryPage() {
                         </select>
                       </div>
                       <div className="single-widget widget-pricefilter">
-                        <h6 className="widget-title">Filter by Price</h6>
+                        <h6 className="widget-title">Lọc theo giá</h6>
                         <div>
-                          <label>Min Jewelry Price:</label>
+                          <label>Giá tối thiểu:</label>
                           <input
                             type="number"
                             value={filters.minjewelryEntryPrice || ""}
@@ -320,7 +302,7 @@ function JewelryPage() {
                           />
                         </div>
                         <div>
-                          <label>Max Jewelry Price:</label>
+                          <label>Giá tối đa:</label>
                           <input
                             type="number"
                             value={filters.maxjewelryEntryPrice || ""}
@@ -333,7 +315,7 @@ function JewelryPage() {
                           />
                         </div>
                       </div>
-                      <button type="submit">Search</button>
+                      <button type="submit" style={{backgroundColor: '#f2ba59', marginTop:'10px'}} className="btn btn-primary mb-4">Tìm kiếm</button>
                     </form>
                   </div>
                 </div>
