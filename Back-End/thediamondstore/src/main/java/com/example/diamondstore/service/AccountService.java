@@ -283,37 +283,34 @@ public class AccountService implements UserDetailsService {
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật tài khoản thành công"));
     }
 
-    public ResponseEntity<Map<String, String>> updateAccountProfile(Integer accountID, AccountRequest accountRequest, String token) {
+    public Account updateAccountProfile(Integer accountID, AccountRequest accountRequest, String token) {
         Account existingAccount = accountRepository.findById(accountID).orElse(null);
         if (existingAccount == null) {
             throw new RuntimeException("Không tìm thấy tài khoản");
         }
-    
+
         // Decode the JWT token to extract the role of the currently logged-in account
         Claims claims = jwtUtil.extractAllClaims(token);
         String currentRole = claims.get("role", String.class);
-    
+
         // If the account being updated is the same as the one logged in, ensure the role cannot be changed
         if (accountID.equals(claims.get("accountID")) && !accountRequest.getRole().equals(currentRole)) {
             throw new RuntimeException("Không thể cập nhật vai trò của tài khoản đang đăng nhập");
         }
-    
+
         // Update account fields from request
         existingAccount.setAccountName(accountRequest.getAccountName());
         existingAccount.setEmail(accountRequest.getEmail());
         existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
         existingAccount.setRole(accountRequest.getRole());
         existingAccount.setAddressAccount(accountRequest.getAddressAccount());
-        existingAccount.setActive(accountRequest.getActive());
-    
+
         // Only update the password if a new password is provided
         if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty()
                 && !accountRequest.getPassword().equals(existingAccount.getPassword())) {
             existingAccount.setPassword(accountRequest.getPassword());
         }
-    
-        accountRepository.save(existingAccount);
-    
-        return ResponseEntity.ok().body(Collections.singletonMap("message", "Cập nhật tài khoản thành công"));
+
+        return accountRepository.save(existingAccount);
     }
 }
