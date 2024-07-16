@@ -55,7 +55,9 @@ function DiamondPage() {
     const cuts = ['Tất cả', 'Excellent'];
     const clarities = ['Tất cả', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2', 'I1', 'I2', 'I3'];
     const shapes = ['Tất cả', 'Radiant', 'Around', 'Pear'];
+
     const origins = ['Tất cả', 'GIA'];
+
 
     useEffect(() => {
         fetchDiamonds(currentPage);
@@ -175,11 +177,13 @@ function DiamondPage() {
                                                     <div className="col-md-12">
                                                         <div className="card border-0">
                                                             <div className="card-header bg-white d-flex justify-content-between align-items-center">
+
                                                                 <h4 className="mb-0">Tính năng tìm kiếm nâng cao</h4>
                                                                 <button type="button" className="btn btn-link" onClick={closeModal}><CloseIcon /></button>
                                                             </div>
                                                             <div className="card-body px-4 px-md-5 py-4">
                                                                 <h5>DANH SÁCH LỌC</h5>
+
                                                                 <div className="row">
                                                                     <div className="col-md-2 mb-4">
                                                                         <div className="card">
@@ -269,7 +273,7 @@ function DiamondPage() {
                                                                     <div className="col-md-2 mb-4">
                                                                         <div className="card">
                                                                             <div className="card-header">
-                                                                                <h6><span className="fa fa-filter mr-3"></span>Nguồn gốc</h6>
+                                                                              <h6><span className="fa fa-filter mr-3"></span>Nguồn gốc</h6>
                                                                             </div>
                                                                             <div className="card-body">
                                                                                 <select
@@ -292,7 +296,7 @@ function DiamondPage() {
                                                                     <div className="col-md-4 mb-4">
                                                                         <div className="card">
                                                                             <div className="card-header">
-                                                                                <h6><span className="fa fa-filter mr-3"></span>Giá</h6>
+                                                                                <h6><span className="fa fa-filter mr-3"></span>Giá tiền</h6>
                                                                             </div>
                                                                             <div className="card-body">
                                                                                 <div className="form-row">
@@ -325,12 +329,12 @@ function DiamondPage() {
                                                                     <div className="col-md-4 mb-4">
                                                                         <div className="card">
                                                                             <div className="card-header">
-                                                                                <h6><span className="fa fa-filter mr-3"></span>Kích cỡ carat</h6>
+                                                                                <h6><span className="fa fa-filter mr-3"></span>Kích thước</h6>
                                                                             </div>
                                                                             <div className="card-body">
                                                                                 <div className="form-row">
                                                                                     <div className="form-group col-md-6">
-                                                                                        <label htmlFor="minCaratSize">Kích cỡ tối thiểu</label>
+                                                                                        <label htmlFor="minCaratSize">Tối thiểu</label>
                                                                                         <input
                                                                                             type="number"
                                                                                             className="form-control"
@@ -341,7 +345,7 @@ function DiamondPage() {
                                                                                         />
                                                                                     </div>
                                                                                     <div className="form-group col-md-6">
-                                                                                        <label htmlFor="maxCaratSize">Kích cỡ tối đa</label>
+                                                                                        <label htmlFor="maxCaratSize">Tối đa</label>
                                                                                         <input
                                                                                             type="number"
                                                                                             className="form-control"
@@ -358,12 +362,12 @@ function DiamondPage() {
                                                                     <div className="col-md-4 mb-4">
                                                                         <div className="card">
                                                                             <div className="card-header">
-                                                                                <h6><span className="fa fa-filter mr-3"></span>Trọng lượng carat</h6>
+                                                                                <h6><span className="fa fa-filter mr-3"></span>Trọng lượng</h6>
                                                                             </div>
                                                                             <div className="card-body">
                                                                                 <div className="form-row">
                                                                                     <div className="form-group col-md-6">
-                                                                                        <label htmlFor="minCaratWeight">Trọng lượng tối thiểu</label>
+                                                                                        <label htmlFor="minCaratWeight">Tối thiểu</label>
                                                                                         <input
                                                                                             type="number"
                                                                                             className="form-control"
@@ -374,7 +378,7 @@ function DiamondPage() {
                                                                                         />
                                                                                     </div>
                                                                                     <div className="form-group col-md-6">
-                                                                                        <label htmlFor="maxCaratWeight">Trọng lượng tối đa</label>
+                                                                                        <label htmlFor="maxCaratWeight">Tối đa</label>
                                                                                         <input
                                                                                             type="number"
                                                                                             className="form-control"
@@ -393,7 +397,7 @@ function DiamondPage() {
                                                             <div className="col-md-12 d-flex flex-column">
                                                                 <div className="mt-auto w-100">
                                                                     <div className="card-footer bg-white d-flex justify-content-end">
-                                                                        <button className="btn btn-secondary px-4 mb-2 mr-5" type="button" onClick={closeModal}>Cancel</button>
+                                                                        <button className="btn btn-secondary px-4 mb-2 mr-5" type="button" onClick={closeModal}>Hủy</button>
                                                                         <button className="btn  ml-5" onClick={handleSearch} style={{ backgroundColor: '#f2ba59' }}>
                                                                             <span className="fa fa-filter"></span> &nbsp;&nbsp;Tìm kiếm
                                                                         </button>
@@ -433,8 +437,8 @@ function DiamondPage() {
                                                                             <li><a href="#"><i className="ion-heart"></i></a></li>
                                                                         </ul>
                                                                         <div className="tm-product-badges">
-                                                                            <span className="tm-product-badges-new">New</span>
-                                                                            <span className="tm-product-badges-sale">Sale</span>
+                                                                            <span className="tm-product-badges-new">Mới</span>
+                                                                            <span className="tm-product-badges-sale">Giảm giá</span>
                                                                         </div>
                                                                     </div>
                                                                     <div className="tm-product-bottomside">

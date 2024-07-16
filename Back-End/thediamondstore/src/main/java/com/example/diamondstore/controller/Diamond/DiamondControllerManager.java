@@ -45,7 +45,7 @@ public class DiamondControllerManager {
     public ResponseEntity<Map<String, String>> deleteDiamonds_Admin(@RequestBody List<String> diamondIDs) {
         try {
             diamondService.deleteDiamonds(diamondIDs);
-            return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
+            return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các kim cương thành công"));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
         }

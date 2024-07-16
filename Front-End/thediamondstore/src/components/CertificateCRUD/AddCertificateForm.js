@@ -3,7 +3,6 @@ import { createCertificate } from "../../api/CertificateAPI.js";
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import Stack from '@mui/material/Stack';
 
 function AddCertificateForm() {
   const [certificate, setCertificate] = useState({
@@ -37,10 +36,15 @@ function AddCertificateForm() {
       };
       const response = await createCertificate(dateTimeCertificate);
       console.log(response);
-      setMessage("Tạo mới Chứng Chỉ thành công");
+      setMessage(response.message || "Tạo mới Chứng Chỉ thành công");
     } catch (error) {
-      console.error(error);
-      setMessage("Tạo mới Chứng Chỉ thất bại");
+      let errorMessage = "Tạo mới Chứng Chỉ thất bại";
+      if (error.response && error.response.data && error.response.data.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      setMessage(errorMessage);
     }
   };
 

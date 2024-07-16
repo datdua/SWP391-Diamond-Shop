@@ -188,28 +188,26 @@ function JewelryPage() {
                                       to={`/product-detail/jewelry/${item.jewelryID}`}
                                     >
                                       <i className="ion-android-cart"></i> Thêm giỏ hàng
-                                      </Link>
+                                    </Link>
                                   </li>
                                   <li>
-                                    <button
-                                      onClick={() => openModal(item)}
-                                      aria-label="Product Quickview"
-                                    >
+                                    <button disabled>
                                       <i className="ion-eye"></i>
                                     </button>
                                   </li>
                                   <li>
-                                    <a href="#">
+                                    <a href="#" onClick={(e) => e.preventDefault()}>
                                       <i className="ion-heart"></i>
                                     </a>
                                   </li>
+
                                 </ul>
                                 <div className="tm-product-badges">
                                   <span className="tm-product-badges-new">
-                                    New
+                                    Mới
                                   </span>
                                   <span className="tm-product-badges-sale">
-                                    Sale
+                                    Hot
                                   </span>
                                 </div>
                               </div>
@@ -287,9 +285,9 @@ function JewelryPage() {
                         </select>
                       </div>
                       <div className="single-widget widget-pricefilter">
-                        <h6 className="widget-title">Lọc theo giá</h6>
+                        <h6 className="widget-title">Lọc Theo Giá</h6>
                         <div>
-                          <label>Giá tối thiểu:</label>
+                          <label>Giá tối thiểu: </label>
                           <input
                             type="number"
                             value={filters.minjewelryEntryPrice || ""}

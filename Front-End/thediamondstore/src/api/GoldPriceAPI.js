@@ -30,12 +30,12 @@ export const createGoldPrice = async (goldPrice) => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.post(
-      "http://localhost:8080/api/goldPrices/manager/create",
+      "http://localhost:8080/api/goldPrices/manager",
       goldPrice,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
-    );
+    )
     return response.data;
   } catch (error) {
     console.error(error);
