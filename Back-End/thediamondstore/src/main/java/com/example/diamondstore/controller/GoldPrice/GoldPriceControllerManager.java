@@ -19,7 +19,7 @@ import com.example.diamondstore.service.GoldPriceService;
 @RestController
 @RequestMapping("/api/manager/gold-price-management/gold-prices")
 public class GoldPriceControllerManager {
-    
+
     private final GoldPriceService goldPriceService;
 
     public GoldPriceControllerManager(GoldPriceService goldPriceService) {

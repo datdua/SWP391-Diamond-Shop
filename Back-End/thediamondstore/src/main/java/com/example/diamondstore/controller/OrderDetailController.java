@@ -11,7 +11,7 @@ import com.example.diamondstore.service.OrderDetailService;
 @RestController
 @RequestMapping("/api")
 public class OrderDetailController {
-    
+
     @Autowired
     private OrderDetailService orderDetailService;
 

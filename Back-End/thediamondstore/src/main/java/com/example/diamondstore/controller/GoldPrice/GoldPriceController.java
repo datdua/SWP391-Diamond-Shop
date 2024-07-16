@@ -25,5 +25,4 @@ public class GoldPriceController {
     public List<GoldPrice> getAllGoldPrices() {
         return goldPriceService.getAll();
     }
-
 }

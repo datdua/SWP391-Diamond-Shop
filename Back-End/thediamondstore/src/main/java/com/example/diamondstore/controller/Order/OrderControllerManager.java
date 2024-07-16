@@ -22,7 +22,7 @@ import com.example.diamondstore.service.OrderService;
 @RestController
 @RequestMapping("/api/manager/order-management/orders")
 public class OrderControllerManager {
-    
+
     private final OrderService orderService;
 
     public OrderControllerManager(OrderService orderService) {
@@ -38,7 +38,6 @@ public class OrderControllerManager {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
         }
     }
-
 
     @GetMapping(value = "/get-by-status/{orderStatus}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrdersByStatus(@PathVariable String orderStatus) {
