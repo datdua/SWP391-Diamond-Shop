@@ -38,11 +38,6 @@ public class WarrantyController {
         return ResponseEntity.ok(warrantyService.getAllWarranties());
     }
 
-    // // customer
-    // @GetMapping(value = "/customer", produces = "application/json;charset=UTF-8")
-    // public ResponseEntity<Iterable<Warranty>> getWarrantiesCustomer() {
-    //     return ResponseEntity.ok(warrantyService.getAllWarranties());
-    // }
     // manager
     @GetMapping(value = "/manager/warranty-management/warranties/{warrantyID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Warranty> getWarrantyManager(@PathVariable String warrantyID) {
