@@ -21,27 +21,22 @@ public class CertificateController {
         this.certificateService = certificateService;
     }
 
-    @GetMapping
+    @GetMapping("/get-all")
     public ResponseEntity<Iterable<Certificate>> getCertificates() {
         return ResponseEntity.ok(certificateService.getAllCertificates());
     }
 
-    @GetMapping("/paged")
+    @GetMapping("/get-paging")
     public ResponseEntity<Page<Certificate>> getAllCertificatePaged(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(certificateService.getAllCertificatesPaged(page, size));
     }
 
-    @GetMapping("/get-all")
-    public ResponseEntity<Iterable<Certificate>> getCertificates_Admin() {
-        return ResponseEntity.ok(certificateService.getAllCertificates());
-    }
-
-    @GetMapping("/getById/{certificateID}")
+    @GetMapping("/get-by-id/{certificateID}")
     public ResponseEntity<?> getCertificate_Admin(@PathVariable String certificateID) {
         return certificateService.getCertificateById(certificateID);
     }
 
-    @GetMapping(value = "/get/certificateImg/{certificateID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/get-certificate-image/{certificateID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getCertificateImg_Admin(@PathVariable String certificateID) {
         return certificateService.getCertificateImg(certificateID);
     }

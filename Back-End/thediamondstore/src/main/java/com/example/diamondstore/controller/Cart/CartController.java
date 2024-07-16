@@ -21,13 +21,13 @@ import com.example.diamondstore.model.Cart;
 import com.example.diamondstore.service.CartService;
 
 @RestController
-@RequestMapping("/api/cart/customer")
+@RequestMapping("/api/customer/carts")
 public class CartController {
 
     @Autowired
     private CartService cartService;
 
-    @GetMapping
+    @GetMapping("/{accountID}")
     public ResponseEntity<List<Cart>> getCartItems(@RequestParam Integer accountID) {
         List<Cart> cartItems = cartService.getCartItems(accountID);
         if (cartItems.isEmpty()) {
@@ -63,13 +63,13 @@ public class CartController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật giỏ hàng thành công"));
     }
 
-    @DeleteMapping(value = "/remove/{cartID}")
+    @DeleteMapping(value = "/delete/{cartID}")
     public ResponseEntity<Map<String, String>> removeCartItem(@PathVariable Integer cartID) {
         cartService.removeCartItem(cartID);
         return ResponseEntity.ok(Collections.singletonMap("message", "Xóa khỏi giỏ hàng thành công"));
     }
 
-    @GetMapping(value = "/totalCart")
+    @GetMapping(value = "/total-cart")
     public ResponseEntity<?> getTotalCart(@RequestParam Integer accountID) {
         BigDecimal totalCart = cartService.getTotalCart(accountID);
         return ResponseEntity.ok(totalCart);

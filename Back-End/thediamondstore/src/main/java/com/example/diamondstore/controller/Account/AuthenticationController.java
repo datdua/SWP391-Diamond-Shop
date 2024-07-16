@@ -20,12 +20,12 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
     
-    @PostMapping(value = "/guest/login", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/api/auth/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
         return authenticationService.authenticate(authenticationRequest);
     }
 
-    @PostMapping(value = "/guest/refresh", produces = "application/json")
+    @PostMapping(value = "/api/auth/refresh-token", produces = "application/json")
     public ResponseEntity<?> refreshAuthenticationToken(@RequestHeader("Authorization") String token) {
         return authenticationService.refresh(token.substring(0));
     }

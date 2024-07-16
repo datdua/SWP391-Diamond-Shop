@@ -21,7 +21,7 @@ public class DiamondController {
     }
 
     @GetMapping("/get-all")
-    public ResponseEntity<List<Diamond>> getDiamonds_Manager() {
+    public ResponseEntity<List<Diamond>> getDiamonds() {
         return ResponseEntity.ok(diamondService.getAllDiamonds());
     }
     

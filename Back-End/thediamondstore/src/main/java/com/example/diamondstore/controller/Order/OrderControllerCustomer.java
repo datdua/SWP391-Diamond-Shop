@@ -80,7 +80,7 @@ public class OrderControllerCustomer {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping(value = "/getOrder/paged", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/getOrder/get-paging", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrdersPaged_Customer(@RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(orderService.getAllOrdersPaged(page, size));
     }

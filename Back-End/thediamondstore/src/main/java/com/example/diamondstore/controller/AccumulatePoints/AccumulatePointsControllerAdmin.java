@@ -19,7 +19,7 @@ import com.example.diamondstore.request.AccumulatePointsRequest;
 import com.example.diamondstore.service.AccumulatePointsService;
 
 @RestController
-@RequestMapping("/api/customers/admin")
+@RequestMapping("/api/admin/accumulate-points")
 public class AccumulatePointsControllerAdmin {
     
     private final AccumulatePointsService accumulatePointsService;
@@ -38,7 +38,7 @@ public class AccumulatePointsControllerAdmin {
         }
     }
 
-    @GetMapping("/total")
+    @GetMapping("/get-total")
     public ResponseEntity<Long> getTotalCustomers() {
         long totalCustomers = accumulatePointsService.getTotalAccumulatePoints();
         return new ResponseEntity<>(totalCustomers, HttpStatus.OK);
@@ -54,7 +54,7 @@ public class AccumulatePointsControllerAdmin {
         }
     }
 
-    @DeleteMapping("/{accountID}")
+    @DeleteMapping("/delete/{accountID}")
     public ResponseEntity<Map<String, String>> deleteCustomer(@PathVariable Integer accountID) {
         return accumulatePointsService.deleteAccumulatePoints(accountID);
     }

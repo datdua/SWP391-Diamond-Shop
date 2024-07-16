@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.diamondstore.service.CertificateService;
 
 @RestController
-@RequestMapping("/api/certificates/customer")
+@RequestMapping("/api/customer/certificates")
 public class CertificateControllerCustomer {
 
     private final CertificateService certificateService;
@@ -18,7 +18,7 @@ public class CertificateControllerCustomer {
         this.certificateService = certificateService;
     }
    
-    @GetMapping(value = "/get/certificateImg/{certificateID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/get-certificate-image/{certificateID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getCertificateImg(@PathVariable String certificateID) {
         return certificateService.getCertificateImg(certificateID);
     }

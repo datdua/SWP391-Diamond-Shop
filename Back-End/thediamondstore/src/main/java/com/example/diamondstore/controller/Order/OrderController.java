@@ -26,7 +26,7 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOrdersHaveTransactionNo());
     }
 
-    @GetMapping(value = "/getOrder/paged", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/get-paging", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrdersPaged(@RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(orderService.getAllOrdersPaged(page, size));
     }
