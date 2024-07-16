@@ -17,7 +17,7 @@ import com.example.diamondstore.service.AccountService;
 
 
 @RestController
-@RequestMapping("/api/accounts/guest")
+@RequestMapping("/api/guest/accounts")
 public class AccountControllerGuest {
     
     private final AccountService accountService;

@@ -37,7 +37,7 @@ public class JewelryControllerGuest {
         return ResponseEntity.ok(jewelry);
     }
 
-    @GetMapping(value = "/paged/jewelrys", produces = "application/json;charset=UTF-8")
+    @GetMapping("/get-paging")
     public ResponseEntity<Page<Jewelry>> getAllJewelryPaged(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         Page<Jewelry> pageJewelrys = jewelryService.getAllJewelryPaged(page, size);
         return ResponseEntity.ok(pageJewelrys);
@@ -60,7 +60,7 @@ public class JewelryControllerGuest {
         return ResponseEntity.ok(jewelrys);
     }
 
-    @GetMapping(value = "/search/filter/paged", produces = "application/json;charset=UTF-8")
+    @GetMapping("/search/get-paging")
     public ResponseEntity<Page<Jewelry>> searchJewelryWithFilters(
             @RequestParam(required = false) String jewelryName,
             @RequestParam(required = false) Float minjewelryEntryPrice,
