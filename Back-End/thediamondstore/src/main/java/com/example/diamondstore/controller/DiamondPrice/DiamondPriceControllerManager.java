@@ -26,7 +26,7 @@ public class DiamondPriceControllerManager {
         this.diamondPriceService = diamondPriceService;
     }
 
-    @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
+    @PostMapping(value = "/add", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> addDiamondPrice(@RequestBody DiamondPriceRequest diamondPriceRequest) {
         return diamondPriceService.addDiamondPrice(diamondPriceRequest);
     }

@@ -38,7 +38,7 @@ public class ProductController {
     }
 
     // guest
-    @GetMapping(value = "/guest/product-management/products/paged", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/guest/product-management/products/get-paging", produces = "application/json;charset=UTF-8")
     public Map<String, Object> getPagedProduction(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
