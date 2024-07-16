@@ -18,7 +18,7 @@ import com.example.diamondstore.request.putRequest.JewelryPutRequest;
 import com.example.diamondstore.service.JewelryService;
 
 @RestController
-@RequestMapping("/api/jewelry/manager")
+@RequestMapping("/api/manager/jewelry-management/jewelries")
 public class JewelryControllerManager {
     
     private final JewelryService jewelryService;
@@ -27,13 +27,13 @@ public class JewelryControllerManager {
         this.jewelryService = jewelryService;
     }
 
-    @PostMapping(value = "/create")
-    public ResponseEntity<Map<String, String>> createJewelry_Admin(@RequestBody Jewelry jewelry) {
+    @PostMapping(value = "/add", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> createJewelryAdmin(@RequestBody Jewelry jewelry) {
         return jewelryService.createJewelry(jewelry);
     }
 
-    @PutMapping("/update/{jewelryID}")
-    public ResponseEntity<Map<String, String>> updateJewelry_Admin(@PathVariable String jewelryID, @RequestBody JewelryPutRequest jewelryPutRequest) {
+    @PutMapping(value = "/update/{jewelryID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> updateJewelryAdmin(@PathVariable String jewelryID, @RequestBody JewelryPutRequest jewelryPutRequest) {
         Map<String, String> response = jewelryService.updateJewelry(jewelryID, jewelryPutRequest);
         if ("Trang sức không tồn tại".equals(response.get("message"))) {
             return ResponseEntity.notFound().build();
@@ -42,7 +42,7 @@ public class JewelryControllerManager {
     }
 
     @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> deleteJewelrys_Admin(@RequestBody List<String> jewelryIDs) {
+    public ResponseEntity<Map<String, String>> deleteJewelrysAdmin(@RequestBody List<String> jewelryIDs) {
         try {
             jewelryService.deleteJewelry(jewelryIDs);
             return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các trang sức thành công"));

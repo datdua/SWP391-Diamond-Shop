@@ -257,12 +257,11 @@ public class AccountService implements UserDetailsService {
         return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
     }
 
-    public ResponseEntity<Map<String, String>> updateAccount_Customer(Integer accountID, AccountRequest accountRequest) {
+    public Account updateAccount_Customer(Integer accountID, AccountRequest accountRequest) {
         Account existingAccount = accountRepository.findById(accountID).orElse(null);
         if (existingAccount == null) {
             throw new RuntimeException("Không tìm thấy tài khoản");
         }
-    
         // Update account fields from request
         existingAccount.setAccountName(accountRequest.getAccountName());
         existingAccount.setEmail(accountRequest.getEmail());
@@ -277,10 +276,7 @@ public class AccountService implements UserDetailsService {
             String encodedPassword = passwordEncoder.encode(accountRequest.getPassword());
             existingAccount.setPassword(encodedPassword);
         }
-    
-        accountRepository.save(existingAccount);
-    
-        return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật tài khoản thành công"));
+        return accountRepository.save(existingAccount);
     }
 
     public Account updateAccountProfile(Integer accountID, AccountRequest accountRequest, String token) {

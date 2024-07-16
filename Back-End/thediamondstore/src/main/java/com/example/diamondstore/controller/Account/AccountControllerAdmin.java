@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.diamondstore.model.Account;
 import com.example.diamondstore.request.AccountRequest;
 import com.example.diamondstore.service.AccountService;
 
@@ -46,12 +47,13 @@ public class AccountControllerAdmin {
         }
     }
 
-    @PutMapping("/updateCustomer/{accountID}")
-    public ResponseEntity<Map<String, String>> updateAccountProfile(
-            @PathVariable Integer accountID,
-            @RequestBody AccountRequest accountRequest,
-            @RequestHeader("Authorization") String jwtToken) {
-
-        return accountService.updateAccountProfile(accountID, accountRequest, jwtToken);
+    @PutMapping(value = "/update/{accountID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> updateAccount_Manger(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
+        try {
+            Account updatedAccount = accountService.updateAccount_Customer(accountID, accountRequest);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+        }
     }
 }

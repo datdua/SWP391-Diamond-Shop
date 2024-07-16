@@ -21,7 +21,7 @@ import com.example.diamondstore.request.putRequest.PromotionPutRequest;
 import com.example.diamondstore.service.PromotionService;
 
 @RestController
-@RequestMapping("/api/promotion")
+@RequestMapping("/api")
 public class PromotionController {
 
     @Autowired
@@ -31,15 +31,15 @@ public class PromotionController {
         this.promotionService = promotionService;
     }
 
-    // admin
-    @GetMapping("/get-all")
-    public ResponseEntity<Iterable<Promotion>> getAllPromotion_Admin() {
+    // admin + manager
+    @GetMapping(value = "/promotions-management/promotions/get-all", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Iterable<Promotion>> getAllPromotion() {
         return ResponseEntity.ok(promotionService.getAllPromotions());
     }
 
-    // admin
-    @GetMapping("/manager/{promotionID}")
-    public ResponseEntity<Promotion> getPromotionByID_Admin(@PathVariable Integer promotionID) {
+    // manager  
+    @GetMapping(value = "/manager/promotions-management/promotions/{promotionID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Promotion> getPromotionByIDManager(@PathVariable Integer promotionID) {
         Promotion promotion = promotionService.getPromotionById(promotionID);
         if (promotion == null) {
             return ResponseEntity.notFound().build();
@@ -48,8 +48,8 @@ public class PromotionController {
     }
 
     // customer
-    @GetMapping("/customer/{promotionID}")
-    public ResponseEntity<Promotion> getPromotionByID_Customer(@PathVariable Integer promotionID) {
+    @GetMapping(value = "/customer/promotions-management/promotions/{promotionID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Promotion> getPromotionByIDCustomer(@PathVariable Integer promotionID) {
         Promotion promotion = promotionService.getPromotionById(promotionID);
         if (promotion == null) {
             return ResponseEntity.notFound().build();
@@ -57,9 +57,9 @@ public class PromotionController {
         return ResponseEntity.ok(promotion);
     }
 
-    // admin
-    @GetMapping("/manager/code/{promotionCode}")
-    public ResponseEntity<Promotion> getPromotionByCode_Manager(@PathVariable String promotionCode) {
+    // manager
+    @GetMapping(value = "/manager/promotions-management/promotions/{promotionCode}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Promotion> getPromotionByCodeManager(@PathVariable String promotionCode) {
         Promotion promotion = promotionService.getPromotionByCode(promotionCode);
         if (promotion == null) {
             return ResponseEntity.notFound().build();
@@ -68,8 +68,8 @@ public class PromotionController {
     }
 
     // customer
-    @GetMapping("/customer/code/{promotionCode}")
-    public ResponseEntity<Promotion> getPromotionByCode_Customer(@PathVariable String promotionCode) {
+    @GetMapping(value = "/customer/promotions-management/promotions/{promotionCode}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Promotion> getPromotionByCodeCustomer(@PathVariable String promotionCode) {
         Promotion promotion = promotionService.getPromotionByCode(promotionCode);
         if (promotion == null) {
             return ResponseEntity.notFound().build();
@@ -78,14 +78,14 @@ public class PromotionController {
     }
 
     // admin
-    @PutMapping(value = "/manager/update/{promotionID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> updatePromotion_Manager(@PathVariable Integer promotionID, @RequestBody PromotionPutRequest promotionPutRequest) {
+    @PutMapping(value = "/manager/promotions-management/promotions/update/{promotionID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> updatePromotionManager(@PathVariable Integer promotionID, @RequestBody PromotionPutRequest promotionPutRequest) {
         return promotionService.updatePromotion(promotionID, promotionPutRequest);
     }
 
     // admin
-    @DeleteMapping(value = "/manager/delete", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> deletePromotions_Manager(@RequestBody List<Integer> promotionIDs) {
+    @DeleteMapping(value = "/manager/promotions-management/promotions/delete", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> deletePromotionsManager(@RequestBody List<Integer> promotionIDs) {
         try {
             promotionService.deletePromotions(promotionIDs);
             return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
@@ -95,14 +95,14 @@ public class PromotionController {
     }
 
     // admin
-    @PostMapping(value = "/manager/create", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> createPromotion_Manager(@RequestBody PromotionRequest promotionRequest) {
+    @PostMapping(value = "/manager/promotions-management/promotions/add", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> createPromotionManager(@RequestBody PromotionRequest promotionRequest) {
         return promotionService.createPromotion(promotionRequest);
     }
 
     // admin
-    @PostMapping("/manager/update-statuses")
-    public ResponseEntity<Map<String, String>> updatePromotionStatusesAuto_Manager() {
+    @PostMapping(value = "/manager/promotions-management/promotions/update-statuses", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> updatePromotionStatusesAutoManager() {
         promotionService.updatePromotionStatusesAuto();
         return ResponseEntity.ok(Collections.singletonMap("message", "Trạng thái khuyến mãi đã được cập nhật"));
     }
