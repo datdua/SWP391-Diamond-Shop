@@ -17,9 +17,9 @@ import com.example.diamondstore.request.GoldPriceRequest;
 import com.example.diamondstore.service.GoldPriceService;
 
 @RestController
-@RequestMapping("/api/goldPrices/manager")
+@RequestMapping("/api/manager/gold-price-management/gold-prices")
 public class GoldPriceControllerManager {
-    
+
     private final GoldPriceService goldPriceService;
 
     public GoldPriceControllerManager(GoldPriceService goldPriceService) {
@@ -31,7 +31,7 @@ public class GoldPriceControllerManager {
         return goldPriceService.addGoldPrice(goldPriceRequest);
     }
 
-    @PutMapping("/{goldPriceID}")
+    @PutMapping(value = "/{goldPriceID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> updateGoldPrice(@PathVariable Integer goldPriceID, @RequestBody GoldPriceRequest goldPriceRequest) {
         return goldPriceService.updateGoldPrice(goldPriceID, goldPriceRequest);
     }

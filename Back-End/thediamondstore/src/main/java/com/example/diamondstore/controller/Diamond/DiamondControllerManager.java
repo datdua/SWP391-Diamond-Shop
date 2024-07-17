@@ -18,9 +18,9 @@ import com.example.diamondstore.request.putRequest.DiamondPutRequest;
 import com.example.diamondstore.service.DiamondService;
 
 @RestController
-@RequestMapping("/api/diamonds/manager")
+@RequestMapping("/api/manager/diamonds")
 public class DiamondControllerManager {
-    
+
     private final DiamondService diamondService;
 
     public DiamondControllerManager(DiamondService diamondService) {
@@ -28,12 +28,12 @@ public class DiamondControllerManager {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Map<String, String>> createDiamond_Admin(@RequestBody Diamond diamond) {
+    public ResponseEntity<Map<String, String>> createDiamond_Manager(@RequestBody Diamond diamond) {
         return diamondService.createDiamond(diamond);
     }
 
     @PutMapping(value = "/update/{diamondID}")
-    public ResponseEntity<Map<String, String>> updateDiamond_Admin(@PathVariable String diamondID, @RequestBody DiamondPutRequest diamondPutRequest) {
+    public ResponseEntity<Map<String, String>> updateDiamond_Manager(@PathVariable String diamondID, @RequestBody DiamondPutRequest diamondPutRequest) {
         Map<String, String> response = diamondService.updateDiamond(diamondID, diamondPutRequest);
         if (response.containsKey("message") && response.get("message").equals("Không tìm thấy kim cương")) {
             return ResponseEntity.notFound().build();
@@ -42,7 +42,7 @@ public class DiamondControllerManager {
     }
 
     @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> deleteDiamonds_Admin(@RequestBody List<String> diamondIDs) {
+    public ResponseEntity<Map<String, String>> deleteDiamonds_Manager(@RequestBody List<String> diamondIDs) {
         try {
             diamondService.deleteDiamonds(diamondIDs);
             return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các kim cương thành công"));

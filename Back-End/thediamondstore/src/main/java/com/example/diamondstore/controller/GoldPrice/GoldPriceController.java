@@ -11,7 +11,7 @@ import com.example.diamondstore.model.GoldPrice;
 import com.example.diamondstore.service.GoldPriceService;
 
 @RestController
-@RequestMapping("/api/goldPrices")
+@RequestMapping("/api/gold-price-management/gold-prices")
 public class GoldPriceController {
 
     @Autowired
@@ -21,9 +21,8 @@ public class GoldPriceController {
         this.goldPriceService = goldPriceService;
     }
 
-    @GetMapping("/get-all")
+    @GetMapping(value = "/get-all", produces = "application/json;charset=UTF-8")
     public List<GoldPrice> getAllGoldPrices() {
         return goldPriceService.getAll();
     }
-
 }

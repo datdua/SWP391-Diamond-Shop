@@ -15,11 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.diamondstore.request.RegisterRequest;
 import com.example.diamondstore.service.AccountService;
 
-
 @RestController
-@RequestMapping("/api/accounts/guest")
+@RequestMapping("/api/guest/accounts")
 public class AccountControllerGuest {
-    
+
     private final AccountService accountService;
 
     public AccountControllerGuest(AccountService accountService) {

@@ -15,9 +15,9 @@ import com.example.diamondstore.model.Diamond;
 import com.example.diamondstore.service.DiamondService;
 
 @RestController
-@RequestMapping("/api/diamonds/guest")
+@RequestMapping("/api/guest/diamonds")
 public class DiamondControllerGuest {
-    
+
     private final DiamondService diamondService;
 
     public DiamondControllerGuest(DiamondService diamondService) {
@@ -29,7 +29,7 @@ public class DiamondControllerGuest {
         return ResponseEntity.ok(diamondService.getAllDiamondsGrossPriceIsNull());
     }
 
-    @GetMapping("/get/{diamondID}")
+    @GetMapping("/{diamondID}")
     public ResponseEntity<Diamond> getDiamond(@PathVariable String diamondID) {
         Diamond diamond = diamondService.getDiamondById(diamondID);
         if (diamond == null) {
@@ -38,13 +38,13 @@ public class DiamondControllerGuest {
         return ResponseEntity.ok(diamond);
     }
 
-    @GetMapping("/paged/diamonds")
+    @GetMapping("/get-paging")
     public ResponseEntity<Page<Diamond>> getAllDiamondsPaged_Guest(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         Page<Diamond> pageDiamonds = diamondService.getAllDiamondsPaged(page, size);
         return ResponseEntity.ok(pageDiamonds);
     }
 
-    @GetMapping("/search/filter")
+    @GetMapping("/search")
     public ResponseEntity<List<Diamond>> searchDiamonds_Guest(
             @RequestParam(required = false) Float minDiamondPrice,
             @RequestParam(required = false) Float maxDiamondPrice,
@@ -66,7 +66,7 @@ public class DiamondControllerGuest {
         return ResponseEntity.ok(diamonds);
     }
 
-    @GetMapping("/search/filter/paged")
+    @GetMapping("/search/get-paging")
     public ResponseEntity<Page<Diamond>> searchDiamondsPaged_Guest(
             @RequestParam(required = false) Float minDiamondPrice,
             @RequestParam(required = false) Float maxDiamondPrice,

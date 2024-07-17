@@ -13,9 +13,8 @@ import com.example.diamondstore.model.Account;
 import com.example.diamondstore.request.AccountRequest;
 import com.example.diamondstore.service.AccountService;
 
-
 @RestController
-@RequestMapping("/api/accounts/manager")
+@RequestMapping("/api/manager/accounts")
 public class AccountControllerManager {
 
     private final AccountService accountService;
@@ -25,7 +24,7 @@ public class AccountControllerManager {
     }
 
     @PutMapping(value = "/update/{accountID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> updateAccount(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
+    public ResponseEntity<?> updateAccountManager(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
         try {
             Account updatedAccount = accountService.updateAccount_Customer(accountID, accountRequest);
             return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));

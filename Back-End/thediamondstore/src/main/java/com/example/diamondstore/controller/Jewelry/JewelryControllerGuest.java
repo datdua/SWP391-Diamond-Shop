@@ -14,7 +14,7 @@ import com.example.diamondstore.model.Jewelry;
 import com.example.diamondstore.service.JewelryService;
 
 @RestController
-@RequestMapping("/api/jewelry/guest")
+@RequestMapping("/api/guest/jewelry-management/jewelries")
 public class JewelryControllerGuest {
 
     private final JewelryService jewelryService;
@@ -23,12 +23,12 @@ public class JewelryControllerGuest {
         this.jewelryService = jewelryService;
     }
 
-    @GetMapping("")
+    @GetMapping(value = "/get-all", produces = "application/json;charset=UTF-8")
     public ResponseEntity<List<Jewelry>> getAllJewelry() {
         return ResponseEntity.ok(jewelryService.getAllJewelry());
     }
 
-    @GetMapping("/get/{jewelryID}")
+    @GetMapping(value = "/{jewelryID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Jewelry> getJewelry(@PathVariable String jewelryID) {
         Jewelry jewelry = jewelryService.getJewelryById(jewelryID);
         if (jewelry == null) {
@@ -37,13 +37,13 @@ public class JewelryControllerGuest {
         return ResponseEntity.ok(jewelry);
     }
 
-    @GetMapping("/paged/jewelrys")
+    @GetMapping("/get-paging")
     public ResponseEntity<Page<Jewelry>> getAllJewelryPaged(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "10") int size) {
         Page<Jewelry> pageJewelrys = jewelryService.getAllJewelryPaged(page, size);
         return ResponseEntity.ok(pageJewelrys);
     }
 
-    @GetMapping("/search/filter")
+    @GetMapping(value = "/search/filter", produces = "application/json;charset=UTF-8")
     public ResponseEntity<List<Jewelry>> searchJewelry(
             @RequestParam(required = false) String jewelryName,
             @RequestParam(required = false) Float minjewelryEntryPrice,
@@ -54,13 +54,13 @@ public class JewelryControllerGuest {
         return ResponseEntity.ok(jewelrys);
     }
 
-    @GetMapping("/searchByName")
+    @GetMapping(value = "/searchByName", produces = "application/json;charset=UTF-8")
     public ResponseEntity<List<Jewelry>> searchJewelryByName(@RequestParam String name) {
         List<Jewelry> jewelrys = jewelryService.searchJewelryByName(name);
         return ResponseEntity.ok(jewelrys);
     }
 
-    @GetMapping("/search/filter/paged")
+    @GetMapping("/search/get-paging")
     public ResponseEntity<Page<Jewelry>> searchJewelryWithFilters(
             @RequestParam(required = false) String jewelryName,
             @RequestParam(required = false) Float minjewelryEntryPrice,
