@@ -5,7 +5,7 @@ import { getPage, searchDiamond } from "../../api/DiamondAPI";
 import { Pagination } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import CircularProgress from '@mui/material/CircularProgress';
+import ImageLoading from "../../components/LoadingImg/ImageLoading"
 
 Modal.setAppElement('#root');
 
@@ -26,9 +26,9 @@ const customModalStyles = {
     },
 };
 
-function DiamondPage() {
+const DiamondPage = () => {
     const [diamonds, setDiamonds] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showNotification, setShowNotification] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
@@ -55,7 +55,6 @@ function DiamondPage() {
     const cuts = ['Tất cả', 'Excellent'];
     const clarities = ['Tất cả', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2', 'I1', 'I2', 'I3'];
     const shapes = ['Tất cả', 'Radiant', 'Around', 'Pear'];
-
     const origins = ['Tất cả', 'GIA'];
 
 
@@ -73,8 +72,6 @@ function DiamondPage() {
         }
     }, [location]);
 
-    const resultsPerPage = 9;
-
     const fetchDiamonds = async (page) => {
         setLoading(true);
         try {
@@ -91,13 +88,16 @@ function DiamondPage() {
                 const { content, totalPages } = await searchDiamond(filtersToUse, page, resultsPerPage);
                 setDiamonds(content);
                 setTotalPages(totalPages);
+
             } else {
                 const data = await getPage(page, resultsPerPage);
-                setDiamonds(data.content);
-                setTotalPages(data.totalPages);
+                setTimeout(() => {
+                    setDiamonds(data.content);
+                    setTotalPages(data.totalPages);
+                    setLoading(false);
+                    window.scrollTo(0, 0);
+                }, 50); 
             }
-            setLoading(false);
-            window.scrollTo(0, 0);
         } catch (error) {
             setError(error.message);
             setLoading(false);
@@ -145,6 +145,9 @@ function DiamondPage() {
         setSelectedItem(null);
     }
 
+    if (loading) {
+        return <ImageLoading />;
+    }
     return (
         <div>
             <div id="wrapper" className="wrapper">
@@ -419,7 +422,7 @@ function DiamondPage() {
 
                                                 <div className="row mt-30-reverse">
                                                     {loading ? (
-                                                        <CircularProgress color="success" />
+                                                        <ImageLoading />
                                                     ) : error ? (
                                                         <div>Lỗi: {error}</div>
                                                     ) : (
