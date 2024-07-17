@@ -31,30 +31,19 @@ public class SecurityConfig {
 
     private static final String[] SWAGGER_URL = {"/api/v1/auth/**", "/v2/api-docs", "/v3/api-docs",
         "/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**", "/configuration/ui",
-        "/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html", "/api/auth/**",
+        "/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html",
         "/api/test/**", "/authenticate"};
 
-    private static final String[] GUEST_URL = {"/guest/**", "/api/guest/accounts**","/api/guest/diamonds/**", "/api/diamondprices/guest/**", 
-        "/api/goldPrices/guest/**", "/api/guest/certificates/**", "/api/guest/carts/**", "/api/collections/guest/**", "/api/customers/guest/**", 
-        "/api/jewelry/guest/**", "/api/orders/guest/**", "/api/orderDetail/guest/**", "/api/payment/guest/**", "/api/production/guest/**", "/api/promotion/guest/**", 
-        "/api/warranties/guest/**"};
+    private static final String[] GUEST_URL = {"/api/guest/**", "/api/auth/**"};
 
-    private static final String[] ADMIN_URL = {"/admin/**", "/api/admin/accounts/**", "/api/admin/certificates/**", "/api/collections/admin/**",
-        "/api/customers/admin/**" ,"/api/admin/diamonds/**", "/api/diamondprices/admin/**", "/api/goldPrices/admin/**", "/api/jewelry/admin/**", 
-        "/api/orders/admin/**", "/api/orderDetail/admin/**", "/api/payment/admin/**", "/api/production/admin/**", "/api/promotion/admin/**", "/api/warranties/admin/**", "/api/admin/accumulate-points/**"};
+    private static final String[] ADMIN_URL = {"/api/admin/**"};
 
-    private static final String[] CUSTOMER_URL = {"/customer/**","/api/customer/accounts/**", "/api/customer/certificates/**", "/api/customer/carts/**",
-        "/api/collections/customer/**", "/api/customers/customer/**", "/api/diamondprices/customer/**", "/api/goldPrices/customer/**", 
-        "/api/jewelry/customer/**", "/api/orders/customer/**", "/api/orderDetail/customer/**", "/api/payment/customer/**", "/api/production/customer/**", "/api/promotion/customer/**", 
-        "/api/warranties/customer/**", "/api/accumulate-points/**", "/api/customer/accumulate-points/**"};
+    private static final String[] CUSTOMER_URL = {"/api/customer/**"};
 
-    private static final String[] MANAGER_URL = {"/manager/**", "/api/manager/accounts/**", "/api/manager/certificates/**",
-        "/api/collections/manager/**", "/api/customers/manager/**", "/api/diamondprices/manager/**", "/api/goldPrices/manager/**", "/api/jewelry/manager/**", 
-        "/api/orders/manager/**", "/api/orderDetail/manager/**", "/api/payment/manager/**", "/api/production/manager/**", "/api/promotion/manager/**", 
-        "/api/warranties/manager/**", "/api/manager/diamonds/**"};
+    private static final String[] MANAGER_URL = {"/api/manager/**"};
 
     //Admin and Manager urls
-    private static final String[] ADMIN_MANAGER_URL = {"/api/accounts/get-all", "/api/accounts/all-except-customer", "/api/accounts/get-by-role/**", "/api/certificates/get-all", "/api/certificates/**", "/api/certificates/get-certificate-image/**", "/api/diamonds/get-all", "/api/diamondprices/get-all",
+    private static final String[] ADMIN_MANAGER_URL = {"/api/accounts/get-all", "/api/accounts/all-except-customer", "/api/accounts/get-by-role/**", "/api/certificates/get-all", "/api/certificates/**", "/api/certificates/get-certificate-image/**", "/api/diamonds/get-all", "/api/diamond-prices/get-all",
          "/api/goldPrices/get-all", "/api/jewelry/get-all", "/api/orders/getByStatus/**", "/api/orders/totalRevenue", "/api/orders/totalOrder", "/api/orders/totalTransaction", "/api/warranties/get-all", "/api/warranties/get/warrantyImg/**",
          "/api/warranties/diamondIDIsNull", "/api/warranties/jewelryIDIsNull" };
 

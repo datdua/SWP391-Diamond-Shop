@@ -101,7 +101,7 @@ public class PromotionController {
     }
 
     // admin
-    @PostMapping(value = "/manager/promotion-management/promotions/update-statuses", produces = "application/json;charset=UTF-8")
+    @PostMapping(value = "/manager/promotion-management/promotions/update-status", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> updatePromotionStatusesAutoManager() {
         promotionService.updatePromotionStatusesAuto();
         return ResponseEntity.ok(Collections.singletonMap("message", "Trạng thái khuyến mãi đã được cập nhật"));

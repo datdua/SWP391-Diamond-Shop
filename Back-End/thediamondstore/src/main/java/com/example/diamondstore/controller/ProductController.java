@@ -27,7 +27,7 @@ public class ProductController {
 
     // guest
     // API search theo tên, giá diamond và jewelry
-    @GetMapping(value = "/guest/product-management/products/search/filter/page", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/guest/product-management/products/search/get-paging", produces = "application/json;charset=UTF-8")
     public Map<String, Object> searchAndFilterProductionPaged_Guest(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Float minPrice,
