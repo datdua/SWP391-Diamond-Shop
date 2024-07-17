@@ -18,7 +18,7 @@ import com.example.diamondstore.request.putRequest.DiamondPutRequest;
 import com.example.diamondstore.service.DiamondService;
 
 @RestController
-@RequestMapping("/api/manager/diamonds")
+@RequestMapping("/api/manager/diamond-management/diamonds")
 public class DiamondControllerManager {
 
     private final DiamondService diamondService;

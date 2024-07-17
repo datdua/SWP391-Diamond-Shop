@@ -22,7 +22,7 @@ public class OrderDetailController {
     }
 
     // customer
-    @GetMapping(value = "/customer/orderDetail-management/orderDetails/get-all", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/customer/orderDetails/get-all", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getAllOrderDetailCustomer() {
         return ResponseEntity.ok(orderDetailService.getAllOrderDetail());
     }
@@ -34,7 +34,7 @@ public class OrderDetailController {
     }
 
     // customer
-    @GetMapping(value = "/customer/orderDetail-management/orderDetails/get-orderDetail/{orderID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/customer/orderDetails/get-orderDetail/{orderID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrderDetailByOrderIDCustomer(Integer orderID) {
         return ResponseEntity.ok(orderDetailService.getOrderDetailByOrderID(orderID));
     }
@@ -46,7 +46,7 @@ public class OrderDetailController {
     }
 
     // customer
-    @GetMapping(value = "/customer/orderDetail-management/orderDetails/{orderDetailID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/customer/orderDetails/{orderDetailID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrderDetailCustomer(Integer orderDetailID) {
         return ResponseEntity.ok(orderDetailService.getOrderDetail(orderDetailID));
     }

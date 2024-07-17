@@ -55,7 +55,7 @@ public class PaymentController {
     private AccumulatePointsRepository accumulatePointsRepository;
 
     // customer
-    @GetMapping(value = "/customer/payment-management/payments/createPayment", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/customer/payments/create-payment", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> createPayment_Customer(@RequestParam Integer orderID) throws UnsupportedEncodingException {
 
         String vnp_Version = "2.1.0";
@@ -128,7 +128,7 @@ public class PaymentController {
     }
 
     // customer
-    @GetMapping(value = "/customer/payment-management/payments/vnpay_return", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/customer/payments/vnpay-return", produces = "application/json;charset=UTF-8")
     public ResponseEntity<TransactionStatusDTO> vnpayReturn(
             @RequestParam(value = "vnp_BankCode") String bankCode,
             @RequestParam(value = "vnp_OrderInfo") Integer orderID,

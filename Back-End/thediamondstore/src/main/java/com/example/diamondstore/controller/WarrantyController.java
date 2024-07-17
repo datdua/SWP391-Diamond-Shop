@@ -49,7 +49,7 @@ public class WarrantyController {
     }
 
     // customer
-    @GetMapping(value = "/customer/warranty-management/warranties/{warrantyID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/customer/warranties/{warrantyID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Warranty> getWarrantyCustomer(@PathVariable String warrantyID) {
         Warranty warranty = warrantyService.getWarrantyById(warrantyID);
         if (warranty == null) {
@@ -93,7 +93,7 @@ public class WarrantyController {
     }
 
     // customer
-    @GetMapping(value = "/customer/warranty-management/warranties/get-warranty-image/{warrantyID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/customer/warranties/get-warranty-image/{warrantyID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> getWarrantyImgCustomer(@PathVariable String warrantyID) {
         return warrantyService.getWarrantyImg(warrantyID);
     }

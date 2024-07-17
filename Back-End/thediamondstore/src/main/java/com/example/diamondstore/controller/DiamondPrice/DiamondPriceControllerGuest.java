@@ -16,7 +16,7 @@ import com.example.diamondstore.model.DiamondPrice;
 import com.example.diamondstore.service.DiamondPriceService;
 
 @RestController
-@RequestMapping("/api/guest/diamond-price-management/diamond-prices")
+@RequestMapping("/api/guest/diamond-prices")
 public class DiamondPriceControllerGuest {
 
     @Autowired

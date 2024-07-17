@@ -48,7 +48,7 @@ public class PromotionController {
     }
 
     // customer
-    @GetMapping(value = "/customer/promotion-management/promotions/{promotionID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/customer/promotions/{promotionID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Promotion> getPromotionByIDCustomer(@PathVariable Integer promotionID) {
         Promotion promotion = promotionService.getPromotionById(promotionID);
         if (promotion == null) {
@@ -68,7 +68,7 @@ public class PromotionController {
     }
 
     // customer
-    @GetMapping(value = "/customer/promotion-management/promotions/{promotionCode}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/customer/promotions/{promotionCode}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Promotion> getPromotionByCodeCustomer(@PathVariable String promotionCode) {
         Promotion promotion = promotionService.getPromotionByCode(promotionCode);
         if (promotion == null) {

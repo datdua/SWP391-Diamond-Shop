@@ -44,10 +44,10 @@ public class SecurityConfig {
 
     //Admin and Manager urls
     private static final String[] ADMIN_MANAGER_URL = {"/api/accounts/get-all", "/api/accounts/all-except-customer", "/api/accounts/get-by-role/**", "/api/certificates/get-all", "/api/certificates/**", "/api/certificates/get-certificate-image/**", "/api/diamonds/get-all", "/api/diamond-prices/get-all",
-         "/api/goldPrices/get-all", "/api/jewelry/get-all", "/api/orders/getByStatus/**", "/api/orders/totalRevenue", "/api/orders/totalOrder", "/api/orders/totalTransaction", "/api/warranties/get-all", "/api/warranties/get/warrantyImg/**",
+         "/api/gold-prices/get-all", "/api/jewelry/get-all", "/api/order-management/**", "/api/orders/totalRevenue", "/api/orders/totalOrder", "/api/orders/totalTransaction", "/api/warranty-management/**", "/api/warranties/get/warrantyImg/**",
          "/api/warranties/diamondIDIsNull", "/api/warranties/jewelryIDIsNull" };
 
-    private static final String[] ADMIN_MANAGER_SALE_STAFF_URL ={"/api/accounts/get/**", "/api/orders/get-all", "/api/orders/getOrderHaveTransactionNo", "/api/promotion/get-all", "/api/accounts/update/**"};
+    private static final String[] ADMIN_MANAGER_SALE_STAFF_URL ={"/api/accounts/get/**", "/api/orders/get-all", "/api/orders/getOrderHaveTransactionNo", "/api/promotion-management/**", "/api/accounts/update/**"};
 
 
     @Autowired

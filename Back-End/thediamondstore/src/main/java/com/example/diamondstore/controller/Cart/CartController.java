@@ -21,7 +21,7 @@ import com.example.diamondstore.model.Cart;
 import com.example.diamondstore.service.CartService;
 
 @RestController
-@RequestMapping("/api/customer/carts")
+@RequestMapping("/api/customer/cart-management/carts")
 public class CartController {
 
     @Autowired

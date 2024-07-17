@@ -14,7 +14,7 @@ import com.example.diamondstore.model.Jewelry;
 import com.example.diamondstore.service.JewelryService;
 
 @RestController
-@RequestMapping("/api/guest/jewelry-management/jewelries")
+@RequestMapping("/api/guest/jewelries")
 public class JewelryControllerGuest {
 
     private final JewelryService jewelryService;

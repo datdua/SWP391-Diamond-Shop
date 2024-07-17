@@ -20,14 +20,14 @@ public class ProductController {
     private ProductionService productionService;
 
     // guest
-    @GetMapping(value = "/guest/product-management/products/get-all", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/guest/products/get-all", produces = "application/json;charset=UTF-8")
     public Map<String, Object> getAllProduction_Guest() {
         return productionService.getAllProduction();
     }
 
     // guest
     // API search theo tên, giá diamond và jewelry
-    @GetMapping(value = "/guest/product-management/products/search/get-paging", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/guest/products/search/get-paging", produces = "application/json;charset=UTF-8")
     public Map<String, Object> searchAndFilterProductionPaged_Guest(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Float minPrice,
@@ -38,7 +38,7 @@ public class ProductController {
     }
 
     // guest
-    @GetMapping(value = "/guest/product-management/products/get-paging", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/guest/products/get-paging", produces = "application/json;charset=UTF-8")
     public Map<String, Object> getPagedProduction(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -46,14 +46,14 @@ public class ProductController {
     }
 
     // guest
-    @GetMapping(value = "/guest/product-management/products/total", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/guest/products/total", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Long> getTotalProduction_Guest() {
         long totalProduction = productionService.getTotalProduction();
         return new ResponseEntity<>(totalProduction, HttpStatus.OK);
     }
 
     // admin + manager
-    @GetMapping(value = "/products/product-management/totalDiamond&Jewelry", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/products/total-products", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, Object>> getTotalProductionCount() {
         Map<String, Object> response = productionService.getTotalProductionCount();
         return ResponseEntity.ok(response);
