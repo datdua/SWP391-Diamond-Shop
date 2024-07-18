@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: "http://localhost:8080/api",
 });
 
 apiClient.interceptors.response.use(
@@ -19,7 +19,7 @@ apiClient.interceptors.response.use(
 // Diamond API functions
 export async function getAllDiamond() {
   const response = await axios.get(
-    "http://localhost:3000/api/diamonds/guest"
+    "http://localhost:8080/api/guest/diamonds"
   );
   if (response.status !== 200) {
     throw new Error("Failed to fetch diamond data");
@@ -30,7 +30,7 @@ export async function getAllDiamond() {
 export async function getAllDiamond_Manager() {
   const token = localStorage.getItem('jwt');
   const response = await axios.get(
-    "http://localhost:3000/api/diamonds/get-all",
+    "http://localhost:8080/api/diamonds/get-all",
     {
       headers: { Authorization: `Bearer ${token}` },
     }
@@ -41,7 +41,7 @@ export async function getAllDiamond_Manager() {
   return response.data;
 }
 
-const BASE_URL = 'http://localhost:3000/api/diamonds/guest/get';
+const BASE_URL = 'http://localhost:8080/api/guest/diamonds';
 
 export const getDiamondById = async (diamondId) => {
     try {
@@ -55,7 +55,7 @@ export const getDiamondById = async (diamondId) => {
 export async function getPage(page = 1, size = 9) {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/diamonds/guest/paged/diamonds?page=${page}&size=${size}`
+      `http://localhost:8080/api/guest/diamonds/get-paging?page=${page}&size=${size}`
     );
     return response.data;
   } catch (error) {
@@ -67,7 +67,7 @@ export async function createDiamond(diamond) {
   try {
     const token = localStorage.getItem('jwt');
     const response = await apiClient.post(
-      "http://localhost:3000/api/diamonds/manager/create",
+      "http://localhost:8080/api/manager/diamonds/create",
       diamond,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -83,7 +83,7 @@ export async function updateDiamond(diamondID, diamond) {
   try {
     const token = localStorage.getItem('jwt');
     const response = await apiClient.put(
-      `http://localhost:3000/api/diamonds/manager/update/${diamondID}`,
+      `http://localhost:8080/api/manager/diamonds/update/${diamondID}`,
       diamond,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -99,7 +99,7 @@ export async function deleteDiamond(diamondIDs) {
   try {
     const token = localStorage.getItem('jwt');
     const response = await apiClient.delete(
-      "http://localhost:3000/api/diamonds/manager/delete",
+      "http://localhost:8080/api/manager/diamonds/delete",
       {
         headers: { Authorization: `Bearer ${token}` },
         data: diamondIDs, // Move `data` inside the same object as headers
@@ -115,7 +115,7 @@ export async function getCertificateImage(certificationID) {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      `http://localhost:3000/api/certificates/get/certificateImg/${certificationID}`,
+      `http://localhost:8080/api/customer/certificates/get-certificate-image/${certificationID}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -131,7 +131,7 @@ export async function getWarrantityImage(warrantyID) {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      `http://localhost:3000/api/warranties/get/warrantyImg/${warrantyID}`,
+      `http://localhost:8080/api/customer/warranty-management/warranties/warrantyImg/${warrantyID}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -146,7 +146,7 @@ export async function getWarrantityImage(warrantyID) {
 export async function searchDiamondByName(name) {
   try {
     const response = await axios.get(
-      `http://localhost:3000/api/diamonds/guest/search/filter?diamondNameLike=${name}`
+      `http://localhost:8080/api/guest/diamonds/search?diamondNameLike=${name}`
     );
     if (response.status !== 200) {
       throw new Error("Failed to search diamonds by name");
@@ -162,13 +162,13 @@ export async function searchDiamondByName(name) {
 
 export const searchDiamond = async (filters, page = 1, size = 9) => {
   try {
-    const params = { ...filters };
-    const filterQueryString = Object.keys(params)
+    const params = { ...filters, page, size };
+    const queryString = Object.keys(params)
       .map((key) => `${key}=${encodeURIComponent(params[key])}`)
       .join("&");
 
     const response = await axios.get(
-      `http://localhost:8080/api/diamonds/guest/search/filter/paged?${filterQueryString}&page=${page}&size=${size}`
+      `http://localhost:8080/api/guest/diamonds/search/get-paging?${queryString}`
     );
     if (response.status !== 200) {
       throw new Error("Failed to fetch diamonds");
@@ -178,4 +178,3 @@ export const searchDiamond = async (filters, page = 1, size = 9) => {
     throw new Error("Failed to fetch diamonds");
   }
 };
-
