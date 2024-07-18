@@ -3,7 +3,8 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import Modal from "react-modal";
 import { getAllJewelry, getPage, searchJewelry } from "../../api/JewelryAPI";
 import { Pagination } from "@mui/material";
-import CircularProgress from '@mui/material/CircularProgress';
+import ImageLoading from "../../components/LoadingImg/ImageLoading"
+
 Modal.setAppElement("#root");
 
 const customModalStyles = {
@@ -24,6 +25,7 @@ const customModalStyles = {
 
 function JewelryPage() {
   const location = useLocation();
+  const { jewelryId } = useParams();
   const [jewelry, setJewelry] = useState([]);
   const [filters, setFilters] = useState({});
   const [loading, setLoading] = useState(true);
@@ -41,15 +43,22 @@ function JewelryPage() {
   const fetchJewelryPage = async (page = 1, filtersToUse = {}) => {
     try {
       setLoading(true);
-      let data;
-      if (Object.keys(filtersToUse).length > 0) {
-        data = await searchJewelry(page, filtersToUse);
-      } else {
-        data = await getPage(page);
-      }
-      setJewelry(data.content);
-      setTotalPages(data.totalPages);
-      setLoading(false);
+      setTimeout(async () => {
+        try {
+          let data;
+          if (Object.keys(filtersToUse).length > 0) {
+            data = await searchJewelry(page, filtersToUse);
+          } else {
+            data = await getPage(page);
+          }
+          setJewelry(data.content);
+          setTotalPages(data.totalPages);
+          setLoading(false);
+        } catch (error) {
+          setError(error.message);
+          setLoading(false);
+        }
+      }, 50); 
     } catch (error) {
       setError(error.message);
       setLoading(false);
@@ -101,20 +110,17 @@ function JewelryPage() {
       } else {
         delete filtersToUse.maxjewelryEntryPrice;
       }
-
       if (filtersToUse.gender === "Tất cả") {
         delete filtersToUse.gender;
       }
-
       await fetchJewelryPage(1, filtersToUse); 
     } catch (error) {
       setError(error.message);
       setLoading(false);
     }
   };
-  
 
-  const handlePageChange = async (event, page) => {
+  const handlePageChange = (event, page) => {
     setCurrentPage(page);
   };
 
@@ -125,6 +131,10 @@ function JewelryPage() {
     };
     checkLoginStatus();
   }, []);
+
+  if (loading) {
+    return <ImageLoading />;
+  }
 
   return (
     <div>
@@ -160,7 +170,7 @@ function JewelryPage() {
                   <div className="tm-shop-products">
                     <div className="row mt-30-reverse">
                       {loading ? (
-                        <CircularProgress color="success" />
+                        <ImageLoading />
                       ) : error ? (
                         <div>Error: {error}</div>
                       ) : (

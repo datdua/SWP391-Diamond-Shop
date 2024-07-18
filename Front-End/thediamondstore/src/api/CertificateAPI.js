@@ -3,7 +3,7 @@ import axios from "axios";
 export const getAllCertificates = async () => {
   try {
     const token = localStorage.getItem("jwt");
-    const response = await axios.get("http://localhost:8080/api/certificates/get-all",
+    const response = await axios.get("http://localhost:3000/api/certificates/get-all",
       {
         headers: { Authorization: `Bearer ${token}` },
       }
