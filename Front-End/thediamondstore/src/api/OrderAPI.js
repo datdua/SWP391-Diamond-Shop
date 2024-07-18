@@ -47,7 +47,7 @@ export async function fetchOrders(accountID) {
   const token = getAuthToken();
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/customer/order-management/orders/${accountID}`,
+      `http://localhost:8080/api/customer/order-management/orders/get-account/${accountID}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
