@@ -20,7 +20,7 @@ import com.example.diamondstore.service.AccountService;
 
 
 @RestController
-@RequestMapping("/api/accounts/admin")
+@RequestMapping("/api/admin/account-management/accounts")
 public class AccountControllerAdmin {
 
     private final AccountService accountService;
@@ -37,7 +37,7 @@ public class AccountControllerAdmin {
         return accountService.deleteAccounts(accountIDs, jwtToken);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/add")
     public ResponseEntity<Map<String, String>> createAccount_Admin(@RequestBody AccountRequest accountRequest) {
         try {
             accountService.createAccount(accountRequest);

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.diamondstore.service.OrderService;
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/api/order-management/orders")
 public class OrderController {
 
     @Autowired
@@ -21,15 +21,13 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getAllOrders());
     }
 
-    @GetMapping(value = "/getOrderHaveTransactionNo", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/get-order-have-transaction-no", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrdersHaveTransactionNo() {
         return ResponseEntity.ok(orderService.getOrdersHaveTransactionNo());
     }
 
-    @GetMapping(value = "/getOrder/paged", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/get-order/get-paging", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrdersPaged(@RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(orderService.getAllOrdersPaged(page, size));
     }
 }
-
-

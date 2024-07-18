@@ -3,7 +3,7 @@ import axios from "axios";
 export const getAllPromotions = async () => {
   try {
     const token = localStorage.getItem('jwt');
-    const response = await axios.get("http://localhost:8080/api/promotion/get-all",
+    const response = await axios.get("http://localhost:3000/api/promotion/get-all",
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -18,7 +18,7 @@ export const getAllPromotions = async () => {
 export const getPromotionById = async (promotionID) => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/promotion/${promotionID}`
+      `http://localhost:3000/api/promotion/${promotionID}`
     );
     return response.data;
   } catch (error) {
@@ -29,9 +29,11 @@ export const getPromotionById = async (promotionID) => {
 
 export const createPromotion = async (promotion) => {
   try {
+    const token = localStorage.getItem('jwt');
     const response = await axios.post(
-      "http://localhost:8080/api/promotion/create",
-      promotion
+      "http://localhost:3000/api/promotion/create",
+      promotion,
+      { headers: { Authorization: `Bearer ${token}` } }
     );
     return response.data;
   } catch (error) {
@@ -42,9 +44,11 @@ export const createPromotion = async (promotion) => {
 
 export const updatePromotion = async (promotionID, promotion) => {
   try {
+    const token = localStorage.getItem('jwt');
     const response = await axios.put(
-      `http://localhost:8080/api/promotion/update/${promotionID}`,
-      promotion
+      `http://localhost:3000/api/promotion/update/${promotionID}`,
+      promotion,
+      { headers: { Authorization: `Bearer ${token}` } }
     );
     return response.data;
   } catch (error) {
@@ -55,11 +59,13 @@ export const updatePromotion = async (promotionID, promotion) => {
 
 export const deletePromotion = async (promotionIDs) => {
   try {
-    const response = await axios.delete(
-      `http://localhost:8080/api/promotion/delete`
-      , { data: promotionIDs }
+    const token = localStorage.getItem('jwt');
+    await axios.delete(
+      `http://localhost:3000/api/promotion/manager/delete`
+      , { 
+        headers: { Authorization: `Bearer ${token}` },
+        data: promotionIDs }
     );
-    return response.data;
   } catch (error) {
     console.error("Error deleting promotion:", error);
     throw error;

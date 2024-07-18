@@ -10,16 +10,14 @@ import com.example.diamondstore.model.AccumulatePoints;
 import com.example.diamondstore.service.AccumulatePointsService;
 
 @RestController
-@RequestMapping("/api/customers")
+@RequestMapping("/api/accumulate-points")
 public class AccumulatePointsController {
 
     @Autowired
     private AccumulatePointsService accumulatePointsService;
 
-    @GetMapping
+    @GetMapping("/get-all")
     public ResponseEntity<Iterable<AccumulatePoints>> getCustomers() {
         return ResponseEntity.ok(accumulatePointsService.getAllAccumulatePointss());
     }
 }
-
-

@@ -2,7 +2,7 @@
   "name": "thediamondstore",
   "version": "2.0.1",
   "private": true,
-  "proxy": "http://localhost:8080/",
+  "proxy": "http://localhost:3000/",
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
     "@coreui/coreui": "^5.0.2",

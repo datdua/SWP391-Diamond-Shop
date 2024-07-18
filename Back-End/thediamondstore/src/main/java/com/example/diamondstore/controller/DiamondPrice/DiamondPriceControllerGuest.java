@@ -16,7 +16,7 @@ import com.example.diamondstore.model.DiamondPrice;
 import com.example.diamondstore.service.DiamondPriceService;
 
 @RestController
-@RequestMapping("/api/diamondprices/guest")
+@RequestMapping("/api/guest/diamond-prices")
 public class DiamondPriceControllerGuest {
 
     @Autowired
@@ -26,44 +26,44 @@ public class DiamondPriceControllerGuest {
         this.diamondPriceService = diamondPriceService;
     }
 
-    @GetMapping("/getAll")
+    @GetMapping(value = "/get-all", produces = "application/json;charset=UTF-8")
     public List<DiamondPrice> getAll_Guest() {
         return diamondPriceService.getAll();
     }
 
-    @GetMapping("/{diamondPriceID}")
+    @GetMapping(value = "/{diamondPriceID}", produces = "application/json;charset=UTF-8")
     public DiamondPrice getDiamondPriceById_Guest(@PathVariable Integer diamondPriceID) {
         return diamondPriceService.getDiamondPriceById(diamondPriceID);
     }
 
-    @GetMapping("/carat/{caratSize}")
+    @GetMapping(value = "/carat/{caratSize}", produces = "application/json;charset=UTF-8")
     public List<DiamondPrice> getDiamondPriceByCaratSize(@PathVariable BigDecimal caratSize) {
         return diamondPriceService.getDiamondPricesByCaratSize(caratSize);
     }
 
-    @GetMapping("/diamondPrices")
+    @GetMapping(value = "/diamon-prices", produces = "application/json;charset=UTF-8")
     public List<DiamondPrice> getDiamondPrices(@RequestParam(required = false) String clarity,
             @RequestParam(required = false) String color,
             @RequestParam(required = false) BigDecimal caratSize) {
         return diamondPriceService.findByCriteria(clarity, color, caratSize);
     }
 
-    @GetMapping("/api/clarity")
+    @GetMapping(value = "/clarity", produces = "application/json;charset=UTF-8")
     public List<String> getClarity() {
         return diamondPriceService.getClarity();
     }
 
-    @GetMapping("/api/caratsize")
+    @GetMapping(value = "/caratsize", produces = "application/json;charset=UTF-8")
     public List<BigDecimal> getCaratSize() {
         return diamondPriceService.getCaratSize();
     }
 
-    @GetMapping("/api/color")
+    @GetMapping(value = "/color", produces = "application/json;charset=UTF-8")
     public List<String> getColor() {
         return diamondPriceService.getColor();
     }
 
-    @GetMapping("/prices/{caratSize}")
+    @GetMapping(value = "/prices/{caratSize}", produces = "application/json;charset=UTF-8")
     public Map<String, Map<String, BigDecimal>> getDiamondPrices(@PathVariable BigDecimal caratSize) {
         List<DiamondPrice> diamondPrices = diamondPriceService.getDiamondPricesByCaratSize(caratSize);
 

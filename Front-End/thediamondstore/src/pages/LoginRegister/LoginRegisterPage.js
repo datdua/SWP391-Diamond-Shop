@@ -29,7 +29,7 @@ function LoginRegisterPage() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/guest/login",
+        "http://localhost:3000/guest/login",
         {
           email: loginEmail,
           password: loginPassword,
@@ -94,7 +94,7 @@ function LoginRegisterPage() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/accounts/guest/register",
+        "http://localhost:3000/api/accounts/guest/register",
         {
           accountName: registerName,
           email: registerEmail,
@@ -154,7 +154,7 @@ function LoginRegisterPage() {
       <div id="wrapper" className="wrapper">
         <div
           className="tm-breadcrumb-area tm-padding-section bg-grey"
-          style={{ backgroundImage: `url(assets/images/banner-header.png)` }}
+          style={{ backgroundImage: `url(https://firebasestorage.googleapis.com/v0/b/the-diamond-store-423602.appspot.com/o/img-banner%2Fimg-banner-dang-nhap.png?alt=media&token=8005f781-7956-444b-92c9-fe5c20a5df31)` }}
         >
           <div className="container">
             <div className="tm-breadcrumb">

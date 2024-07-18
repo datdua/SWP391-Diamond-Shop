@@ -17,7 +17,7 @@ import com.example.diamondstore.request.DiamondPriceRequest;
 import com.example.diamondstore.service.DiamondPriceService;
 
 @RestController
-@RequestMapping("/api/diamondprices/manager")
+@RequestMapping("/api/manager/diamond-price-management/diamond-prices")
 public class DiamondPriceControllerManager {
 
     private final DiamondPriceService diamondPriceService;
@@ -25,19 +25,19 @@ public class DiamondPriceControllerManager {
     public DiamondPriceControllerManager(DiamondPriceService diamondPriceService) {
         this.diamondPriceService = diamondPriceService;
     }
-    
-    @PostMapping(value = "/create")
-    public ResponseEntity<?> addDiamondPrice_Admin(@RequestBody DiamondPriceRequest diamondPriceRequest) {
+
+    @PostMapping(value = "/add", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> addDiamondPrice(@RequestBody DiamondPriceRequest diamondPriceRequest) {
         return diamondPriceService.addDiamondPrice(diamondPriceRequest);
     }
 
-    @PutMapping("/{diamondPriceID}")
-    public ResponseEntity<Map<String, String>> updateDiamondPrice_Admin(@PathVariable Integer diamondPriceID, @RequestBody DiamondPriceRequest diamondPriceRequest) {
+    @PutMapping(value = "/{diamondPriceID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> updateDiamondPrice(@PathVariable Integer diamondPriceID, @RequestBody DiamondPriceRequest diamondPriceRequest) {
         return diamondPriceService.updateDiamondPrice(diamondPriceID, diamondPriceRequest);
     }
 
     @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> deleteDiamondPrices_Admin(@RequestBody List<Integer> diamondPriceIDs) {
+    public ResponseEntity<Map<String, String>> deleteDiamondPrices(@RequestBody List<Integer> diamondPriceIDs) {
         try {
             diamondPriceService.deleteDiamondPrices(diamondPriceIDs);
             return ResponseEntity.ok(Collections.singletonMap("message", "Xóa các tài khoản thành công"));

@@ -20,17 +20,17 @@ import com.example.diamondstore.request.putRequest.OrderPutRequest;
 import com.example.diamondstore.service.OrderService;
 
 @RestController
-@RequestMapping("/api/orders/customer")
+@RequestMapping("/api/customer/order-management/orders")
 public class OrderControllerCustomer {
-    
+
     private final OrderService orderService;
 
     public OrderControllerCustomer(OrderService orderService) {
         this.orderService = orderService;
     }
 
-    @GetMapping(value = "/get/{orderID}")
-    public ResponseEntity<Order> getOrder_Customer(@PathVariable int orderID) {
+    @GetMapping(value = "/{orderID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Order> getOrderCustomer(@PathVariable int orderID) {
         Order order = orderService.getOrder(orderID);
 
         if (order == null) {
@@ -41,7 +41,7 @@ public class OrderControllerCustomer {
     }
 
     @GetMapping(value = "/{accountID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> getOrdersByAccount_Customer(@PathVariable int accountID) {
+    public ResponseEntity<?> getOrdersByAccountCustomer(@PathVariable int accountID) {
         try {
             return ResponseEntity.ok(orderService.getOrdersByAccountId(accountID));
         } catch (IllegalArgumentException e) {
@@ -49,8 +49,8 @@ public class OrderControllerCustomer {
         }
     }
 
-    @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> createOrder_Customer(
+    @PostMapping(value = "/add", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> createOrderCustomer(
             @RequestParam Integer accountID,
             @RequestParam String deliveryAddress,
             @RequestParam(required = false) String promotionCode,
@@ -62,7 +62,7 @@ public class OrderControllerCustomer {
     }
 
     @DeleteMapping(value = "/cancel/{orderID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> cancelOrder_Customer(@PathVariable int orderID) {
+    public ResponseEntity<Map<String, String>> cancelOrderCustomer(@PathVariable int orderID) {
         try {
             orderService.cancelOrder(orderID);
             return ResponseEntity.ok(Collections.singletonMap("message", "Hủy đơn hàng thành công"));
@@ -72,7 +72,7 @@ public class OrderControllerCustomer {
     }
 
     @PutMapping(value = "/update/{orderID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> updateOrder_Customer(@PathVariable Integer orderID, @RequestBody OrderPutRequest orderPutRequest) {
+    public ResponseEntity<?> updateOrderCustomer(@PathVariable Integer orderID, @RequestBody OrderPutRequest orderPutRequest) {
         Map<String, String> response = orderService.updateOrder(orderID, orderPutRequest);
         if (response.get("message").equals("Cập nhật thất bại")) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -80,13 +80,13 @@ public class OrderControllerCustomer {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping(value = "/getOrder/paged", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> getOrdersPaged_Customer(@RequestParam int page, @RequestParam int size) {
+    @GetMapping(value = "/get-order/get-paging", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getOrdersPagedCustomer(@RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(orderService.getAllOrdersPaged(page, size));
     }
 
-    @GetMapping(value = "/getByStatus/{orderStatus}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> getOrdersByStatus_Customer(@PathVariable String orderStatus) {
+    @GetMapping(value = "/get-by-status/{orderStatus}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getOrdersByStatusCustomer(@PathVariable String orderStatus) {
         return ResponseEntity.ok(orderService.getOrdersByStatus(orderStatus));
     }
 }

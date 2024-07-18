@@ -19,9 +19,9 @@ import com.example.diamondstore.request.putRequest.CertificatePutRequest;
 import com.example.diamondstore.service.CertificateService;
 
 @RestController
-@RequestMapping("/api/certificates/manager")
+@RequestMapping("/api/manager/certificate-management/certificates")
 public class CertificateControllerManager {
-    
+
     private final CertificateService certificateService;
 
     public CertificateControllerManager(CertificateService certificateService) {
@@ -33,7 +33,7 @@ public class CertificateControllerManager {
         return certificateService.getCertificateById(certificateID);
     }
 
-    @PostMapping(value = "/create", produces = "application/json;charset=UTF-8")
+    @PostMapping(value = "/add", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> createCertificate(@RequestBody Certificate certificate) {
         return certificateService.createCertificate(certificate);
     }
@@ -53,7 +53,7 @@ public class CertificateControllerManager {
         }
     }
 
-    @PostMapping("/update-statuses")
+    @PostMapping("/update-status")
     public ResponseEntity<Map<String, String>> updateCertificateStatusesAuto() {
         certificateService.updateCertificateStatusesAuto();
         return ResponseEntity.ok(Collections.singletonMap("message", "Trạng thái chứng chỉ đã được cập nhật"));
