@@ -3,7 +3,7 @@ import axios from "axios";
 export const getAllPromotions = async () => {
   try {
     const token = localStorage.getItem('jwt');
-    const response = await axios.get("http://localhost:8080/api/promotion/get-all",
+    const response = await axios.get("http://localhost:8080/api/promotion-management/promotions/get-all",
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -17,8 +17,12 @@ export const getAllPromotions = async () => {
 
 export const getPromotionById = async (promotionID) => {
   try {
+    const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      `http://localhost:8080/api/promotion/${promotionID}`
+      `http://localhost:8080/api/manager/promotion-management/promotions/${promotionID}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -31,7 +35,7 @@ export const createPromotion = async (promotion) => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.post(
-      "http://localhost:8080/api/promotion/create",
+      "http://localhost:8080/api/manager/promotion-management/promotions/add",
       promotion,
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -46,7 +50,7 @@ export const updatePromotion = async (promotionID, promotion) => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.put(
-      `http://localhost:8080/api/promotion/update/${promotionID}`,
+      `http://localhost:8080/api/manager/promotion-management/promotions/update/${promotionID}`,
       promotion,
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -61,7 +65,7 @@ export const deletePromotion = async (promotionIDs) => {
   try {
     const token = localStorage.getItem('jwt');
     await axios.delete(
-      `http://localhost:8080/api/promotion/manager/delete`
+      `http://localhost:8080/api/manager/promotion-management/promotions/delete`
       , { 
         headers: { Authorization: `Bearer ${token}` },
         data: promotionIDs }

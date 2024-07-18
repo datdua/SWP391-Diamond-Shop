@@ -32,12 +32,12 @@ public class CertificateController {
     }
 
     @GetMapping("/get-by-id/{certificateID}")
-    public ResponseEntity<?> getCertificate_Admin(@PathVariable String certificateID) {
+    public ResponseEntity<?> getCertificateById(@PathVariable String certificateID) {
         return certificateService.getCertificateById(certificateID);
     }
 
     @GetMapping(value = "/get-certificate-image/{certificateID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> getCertificateImg_Admin(@PathVariable String certificateID) {
+    public ResponseEntity<?> getCertificateImg(@PathVariable String certificateID) {
         return certificateService.getCertificateImg(certificateID);
     }
 }

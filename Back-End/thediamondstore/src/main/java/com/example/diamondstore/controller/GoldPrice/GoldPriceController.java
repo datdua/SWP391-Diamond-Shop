@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,5 +25,10 @@ public class GoldPriceController {
     @GetMapping(value = "/get-all", produces = "application/json;charset=UTF-8")
     public List<GoldPrice> getAllGoldPrices() {
         return goldPriceService.getAll();
+    }
+
+    @GetMapping(value = "/get-by-id/{goldPriceID}", produces = "application/json;charset=UTF-8")
+    public GoldPrice getGoldPriceById(@PathVariable Integer goldPriceID) {
+        return goldPriceService.getGoldPriceById(goldPriceID);
     }
 }

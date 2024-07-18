@@ -31,7 +31,7 @@ public class DiamondPriceControllerManager {
         return diamondPriceService.addDiamondPrice(diamondPriceRequest);
     }
 
-    @PutMapping(value = "/{diamondPriceID}", produces = "application/json;charset=UTF-8")
+    @PutMapping(value = "/update/{diamondPriceID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> updateDiamondPrice(@PathVariable Integer diamondPriceID, @RequestBody DiamondPriceRequest diamondPriceRequest) {
         return diamondPriceService.updateDiamondPrice(diamondPriceID, diamondPriceRequest);
     }

@@ -17,8 +17,12 @@ export const getAllCertificates = async () => {
 
 export const getCertificateById = async (certificateId) => {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `http://localhost:8080/api/certificates/${certificateId}`
+      `http://localhost:8080/api/certificates/get-by-id/${certificateId}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -31,7 +35,7 @@ export const createCertificate = async (certificate) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.post(
-      "http://localhost:8080/api/certificates/manager/create",
+      "http://localhost:8080/api/managers/certificate-management/certificates/add",
       certificate,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -48,7 +52,7 @@ export const updateCertificate = async (certificateId, certificate) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.put(
-      `http://localhost:8080/api/certificates/manager/update/${certificateId}`,
+      `http://localhost:8080/api/managers/certificate-management/certificates/update/${certificateId}`,
       certificate,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -65,7 +69,7 @@ export const updateCertificate = async (certificateId, certificate) => {
 export async function deleteCertificate(certificateIDs) {
   try {
     const token = localStorage.getItem("jwt");
-    const response = await axios.delete("http://localhost:8080/api/certificates/manager/delete", 
+    const response = await axios.delete("http://localhost:8080/api/managers/certificate-management/certificates/delete", 
       { 
         headers: { Authorization: `Bearer ${token}` },
         data: certificateIDs
@@ -79,8 +83,12 @@ export async function deleteCertificate(certificateIDs) {
 
 export const getCertificateImage = async (certificationID) => {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `http://localhost:8080/api/certificates/get/certificateImg/${certificationID}`
+      `http://localhost:8080/api/certificates/get-certificate-image/${certificationID}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
@@ -91,8 +99,12 @@ export const getCertificateImage = async (certificationID) => {
 
 export const getCertificateByPage = async (page = 1, size = 9) => {
   try {
+    const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `http://localhost:8080/api/certificates/paged?page=${page}&size=${size}`
+      `http://localhost:8080/api/certificates/get-paging?page=${page}&size=${size}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
     );
     return response.data;
   } catch (error) {
