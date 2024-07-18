@@ -64,8 +64,8 @@ function LoginRegisterPage() {
           navigate("/sale-staff/profile");
         } else {
           navigate("/trangchu");
-          window.location.reload();
           window.scrollTo(0, 0);
+          window.location.reload();        
         }
       } else {
         console.error("Đăng nhập thất bại:", response);
@@ -87,7 +87,6 @@ function LoginRegisterPage() {
       return;
     }
 
-    // Check if required fields are filled
     if (!registerName || !registerEmail || !registerPassword) {
       toast.error("Vui lòng điền đầy đủ thông tin đăng ký.");
       return;

@@ -160,7 +160,7 @@ function JewelryDetailPage() {
                             </span>
                             <div className="tm-prodetails-infos">
                               <div className="tm-prodetails-singleinfo" style={{marginTop:'20px', marginBottom:'20px'}}>
-                                <b>Product ID: </b>
+                                <b> ID Trang sức: </b>
                                 {jewelry.jewelryID}
                               </div>
                               <div className="tm-prodetails-singleinfo" style={{marginTop:'20px', marginBottom:'20px'}}>
