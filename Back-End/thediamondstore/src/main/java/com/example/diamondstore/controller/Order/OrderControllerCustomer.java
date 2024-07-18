@@ -29,8 +29,8 @@ public class OrderControllerCustomer {
         this.orderService = orderService;
     }
 
-    @GetMapping(value = "/{orderID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Order> getOrderCustomer(@PathVariable int orderID) {
+    @GetMapping(value = "/get-order/{orderID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Order> getOrderCustomer(@PathVariable Integer orderID) {
         Order order = orderService.getOrder(orderID);
 
         if (order == null) {
@@ -40,8 +40,8 @@ public class OrderControllerCustomer {
         return ResponseEntity.ok(order);
     }
 
-    @GetMapping(value = "/{accountID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> getOrdersByAccountCustomer(@PathVariable int accountID) {
+    @GetMapping(value = "/get-account/{accountID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getOrdersByAccountCustomer(@PathVariable Integer accountID) {
         try {
             return ResponseEntity.ok(orderService.getOrdersByAccountId(accountID));
         } catch (IllegalArgumentException e) {
@@ -62,7 +62,7 @@ public class OrderControllerCustomer {
     }
 
     @DeleteMapping(value = "/cancel/{orderID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> cancelOrderCustomer(@PathVariable int orderID) {
+    public ResponseEntity<Map<String, String>> cancelOrderCustomer(@PathVariable Integer orderID) {
         try {
             orderService.cancelOrder(orderID);
             return ResponseEntity.ok(Collections.singletonMap("message", "Hủy đơn hàng thành công"));

@@ -37,7 +37,6 @@ function JewelryPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const resultsPerPage = 9;
-  const { jewelryId } = useParams();
   const genders = ["Tất cả", "Nam", "Nữ"];
 
   const fetchJewelryPage = async (page = 1, filtersToUse = {}) => {

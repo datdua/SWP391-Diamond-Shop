@@ -31,7 +31,7 @@ export async function getAccountByID(accountID) {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      `http://localhost:8080/api/customer/accounts/contact-information/${accountID}`,{
+      `http://localhost:8080/api/customer/accumulate-points/${accountID}`,{
         headers: {
           Authorization: `Bearer ${token}`
         }

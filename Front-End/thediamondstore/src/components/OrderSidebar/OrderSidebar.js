@@ -2,7 +2,7 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import './OrderSidebar.css';
 
 function OrderSidebar({ order, show, onHide }) {
-  console.log("OrderSidebar props:", order, show, onHide);
+  console.log("OrderSidebar props:", order, show);
 
   return (
     <Offcanvas show={show} onHide={onHide}>

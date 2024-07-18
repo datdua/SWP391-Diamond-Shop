@@ -27,7 +27,7 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    @GetMapping("/{accountID}")
+    @GetMapping("/accountID")
     public ResponseEntity<List<Cart>> getCartItems(@RequestParam Integer accountID) {
         List<Cart> cartItems = cartService.getCartItems(accountID);
         if (cartItems.isEmpty()) {

@@ -56,7 +56,7 @@ const DiamondPage = () => {
     const clarities = ['Tất cả', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2', 'I1', 'I2', 'I3'];
     const shapes = ['Tất cả', 'Radiant', 'Around', 'Pear'];
     const origins = ['Tất cả', 'GIA'];
-
+    const resultsPerPage = 9;
 
     useEffect(() => {
         fetchDiamonds(currentPage);
