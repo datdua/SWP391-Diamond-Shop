@@ -26,7 +26,7 @@ public class GoldPriceControllerManager {
         this.goldPriceService = goldPriceService;
     }
 
-    @PostMapping
+    @PostMapping(value = "/add", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> addGoldPrice(@RequestBody GoldPriceRequest goldPriceRequest) {
         return goldPriceService.addGoldPrice(goldPriceRequest);
     }
