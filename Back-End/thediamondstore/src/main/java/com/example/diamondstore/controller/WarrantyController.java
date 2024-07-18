@@ -33,7 +33,7 @@ public class WarrantyController {
     }
 
     // admin + manager
-    @GetMapping(value = "/warranty-management/warranties", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/warranty-management/warranties/get-all", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Iterable<Warranty>> getWarranties() {
         return ResponseEntity.ok(warrantyService.getAllWarranties());
     }
@@ -49,7 +49,7 @@ public class WarrantyController {
     }
 
     // customer
-    @GetMapping(value = "/customer/warranty-management/warranties/{warrantyID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/customer/warranties/{warrantyID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Warranty> getWarrantyCustomer(@PathVariable String warrantyID) {
         Warranty warranty = warrantyService.getWarrantyById(warrantyID);
         if (warranty == null) {
@@ -87,31 +87,31 @@ public class WarrantyController {
     }
 
     // admin + manager
-    @GetMapping(value = "/warranty-management/warranties/warrantyImg/{warrantyID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/warranty-management/warranties/get-warranty-image/{warrantyID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> getWarrantyImg(@PathVariable String warrantyID) {
         return warrantyService.getWarrantyImg(warrantyID);
     }
 
     // customer
-    @GetMapping(value = "/customer/warranty-management/warranties/warrantyImg/{warrantyID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/customer/warranties/get-warranty-image/{warrantyID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> getWarrantyImgCustomer(@PathVariable String warrantyID) {
         return warrantyService.getWarrantyImg(warrantyID);
     }
 
     // admin + manager
-    @GetMapping(value = "/warranty-management/warranties/diamondIDIsNull", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/warranty-management/warranties/get-jewelry-warranty", produces = "application/json;charset=UTF-8")
     public ResponseEntity<List<Warranty>> getWarrantiesByDiamondIDIsNull() {
         return ResponseEntity.ok(warrantyService.getWarrantiesByDiamondIDIsNull());
     }
 
     // admin + manager
-    @GetMapping(value = "/warranty-management/warranties/jewelryIDIsNull", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/warranty-management/warranties/get-diamond-warranty", produces = "application/json;charset=UTF-8")
     public ResponseEntity<List<Warranty>> getWarrantiesByJewelryIDIsNull() {
         return ResponseEntity.ok(warrantyService.getWarrantiesByJewelryIDIsNull());
     }
 
     // admin + manager
-    @PostMapping(value = "/manager/warranty-management/warranties/update-statuses", produces = "application/json;charset=UTF-8")
+    @PostMapping(value = "/manager/warranty-management/warranties/update-status", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> updateWarrantyStatusesAuto() {
         warrantyService.updateWarrantyStatusesAuto();
         return ResponseEntity.ok(Collections.singletonMap("message", "Trạng thái giấy bảo hành đã được cập nhật"));

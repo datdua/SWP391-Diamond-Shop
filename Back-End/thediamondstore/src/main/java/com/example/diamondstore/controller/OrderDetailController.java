@@ -16,37 +16,37 @@ public class OrderDetailController {
     private OrderDetailService orderDetailService;
 
     // admin + manager
-    @GetMapping(value = "/orderdetail-management/orderdetails/get-all", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/orderDetail-management/orderDetails/get-all", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getAllOrderDetail() {
         return ResponseEntity.ok(orderDetailService.getAllOrderDetail());
     }
 
     // customer
-    @GetMapping(value = "/customer/orderdetail-management/orderdetails/get-all", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/customer/orderDetails/get-all", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getAllOrderDetailCustomer() {
         return ResponseEntity.ok(orderDetailService.getAllOrderDetail());
     }
 
     // admin + manager
-    @GetMapping(value = "/admin/orderdetail-management/orderdetails/getOrderDetail/{orderID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/admin/orderDetail-management/orderDetails/get-orderDetail/{orderID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrderDetailByOrderID(Integer orderID) {
         return ResponseEntity.ok(orderDetailService.getOrderDetailByOrderID(orderID));
     }
 
     // customer
-    @GetMapping(value = "/customer/orderdetail-management/orderdetails/getOrderDetail/{orderID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/customer/orderDetails/get-orderDetail/{orderID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrderDetailByOrderIDCustomer(Integer orderID) {
         return ResponseEntity.ok(orderDetailService.getOrderDetailByOrderID(orderID));
     }
 
     // admin + manager
-    @GetMapping(value = "/admin/orderdetail-management/orderdetails/{orderDetailID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/admin/orderDetail-management/orderDetails/{orderDetailID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrderDetail(Integer orderDetailID) {
         return ResponseEntity.ok(orderDetailService.getOrderDetail(orderDetailID));
     }
 
     // customer
-    @GetMapping(value = "/customer/orderdetail-management/orderdetails/{orderDetailID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/customer/orderDetails/{orderDetailID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrderDetailCustomer(Integer orderDetailID) {
         return ResponseEntity.ok(orderDetailService.getOrderDetail(orderDetailID));
     }

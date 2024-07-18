@@ -12,7 +12,7 @@ import com.example.diamondstore.model.GoldPrice;
 import com.example.diamondstore.service.GoldPriceService;
 
 @RestController
-@RequestMapping("/api/guest/gold-price-management/gold-prices")
+@RequestMapping("/api/guest/gold-prices")
 public class GoldPriceControllerGuest {
 
     @Autowired

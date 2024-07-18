@@ -20,7 +20,7 @@ import com.example.diamondstore.service.AccountService;
 
 
 @RestController
-@RequestMapping("/api/admin/accounts")
+@RequestMapping("/api/admin/account-management/accounts")
 public class AccountControllerAdmin {
 
     private final AccountService accountService;

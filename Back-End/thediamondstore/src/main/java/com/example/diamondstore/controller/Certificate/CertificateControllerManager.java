@@ -19,7 +19,7 @@ import com.example.diamondstore.request.putRequest.CertificatePutRequest;
 import com.example.diamondstore.service.CertificateService;
 
 @RestController
-@RequestMapping("/api/manager/certificates")
+@RequestMapping("/api/manager/certificate-management/certificates")
 public class CertificateControllerManager {
 
     private final CertificateService certificateService;
