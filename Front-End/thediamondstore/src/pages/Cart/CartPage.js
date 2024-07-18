@@ -74,13 +74,9 @@ function CartPage() {
     return (
         <div>
             <div id="wrapper" className="wrapper">
-                {/* Header and Breadcrumbs */}
-                {/* Main Content */}
                 <main className="page-content">
-                    {/* Shopping Cart Area */}
                     <div className="tm-section shopping-cart-area bg-white tm-padding-section">
                         <div className="container">
-                            {/* Cart Table */}
                             <div className="tm-cart-table table-responsive">
                                 <table className="table table-bordered mb-0">
                                     <thead>
