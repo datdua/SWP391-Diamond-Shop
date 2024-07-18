@@ -67,7 +67,7 @@ export async function createDiamond(diamond) {
   try {
     const token = localStorage.getItem('jwt');
     const response = await apiClient.post(
-      "http://localhost:8080/api/manager/diamonds/create",
+      "http://localhost:8080/api/manager/diamond-management/diamonds/add",
       diamond,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -83,7 +83,7 @@ export async function updateDiamond(diamondID, diamond) {
   try {
     const token = localStorage.getItem('jwt');
     const response = await apiClient.put(
-      `http://localhost:8080/api/manager/diamonds/update/${diamondID}`,
+      `http://localhost:8080/api/manager/diamond-management/diamonds/update/${diamondID}`,
       diamond,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -99,7 +99,7 @@ export async function deleteDiamond(diamondIDs) {
   try {
     const token = localStorage.getItem('jwt');
     const response = await apiClient.delete(
-      "http://localhost:8080/api/manager/diamonds/delete",
+      "http://localhost:8080/api/manager/diamond-management/diamonds/delete",
       {
         headers: { Authorization: `Bearer ${token}` },
         data: diamondIDs, // Move `data` inside the same object as headers

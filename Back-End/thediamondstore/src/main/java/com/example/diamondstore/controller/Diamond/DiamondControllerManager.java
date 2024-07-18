@@ -27,7 +27,7 @@ public class DiamondControllerManager {
         this.diamondService = diamondService;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/add")
     public ResponseEntity<Map<String, String>> createDiamond_Manager(@RequestBody Diamond diamond) {
         return diamondService.createDiamond(diamond);
     }

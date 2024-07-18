@@ -45,7 +45,7 @@ export const getAllCartItems = async (accountID) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `http://localhost:8080/api/customer/carts/?accountID=${accountID}`,
+      `http://localhost:8080/api/customer/carts/${accountID}`,
       {
         method: "GET",
         headers: {
