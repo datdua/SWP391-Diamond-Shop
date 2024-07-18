@@ -29,7 +29,7 @@ function LoginRegisterPage() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/guest/login",
+        "http://localhost:8080/api/auth/login",
         {
           email: loginEmail,
           password: loginPassword,
@@ -94,7 +94,7 @@ function LoginRegisterPage() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/accounts/guest/register",
+        "http://localhost:8080/api/accounts/register",
         {
           accountName: registerName,
           email: registerEmail,
