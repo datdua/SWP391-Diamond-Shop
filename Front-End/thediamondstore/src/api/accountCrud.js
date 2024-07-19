@@ -208,7 +208,7 @@ export const getCustomerPoints = async (accountId) => {
 
 export const resetPassword = async (email) => {
   try {
-    const response = await axios.post(`http://localhost:8080/api/auth/forget-password?email=${email}`,
+    const response = await axios.post(`http://localhost:8080/api/accounts/forget-password?email=${email}`,
     );
     return response.data;
   } catch (error) {
@@ -221,7 +221,7 @@ export const resetPassword = async (email) => {
 
 export const setPassword = async (email, newPassword) => {
   try {
-    const response = await axios.put(`http://localhost:8080/api/auth/set-password?email=${encodeURIComponent(email)}`, {}, {
+    const response = await axios.put(`http://localhost:8080/api/accounts/set-password?email=${encodeURIComponent(email)}`, {}, {
       headers: {
         'Content-Type': 'application/json',
         'newPassword': newPassword, // Add newPassword to the headers
@@ -265,7 +265,7 @@ export const regenerateOTP = async (email) => {
   try {
     // Make GET request to the API endpoint with email as a query parameter
     const response = await axios.put(
-      `http://localhost:8080/api/auth/regenerate-otp`,
+      `http://localhost:8080/api/accounts/regenerate-otp`,
       null, // Pass null as the data parameter for PUT request
       {
         params: {

@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import { deleteOrderByManager } from "../../api/OrderAPI";
+import { deleteOrder } from "../../api/OrderAPI";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Tooltip } from "@mui/material";
 
@@ -8,7 +8,7 @@ function DeleteOrderForm({ orderID, onDelete }) {
   const handleDelete = async () => {
     if (window.confirm("Bạn có chắc muốn XÓA đơn hàng này ?")) {
       try {
-        await deleteOrderByManager(orderID);
+        await deleteOrder(orderID);
         onDelete(orderID);
         alert("Xóa thành công");
       } catch (error) {

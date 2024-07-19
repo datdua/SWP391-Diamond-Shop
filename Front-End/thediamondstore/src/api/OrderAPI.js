@@ -176,7 +176,7 @@ export async function updateOrder(orderId, updatedOrder) {
   try {
     const token = getAuthToken();
     const response = await axios.put(
-      `http://localhost:8080/api/manager/order-management/orders/update/${orderId}`,
+      `http://localhost:8080/api/orders/manager/update/${orderId}`,
       updatedOrder,
       {
         headers: { Authorization: `Bearer ${token}` },

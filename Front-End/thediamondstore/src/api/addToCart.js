@@ -9,7 +9,7 @@ export const addJewelryToCart = async (
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.post(
-      `http://localhost:8080/api/customer/carts/add?accountID=${accountID}&jewelryID=${jewelryId}&quantity=${quantity}&sizeJewelry=${size}`,
+      `http://localhost:8080/api/customer/cart-management/carts/add?accountID=${accountID}&jewelryID=${jewelryId}&quantity=${quantity}&sizeJewelry=${size}`,
       {},
       {
         headers: {
@@ -27,7 +27,7 @@ export const addDiamondToCart = async (accountID, diamondId, quantity) => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.post(
-      `http://localhost:8080/api/customer/carts/add?accountID=${accountID}&diamondID=${diamondId}&quantity=${quantity}`,
+      `http://localhost:8080/api/customer/cart-management/carts/add?accountID=${accountID}&diamondID=${diamondId}&quantity=${quantity}`,
       {},
       {
         headers: {
@@ -45,7 +45,7 @@ export const getAllCartItems = async (accountID) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `http://localhost:8080/api/customer/carts/${accountID}`,
+      `http://localhost:8080/api/customer/cart-management/carts/accountID?accountID=${accountID}`,
       {
         method: "GET",
         headers: {
@@ -82,7 +82,7 @@ export const getTotalCart = async (accountID) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `http://localhost:8080/api/customer/carts/total-cart?accountID=${accountID}`,
+      `http://localhost:8080/api/customer/cart-management/carts/total-cart?accountID=${accountID}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
