@@ -3,7 +3,7 @@ import axios from "axios";
 export const getAllCertificates = async () => {
   try {
     const token = localStorage.getItem("jwt");
-    const response = await axios.get("http://localhost:8080/api/certificates/get-all",
+    const response = await axios.get("https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/certificates/get-all",
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -19,7 +19,7 @@ export const getCertificateById = async (certificateId) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `http://localhost:8080/api/certificates/get-by-id/${certificateId}`,
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/certificates/get-by-id/${certificateId}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -35,7 +35,7 @@ export const createCertificate = async (certificate) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.post(
-      "http://localhost:8080/api/manager/certificate-management/certificates/add",
+      "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/managers/certificate-management/certificates/add",
       certificate,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -52,7 +52,7 @@ export const updateCertificate = async (certificateId, certificate) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.put(
-      `http://localhost:8080/api/manager/certificate-management/certificates/update/${certificateId}`,
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/managers/certificate-management/certificates/update/${certificateId}`,
       certificate,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -69,7 +69,7 @@ export const updateCertificate = async (certificateId, certificate) => {
 export async function deleteCertificate(certificateIDs) {
   try {
     const token = localStorage.getItem("jwt");
-    const response = await axios.delete("http://localhost:8080/api/manager/certificate-management/certificates/delete", 
+    const response = await axios.delete("https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/managers/certificate-management/certificates/delete", 
       { 
         headers: { Authorization: `Bearer ${token}` },
         data: certificateIDs
@@ -85,7 +85,7 @@ export const getCertificateImage = async (certificationID) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `http://localhost:8080/api/certificates/get-certificate-image/${certificationID}`,
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/certificates/get-certificate-image/${certificationID}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -101,7 +101,7 @@ export const getCertificateByPage = async (page = 1, size = 9) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `http://localhost:8080/api/certificates/get-paging?page=${page}&size=${size}`,
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/certificates/get-paging?page=${page}&size=${size}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }

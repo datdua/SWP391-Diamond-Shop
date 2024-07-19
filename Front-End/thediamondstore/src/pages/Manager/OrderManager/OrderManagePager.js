@@ -8,7 +8,7 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
-import { deleteOrder, getAllOrder } from "../../../api/OrderAPI";
+import { deleteOrderByManager, getAllOrder } from "../../../api/OrderAPI";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
 import UpdateOrderForm from "../../../components/OrderCRUD/OrderUpdate";
@@ -48,7 +48,7 @@ function OrderManagerPage() {
 
   const handleDelete = async (orderID) => {
     try {
-      await deleteOrder(orderID);
+      await deleteOrderByManager(orderID);
       setOrderData(orderData.filter((order) => order.orderID !== orderID));
     } catch (error) {
       console.error("Error deleting order:", error);
