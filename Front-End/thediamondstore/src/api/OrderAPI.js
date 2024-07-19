@@ -134,7 +134,7 @@ export const getPromotion = async (promotionCode) => {
   const token = localStorage.getItem('jwt')
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/customer/promotions/${promotionCode}`, {
+      `http://localhost:8080/api/customer/promotions/get-by-promotion-code/${promotionCode}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
