@@ -42,7 +42,7 @@ export async function getProductPage(page = 1, size = 4) {
       throw error;
   }
 }
-export const searchProductionByName = async (name, page = 1, size = 9) => {
+export const searchProductionByName = async (name, page = 1, size = 8) => {
   try {
     const response = await axios.get(
       `http://localhost:8080/api/guest/products/search/get-paging`,

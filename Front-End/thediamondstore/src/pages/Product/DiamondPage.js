@@ -26,7 +26,7 @@ const customModalStyles = {
     },
 };
 
-const DiamondPage = () => {
+function DiamondPage() {
     const [diamonds, setDiamonds] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -152,7 +152,7 @@ const DiamondPage = () => {
         setIsOpen(false);
         setSelectedItem(null);
     }
-    
+
     return (
         <div>
             <div id="wrapper" className="wrapper">
@@ -281,7 +281,7 @@ const DiamondPage = () => {
                                                                     <div className="col-md-2 mb-4">
                                                                         <div className="card">
                                                                             <div className="card-header">
-                                                                              <h6><span className="fa fa-filter mr-3"></span>Nguồn gốc</h6>
+                                                                                <h6><span className="fa fa-filter mr-3"></span>Nguồn gốc</h6>
                                                                             </div>
                                                                             <div className="card-body">
                                                                                 <select
@@ -461,7 +461,6 @@ const DiamondPage = () => {
                                                                         <span className="tm-product-price">{item.diamondEntryPrice ? item.diamondEntryPrice.toLocaleString() : 'N/A'} VND</span>
                                                                     </div>
                                                                 </div>
-
                                                             </div>
                                                         ))
                                                     )}
@@ -471,11 +470,11 @@ const DiamondPage = () => {
                                                 <Pagination
                                                     count={totalPages}
                                                     page={currentPage}
-                                                    onChange={(event, page) => handlePageChange(page)}
+                                                    onChange={handlePageChange}
                                                 />
                                             </div>
                                         </div>
-                                        <div className="col-lg-3">
+                                        <div className="col-lg-3 col-12">
                                             <div className="widgets">
                                                 <div className="single-widget widget-categories">
                                                     <h6 className="widget-title">Danh mục</h6>
