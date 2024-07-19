@@ -61,16 +61,6 @@ public class OrderControllerCustomer {
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo đơn hàng thành công"));
     }
 
-    @DeleteMapping(value = "/cancel/{orderID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> cancelOrderCustomer(@PathVariable Integer orderID) {
-        try {
-            orderService.cancelOrder(orderID);
-            return ResponseEntity.ok(Collections.singletonMap("message", "Hủy đơn hàng thành công"));
-        } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
-        }
-    }
-
     @PutMapping(value = "/update/{orderID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> updateOrderCustomer(@PathVariable Integer orderID, @RequestBody OrderPutRequest orderPutRequest) {
         Map<String, String> response = orderService.updateOrder(orderID, orderPutRequest);
@@ -88,5 +78,15 @@ public class OrderControllerCustomer {
     @GetMapping(value = "/get-by-status/{orderStatus}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrdersByStatusCustomer(@PathVariable String orderStatus) {
         return ResponseEntity.ok(orderService.getOrdersByStatus(orderStatus));
+    }
+
+    @DeleteMapping(value = "/cancel/{orderID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<Map<String, String>> cancelOrderCustomer(@PathVariable Integer orderID) {
+        try {
+            orderService.cancelOrder(orderID);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Hủy đơn hàng thành công"));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+        }
     }
 }

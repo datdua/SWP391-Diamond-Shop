@@ -57,7 +57,7 @@ public class WarrantyService {
         updateWarrantyStatusesAuto();
     }
 
-    @Scheduled(cron = "0 0 * * * *") // Chạy mỗi giờ
+    @Scheduled(cron = "0 0 * * * *") 
     public void updateWarrantyStatusesAuto() {
         List<Warranty> warrantys = warrantyRepository.findAll();
         LocalDateTime now = LocalDateTime.now();
@@ -82,12 +82,10 @@ public class WarrantyService {
     }
 
     public ResponseEntity<Map<String, String>> createWarranty(Warranty warranty) {
-        // validate warrantyID
         if (!validateWarrantyID(warranty.getWarrantyID())) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã bảo hành không hợp lệ"));
         }
 
-        // Thay thế chuỗi rỗng bằng null ngay từ đầu
         if (warranty.getDiamondID() != null && warranty.getDiamondID().isEmpty()) {
             warranty.setDiamondID(null);
         }
@@ -99,18 +97,14 @@ public class WarrantyService {
         if (existingWarranty != null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Giấy bảo hành đã tồn tại"));
         }
-
-        // Kiểm tra xem ít nhất một trong hai cột ID có giá trị không null
         if (warranty.getDiamondID() == null && warranty.getJewelryID() == null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Cần cung cấp ít nhất một ID cho kim cương hoặc trang sức"));
         }
-
-        // Đảm bảo rằng chỉ một trong hai cột ID có giá trị
         if (warranty.getDiamondID() != null && warranty.getJewelryID() != null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Chỉ có thể có một trong hai ID cho kim cương hoặc trang sức"));
         }
 
-    updateWarrantyStatus(warranty); // Cập nhật trạng thái trước khi lưu
+    updateWarrantyStatus(warranty); 
     warrantyRepository.save(warranty);
 
     Diamond diamond = diamondRepository.findByDiamondID(warranty.getDiamondID());
@@ -130,7 +124,6 @@ public class WarrantyService {
     }
 
     public ResponseEntity<Map<String, String>> updateWarranty(String warrantyID, WarrantyPutRequest warrantyPutRequest) {
-        // validate warrantyID
         if (!validateWarrantyID(warrantyID)) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã giấy bảo hành không hợp lệ"));
         }
