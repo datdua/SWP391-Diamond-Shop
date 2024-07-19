@@ -52,6 +52,8 @@ const DiamondPage = () => {
     const location = useLocation();
     const [searchResults, setSearchResults] = useState([]);
     const [filterApplied, setFilterApplied] = useState(false);
+    const [showLoadingSpinner, setShowLoadingSpinner] = useState(false);
+
     const colors = ['Tất cả', 'E', 'J', 'F', 'D'];
     const cuts = ['Tất cả', 'Excellent'];
     const clarities = ['Tất cả', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2', 'I1', 'I2', 'I3'];
@@ -74,6 +76,9 @@ const DiamondPage = () => {
 
     const fetchDiamonds = async (page) => {
         setLoading(true);
+        setShowLoadingSpinner(false);
+        const timer = setTimeout(() => setShowLoadingSpinner(true), 2000);
+
         try {
             if (filterApplied) {
                 const filtersToUse = {};
@@ -88,29 +93,30 @@ const DiamondPage = () => {
                 const { content, totalPages } = await searchDiamond(filtersToUse, page, resultsPerPage);
                 setDiamonds(content);
                 setTotalPages(totalPages);
-
             } else {
                 const data = await getPage(page, resultsPerPage);
-                setTimeout(() => {
-                    setDiamonds(data.content);
-                    setTotalPages(data.totalPages);
-                    setLoading(false);
-                    window.scrollTo(0, 0);
-                }, 50); 
+                setDiamonds(data.content);
+                setTotalPages(data.totalPages);
             }
         } catch (error) {
             setError(error.message);
+        } finally {
+            clearTimeout(timer);
             setLoading(false);
+            setShowLoadingSpinner(false);
+            window.scrollTo(0, 0);
         }
     };
 
     const handleSearch = async (e) => {
         e.preventDefault();
         setLoading(true);
+        setShowLoadingSpinner(false);
+        const timer = setTimeout(() => setShowLoadingSpinner(true), 2000);
+
         try {
             const filtersToUse = {};
 
-            // Include only non-empty and non-'Tất cả' filters
             Object.entries(filters).forEach(([key, value]) => {
                 if (value !== '' && value !== 'Tất cả') {
                     filtersToUse[key] = value;
@@ -121,17 +127,19 @@ const DiamondPage = () => {
             setDiamonds(content);
             setTotalPages(totalPages);
 
-            setLoading(false);
-            window.scrollTo(0, 0);
-            closeModal();
             setFilterApplied(true); // Filters are now applied
         } catch (error) {
             setError(error.message);
+        } finally {
+            clearTimeout(timer);
             setLoading(false);
+            setShowLoadingSpinner(false);
+            window.scrollTo(0, 0);
+            closeModal();
         }
     };
 
-    const handlePageChange = async (page) => {
+    const handlePageChange = (event, page) => {
         setCurrentPage(page);
     };
 
@@ -144,10 +152,7 @@ const DiamondPage = () => {
         setIsOpen(false);
         setSelectedItem(null);
     }
-
-    if (loading) {
-        return <ImageLoading />;
-    }
+    
     return (
         <div>
             <div id="wrapper" className="wrapper">
