@@ -16,7 +16,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.diamondstore.DTO.OrderSummaryDTO;
 import com.example.diamondstore.model.Account;
@@ -187,16 +190,24 @@ public class OrderService {
     }
 
     @Transactional
-    public Map<String, String> updateOrder(int orderID, OrderPutRequest orderPutRequest) {
+    public ResponseEntity<?> updateOrder(int orderID, OrderPutRequest orderPutRequest) {
         try {
             Order existingOrder = orderRepository.findById(orderID)
                     .orElseThrow(() -> new IllegalArgumentException("Order not found"));
 
+            LocalDateTime deliveryDate = orderPutRequest.getDeliveryDate();
+            LocalDateTime today = LocalDateTime.now();
+
             existingOrder.setDeliveryAddress(orderPutRequest.getDeliveryAddress());
             existingOrder.setOrderStatus(orderPutRequest.getOrderStatus());
-            existingOrder.setDeliveryDate(orderPutRequest.getDeliveryDate());
             existingOrder.setCertificateImage(orderPutRequest.getCertificateImage());
             existingOrder.setWarrantyImage(orderPutRequest.getWarrantyImage());
+
+            if (deliveryDate != null && deliveryDate.isAfter(today)) {
+                existingOrder.setDeliveryDate(deliveryDate);
+            }else {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ngày giao hàng không hợp lệ");
+            }
 
             // Handle promotion code and totalOrder update
             String newPromotionCode = orderPutRequest.getPromotionCode();
@@ -213,9 +224,9 @@ public class OrderService {
 
             existingOrder.settotalOrder(totalOrder);
             orderRepository.save(existingOrder);
-            return Collections.singletonMap("message", "Cập nhật thành công");
+            return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
         } catch (Exception e) {
-            return Collections.singletonMap("message", "Cập nhật thất bại");
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Cập nhật thất bại"));
         }
     }
 

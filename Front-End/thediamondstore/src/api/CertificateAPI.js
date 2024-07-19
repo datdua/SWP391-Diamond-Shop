@@ -35,7 +35,7 @@ export const createCertificate = async (certificate) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.post(
-      "http://localhost:8080/api/managers/certificate-management/certificates/add",
+      "http://localhost:8080/api/manager/certificate-management/certificates/add",
       certificate,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -52,7 +52,7 @@ export const updateCertificate = async (certificateId, certificate) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.put(
-      `http://localhost:8080/api/managers/certificate-management/certificates/update/${certificateId}`,
+      `http://localhost:8080/api/manager/certificate-management/certificates/update/${certificateId}`,
       certificate,
       {
         headers: { Authorization: `Bearer ${token}` },
