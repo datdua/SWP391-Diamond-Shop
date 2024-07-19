@@ -31,7 +31,7 @@ public class GoldPriceControllerManager {
         return goldPriceService.addGoldPrice(goldPriceRequest);
     }
 
-    @PutMapping(value = "/{goldPriceID}", produces = "application/json;charset=UTF-8")
+    @PutMapping(value = "/update/{goldPriceID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> updateGoldPrice(@PathVariable Integer goldPriceID, @RequestBody GoldPriceRequest goldPriceRequest) {
         return goldPriceService.updateGoldPrice(goldPriceID, goldPriceRequest);
     }

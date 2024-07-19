@@ -8,10 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 function AddDiamondForm() {
   const [diamond, setDiamond] = useState({
     diamondID: "",
-    warrantyID: "",
-    certificationID: "",
     diamondName: "",
-    diamondEntryPrice: "",
     diamondImage: "",
     caratSize: "",
     color: "",
@@ -25,12 +22,8 @@ function AddDiamondForm() {
 
   const labels = {
     diamondID: "Mã số",
-    warrantyID: "Mã bảo hành",
-    certificationID: "Mã chứng nhận",
     diamondName: "Tên kim cương",
-    diamondEntryPrice: "Giá nhập",
     diamondImage: "Hình ảnh",
-    weight: "Trọng lượng",
     caratSize: "Kích thước carat",
     color: "Màu sắc",
     cut: "Vết cắt",

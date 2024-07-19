@@ -45,7 +45,7 @@ public class SecurityConfig {
     //Admin and Manager urls
     private static final String[] ADMIN_MANAGER_URL = {"/api/accounts/get-all", "/api/accounts/all-except-customer", "/api/accounts/get-by-role/**", "/api/certificates/get-all", "/api/certificates/**", "/api/certificates/get-certificate-image/**", "/api/diamonds/get-all", "/api/diamond-prices/get-all",
          "/api/gold-prices/get-all", "/api/jewelry/get-all", "/api/order-management/**", "/api/orders/totalRevenue", "/api/orders/totalOrder", "/api/orders/totalTransaction", "/api/warranty-management/**", "/api/warranties/get/warrantyImg/**",
-         "/api/warranties/diamondIDIsNull", "/api/warranties/jewelryIDIsNull", "/api/accounts/**" };
+         "/api/warranties/diamondIDIsNull", "/api/warranties/jewelryIDIsNull", "/api/accounts/**", "/api/customer/warranties/get-warranty-image/**", "/api/customer/certificates/get-certificate-image/**" };
 
     private static final String[] ADMIN_MANAGER_SALE_STAFF_URL ={"/api/accounts/get/**", "/api/orders/get-all", "/api/orders/getOrderHaveTransactionNo", "/api/promotion-management/**", "/api/accounts/update/**"};
 

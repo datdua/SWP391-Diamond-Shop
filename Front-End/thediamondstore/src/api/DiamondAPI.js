@@ -131,7 +131,7 @@ export async function getWarrantityImage(warrantyID) {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      `http://localhost:8080/api/customer/warranty-management/warranties/warrantyImg/${warrantyID}`,
+      `http://localhost:8080/api/customer/warranties/get-warranty-image/${warrantyID}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -142,6 +142,39 @@ export async function getWarrantityImage(warrantyID) {
     throw new Error("Failed to fetch diamond warranty image");
   }
 }
+
+export async function getCertificateImageManager(certificationID) {
+  try {
+    const token = localStorage.getItem('jwt');
+    const response = await axios.get(
+      `http://localhost:8080/api/certificates/get-certificate-image/${certificationID}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    console.log("API Response:", response.data); // Debug line
+    return response.data.certificateImage; // Correctly extract the certificateImage URL
+  } catch (error) {
+    throw new Error("Failed to fetch diamond certificate image");
+  }
+}
+
+export async function getWarrantityImageManager(warrantyID) {
+  try {
+    const token = localStorage.getItem('jwt');
+    const response = await axios.get(
+      `http://localhost:8080/api/warranty-management/warranties/get-warranty-image/${warrantyID}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    console.log("API Response:", response.data); // Debug line
+    return response.data.warrantyImage; // Correctly extract the warrantityImage URL
+  } catch (error) {
+    throw new Error("Failed to fetch diamond warranty image");
+  }
+}
+
 
 export async function searchDiamondByName(name) {
   try {

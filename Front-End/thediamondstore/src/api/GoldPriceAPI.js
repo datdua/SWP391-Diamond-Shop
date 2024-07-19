@@ -30,7 +30,7 @@ export const createGoldPrice = async (goldPrice) => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.post(
-      "http://localhost:8080/api/managers/gold-price-management/gold-prices/add",
+      "http://localhost:8080/api/manager/gold-price-management/gold-prices/add",
       goldPrice,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -46,7 +46,7 @@ export const updateGoldPrice = async (goldPriceID, goldPrice) => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.put(
-      `http://localhost:8080/api/gold-prices/gold-price-management/gold-prices/update/${goldPriceID}`,
+      `http://localhost:8080/api/manager/gold-price-management/gold-prices/update/${goldPriceID}`,
       goldPrice,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -62,7 +62,7 @@ export const deleteGoldPrice = async (goldPriceIDs) => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.delete(
-      `http://localhost:8080/api/gold-prices/gold-price-management/gold-prices/delete`
+      `http://localhost:8080/api/manager/gold-price-management/gold-prices/delete`
       , { 
         headers: { Authorization: `Bearer ${token}` },
         data: goldPriceIDs }
