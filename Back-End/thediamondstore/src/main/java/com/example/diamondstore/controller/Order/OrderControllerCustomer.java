@@ -54,10 +54,10 @@ public class OrderControllerCustomer {
             @RequestParam Integer accountID,
             @RequestParam String deliveryAddress,
             @RequestParam(required = false) String promotionCode,
-            @RequestParam(required = false) Integer poIntegersToRedeem,
+            @RequestParam(required = false) Integer pointsToRedeem,
             @RequestParam String phoneNumber) {
 
-        Order order = orderService.createOrder(accountID, deliveryAddress, promotionCode, poIntegersToRedeem, phoneNumber);
+        Order order = orderService.createOrder(accountID, deliveryAddress, promotionCode, pointsToRedeem, phoneNumber);
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo đơn hàng thành công"));
     }
 

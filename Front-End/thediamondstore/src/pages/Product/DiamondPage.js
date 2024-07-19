@@ -126,8 +126,7 @@ function DiamondPage() {
             const { content, totalPages } = await searchDiamond(filtersToUse, 1, resultsPerPage);
             setDiamonds(content);
             setTotalPages(totalPages);
-
-            setFilterApplied(true); // Filters are now applied
+            setFilterApplied(true); 
         } catch (error) {
             setError(error.message);
         } finally {

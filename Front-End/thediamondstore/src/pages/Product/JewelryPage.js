@@ -319,22 +319,6 @@ function JewelryPage() {
           </div>
         </main>
       </div>
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        style={customModalStyles}
-        contentLabel="Product Quickview"
-      >
-        {selectedItem && (
-          <div>
-            <h2>{selectedItem.jewelryName}</h2>
-            <img src={selectedItem.jewelryImage} alt={selectedItem.jewelryName} />
-            <p>{selectedItem.jewelryDescription}</p>
-            <p>Price: {selectedItem.jewelryEntryPrice.toLocaleString()} VND</p>
-            <button onClick={closeModal}>Close</button>
-          </div>
-        )}
-      </Modal>
     </div>
   );
 }

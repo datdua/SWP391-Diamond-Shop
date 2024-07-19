@@ -154,7 +154,6 @@ function CartPage() {
                                     </tbody>
                                 </table>
                             </div>
-                            {/* Cart Bottom Area */}
                             <div className="tm-cart-bottomarea">
                                 <div className="row">
                                     <div className="col-lg-8 col-md-6">

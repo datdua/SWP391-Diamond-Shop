@@ -64,7 +64,7 @@ export const removeCartItem = async (cartID) => {
   const token = localStorage.getItem('jwt')
   try {
     const response = await axios.delete(
-      `http://localhost:8080/api/customer/cart-management/carts/delete/${cartID}`,{
+      `http://localhost:8080/api/customer/carts/delete/${cartID}`,{
         headers: {
           Authorization: `Bearer ${token}`
           }
@@ -89,7 +89,7 @@ export const getTotalCart = async (accountID) => {
         },
       }
     );
-    return response.data; // Adjust this line according to your actual API response
+    return response.data; 
   } catch (error) {
     console.error("Error fetching total cart value:", error);
     throw new Error("Failed to fetch total cart value: " + error.message);

@@ -42,21 +42,11 @@ export async function getProductPage(page = 1, size = 4) {
       throw error;
   }
 }
-export const searchProductionByName = async (name, page = 1, size = 8) => {
-  try {
-    const response = await axios.get(
-      `http://localhost:8080/api/guest/products/search/get-paging`,
-      {
-        params: {
-          name: name,
-          page: page,
-          size: size,
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error searching production by name:", error);
-    throw error;
+export async function searchProductionByName(searchTerm, page = 1, size = 8) {
+  const response = await fetch(`http://localhost:8080/api/guest/products/search/get-paging?name=${encodeURIComponent(searchTerm)}&page=${page}&size=${size}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch");
   }
-};
+  const data = await response.json();
+  return data;
+}

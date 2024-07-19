@@ -121,9 +121,8 @@ export const addToCart = async (accountId, jewelryId, quantity, size) => {
 
 export async function searchJewelry(page = 1, filters = {}) {
   try {
-    // Construct the query parameters including filters and pagination
     const params = new URLSearchParams({
-      ...filters, // Spread the filters object to include its properties as individual parameters
+      ...filters, 
       page, 
       size: 9, 
     });
