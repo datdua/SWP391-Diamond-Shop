@@ -237,7 +237,6 @@ export const deleteOrder = async (orderId) => {
   }
 };
 
-
 export const deleteOrderByManager = async (orderId) => {
   const token = localStorage.getItem('jwt')
   try {

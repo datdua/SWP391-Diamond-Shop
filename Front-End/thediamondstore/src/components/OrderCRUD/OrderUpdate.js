@@ -33,7 +33,7 @@ function UpdateOrderForm({ order }) {
         deliveryDate: `${updatedOrder.deliveryDate} ${updatedOrder.deliveryTime}:00`,
       };
       await updateOrder(order.orderID, dateTimeDelivery);
-      setSnackbarMessage("Cập nhật thông tin thành công!");
+      setSnackbarMessage("Cập nhật thông tin thành công, vui lòng tải lại trang!");
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
     } catch (error) {

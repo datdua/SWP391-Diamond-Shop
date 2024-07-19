@@ -156,10 +156,6 @@ function OrderManagerPage() {
                               <EditIcon />
                             </Button>
                           </Tooltip>
-                          <DeleteOrderForm
-                            orderID={order.orderID}
-                            onDelete={handleDelete}
-                          />
                         </td>
                       </tr>
                     ))}
@@ -198,7 +194,7 @@ function OrderManagerPage() {
           <img
             src={selectedImage}
             alt="Hình ảnh bị lỗi. Vui lòng kiểu tra lại địa chỉ hình ảnh"
-            style={{ width: "100%"}}
+            style={{ width: "100%" }}
           />
         </Modal.Body>
       </Modal>

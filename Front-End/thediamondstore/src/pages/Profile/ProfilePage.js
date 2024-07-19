@@ -106,6 +106,7 @@ const ProfilePage = () => {
               onChange={handleChange}
               fullWidth
               sx={{ marginBottom: 2 }}
+              disabled
             />
           ) : (
             <Typography variant="subtitle1" color="textSecondary" gutterBottom>

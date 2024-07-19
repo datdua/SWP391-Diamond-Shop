@@ -69,7 +69,7 @@ export const updateCertificate = async (certificateId, certificate) => {
 export async function deleteCertificate(certificateIDs) {
   try {
     const token = localStorage.getItem("jwt");
-    const response = await axios.delete("http://localhost:8080/api/managers/certificate-management/certificates/delete", 
+    const response = await axios.delete("http://localhost:8080/api/manager/certificate-management/certificates/delete", 
       { 
         headers: { Authorization: `Bearer ${token}` },
         data: certificateIDs
