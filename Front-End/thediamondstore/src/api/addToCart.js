@@ -64,7 +64,7 @@ export const removeCartItem = async (cartID) => {
   const token = localStorage.getItem('jwt')
   try {
     const response = await axios.delete(
-      `http://localhost:8080/api/customer/carts/delete/${cartID}`,{
+      `http://localhost:8080/api/customer/cart-management/carts/delete/${cartID}`,{
         headers: {
           Authorization: `Bearer ${token}`
           }
@@ -99,7 +99,7 @@ export const getTotalCart = async (accountID) => {
 export const updateCart = async (cartId, accountId, diamondId, jewelryId, quantity, sizeJewelry) => {
   const token = localStorage.getItem('jwt')
   try {
-      let url = `http://localhost:8080/api/customer/carts/update/${cartId}?accountID=${accountId}&quantity=${quantity}`;
+      let url = `http://localhost:8080/api/customer/cart-management/carts/update/${cartId}?accountID=${accountId}&quantity=${quantity}`;
       
       if (diamondId) {
           url += `&diamondID=${diamondId}`;

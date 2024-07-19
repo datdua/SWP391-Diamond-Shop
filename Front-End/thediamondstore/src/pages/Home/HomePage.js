@@ -72,7 +72,7 @@ function HomePage() {
 
         fetchData();
     }, []);
-
+    
     // Function to open the modal
     const openModal = (item) => {
         setSelectedItem(item);

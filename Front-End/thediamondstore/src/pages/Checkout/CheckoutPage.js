@@ -110,9 +110,10 @@ function CheckoutPage() {
             toast.error("Xin cung cấp địa chỉ giao hàng và số điện thoại");
             return;
         }
+
         try {
-            let pointsToUse = usePoints ? pointsToRedeem : 0;
-            let finalTotal = totalCart - discountAmount - (pointsToUse * 10000);
+            const orderData = await createOrder(accountId, deliveryAddress, phoneNumber, pointsDiscount, promotionCode);
+
             toast.success("Đặt hàng thành công");
             navigate(`/account/${accountId}`);
         } catch (error) {
@@ -123,6 +124,7 @@ function CheckoutPage() {
     const handleUsePoints = () => {
         if (pointsToRedeem <= totalAccumulatedPoints) {
             setUsePoints(true);
+            setPointsToRedeem(totalAccumulatedPoints); 
         } else {
             toast.error("Số điểm tích lũy không đủ để sử dụng.");
         }
