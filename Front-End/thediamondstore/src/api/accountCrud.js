@@ -63,7 +63,7 @@ export async function getAccountByRoleCustomer() {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      `hhttp://localhost:8080/api/accounts/get-by-account-role/ROLE_CUSTOMER`,
+      `http://localhost:8080/api/accounts/get-by-account-role/ROLE_CUSTOMER`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -97,7 +97,25 @@ export async function updateProfile(accountID, accountDetails) {
   const token = getAuthToken();
   try {
     const response = await axios.put(
-      `http://localhost:8080/api/customers/customer/update/${accountID}`,
+      `http://localhost:8080/api/accounts/update/${accountID}`,
+      accountDetails,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to update account");
+  }
+}
+
+export async function updateAccountByAdmin(accountID, accountDetails) {
+  const token = getAuthToken();
+  try {
+    const response = await axios.put(
+      `http://localhost:8080/api/admin/account-management/accounts/update/${accountID}`,
       accountDetails,
       {
         headers: {
@@ -115,7 +133,7 @@ export async function updateProfile(accountID, accountDetails) {
 export async function deleteAccounts(accountIDs) {
   try {
     const token = localStorage.getItem("jwt");
-    const response = await axios.delete("http://localhost:8080/api/admin/accounts/delete", {
+    const response = await axios.delete("http://localhost:8080/api/admin/account-management/accounts/delete", {
       headers : { Authorization: `Bearer ${token}` },
       data: accountIDs,
     });

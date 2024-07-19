@@ -24,4 +24,6 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
     List<Cart> findByOrder(Order order);
 
     Object deleteByAccountID(Integer accountID);
+
+    void deleteByOrder_OrderID(Integer orderID);
 }

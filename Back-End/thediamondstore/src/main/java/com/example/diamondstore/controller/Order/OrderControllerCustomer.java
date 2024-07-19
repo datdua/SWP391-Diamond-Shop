@@ -54,10 +54,10 @@ public class OrderControllerCustomer {
             @RequestParam Integer accountID,
             @RequestParam String deliveryAddress,
             @RequestParam(required = false) String promotionCode,
-            @RequestParam(required = false) Integer pointsToRedeem,
+            @RequestParam(required = false) Integer poIntegersToRedeem,
             @RequestParam String phoneNumber) {
 
-        Order order = orderService.createOrder(accountID, deliveryAddress, promotionCode, pointsToRedeem, phoneNumber);
+        Order order = orderService.createOrder(accountID, deliveryAddress, promotionCode, poIntegersToRedeem, phoneNumber);
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo đơn hàng thành công"));
     }
 
@@ -81,7 +81,7 @@ public class OrderControllerCustomer {
     }
 
     @GetMapping(value = "/get-order/get-paging", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> getOrdersPagedCustomer(@RequestParam int page, @RequestParam int size) {
+    public ResponseEntity<?> getOrdersPagedCustomer(@RequestParam Integer page, @RequestParam Integer size) {
         return ResponseEntity.ok(orderService.getAllOrdersPaged(page, size));
     }
 

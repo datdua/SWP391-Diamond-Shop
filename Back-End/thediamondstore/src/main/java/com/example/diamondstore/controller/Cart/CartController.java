@@ -21,14 +21,14 @@ import com.example.diamondstore.model.Cart;
 import com.example.diamondstore.service.CartService;
 
 @RestController
-@RequestMapping("/api/customer/cart-management/carts")
+@RequestMapping("/api/customer/carts")
 public class CartController {
 
     @Autowired
     private CartService cartService;
 
-    @GetMapping("/accountID")
-    public ResponseEntity<List<Cart>> getCartItems(@RequestParam Integer accountID) {
+     @GetMapping("/{accountID}")
+    public ResponseEntity<List<Cart>> getCartItems(@PathVariable Integer accountID) {
         List<Cart> cartItems = cartService.getCartItems(accountID);
         if (cartItems.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

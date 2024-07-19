@@ -30,11 +30,8 @@ public class AccountControllerAdmin {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<Map<String, String>> deleteAccounts(
-            @RequestBody List<Integer> accountIDs,
-            @RequestHeader("Authorization") String jwtToken) {
-
-        return accountService.deleteAccounts(accountIDs, jwtToken);
+    public ResponseEntity<Map<String, String>> deleteAccounts(@RequestBody List<Integer> accountIDs) {
+        return accountService.deleteAccounts(accountIDs);
     }
 
     @PostMapping("/add")
@@ -48,9 +45,9 @@ public class AccountControllerAdmin {
     }
 
     @PutMapping(value = "/update/{accountID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> updateAccount_Manger(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
+    public ResponseEntity<?> updateAccount_Admin(@PathVariable Integer accountID, @RequestBody AccountRequest accountRequest) {
         try {
-            Account updatedAccount = accountService.updateAccount_Customer(accountID, accountRequest);
+            Account updatedAccount = accountService.updateAccount_Admin(accountID, accountRequest);
             return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
