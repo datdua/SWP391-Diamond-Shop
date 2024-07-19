@@ -208,7 +208,7 @@ export const getCustomerPoints = async (accountId) => {
 
 export const resetPassword = async (email) => {
   try {
-    const response = await axios.post(`http://localhost:8080/api/accounts/forget-password?email=${email}`,
+    const response = await axios.post(`http://localhost:8080/api/auth/forget-password?email=${email}`,
     );
     return response.data;
   } catch (error) {
