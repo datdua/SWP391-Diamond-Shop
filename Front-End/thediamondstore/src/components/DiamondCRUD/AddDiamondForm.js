@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 
+
 function AddDiamondForm() {
   const [diamond, setDiamond] = useState({
     diamondID: "",
@@ -15,10 +16,12 @@ function AddDiamondForm() {
     cut: "Excellent",
     clarity: "",
     shape: "",
-    origin: "",
+    origin: "GIA",
   });
 
+
   const [message, setMessage] = useState("");
+
 
   const labels = {
     diamondID: "Mã số",
@@ -32,16 +35,18 @@ function AddDiamondForm() {
     origin: "Xuất xứ",
   };
 
+
   const options = {
-    caratSize: [3.6, 3.9, 4.1, 4.5],
     color: ["F", "E", "J", "D"],
     clarity: ["VS1", "VS2", "VVS1", "VVS2"],
     shape: ["Round", "Pear", "Radiant"],
   };
 
+
   const handleChange = (event) => {
     setDiamond({ ...diamond, [event.target.name]: event.target.value });
   };
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -59,6 +64,7 @@ function AddDiamondForm() {
       setMessage(errorMessage);
     }
   };
+
 
   return (
     <div>
@@ -103,7 +109,18 @@ function AddDiamondForm() {
               }}
               variant="outlined"
             />
-          ) : (
+          ) : key === "origin" ? (
+            <TextField
+              key={key}
+              id="outlined-read-only-input"
+              label={labels[key]}
+              defaultValue="GIA"
+              InputProps={{
+                readOnly: true,
+              }}
+              variant="outlined"
+            />
+          ): (
             <TextField
               key={key}
               id="outlined-basic"
@@ -121,5 +138,6 @@ function AddDiamondForm() {
     </div>
   );
 }
+
 
 export default AddDiamondForm;

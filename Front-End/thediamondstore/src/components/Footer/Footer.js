@@ -53,7 +53,7 @@ function Footer() {
                                 <p>Cửa hàng bán kim cương và trang sức</p>
                                 <ul>
                                     <li><b>Địa chỉ :</b>Lô E2a-7, Đường D1, Long Thạnh Mỹ, Thành Phố Thủ Đức, Thành phố Hồ Chí Minh</li>
-                                    <li><b>SĐT :</b><a href="tel:0905558630">0905558630</a></li>
+                                    <li><b>SĐT :</b><a href="tel:0912051433">0912051433</a></li>
                                     <li><b>Email :</b><a href="mailto:thediamondstore.info24@gmail.com">thediamondstore.info24@gmail.com</a></li>
                                 </ul>
                             </div>

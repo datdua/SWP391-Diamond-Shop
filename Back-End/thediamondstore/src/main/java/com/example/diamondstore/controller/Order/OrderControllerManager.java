@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -107,15 +106,5 @@ public class OrderControllerManager {
     public ResponseEntity<?> getRevenueMonthInAYear(@RequestParam int year) {
         List<OrderSummaryDTO> orderSummaries = orderService.getRevenueMonthInYear(year);
         return new ResponseEntity<>(orderSummaries, HttpStatus.OK);
-    }
-
-    @DeleteMapping(value = "/cancel/{orderID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> cancelOrderCustomer(@PathVariable Integer orderID) {
-        try {
-            orderService.cancelOrder(orderID);
-            return ResponseEntity.ok(Collections.singletonMap("message", "Hủy đơn hàng thành công"));
-        } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
-        }
     }
 }

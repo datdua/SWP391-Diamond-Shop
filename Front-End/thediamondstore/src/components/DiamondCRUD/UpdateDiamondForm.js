@@ -53,38 +53,11 @@ function UpdateDiamondForm({ diamond }) {
           type="text"
         />
         <TextField
-          id="warrantyID"
-          label="Mã bảo hành"
-          variant="outlined"
-          name="warrantyID"
-          value={updatedDiamond.warrantyID}
-          onChange={handleChange}
-          type="text"
-        />
-        <TextField
-          id="certificationID"
-          label="Mã chứng chỉ"
-          variant="outlined"
-          name="certificationID"
-          value={updatedDiamond.certificationID}
-          onChange={handleChange}
-          type="text"
-        />
-        <TextField
           id="diamondName"
           label="Tên kim cương"
           variant="outlined"
           name="diamondName"
           value={updatedDiamond.diamondName}
-          onChange={handleChange}
-          type="text"
-        />
-        <TextField
-          id="diamondEntryPrice"
-          label="Giá nhập kim cương"
-          variant="outlined"
-          name="diamondEntryPrice"
-          value={updatedDiamond.diamondEntryPrice}
           onChange={handleChange}
           type="text"
         />
@@ -180,6 +153,9 @@ function UpdateDiamondForm({ diamond }) {
           value={updatedDiamond.origin}
           onChange={handleChange}
           type="text"
+          InputProps={{
+            readOnly: true,
+          }}
         />
         <Button type="submit" variant="contained" color="success">Cập nhật</Button>
       </Box>

@@ -130,7 +130,6 @@ function OrderManagerPage() {
                         <td>
                           <img
                             src={order.certificateImage}
-                            alt="Certificate"
                             style={{ width: "50px", height: "50px", cursor: "pointer" }}
                             onClick={() => handleShowImage(order.certificateImage)}
                           />
@@ -138,7 +137,6 @@ function OrderManagerPage() {
                         <td>
                           <img
                             src={order.warrantyImage}
-                            alt="Warranty"
                             style={{ width: "50px", height: "50px", cursor: "pointer" }}
                             onClick={() => handleShowImage(order.warrantyImage)}
                           />
@@ -199,8 +197,8 @@ function OrderManagerPage() {
         <Modal.Body className="text-center">
           <img
             src={selectedImage}
-            alt="Popup"
-            style={{ width: "100%", height: "500px" }}
+            alt="Hình ảnh bị lỗi. Vui lòng kiểu tra lại địa chỉ hình ảnh"
+            style={{ width: "100%"}}
           />
         </Modal.Body>
       </Modal>
