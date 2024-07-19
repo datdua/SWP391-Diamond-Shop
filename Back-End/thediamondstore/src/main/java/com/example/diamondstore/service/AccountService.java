@@ -6,15 +6,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,9 +28,11 @@ import org.springframework.util.StringUtils;
 
 import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.AccumulatePoints;
+import com.example.diamondstore.model.Order;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.AccumulatePointsRepository;
 import com.example.diamondstore.repository.OrderRepository;
+import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.request.AccountRequest;
 import com.example.diamondstore.request.RegisterRequest;
 import com.example.diamondstore.utils.EmailUtil;
@@ -46,6 +52,9 @@ public class AccountService implements UserDetailsService {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     @Autowired
     private OtpUtil otpUtil;
@@ -229,11 +238,15 @@ public class AccountService implements UserDetailsService {
         return Collections.singletonMap("message", "Mật khẩu đã được thiết lập. Vui lòng đăng nhập.");
     }
 
-    public ResponseEntity<Map<String, String>> deleteAccounts(List<Integer> accountIDs, String token) {
-        // Decode the JWT token to get the current user's account ID and role
-        Claims claims = jwtUtil.extractAllClaims(token);
-        Integer currentAccountID = claims.get("accountID", Integer.class);
-        String currentRole = claims.get("role", String.class);
+    @Transactional
+    public ResponseEntity<Map<String, String>> deleteAccounts(List<Integer> accountIDs) {
+        // Get the current authenticated user details
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentRole = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .filter(role -> role.equals("ROLE_ADMIN") || role.equals("ROLE_MANAGER"))
+                .findFirst()
+                .orElseThrow();
 
         // Filter out non-existing accounts and restricted accounts
         List<Integer> existingAccountIDs = accountIDs.stream()
@@ -241,19 +254,26 @@ public class AccountService implements UserDetailsService {
                 .filter(accountID -> {
                     Account account = accountRepository.findById(accountID).orElse(null);
                     return account != null
-                            && !accountID.equals(currentAccountID)
-                            && !account.getRole().equals("ROLE_ADMIN")
-                            && !account.getRole().equals("ROLE_MANAGER");
+                            && !account.getRole().equals("ROLE_ADMIN");
                 })
                 .collect(Collectors.toList());
 
         // Check if all IDs were restricted
         if (existingAccountIDs.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "Không thể xóa tài khoản đang đăng nhập hoặc các tài khoản với vai trò ADMIN và MANAGER"));
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "Không thể xóa tài khoản đang đăng nhập hoặc các tài khoản với vai trò ADMIN"));
         }
 
-        // Delete accounts
-        accountRepository.deleteAllById(existingAccountIDs);
+        existingAccountIDs.forEach(accountID -> {
+        Account account = accountRepository.findById(accountID).orElseThrow();
+        List<Order> orders = orderRepository.findByAccount_AccountID(accountID);
+        orders.forEach((var order) -> {
+            cartRepository.deleteByOrder_OrderID(order.getOrderID());
+            orderRepository.delete(order);
+        });
+        accumulatePointsRepository.deleteByAccountID(accountID);
+        accountRepository.delete(account);
+    });
+
         return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
     }
 
@@ -307,6 +327,29 @@ public class AccountService implements UserDetailsService {
             existingAccount.setPassword(accountRequest.getPassword());
         }
 
+        return accountRepository.save(existingAccount);
+    }
+
+    public Account updateAccount_Admin(Integer accountID, AccountRequest accountRequest) {
+        Account existingAccount = accountRepository.findById(accountID).orElse(null);
+        if (existingAccount == null) {
+            throw new RuntimeException("Không tìm thấy tài khoản");
+        }
+        // Update account fields from request
+        existingAccount.setAccountName(accountRequest.getAccountName());
+        existingAccount.setEmail(accountRequest.getEmail());
+        existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
+        existingAccount.setRole(accountRequest.getRole());
+        existingAccount.setAddressAccount(accountRequest.getAddressAccount());
+        existingAccount.setActive(accountRequest.getActive());
+
+        // Only update the password if a new password is provided
+        if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty()
+                && !accountRequest.getPassword().equals(existingAccount.getPassword())) {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String encodedPassword = passwordEncoder.encode(accountRequest.getPassword());
+            existingAccount.setPassword(encodedPassword);
+        }
         return accountRepository.save(existingAccount);
     }
 }
