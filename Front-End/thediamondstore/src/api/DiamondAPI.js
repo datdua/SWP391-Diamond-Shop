@@ -140,6 +140,7 @@ export async function getWarrantityImage(warrantyID) {
   }
 }
 
+
 export async function searchDiamondByName(name) {
   try {
     const response = await axios.get(

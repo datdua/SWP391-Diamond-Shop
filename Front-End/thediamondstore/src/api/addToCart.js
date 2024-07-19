@@ -99,7 +99,7 @@ export const getTotalCart = async (accountID) => {
 export const updateCart = async (cartId, accountId, diamondId, jewelryId, quantity, sizeJewelry) => {
   const token = localStorage.getItem('jwt')
   try {
-      let url = `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/customer/cart-management/carts/update/${cartId}?accountID=${accountId}&quantity=${quantity}`;
+      let url = `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/customer/carts/update/${cartId}?accountID=${accountId}&quantity=${quantity}`;
       
       if (diamondId) {
           url += `&diamondID=${diamondId}`;

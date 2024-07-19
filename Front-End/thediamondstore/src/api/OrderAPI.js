@@ -1,8 +1,10 @@
 import axios from "axios";
 
+
 export const getAuthToken = () => {
   return localStorage.getItem("jwt"); 
 };
+
 
 export const createOrder = async (
   accountId,
@@ -20,6 +22,7 @@ export const createOrder = async (
     if (pointsToRedeem) data.append("pointsToRedeem", pointsToRedeem);
     if (promotionCode) data.append("promotionCode", promotionCode);
 
+
     const response = await axios.post(
       "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/customer/order-management/orders/add",
       data,
@@ -31,6 +34,7 @@ export const createOrder = async (
       }
     );
 
+
     return response.data;
   } catch (error) {
     console.error("Error creating order:", error);
@@ -38,10 +42,12 @@ export const createOrder = async (
   }
 };
 
+
 export async function fetchOrders(accountID) {
   if (!accountID) {
     throw new Error("Account ID is undefined");
   }
+
 
   const token = getAuthToken();
   try {
@@ -54,6 +60,7 @@ export async function fetchOrders(accountID) {
       }
     );
 
+
     if (response.status !== 200) {
       throw new Error(`Failed to fetch orders: ${response.status} - ${response.statusText}`);
     }
@@ -63,6 +70,8 @@ export async function fetchOrders(accountID) {
     throw error; 
   }
 }
+
+
 
 
 export async function createPayment(orderID) {
@@ -132,6 +141,7 @@ export const getPromotion = async (promotionCode) => {
   }
 };
 
+
 export async function fetchOrderDetail(orderID) {
   const token = getAuthToken();
   try {
@@ -144,9 +154,11 @@ export async function fetchOrderDetail(orderID) {
       }
     );
 
+
     if (response.status !== 200) {
       throw new Error("Failed to fetch order details");
     }
+
 
     const orderDetails = response.data;
     console.log("Fetched order details:", orderDetails);
@@ -157,16 +169,18 @@ export async function fetchOrderDetail(orderID) {
   }
 }
 
+
 export async function updateOrder(orderId, updatedOrder) {
   try {
     const token = getAuthToken();
     const response = await axios.put(
-      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/orders/manager/update/${orderId}`,
+      `http://localhost:8080/api/manager/order-management/orders/update/${orderId}`,
       updatedOrder,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
+
 
     if (response.status === 200) {
       return response.data; 
@@ -179,10 +193,32 @@ export async function updateOrder(orderId, updatedOrder) {
   }
 }
 
+
 export const deleteOrder = async (orderId) => {
   const token = localStorage.getItem('jwt')
   try {
     const url = `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/customer/order-management/orders/cancel/${orderId}`;
+    const response = await axios.delete(url, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (response.status === 200) {
+      return response.data; 
+    } else {
+      throw new Error(`Failed to delete order with status ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error deleting order:", error.message);
+    throw error; 
+  }
+};
+
+export const deleteOrderByManager = async (orderId) => {
+  const token = localStorage.getItem('jwt')
+  try {
+    const url = `http://localhost:8080/api/manager/order-management/orders/cancel/${orderId}`;
     const response = await axios.delete(url, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -212,6 +248,7 @@ export const fetchOrderByPaged = async (page, size) => {
   }
 };
 
+
 export async function getAllOrder() {
   try {
     const token = getAuthToken();
@@ -231,6 +268,7 @@ export async function getAllOrder() {
     throw error;
   }
 }
+
 
 export async function getOrdersHaveTransactionNo() {
   try {
