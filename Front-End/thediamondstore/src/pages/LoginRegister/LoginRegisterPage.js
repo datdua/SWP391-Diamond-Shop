@@ -29,7 +29,7 @@ function LoginRegisterPage() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/auth/login",
+        "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/auth/login",
         {
           email: loginEmail,
           password: loginPassword,
@@ -94,7 +94,7 @@ function LoginRegisterPage() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/auth/register",
+        "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/auth/register",
         {
           accountName: registerName,
           email: registerEmail,

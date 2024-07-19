@@ -4,7 +4,7 @@ export const getAllDiamondPrice = async () => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      "http://localhost:8080/api/guest/diamond-prices/get-all",
+      "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/guest/diamond-prices/get-all",
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -19,7 +19,7 @@ export const getDiamondPriceById = async (diamondPriceID) => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      `http://localhost:8080/api/guest/diamond-prices/${diamondPriceID}`,
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/guest/diamond-prices/${diamondPriceID}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -34,7 +34,7 @@ export const createDiamondPrice = async (diamondPrice) => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.post(
-      "http://localhost:8080/api/manager/diamond-price-management/diamond-prices/add",
+      "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/manager/diamond-price-management/diamond-prices/add",
       diamondPrice,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -50,7 +50,7 @@ export const updateDiamondPrice = async (diamondPriceID, diamondPrice) => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.put(
-      `http://localhost:8080/api/manager/diamond-price-management/diamond-prices/update/${diamondPriceID}`,
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/manager/diamond-price-management/diamond-prices/update/${diamondPriceID}`,
       diamondPrice,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -65,7 +65,7 @@ export const updateDiamondPrice = async (diamondPriceID, diamondPrice) => {
 export const getDiamondPriceByCaratSize = async (caratSize) => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/guest/diamond-prices/prices/${caratSize}`
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/guest/diamond-prices/prices/${caratSize}`
     );
     return response.data;
   } catch (error) {
@@ -76,7 +76,7 @@ export const getDiamondPriceByCaratSize = async (caratSize) => {
 export const getAllClarity = async () => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/guest/diamond-prices/clarity`
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/guest/diamond-prices/clarity`
     );
     return response.data;
   } catch (error) {
@@ -87,7 +87,7 @@ export const getAllClarity = async () => {
 export const getAllColor = async () => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/guest/diamond-prices/color`
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/guest/diamond-prices/color`
     );
     return response.data;
   } catch (error) {
@@ -98,7 +98,7 @@ export const getAllColor = async () => {
 export const getAllCaratSize = async () => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/guest/diamond-prices/caratsize`
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/guest/diamond-prices/caratsize`
     );
     return response.data;
   } catch (error) {
@@ -110,7 +110,7 @@ export const deleteDiamondPrice = async (diamondPriceIDs) => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.delete(
-      `http://localhost:8080/api/manager/diamond-price-management/diamond-prices/delete`
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/manager/diamond-price-management/diamond-prices/delete`
       , {
         headers: { Authorization: `Bearer ${token}` },
         data: diamondPriceIDs

@@ -8,7 +8,7 @@ export const getAuthToken = () => {
 export async function getAllProduct() {
     try {
         const response = await axios.get(
-          "http://localhost:8080/api/guest/products/get-all",{
+          "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/guest/products/get-all",{
           },
         );
         console.log('Response:', response); 
@@ -29,7 +29,7 @@ export async function getProductPage(page = 1, size = 4) {
       page = typeof page === 'object' ? 1 : Number(page);
 
       const response = await axios.get(
-        `http://localhost:8080/api/guest/products/get-paging?page=${page}&size=${size}`,
+        `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/guest/products/get-paging?page=${page}&size=${size}`,
       );
       
       if (response.status !== 200) {
@@ -43,7 +43,7 @@ export async function getProductPage(page = 1, size = 4) {
   }
 }
 export async function searchProductionByName(searchTerm, page = 1, size = 8) {
-  const response = await fetch(`http://localhost:8080/api/guest/products/search/get-paging?name=${encodeURIComponent(searchTerm)}&page=${page}&size=${size}`);
+  const response = await fetch(`https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/guest/products/search/get-paging?name=${encodeURIComponent(searchTerm)}&page=${page}&size=${size}`);
   if (!response.ok) {
     throw new Error("Failed to fetch");
   }
