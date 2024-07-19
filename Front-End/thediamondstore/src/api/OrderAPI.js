@@ -151,7 +151,7 @@ export async function fetchOrderDetail(orderID) {
   const token = getAuthToken();
   try {
     const response = await axios.get(
-      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/customer/order-management/orders/${orderID}`,
+      `https://localhost:8080/api/customer/order-management/orders/${orderID}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -176,7 +176,7 @@ export async function updateOrder(orderId, updatedOrder) {
   try {
     const token = getAuthToken();
     const response = await axios.put(
-      `http://localhost:8080/api/orders/manager/update/${orderId}`,
+      `http://localhost:8080/api/manager/order-management/orders/update/${orderId}`,
       updatedOrder,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -198,6 +198,27 @@ export const deleteOrder = async (orderId) => {
   const token = localStorage.getItem('jwt')
   try {
     const url = `http://localhost:8080/api/orders/customer/cancel/${orderId}`;
+    const response = await axios.delete(url, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (response.status === 200) {
+      return response.data; // Return data if needed
+    } else {
+      throw new Error(`Failed to delete order with status ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error deleting order:", error.message);
+    throw error; // Throw error to handle it in the calling code
+  }
+};
+
+export const deleteOrderByManager = async (orderId) => {
+  const token = localStorage.getItem('jwt')
+  try {
+    const url = `http://localhost:8080/api/manager/order-management/orders/cancel/${orderId}`;
     const response = await axios.delete(url, {
       headers: {
         Authorization: `Bearer ${token}`
