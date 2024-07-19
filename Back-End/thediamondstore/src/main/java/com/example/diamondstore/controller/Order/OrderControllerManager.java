@@ -53,11 +53,8 @@ public class OrderControllerManager {
 
     @PutMapping(value = "/update/{orderID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> updateOrderManager(@PathVariable Integer orderID, @RequestBody OrderPutRequest orderPutRequest) {
-        Map<String, String> response = orderService.updateOrder(orderID, orderPutRequest);
-        if (response.get("message").equals("Cập nhật thất bại")) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
-        return ResponseEntity.ok(response);
+        ResponseEntity<?> response = orderService.updateOrder(orderID, orderPutRequest);
+        return response;
     }
 
     @GetMapping(value = "/total-order", produces = "application/json;charset=UTF-8")
