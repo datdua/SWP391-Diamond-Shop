@@ -174,7 +174,7 @@ export async function updateOrder(orderId, updatedOrder) {
   try {
     const token = getAuthToken();
     const response = await axios.put(
-      `http://localhost:8080/api/manager/order-management/orders/update/${orderId}`,
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/manager/order-management/orders/update/${orderId}`,
       updatedOrder,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -218,7 +218,7 @@ export const deleteOrder = async (orderId) => {
 export const deleteOrderByManager = async (orderId) => {
   const token = localStorage.getItem('jwt')
   try {
-    const url = `http://localhost:8080/api/manager/order-management/orders/cancel/${orderId}`;
+    const url = `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/manager/order-management/orders/cancel/${orderId}`;
     const response = await axios.delete(url, {
       headers: {
         Authorization: `Bearer ${token}`
