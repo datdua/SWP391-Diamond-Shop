@@ -237,29 +237,6 @@ export const deleteOrder = async (orderId) => {
   }
 };
 
-
-export const deleteOrderByManager = async (orderId) => {
-  const token = localStorage.getItem('jwt')
-  try {
-    const url = `http://localhost:8080/api/manager/order-management/orders/cancel/${orderId}`;
-    const response = await axios.delete(url, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-
-    if (response.status === 200) {
-      return response.data; // Return data if needed
-    } else {
-      throw new Error(`Failed to delete order with status ${response.status}`);
-    }
-  } catch (error) {
-    console.error("Error deleting order:", error.message);
-    throw error; // Throw error to handle it in the calling code
-  }
-};
-
 export const deleteOrderByManager = async (orderId) => {
   const token = localStorage.getItem('jwt')
   try {
