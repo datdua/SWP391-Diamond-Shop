@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Modal from "react-modal";
-import { getAllJewelry, getPage, searchJewelry } from "../../api/JewelryAPI";
+import { getPage, searchJewelry } from "../../api/JewelryAPI";
 import { Pagination } from "@mui/material";
-import ImageLoading from "../../components/LoadingImg/ImageLoading"
+import ImageLoading from "../../components/LoadingImg/ImageLoading";
 
 Modal.setAppElement("#root");
 
@@ -36,7 +36,6 @@ function JewelryPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const resultsPerPage = 9;
-  const { jewelryId } = useParams();
   const genders = ["Tất cả", "Nam", "Nữ"];
 
   const fetchJewelryPage = async (page = 1, filtersToUse = {}) => {
@@ -99,6 +98,7 @@ function JewelryPage() {
     setLoading(true);
     try {
       let filtersToUse = { ...filters };
+
       if (filtersToUse.minjewelryEntryPrice !== undefined && filtersToUse.minjewelryEntryPrice !== '') {
         filtersToUse.minjewelryEntryPrice = parseInt(filtersToUse.minjewelryEntryPrice);
       } else {
@@ -109,9 +109,11 @@ function JewelryPage() {
       } else {
         delete filtersToUse.maxjewelryEntryPrice;
       }
+
       if (filtersToUse.gender === "Tất cả") {
         delete filtersToUse.gender;
       }
+
       await fetchJewelryPage(1, filtersToUse); 
     } catch (error) {
       setError(error.message);

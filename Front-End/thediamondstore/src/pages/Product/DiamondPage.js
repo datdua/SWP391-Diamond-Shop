@@ -58,7 +58,6 @@ const DiamondPage = () => {
     const shapes = ['Tất cả', 'Radiant', 'Around', 'Pear'];
     const origins = ['Tất cả', 'GIA'];
 
-
     useEffect(() => {
         fetchDiamonds(currentPage);
     }, [filterApplied, currentPage]);

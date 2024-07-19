@@ -42,7 +42,7 @@ export async function getWarrantityImage(warrantyID) {
 export async function getJewelryById(jewelryId) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/guest/jewelry-management/jewelries/${jewelryId}`
+      `http://localhost:8080/api/guest/jewelries/${jewelryId}`
     );
     return response.data;
   } catch (error) {
@@ -53,7 +53,7 @@ export async function getJewelryById(jewelryId) {
 export async function getPage(page = 1, size = 9) {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/guest/jewelry-management/jewelries/get-paging?page=${page}&size=${size}`
+      `http://localhost:8080/api/guest/jewelries/get-paging?page=${page}&size=${size}`
     );
     return response.data;
   } catch (error) {
@@ -108,7 +108,6 @@ export async function deleteJewelry(jewelryIDs) {
   }
 }
 
-// Cart API functions
 export const addToCart = async (accountId, jewelryId, quantity, size) => {
   try {
     const response = await axios.post(
@@ -130,7 +129,7 @@ export async function searchJewelry(page = 1, filters = {}) {
     });
 
     const response = await axios.get(
-      "http://localhost:8080/api/guest/jewelry-management/jewelries/search/get-paging",
+      "http://localhost:8080/api/guest/jewelries/search/get-paging",
       { params }
     );
 
