@@ -99,16 +99,13 @@ public class CertificateService {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Chứng chỉ đã tồn tại"));
         }
 
-        // Save the new certificate
+        updateCertificateStatus(certificate);
         certificateRepository.save(certificate);
-
-        // Update the corresponding diamond's certificationID
         Diamond diamond = diamondRepository.findById(certificate.getDiamondID()).orElse(null);
         if (diamond != null) {
             diamond.setCertificationID(certificate.getCertificateID());
             diamondRepository.save(diamond);
         } else {
-            // Rollback if the diamond does not exist
             throw new RuntimeException("Viên kim cương không tồn tại");
         }
 
