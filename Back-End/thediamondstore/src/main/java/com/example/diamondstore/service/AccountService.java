@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
@@ -31,8 +30,8 @@ import com.example.diamondstore.model.AccumulatePoints;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.AccumulatePointsRepository;
-import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.repository.CartRepository;
+import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.request.AccountRequest;
 import com.example.diamondstore.request.RegisterRequest;
 import com.example.diamondstore.utils.EmailUtil;
@@ -115,7 +114,6 @@ public class AccountService implements UserDetailsService {
         AccumulatePoints accumulatePoints = new AccumulatePoints(account.getAccountID(), 0);
         accumulatePointsRepository.save(accumulatePoints);
 
-        // return "Đăng ký thành công. Vui lòng kiểm tra email để xác nhận tài khoản.";
         return Collections.singletonMap("message", "Đăng ký thành công. Vui lòng kiểm tra email để xác nhận tài khoản.");
     }
 
@@ -128,20 +126,15 @@ public class AccountService implements UserDetailsService {
                 .orElseThrow(() -> new RuntimeException("Email không tồn tại" + email));
         LocalDateTime otpGeneratedTime = account.getOtpGeneratedTime();
         LocalDateTime now = LocalDateTime.now();
-        // Calculate the duration in seconds
         long otpAgeInSeconds = Duration.between(otpGeneratedTime, now).getSeconds();
 
-        // Check if the OTP is valid
         String otpAccount = account.getOtp().trim();
 
-        // Check if the OTP is valid
         if (otpAccount.equals(otp) && otpAgeInSeconds < 600) {
-            // OTP is valid and within the allowed time frame
             account.setActive(true);
             accountRepository.save(account);
             return Collections.singletonMap("message", "Xác thực thành công");
         } else {
-            // OTP is invalid or has expired
             return Collections.singletonMap("message", "Xác thực thất bại. Vui lòng thử lại.");
         }
     }
@@ -153,13 +146,11 @@ public class AccountService implements UserDetailsService {
         try {
             emailUtil.sendOtpEmail(email, otp);
         } catch (MessagingException e) {
-            // TODO Auto-generated catch block
             throw new RuntimeException("Không thể gửi OTP. Vui lòng thử lại.");
         }
         account.setOtp(otp);
         account.setOtpGeneratedTime(LocalDateTime.now());
         accountRepository.save(account);
-        // return "Email xác thực đã được gửi. Vui lòng kiểm tra email.";
         return Collections.singletonMap("message", "Email xác thực đã được gửi. Vui lòng kiểm tra email.");
     }
 
@@ -168,7 +159,6 @@ public class AccountService implements UserDetailsService {
     }
 
     public void createAccount(AccountRequest accountRequest) {
-        // Validate account request
         validateAccountRequest(accountRequest);
 
         String accountName = accountRequest.getAccountName();
@@ -177,13 +167,11 @@ public class AccountService implements UserDetailsService {
         String phoneNumber = accountRequest.getPhoneNumber();
         String email = accountRequest.getEmail();
 
-        // Check if account already exists
         Optional<Account> existingAccount = accountRepository.findByEmail(email);
         if (existingAccount.isPresent()) {
             throw new RuntimeException("Tài khoản đã tồn tại");
         }
 
-        // Create a new account entity
         Account account = new Account();
         account.setAccountName(accountName);
         account.setPassword(password);
@@ -191,8 +179,8 @@ public class AccountService implements UserDetailsService {
         account.setRole(role);
         account.setPhoneNumber(phoneNumber);
         account.setEmail(email);
+        account.setActive(true);
 
-        // Save the account to the database
         accountRepository.save(account);
     }
 
@@ -203,17 +191,14 @@ public class AccountService implements UserDetailsService {
         String phoneNumber = accountRequest.getPhoneNumber();
         String email = accountRequest.getEmail();
 
-        // Validate email format
         if (!email.matches("^[a-zA-Z0-9._%+-]+@gmail.com$")) {
             throw new RuntimeException("Email không hợp lệ");
         }
 
-        // Validate phone number format (10 digits starting with specified prefixes)
         if (!phoneNumber.matches("^(090|093|089|096|097|098)[0-9]{7}$")) {
             throw new RuntimeException("Số điện thoại không hợp lệ");
         }
 
-        // Check if any field is empty
         if (!StringUtils.hasText(accountName) || !StringUtils.hasText(password) || !StringUtils.hasText(role) || !StringUtils.hasText(email)) {
             throw new RuntimeException("Vui lòng nhập đầy đủ thông tin");
         }
@@ -240,7 +225,6 @@ public class AccountService implements UserDetailsService {
 
     @Transactional
     public ResponseEntity<Map<String, String>> deleteAccounts(List<Integer> accountIDs) {
-        // Get the current authenticated user details
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentRole = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -248,7 +232,6 @@ public class AccountService implements UserDetailsService {
                 .findFirst()
                 .orElseThrow();
 
-        // Filter out non-existing accounts and restricted accounts
         List<Integer> existingAccountIDs = accountIDs.stream()
                 .filter(accountID -> accountRepository.existsById(accountID))
                 .filter(accountID -> {
@@ -258,7 +241,6 @@ public class AccountService implements UserDetailsService {
                 })
                 .collect(Collectors.toList());
 
-        // Check if all IDs were restricted
         if (existingAccountIDs.isEmpty()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Collections.singletonMap("message", "Không thể xóa tài khoản đang đăng nhập hoặc các tài khoản với vai trò ADMIN"));
         }
@@ -282,14 +264,12 @@ public class AccountService implements UserDetailsService {
         if (existingAccount == null) {
             throw new RuntimeException("Không tìm thấy tài khoản");
         }
-        // Update account fields from request
         existingAccount.setAccountName(accountRequest.getAccountName());
         existingAccount.setEmail(accountRequest.getEmail());
         existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
         existingAccount.setRole(accountRequest.getRole());
         existingAccount.setAddressAccount(accountRequest.getAddressAccount());
 
-        // Only update the password if a new password is provided
         if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty()
                 && !accountRequest.getPassword().equals(existingAccount.getPassword())) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -305,23 +285,19 @@ public class AccountService implements UserDetailsService {
             throw new RuntimeException("Không tìm thấy tài khoản");
         }
 
-        // Decode the JWT token to extract the role of the currently logged-in account
         Claims claims = jwtUtil.extractAllClaims(token);
         String currentRole = claims.get("role", String.class);
 
-        // If the account being updated is the same as the one logged in, ensure the role cannot be changed
         if (accountID.equals(claims.get("accountID")) && !accountRequest.getRole().equals(currentRole)) {
             throw new RuntimeException("Không thể cập nhật vai trò của tài khoản đang đăng nhập");
         }
 
-        // Update account fields from request
         existingAccount.setAccountName(accountRequest.getAccountName());
         existingAccount.setEmail(accountRequest.getEmail());
         existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
         existingAccount.setRole(accountRequest.getRole());
         existingAccount.setAddressAccount(accountRequest.getAddressAccount());
 
-        // Only update the password if a new password is provided
         if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty()
                 && !accountRequest.getPassword().equals(existingAccount.getPassword())) {
             existingAccount.setPassword(accountRequest.getPassword());
@@ -335,7 +311,6 @@ public class AccountService implements UserDetailsService {
         if (existingAccount == null) {
             throw new RuntimeException("Không tìm thấy tài khoản");
         }
-        // Update account fields from request
         existingAccount.setAccountName(accountRequest.getAccountName());
         existingAccount.setEmail(accountRequest.getEmail());
         existingAccount.setPhoneNumber(accountRequest.getPhoneNumber());
@@ -343,7 +318,6 @@ public class AccountService implements UserDetailsService {
         existingAccount.setAddressAccount(accountRequest.getAddressAccount());
         existingAccount.setActive(accountRequest.getActive());
 
-        // Only update the password if a new password is provided
         if (accountRequest.getPassword() != null && !accountRequest.getPassword().isEmpty()
                 && !accountRequest.getPassword().equals(existingAccount.getPassword())) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

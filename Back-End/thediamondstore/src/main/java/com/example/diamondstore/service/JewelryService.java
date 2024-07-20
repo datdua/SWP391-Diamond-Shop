@@ -25,15 +25,14 @@ import com.example.diamondstore.repository.WarrantyRepository;
 import com.example.diamondstore.request.putRequest.JewelryPutRequest;
 import com.example.diamondstore.specification.JewelrySpecification;
 
-
 @Service
 public class JewelryService {
 
     @Autowired
-    private  JewelryRepository jewelryRepository;
+    private JewelryRepository jewelryRepository;
 
     @Autowired
-    private  WarrantyRepository warrantyRepository;
+    private WarrantyRepository warrantyRepository;
 
     @Autowired
     private GoldPriceRepository goldPriceRepository;
@@ -55,39 +54,41 @@ public class JewelryService {
     }
 
     public ResponseEntity<Map<String, String>> createJewelry(Jewelry jewelry) {
-    // validate jewelryID
-    if (!validateJewelryID(jewelry.getJewelryID())) {
-        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã trang sức không hợp lệ"));
-    }
-
-    Jewelry existingJewelry = jewelryRepository.findByJewelryID(jewelry.getJewelryID());
-    if (existingJewelry != null) {
-        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Trang sức đã tồn tại"));
-    }
-
-    // if grossJewelryPrice is null, set it to 0
-    if(jewelry.getGrossJewelryPrice() == null) {
-        jewelry.setGrossJewelryPrice(new BigDecimal(0));
-    }
-
-    // if warrantyID is not null and not empty, validate it
-    if (jewelry.getWarrantyID() != null && !jewelry.getWarrantyID().isEmpty()) {
-        if (!warrantyService.validateWarrantyID(jewelry.getWarrantyID())) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã bảo hành không hợp lệ"));
+        if (!validateJewelryID(jewelry.getJewelryID())) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã trang sức không hợp lệ"));
         }
 
-        if (jewelryRepository.existsByWarrantyID(jewelry.getWarrantyID())) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Bảo hành đã được gán cho một trang sức khác"));
+        Jewelry existingJewelry = jewelryRepository.findByJewelryID(jewelry.getJewelryID());
+        if (existingJewelry != null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Trang sức đã tồn tại"));
+        }
+
+        if (jewelry.getJewelryEntryPrice() == null) {
+            jewelry.setJewelryEntryPrice(BigDecimal.ZERO);
+        }
+
+        if (jewelry.getWarrantyID() != null && !jewelry.getWarrantyID().isEmpty()) {
+            if (!warrantyService.validateWarrantyID(jewelry.getWarrantyID())) {
+                return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã bảo hành không hợp lệ"));
+            }
+
+            if (jewelryRepository.existsByWarrantyID(jewelry.getWarrantyID())) {
+                return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Bảo hành đã được gán cho một trang sức khác"));
+            }
+        }
+
+        // Calculate gross jewelry price = jewelry price * 1.2 (tax: 10%, wage: 10%)
+        BigDecimal grossJewelryPrice = jewelry.getJewelryEntryPrice().multiply(new BigDecimal(1.2));
+        jewelry.setGrossJewelryPrice(grossJewelryPrice);
+
+        jewelryRepository.save(jewelry);
+
+        if (jewelry.getJewelryEntryPrice().compareTo(BigDecimal.ZERO) == 0) {
+            return ResponseEntity.ok().body(Collections.singletonMap("message", "Tạo trang sức thành công, vui lòng tạo giá cho trang sức này"));
+        } else {
+            return ResponseEntity.ok().body(Collections.singletonMap("message", "Tạo trang sức thành công"));
         }
     }
-    
-    //calculate gross jewelry price = jewelry price * 1.2 (tax: 10%, wage: 10%)
-    BigDecimal grossJewelryPrice = jewelry.getJewelryEntryPrice().multiply(new BigDecimal(1.2));
-    jewelry.setGrossJewelryPrice(grossJewelryPrice);
-    
-    jewelryRepository.save(jewelry);
-    return ResponseEntity.ok().body(Collections.singletonMap("message", "Tạo trang sức thành công"));
-}
 
     public Map<String, String> updateJewelry(String jewelryID, JewelryPutRequest jewelryPutRequest) {
         // validate jewelryID
@@ -112,7 +113,6 @@ public class JewelryService {
         jewelryRepository.save(existingJewelry);
         return Collections.singletonMap("message", "Cập nhật thành công");
     }
-
 
     @Transactional
     public ResponseEntity<Map<String, String>> deleteJewelry(@RequestBody List<String> jewelryIDs) {
@@ -149,7 +149,7 @@ public class JewelryService {
         if (jewelryName != null) {
             spec = spec.and(JewelrySpecification.hasNameLike(jewelryName));
         }
-        if (minjewelryEntryPrice != null ) {
+        if (minjewelryEntryPrice != null) {
             spec = spec.and(JewelrySpecification.hasMinJewelryEntryPrice(minjewelryEntryPrice));
         }
         if (maxjewelryEntryPrice != null) {
@@ -180,7 +180,7 @@ public class JewelryService {
         if (jewelryName != null) {
             spec = spec.and(JewelrySpecification.hasJewelryNameIgnoreCase(jewelryName));
         }
-        if (minjewelryEntryPrice != null ) {
+        if (minjewelryEntryPrice != null) {
             spec = spec.and(JewelrySpecification.hasMinJewelryEntryPrice(minjewelryEntryPrice));
         }
         if (maxjewelryEntryPrice != null) {

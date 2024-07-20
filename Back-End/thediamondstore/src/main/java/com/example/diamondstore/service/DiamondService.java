@@ -75,20 +75,17 @@ public class DiamondService {
         DiamondPrice diamondPrice = diamondPriceRepository.findAllByCaratSizeAndColorAndClarity(
                 diamond.getCaratSize(), diamond.getColor(), diamond.getClarity());
 
-        // If no matching diamond price is found
         if (diamondPrice == null) {
             if (diamondEntryPriceInput == null) {
-                return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy giá kim cương và giá nhập không được cung cấp"));
+                diamond.setDiamondEntryPrice(BigDecimal.ZERO);
+                diamondRepository.save(diamond);
+                return ResponseEntity.ok(Collections.singletonMap("message", "Kim cương tạo thành công, nhưng chưa có giá. Vui lòng thêm giá cho kim cương này."));
             }
             diamond.setDiamondEntryPrice(diamondEntryPriceInput);
         } else {
             BigDecimal diamondEntryPriceDB = diamondPrice.getDiamondEntryPrice();
-
-            // Debug: Print values for comparison
             System.out.println("diamondEntryPriceInput: " + diamondEntryPriceInput);
             System.out.println("diamondEntryPriceDB: " + diamondEntryPriceDB);
-
-            // If diamond price input is provided and differs from database
             if (diamondEntryPriceInput != null && diamondEntryPriceInput.compareTo(diamondEntryPriceDB) != 0) {
                 priceMismatch = true;
                 diamond.setDiamondEntryPrice(null);

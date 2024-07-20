@@ -97,24 +97,19 @@ public class DiamondPriceService {
         diamondPrice.setCaratSize(diamondPriceRequest.getCaratSize());
         diamondPrice.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
 
-        //in DB already have a diamondPrice already have input caratSize, color, clarity 
         if (diamondPriceRepository.existsByCaratSizeAndColorAndClarity(diamondPriceRequest.getCaratSize(), diamondPriceRequest.getColor(),
                 diamondPriceRequest.getClarity())) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Đã tồn tại Giá cho loại kim cương này"));
         }
 
-        // Calculate weight based on caratSize
         BigDecimal weight = new BigDecimal(Math.pow(diamondPriceRequest.getCaratSize().doubleValue() / 6.5, 2));
         diamondPrice.setWeight(weight);
 
-        // Save the new DiamondPrice
         diamondPriceRepository.save(diamondPrice);
 
-        // Find diamonds with the same caratSize, color, and clarity
         List<Diamond> diamonds = diamondRepository.findAllByCaratSizeAndColorAndClarity(
                 diamondPriceRequest.getCaratSize(), diamondPriceRequest.getColor(), diamondPriceRequest.getClarity());
 
-        // Update diamondEntryPrice and grossDiamondPrice for matching diamonds
         for (Diamond diamond : diamonds) {
             diamond.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
             // Assuming grossDiamondPrice is 10% more than diamondEntryPrice
@@ -123,7 +118,6 @@ public class DiamondPriceService {
             diamondRepository.save(diamond);
         }
 
-        // Return success response
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công"));
     }
 
