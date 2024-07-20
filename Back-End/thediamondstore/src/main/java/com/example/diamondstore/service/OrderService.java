@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -23,16 +22,14 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.diamondstore.DTO.OrderSummaryDTO;
 import com.example.diamondstore.model.Account;
-import com.example.diamondstore.model.Cart;
-import com.example.diamondstore.model.Certificate;
 import com.example.diamondstore.model.AccumulatePoints;
+import com.example.diamondstore.model.Cart;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.model.Promotion;
-import com.example.diamondstore.model.Warranty;
 import com.example.diamondstore.repository.AccountRepository;
+import com.example.diamondstore.repository.AccumulatePointsRepository;
 import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.CertificateRepository;
-import com.example.diamondstore.repository.AccumulatePointsRepository;
 import com.example.diamondstore.repository.DiamondRepository;
 import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.repository.PromotionRepository;
@@ -89,25 +86,6 @@ public class OrderService {
 
         // Lưu Order trước
         order = orderRepository.save(order);
-
-        String diamondID = cartItems.get(0).getDiamondID();
-        if (diamondID != null) {
-            String certificateID = diamondRepository.findByDiamondID(diamondID).getCertificationID();
-            if (certificateID != null) {
-                Certificate certificate = certificateRepository.findByCertificateID(certificateID);
-                if (certificate != null) {
-                    order.setCertificateImage(certificate.getcertificateImage());
-                }
-            }
-
-            String warrantyID = diamondRepository.findByDiamondID(diamondID).getWarrantyID();
-            if (warrantyID != null) {
-                Warranty warranty = warrantyRepository.findByWarrantyID(warrantyID);
-                if (warranty != null) {
-                    order.setWarrantyImage(warranty.getwarrantyImage());
-                }
-            }
-        }
 
         BigDecimal totalOrder = BigDecimal.ZERO;
         for (Cart cart : cartItems) {
@@ -200,8 +178,6 @@ public class OrderService {
 
             existingOrder.setDeliveryAddress(orderPutRequest.getDeliveryAddress());
             existingOrder.setOrderStatus(orderPutRequest.getOrderStatus());
-            existingOrder.setCertificateImage(orderPutRequest.getCertificateImage());
-            existingOrder.setWarrantyImage(orderPutRequest.getWarrantyImage());
 
             if (deliveryDate != null && deliveryDate.isAfter(today)) {
                 existingOrder.setDeliveryDate(deliveryDate);

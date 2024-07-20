@@ -60,12 +60,22 @@ public class OrderDetail {
     @Column(name = "totalPrice", nullable = false)
     private BigDecimal totalPrice;
 
+    @Column(name = "diamondWarrantyImage")
+    private String diamondWarrantyImage;
+
+    @Column(name = "jewelryWarrantyImage")
+    private String jewelryWarrantyImage;
+
+    @Column(name = "diamondCertificateImage")
+    private String diamondCertificateImage;
+
     public OrderDetail() {
     }
 
     public OrderDetail(Integer orderDetailID, Order order, Integer accountID, String diamondID, String jewelryID,
             String diamondName, String jewelryName, String diamondImage, String jewelryImage, Integer quantity,
-            Integer sizeJewelry, BigDecimal price, BigDecimal grossCartPrice, BigDecimal totalPrice) {
+            Integer sizeJewelry, BigDecimal price, BigDecimal grossCartPrice, BigDecimal totalPrice,
+            String diamondWarrantyImage, String jewelryWarrantyImage, String diamondCertificateImage) {
         this.orderDetailID = orderDetailID;
         this.order = order;
         this.accountID = accountID;
@@ -80,6 +90,9 @@ public class OrderDetail {
         this.price = price;
         this.grossCartPrice = grossCartPrice;
         this.totalPrice = totalPrice;
+        this.diamondWarrantyImage = diamondWarrantyImage;
+        this.jewelryWarrantyImage = jewelryWarrantyImage;
+        this.diamondCertificateImage = diamondCertificateImage;
     }
 
     public Integer getOrderDetailID() {
@@ -192,5 +205,29 @@ public class OrderDetail {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public String getDiamondWarrantyImage() {
+        return diamondWarrantyImage;
+    }
+
+    public void setDiamondWarrantyImage(String diamondWarrantyImage) {
+        this.diamondWarrantyImage = diamondWarrantyImage;
+    }
+
+    public String getJewelryWarrantyImage() {
+        return jewelryWarrantyImage;
+    }
+
+    public void setJewelryWarrantyImage(String jewelryWarrantyImage) {
+        this.jewelryWarrantyImage = jewelryWarrantyImage;
+    }
+
+    public String getDiamondCertificateImage() {
+        return diamondCertificateImage;
+    }
+
+    public void setDiamondCertificateImage(String diamondCertificateImage) {
+        this.diamondCertificateImage = diamondCertificateImage;
     }
 }
