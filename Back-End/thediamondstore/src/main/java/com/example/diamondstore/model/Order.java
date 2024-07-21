@@ -51,12 +51,6 @@ public class Order {
     @Column(name = "phoneNumber")
     private String phoneNumber;
 
-    @Column(name = "certificateImage")
-    private String certificateImage;
-
-    @Column(name = "warrantyImage")
-    private String warrantyImage;
-
     @Column(name = "promotionCode")
     private String promotionCode; // Chỉ lưu trữ promotionCode dưới dạng chuỗi
 
@@ -71,8 +65,7 @@ public class Order {
     }
 
     public Order(Integer orderID, Account account, LocalDateTime startorderDate, String orderStatus, LocalDateTime deliveryDate,
-            BigDecimal totalOrder, String deliveryAddress, String phoneNumber, String certificateImage, String warrantyImage,
-            String promotionCode, List<Cart> cartItems, Integer transactionNo) {
+            BigDecimal totalOrder, String deliveryAddress, String phoneNumber, String promotionCode, List<Cart> cartItems, Integer transactionNo) {
         this.orderID = orderID;
         this.account = account;
         this.startorderDate = startorderDate;
@@ -81,8 +74,6 @@ public class Order {
         this.totalOrder = totalOrder;
         this.deliveryAddress = deliveryAddress;
         this.phoneNumber = phoneNumber;
-        this.certificateImage = certificateImage;
-        this.warrantyImage = warrantyImage;
         this.promotionCode = promotionCode;
         this.cartItems = cartItems;
         this.transactionNo = transactionNo;
@@ -158,22 +149,6 @@ public class Order {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getCertificateImage() {
-        return certificateImage;
-    }
-
-    public void setCertificateImage(String certificateImage) {
-        this.certificateImage = certificateImage;
-    }
-
-    public String getWarrantyImage() {
-        return warrantyImage;
-    }
-
-    public void setWarrantyImage(String warrantyImage) {
-        this.warrantyImage = warrantyImage;
     }
 
     public String getPromotionCode() {

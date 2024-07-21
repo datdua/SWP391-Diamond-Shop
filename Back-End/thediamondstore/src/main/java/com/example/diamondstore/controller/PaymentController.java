@@ -32,8 +32,10 @@ import com.example.diamondstore.model.OrderDetail;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.AccumulatePointsRepository;
 import com.example.diamondstore.repository.CartRepository;
+import com.example.diamondstore.repository.CertificateRepository;
 import com.example.diamondstore.repository.OrderDetailRepository;
 import com.example.diamondstore.repository.OrderRepository;
+import com.example.diamondstore.repository.WarrantyRepository;
 
 @RestController
 @RequestMapping("/api")
@@ -53,6 +55,12 @@ public class PaymentController {
 
     @Autowired
     private AccumulatePointsRepository accumulatePointsRepository;
+
+    @Autowired
+    private WarrantyRepository warrantyRepository;
+
+    @Autowired
+    private CertificateRepository certificateRepository;
 
     // customer
     @GetMapping(value = "/customer/payments/create-payment", produces = "application/json;charset=UTF-8")
@@ -158,6 +166,18 @@ public class PaymentController {
             List<Cart> cartItems = cartRepository.findByOrder(order);
             for (Cart cart : cartItems) {
                 OrderDetail orderDetail = new OrderDetail();
+                if (cart.getDiamondID() != null) {
+                    orderDetail.setDiamondWarrantyImage(warrantyRepository.findByDiamondID(cart.getDiamondID()).getwarrantyImage());
+                    orderDetail.setDiamondCertificateImage(certificateRepository.findByDiamondID(cart.getDiamondID()).getcertificateImage());
+                } else {
+                    orderDetail.setDiamondWarrantyImage(null);
+                    orderDetail.setDiamondCertificateImage(null);
+                }
+                if (cart.getJewelryID() != null) {
+                    orderDetail.setJewelryWarrantyImage(warrantyRepository.findByJewelryID(cart.getJewelryID()).getwarrantyImage());
+                } else {
+                    orderDetail.setJewelryWarrantyImage(null);
+                }
                 orderDetail.setOrder(order);
                 orderDetail.setAccountID(order.getAccount().getAccountID());
                 orderDetail.setDiamondID(cart.getDiamondID());
