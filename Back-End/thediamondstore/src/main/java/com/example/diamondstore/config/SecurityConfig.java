@@ -53,7 +53,7 @@ public class SecurityConfig {
 
     private static final String[] ADMIN_MANAGER_SALE_STAFF_URL = { "/api/accounts/get/**", "/api/accounts/**", "/api/order-management/**",
             "/api/order-management/orders/get-all", "/api/order-management/orders/get-order-have-transaction-no",
-            "/api/promotion-management/**", "/api/accounts/update/**" };
+            "/api/promotion-management/**", "/api/accounts/update/**", "/api/order-management/orders/update/**" };
 
     @Autowired
     private final AccountService UserService;

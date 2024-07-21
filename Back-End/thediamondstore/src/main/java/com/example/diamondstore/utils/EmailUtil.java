@@ -20,7 +20,6 @@ public class EmailUtil {
     private JavaMailSender javaMailSender;
     
     public String loadEmailTemplate_SetPassword() throws IOException {
-        // Use ClassLoader to load the resource
         ClassLoader classLoader = getClass().getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream("template/SetPassword.html");
 
@@ -28,7 +27,6 @@ public class EmailUtil {
             throw new IOException("File not found: template/SetPassword.html");
         }
 
-        // Read the file content
         StringBuilder content = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             String line;
@@ -41,7 +39,6 @@ public class EmailUtil {
     }
 
     public String loadEmailTemplate_OtpEmail() throws IOException {
-        // Use ClassLoader to load the resource
         ClassLoader classLoader = getClass().getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream("template/OtpEmail.html");
 
@@ -49,7 +46,6 @@ public class EmailUtil {
             throw new IOException("File not found: template/OtpEmail.html");
         }
 
-        // Read the file content
         StringBuilder content = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             String line;
@@ -73,8 +69,7 @@ public class EmailUtil {
             emailContent = emailContent.replace("{{otp}}", otp);
             emailContent = emailContent.replace("{{email}}", email);
         } catch (IOException e) {
-            // Handle the IOException (e.g., log it, throw a new exception, or set a default email content)
-            emailContent = "Default email content if template cannot be read"; // Example of setting a default content
+            emailContent = "Default email content if template cannot be read";
         }
         
         mimeMessageHelper.setText(emailContent, true);
@@ -92,8 +87,7 @@ public class EmailUtil {
             emailContent = loadEmailTemplate_SetPassword();
             emailContent = emailContent.replace("{{email}}", email);
         } catch (IOException e) {
-            // Handle the IOException (e.g., log it, throw a new exception, or set a default email content)
-            emailContent = "Default email content if template cannot be read"; // Example of setting a default content
+            emailContent = "Default email content if template cannot be read";
         }
         
         mimeMessageHelper.setText(emailContent, true);

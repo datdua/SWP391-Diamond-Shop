@@ -15,4 +15,6 @@ public interface CertificateRepository extends JpaRepository<Certificate, String
     void deleteByDiamondID(String diamondID);
 
     void deleteAllByDiamondIDIn(List<String> diamondIDs);
+
+    Certificate findByDiamondID(String diamondID);
 }
