@@ -50,11 +50,6 @@ public class DiamondPriceService {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy giá kim cương để cập nhật"));
         }
 
-        if (diamondPriceRepository.existsByCaratSizeAndColorAndClarity(diamondPriceRequest.getCaratSize(), diamondPriceRequest.getColor(),
-                diamondPriceRequest.getClarity())) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Đã tồn tại Giá cho loại kim cương này"));
-        }
-
         existingDiamondPrice.setClarity(diamondPriceRequest.getClarity());
         existingDiamondPrice.setColor(diamondPriceRequest.getColor());
         existingDiamondPrice.setCaratSize(diamondPriceRequest.getCaratSize());
@@ -63,6 +58,11 @@ public class DiamondPriceService {
         // size (mm) = sqrt(weight) * 6.5 => weight = (size / 6.5) ^ 2
         BigDecimal weight = new BigDecimal(Math.pow(diamondPriceRequest.getCaratSize().doubleValue() / 6.5, 2));
         existingDiamondPrice.setWeight(weight);
+
+        if (diamondPriceRepository.existsByCaratSizeAndColorAndClarityAndDiamondPriceIDNot(diamondPriceRequest.getCaratSize(), diamondPriceRequest.getColor(),
+                diamondPriceRequest.getClarity(), diamondPriceID)) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Đã tồn tại Giá cho loại kim cương này"));
+        }
 
         diamondPriceRepository.save(existingDiamondPrice);
 
