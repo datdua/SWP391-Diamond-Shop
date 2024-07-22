@@ -90,8 +90,8 @@ public class OrderService {
         BigDecimal totalOrder = BigDecimal.ZERO;
         for (Cart cart : cartItems) {
             totalOrder = totalOrder.add(cart.getGrossCartPrice());
-            cart.setOrder(order);  // Associate cart items with the order
-            cart.setCartStatus("Đang chờ thanh toán"); // New status to indicate pending payment
+            cart.setOrder(order);
+            cart.setCartStatus("Đang chờ thanh toán");
             cartRepository.save(cart);
         }
 
