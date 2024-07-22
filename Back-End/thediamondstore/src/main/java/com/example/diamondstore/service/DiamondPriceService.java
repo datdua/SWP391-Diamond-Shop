@@ -50,19 +50,6 @@ public class DiamondPriceService {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy giá kim cương để cập nhật"));
         }
 
-        // Check if the new diamond price already exists with the same attributes
-        boolean priceExists = diamondPriceRepository.existsByCaratSizeAndColorAndClarity(
-                diamondPriceRequest.getCaratSize(),
-                diamondPriceRequest.getColor(),
-                diamondPriceRequest.getClarity()
-        );
-
-        // If it exists and the ID is different, return an error message
-        if (priceExists && !existingDiamondPrice.getDiamondPriceID().equals(diamondPriceID)) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Đã tồn tại giá cho loại kim cương này"));
-        }
-
-        // Update fields in existing diamond price
         existingDiamondPrice.setClarity(diamondPriceRequest.getClarity());
         existingDiamondPrice.setColor(diamondPriceRequest.getColor());
         existingDiamondPrice.setCaratSize(diamondPriceRequest.getCaratSize());
@@ -72,16 +59,18 @@ public class DiamondPriceService {
         BigDecimal weight = new BigDecimal(Math.pow(diamondPriceRequest.getCaratSize().doubleValue() / 6.5, 2));
         existingDiamondPrice.setWeight(weight);
 
+        if (diamondPriceRepository.existsByCaratSizeAndColorAndClarityAndDiamondPriceIDNot(diamondPriceRequest.getCaratSize(), diamondPriceRequest.getColor(),
+                diamondPriceRequest.getClarity(), diamondPriceID)) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Đã tồn tại Giá cho loại kim cương này"));
+        }
+
         diamondPriceRepository.save(existingDiamondPrice);
 
-        // Find diamonds with the same attributes and update their prices
         List<Diamond> diamonds = diamondRepository.findAllByCaratSizeAndColorAndClarity(
                 diamondPriceRequest.getCaratSize(), diamondPriceRequest.getColor(), diamondPriceRequest.getClarity());
 
-        // Update diamondEntryPrice and grossDiamondPrice for matching diamonds
         for (Diamond diamond : diamonds) {
             diamond.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
-            // Assuming grossDiamondPrice is 10% more than diamondEntryPrice
             BigDecimal grossDiamondPrice = diamondPriceRequest.getDiamondEntryPrice().multiply(new BigDecimal("1.1"));
             diamond.setGrossDiamondPrice(grossDiamondPrice);
             diamondRepository.save(diamond);
@@ -112,7 +101,6 @@ public class DiamondPriceService {
 
         for (Diamond diamond : diamonds) {
             diamond.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
-            // Assuming grossDiamondPrice is 10% more than diamondEntryPrice
             BigDecimal grossDiamondPrice = diamondPriceRequest.getDiamondEntryPrice().multiply(new BigDecimal("1.1"));
             diamond.setGrossDiamondPrice(grossDiamondPrice);
             diamondRepository.save(diamond);
@@ -126,26 +114,16 @@ public class DiamondPriceService {
     }
 
     public ResponseEntity<Map<String, String>> deleteDiamondPrices(@RequestBody List<Integer> diamondPriceIDs) {
-        // Filter out non-existing diamondPrices
         List<Integer> existingDiamondPriceIDs = diamondPriceIDs.stream()
                 .filter(diamondPriceID -> diamondPriceRepository.existsById(diamondPriceID))
                 .collect(Collectors.toList());
 
-        // Delete diamondPrices
         if (!existingDiamondPriceIDs.isEmpty()) {
             diamondPriceRepository.deleteAllById(existingDiamondPriceIDs);
-            return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các chứng chỉ thành công"));
+            return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các giá kim cương thành công"));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy chứng chỉ để xóa"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy giá kim cương để xóa"));
         }
-    }
-
-    public void updateDiamondPrice(DiamondPrice diamondPrice, Diamond diamond) {
-        diamond.setDiamondEntryPrice(diamondPrice.getDiamondEntryPrice());
-        // Assuming the grossDiamondPrice is calculated as some function of the diamondEntryPrice
-        diamond.setGrossDiamondPrice(diamondPrice.getDiamondEntryPrice().multiply(new BigDecimal("1.1")));
-
-        diamondRepository.save(diamond);
     }
 
     public List<DiamondPrice> getDiamondPricesByCaratSize(BigDecimal caratSize) {
