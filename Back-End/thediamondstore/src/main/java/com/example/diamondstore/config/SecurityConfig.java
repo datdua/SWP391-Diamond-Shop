@@ -42,7 +42,6 @@ public class SecurityConfig {
 
     private static final String[] MANAGER_URL = { "/api/manager/**" };
 
-    // Admin and Manager urls
     private static final String[] ADMIN_MANAGER_URL = { "/api/accounts/get-all", "/api/accounts/all-except-customer",
             "/api/accounts/get-by-role/**", "/api/certificates/get-all", "/api/certificates/**",
             "/api/certificates/get-certificate-image/**", "/api/diamonds/get-all", "/api/diamond-prices/get-all",
@@ -72,7 +71,7 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(authz -> authz
-                        .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight requests
+                        .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .antMatchers(SWAGGER_URL).permitAll()
                         .antMatchers(GUEST_URL).permitAll()
                         .antMatchers(ADMIN_URL).hasRole("ADMIN")
