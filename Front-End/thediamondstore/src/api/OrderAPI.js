@@ -24,7 +24,7 @@ export const createOrder = async (
 
 
     const response = await axios.post(
-      "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/customer/order-management/orders/add",
+      "http://localhost:8080/api/customer/order-management/orders/add",
       data,
       {
         headers: {
@@ -52,7 +52,7 @@ export async function fetchOrders(accountID) {
   const token = getAuthToken();
   try {
     const response = await axios.get(
-      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/customer/order-management/orders/get-account/${accountID}`,
+      `http://localhost:8080/api/customer/order-management/orders/get-account/${accountID}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -76,7 +76,7 @@ export async function fetchOrders(accountID) {
 
 export async function createPayment(orderID) {
   try {
-    const url = `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/customer/payments/create-payment?orderID=${orderID}`;
+    const url = `http://localhost:8080/api/customer/payments/create-payment?orderID=${orderID}`;
     const token = getAuthToken();
     const config = {
       headers: {
@@ -100,7 +100,7 @@ export const handleVnpayReturn = async (params) => {
   try {
     const token = getAuthToken();
     const response = await axios.get(
-      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/customer/payments/vnpay-return`,
+      `http://localhost:8080/api/customer/payments/vnpay-return`,
       {
         params: params,
         headers: {
@@ -128,7 +128,7 @@ export const getPromotion = async (promotionCode) => {
   const token = localStorage.getItem('jwt')
   try {
     const response = await axios.get(
-      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/customer/promotions/get-by-promotion-code/${promotionCode}`, {
+      `http://localhost:8080/api/customer/promotions/get-by-promotion-code/${promotionCode}`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -146,7 +146,7 @@ export async function fetchOrderDetail(orderID) {
   const token = getAuthToken();
   try {
     const response = await axios.get(
-      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/customer/orderDetails/get-orderDetail/${orderID}`,
+      `http://localhost:8080/api/customer/orderDetails/get-orderDetail/${orderID}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -174,7 +174,7 @@ export async function updateOrder(orderId, updatedOrder) {
   try {
     const token = getAuthToken();
     const response = await axios.put(
-      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/order-management/orders/update/${orderId}`,
+      `http://localhost:8080/api/order-management/orders/update/${orderId}`,
       updatedOrder,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -197,7 +197,7 @@ export async function updateOrder(orderId, updatedOrder) {
 export const deleteOrder = async (orderId) => {
   const token = localStorage.getItem('jwt')
   try {
-    const url = `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/customer/order-management/orders/cancel/${orderId}`;
+    const url = `http://localhost:8080/api/customer/order-management/orders/cancel/${orderId}`;
     const response = await axios.delete(url, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -218,7 +218,7 @@ export const deleteOrder = async (orderId) => {
 export const deleteOrderByManager = async (orderId) => {
   const token = localStorage.getItem('jwt')
   try {
-    const url = `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/manager/order-management/orders/cancel/${orderId}`;
+    const url = `http://localhost:8080/api/manager/order-management/orders/cancel/${orderId}`;
     const response = await axios.delete(url, {
       headers: {
         Authorization: `Bearer ${token}`
@@ -239,7 +239,7 @@ export const deleteOrderByManager = async (orderId) => {
 export const fetchOrderByPaged = async (page, size) => {
   try {
     const response = await axios.get(
-      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/order-management/orders/get-order/get-paging?page=${page}&size=${size}`
+      `http://localhost:8080/api/order-management/orders/get-order/get-paging?page=${page}&size=${size}`
     );
     return response.data;
   } catch (error) {
@@ -252,7 +252,7 @@ export const fetchOrderByPaged = async (page, size) => {
 export async function getAllOrder() {
   try {
     const token = getAuthToken();
-    const response = await axios.get("https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/order-management/orders/get-all",
+    const response = await axios.get("http://localhost:8080/api/order-management/orders/get-all",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -274,7 +274,7 @@ export async function getOrdersHaveTransactionNo() {
   try {
     const token = getAuthToken();
     const response = await axios.get(
-      "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/order-management/orders/get-order-have-transaction-no",
+      "http://localhost:8080/api/order-management/orders/get-order-have-transaction-no",
       {
         headers: {
           Authorization: `Bearer ${token}`,
