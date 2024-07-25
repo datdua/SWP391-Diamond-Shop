@@ -42,7 +42,11 @@ export const createDiamondPrice = async (diamondPrice) => {
     );
     return response.data;
   } catch (error) {
-    console.error(error);
+    if (error.response && error.response.data) {
+      throw error.response.data;
+    } else {
+      throw error;
+    }
   }
 };
 
@@ -58,7 +62,11 @@ export const updateDiamondPrice = async (diamondPriceID, diamondPrice) => {
     );
     return response.data;
   } catch (error) {
-    console.error(error);
+    if (error.response && error.response.data) {
+      throw error.response.data;
+    } else {
+      throw error;
+    }
   }
 };
 

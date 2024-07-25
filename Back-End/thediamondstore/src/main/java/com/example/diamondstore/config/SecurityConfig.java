@@ -29,26 +29,30 @@ import com.example.diamondstore.service.AccountService;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private static final String[] SWAGGER_URL = {"/api/v1/auth/**", "/v2/api-docs", "/v3/api-docs",
-        "/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**", "/configuration/ui",
-        "/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html",
-        "/api/test/**", "/authenticate"};
+    private static final String[] SWAGGER_URL = { "/api/v1/auth/**", "/v2/api-docs", "/v3/api-docs",
+            "/v3/api-docs/**", "/swagger-resources", "/swagger-resources/**", "/configuration/ui",
+            "/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html",
+            "/api/test/**", "/authenticate" };
 
-    private static final String[] GUEST_URL = {"/api/guest/**", "/api/auth/**"};
+    private static final String[] GUEST_URL = { "/api/guest/**", "/api/auth/**" };
 
-    private static final String[] ADMIN_URL = {"/api/admin/**"};
+    private static final String[] ADMIN_URL = { "/api/admin/**" };
 
-    private static final String[] CUSTOMER_URL = {"/api/customer/**"};
+    private static final String[] CUSTOMER_URL = { "/api/customer/**" };
 
-    private static final String[] MANAGER_URL = {"/api/manager/**"};
+    private static final String[] MANAGER_URL = { "/api/manager/**" };
 
-    //Admin and Manager urls
-    private static final String[] ADMIN_MANAGER_URL = {"/api/accounts/get-all", "/api/accounts/all-except-customer", "/api/accounts/get-by-role/**", "/api/certificates/get-all", "/api/certificates/**", "/api/certificates/get-certificate-image/**", "/api/diamonds/get-all", "/api/diamond-prices/get-all",
-         "/api/gold-prices/get-all", "/api/jewelry/get-all", "/api/order-management/**", "/api/orders/totalRevenue", "/api/orders/totalOrder", "/api/orders/totalTransaction", "/api/warranty-management/**", "/api/warranties/get/warrantyImg/**",
-         "/api/warranties/diamondIDIsNull", "/api/warranties/jewelryIDIsNull", "/api/accounts/**", "/api/customer/warranties/get-warranty-image/**", "/api/customer/certificates/get-certificate-image/**" };
+    private static final String[] ADMIN_MANAGER_URL = { "/api/accounts/get-all", "/api/accounts/all-except-customer",
+            "/api/accounts/get-by-role/**", "/api/certificates/get-all", "/api/certificates/**",
+            "/api/certificates/get-certificate-image/**", "/api/diamonds/get-all", "/api/diamond-prices/get-all",
+            "/api/gold-prices/get-all", "/api/jewelry/get-all", "/api/orders/totalRevenue",
+            "/api/orders/totalOrder", "/api/warranty-management/**", "/api/warranties/get/warrantyImg/**", "/api/warranties/diamondIDIsNull", "/api/warranties/jewelryIDIsNull",
+            "/api/accounts/**", "/api/customer/warranties/get-warranty-image/**",
+            "/api/customer/certificates/get-certificate-image/**" };
 
-    private static final String[] ADMIN_MANAGER_SALE_STAFF_URL ={"/api/accounts/get/**", "/api/orders/get-all", "/api/orders/getOrderHaveTransactionNo", "/api/promotion-management/**", "/api/accounts/update/**"};
-
+    private static final String[] ADMIN_MANAGER_SALE_STAFF_URL = { "/api/accounts/get/**", "/api/accounts/**", "/api/order-management/**",
+            "/api/order-management/orders/get-all", "/api/order-management/orders/get-order-have-transaction-no",
+            "/api/promotion-management/**", "/api/accounts/update/**", "/api/order-management/orders/update/**" };
 
     @Autowired
     private final AccountService UserService;
@@ -67,19 +71,19 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(authz -> authz
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Allow preflight requests
-                .antMatchers(SWAGGER_URL).permitAll()
-                .antMatchers(GUEST_URL).permitAll()
-                .antMatchers(ADMIN_URL).hasRole("ADMIN")
-                .antMatchers(CUSTOMER_URL).hasRole("CUSTOMER")
-                .antMatchers(MANAGER_URL).hasRole("MANAGER")
-                .antMatchers(ADMIN_MANAGER_URL).hasAnyRole("ADMIN", "MANAGER")
-                .antMatchers(ADMIN_MANAGER_SALE_STAFF_URL).hasAnyRole("ADMIN", "MANAGER", "SALE-STAFF")
-                .anyRequest().authenticated())
+                        .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .antMatchers(SWAGGER_URL).permitAll()
+                        .antMatchers(GUEST_URL).permitAll()
+                        .antMatchers(ADMIN_URL).hasRole("ADMIN")
+                        .antMatchers(CUSTOMER_URL).hasRole("CUSTOMER")
+                        .antMatchers(MANAGER_URL).hasRole("MANAGER")
+                        .antMatchers(ADMIN_MANAGER_URL).hasAnyRole("ADMIN", "MANAGER")
+                        .antMatchers(ADMIN_MANAGER_SALE_STAFF_URL).hasAnyRole("ADMIN", "MANAGER", "SALE-STAFF")
+                        .anyRequest().authenticated())
                 .exceptionHandling(e -> e
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+                        .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .sessionManagement(s -> s
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

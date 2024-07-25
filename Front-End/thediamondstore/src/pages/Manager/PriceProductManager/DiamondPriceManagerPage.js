@@ -17,6 +17,7 @@ import AddDiamondPriceForm from "../../../components/DiamondPriceCRUD/AddDiamond
 import UpdateDiamondPriceForm from "../../../components/DiamondPriceCRUD/UpdateDiamondPriceForm.js";
 import CalculatorForm from "../../../components/Calculator/CalculatorForm.js";
 import { Pagination, Tooltip, Checkbox, FormControlLabel } from "@mui/material";
+import { toast } from "react-toastify";
 import "../ProductManager.css";
 
 function DiamondPriceManager() {
@@ -28,6 +29,7 @@ function DiamondPriceManager() {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectAll, setSelectAll] = useState(false);
   const [indeterminate, setIndeterminate] = useState(false);
+  const userRole = localStorage.getItem("role");
   const size = 8;
   const startIndex = (currentPage - 1) * size;
   const endIndex = startIndex + size;
@@ -38,20 +40,32 @@ function DiamondPriceManager() {
     setIsUpdating(false);
   };
 
+  const showAlert = () => {
+    toast.warning("Rất tiếc, chức năng này chỉ dành cho quản lý!")
+  }
+
   const handleChangePage = (event, newPage) => {
     setCurrentPage(newPage);
   };
 
   const handleShowAdd = () => {
+    if (userRole !== "ROLE_MANAGER") {
+      showAlert();
+    } else {
     setSelectedDiamondPrice(null);
     setIsUpdating(false);
     setShowModal(true);
+    }
   };
 
   const handleShowUpdate = (item) => {
+    if (userRole !== "ROLE_MANAGER") {
+      showAlert();
+    } else {
     setSelectedDiamondPrice(item);
     setIsUpdating(true);
     setShowModal(true);
+    }
   };
 
   const handleClick = (event, id) => {
@@ -99,6 +113,9 @@ function DiamondPriceManager() {
   };
 
   const handleDeleteDiamondPrice = async () => {
+    if (userRole !== "ROLE_MANAGER") {
+      showAlert();
+    } else {
     if (window.confirm("Bạn có chắc muốn XÓA các giá kim cương này?")) {
       try {
         await deleteDiamondPrice(selected);
@@ -108,6 +125,7 @@ function DiamondPriceManager() {
       } catch (error) {
         alert("Xóa thất bại");
       }
+    }
     }
   };
 
@@ -178,7 +196,7 @@ function DiamondPriceManager() {
                       <th>Mã Giá Kim Cương</th>
                       <th>Giá Kim Cương</th>
                       <th>Trọng Lượng</th>
-                      <th>Độ Trong</th>
+                      <th>Độ tinh khiết</th>
                       <th>Màu Sắc</th>
                       <th>Kích cỡ</th>
                       <th>Thao Tác</th>
@@ -205,7 +223,7 @@ function DiamondPriceManager() {
                             {diamondPrice.diamondEntryPrice
                               ? diamondPrice.diamondEntryPrice.toLocaleString() +
                               " VNĐ"
-                              : "N/A"}
+                              : "Chưa có giá!"}
                           </td>
                           <td>{diamondPrice.weight ? diamondPrice.weight : "N/A"}</td>
                           <td>{diamondPrice.clarity}</td>

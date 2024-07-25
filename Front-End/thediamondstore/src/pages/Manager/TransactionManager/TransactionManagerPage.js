@@ -10,7 +10,6 @@ import {
 } from "react-bootstrap";
 import { getOrdersHaveTransactionNo } from "../../../api/OrderAPI";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import EditIcon from "@mui/icons-material/Edit";
 import UpdateOrderForm from "../../../components/OrderCRUD/OrderUpdate";
 import { Pagination, Tooltip } from "@mui/material";
 import "../ProductManager.css";
@@ -32,12 +31,6 @@ function TransactionManagerPage() {
   const handleClose = () => {
     setShowModal(false);
     setIsUpdating(false);
-  };
-
-  const handleShowUpdate = (order) => {
-    setSelectedOrder(order);
-    setIsUpdating(true);
-    setShowModal(true);
   };
 
 
@@ -119,8 +112,6 @@ function TransactionManagerPage() {
                       <th>Tổng Đơn</th>
                       <th>Địa Chỉ Giao Hàng</th>
                       <th>Số Điện Thoại</th>
-                      <th>Giấy Chứng Nhận</th>
-                      <th>Giấy Bảo Hành</th>
                       <th>Mã Khuyến Mãi</th>
                     </tr>
                   </thead>
@@ -153,20 +144,6 @@ function TransactionManagerPage() {
                         </td>
                         <td>{order.deliveryAddress}</td>
                         <td>{order.phoneNumber}</td>
-                        <td>
-                          <img
-                            src={order.certificateImage}
-                            style={{ width: "50px", height: "50px", cursor: "pointer" }}
-                            onClick={() => handleShowImage(order.certificateImage)}
-                          />
-                        </td>
-                        <td>
-                          <img
-                            src={order.warrantyImage}
-                            style={{ width: "50px", height: "50px", cursor: "pointer" }}
-                            onClick={() => handleShowImage(order.warrantyImage)}
-                          />
-                        </td>
                         <td>{order.promotionCode}</td>
                       </tr>
                     ))}
@@ -205,7 +182,7 @@ function TransactionManagerPage() {
           <img
             src={selectedImage}
             alt="Hình ảnh bị lỗi. Vui lòng kiểu tra lại địa chỉ hình ảnh"
-            style={{ width: "100%"}}
+            style={{ width: "100%" }}
           />
         </Modal.Body>
       </Modal>

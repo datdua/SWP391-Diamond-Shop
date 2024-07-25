@@ -11,21 +11,18 @@ public class OrderPutRequest {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime deliveryDate;
     private String deliveryAddress;
-    private String certificateImage;
-    private String warrantyImage;
     private String promotionCode;
     private BigDecimal totalOrder;
 
     public OrderPutRequest() {
     }
 
-    public OrderPutRequest(String certificateImage, String deliveryAddress, LocalDateTime deliveryDate, String orderStatus, String promotionCode, String warrantyImage, BigDecimal totalOrder) {
-        this.certificateImage = certificateImage;
-        this.deliveryAddress = deliveryAddress;
-        this.deliveryDate = deliveryDate;
+    public OrderPutRequest(String orderStatus, LocalDateTime deliveryDate, String deliveryAddress, String promotionCode,
+            BigDecimal totalOrder) {
         this.orderStatus = orderStatus;
+        this.deliveryDate = deliveryDate;
+        this.deliveryAddress = deliveryAddress;
         this.promotionCode = promotionCode;
-        this.warrantyImage = warrantyImage;
         this.totalOrder = totalOrder;
     }
 
@@ -51,22 +48,6 @@ public class OrderPutRequest {
 
     public void setDeliveryAddress(String deliveryAddress) {
         this.deliveryAddress = deliveryAddress;
-    }
-
-    public String getCertificateImage() {
-        return certificateImage;
-    }
-
-    public void setCertificateImage(String certificateImage) {
-        this.certificateImage = certificateImage;
-    }
-
-    public String getWarrantyImage() {
-        return warrantyImage;
-    }
-
-    public void setWarrantyImage(String warrantyImage) {
-        this.warrantyImage = warrantyImage;
     }
 
     public String getPromotionCode() {

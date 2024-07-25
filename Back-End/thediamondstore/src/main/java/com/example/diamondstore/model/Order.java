@@ -3,17 +3,7 @@ package com.example.diamondstore.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -51,28 +41,27 @@ public class Order {
     @Column(name = "phoneNumber")
     private String phoneNumber;
 
-    @Column(name = "certificateImage")
-    private String certificateImage;
-
-    @Column(name = "warrantyImage")
-    private String warrantyImage;
-
     @Column(name = "promotionCode")
-    private String promotionCode; // Chỉ lưu trữ promotionCode dưới dạng chuỗi
+    private String promotionCode; 
 
     @Column(name = "transactionNo")
     private Integer transactionNo;
 
     @JsonIgnore
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<OrderDetail> orderDetails;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
     private List<Cart> cartItems;
+
 
     public Order() {
     }
 
-    public Order(Integer orderID, Account account, LocalDateTime startorderDate, String orderStatus, LocalDateTime deliveryDate,
-            BigDecimal totalOrder, String deliveryAddress, String phoneNumber, String certificateImage, String warrantyImage,
-            String promotionCode, List<Cart> cartItems, Integer transactionNo) {
+    public Order(Integer orderID, Account account, LocalDateTime startorderDate, String orderStatus,
+            LocalDateTime deliveryDate, BigDecimal totalOrder, String deliveryAddress, String phoneNumber,
+            String promotionCode, Integer transactionNo, List<OrderDetail> orderDetails) {
         this.orderID = orderID;
         this.account = account;
         this.startorderDate = startorderDate;
@@ -81,19 +70,9 @@ public class Order {
         this.totalOrder = totalOrder;
         this.deliveryAddress = deliveryAddress;
         this.phoneNumber = phoneNumber;
-        this.certificateImage = certificateImage;
-        this.warrantyImage = warrantyImage;
         this.promotionCode = promotionCode;
-        this.cartItems = cartItems;
         this.transactionNo = transactionNo;
-    }
-
-    public Integer getTransactionNo() {
-        return transactionNo;
-    }
-
-    public void setTransactionNo(Integer transactionNo) {
-        this.transactionNo = transactionNo;
+        this.orderDetails = orderDetails;
     }
 
     public Integer getOrderID() {
@@ -136,11 +115,11 @@ public class Order {
         this.deliveryDate = deliveryDate;
     }
 
-    public BigDecimal gettotalOrder() {
+    public BigDecimal getTotalOrder() {
         return totalOrder;
     }
 
-    public void settotalOrder(BigDecimal totalOrder) {
+    public void setTotalOrder(BigDecimal totalOrder) {
         this.totalOrder = totalOrder;
     }
 
@@ -160,28 +139,28 @@ public class Order {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getCertificateImage() {
-        return certificateImage;
-    }
-
-    public void setCertificateImage(String certificateImage) {
-        this.certificateImage = certificateImage;
-    }
-
-    public String getWarrantyImage() {
-        return warrantyImage;
-    }
-
-    public void setWarrantyImage(String warrantyImage) {
-        this.warrantyImage = warrantyImage;
-    }
-
     public String getPromotionCode() {
         return promotionCode;
     }
 
     public void setPromotionCode(String promotionCode) {
         this.promotionCode = promotionCode;
+    }
+
+    public Integer getTransactionNo() {
+        return transactionNo;
+    }
+
+    public void setTransactionNo(Integer transactionNo) {
+        this.transactionNo = transactionNo;
+    }
+
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 
     public List<Cart> getCartItems() {
@@ -191,4 +170,6 @@ public class Order {
     public void setCartItems(List<Cart> cartItems) {
         this.cartItems = cartItems;
     }
+
+    
 }

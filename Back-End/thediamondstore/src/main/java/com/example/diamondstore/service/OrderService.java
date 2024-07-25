@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -23,16 +22,14 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.diamondstore.DTO.OrderSummaryDTO;
 import com.example.diamondstore.model.Account;
-import com.example.diamondstore.model.Cart;
-import com.example.diamondstore.model.Certificate;
 import com.example.diamondstore.model.AccumulatePoints;
+import com.example.diamondstore.model.Cart;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.model.Promotion;
-import com.example.diamondstore.model.Warranty;
 import com.example.diamondstore.repository.AccountRepository;
+import com.example.diamondstore.repository.AccumulatePointsRepository;
 import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.CertificateRepository;
-import com.example.diamondstore.repository.AccumulatePointsRepository;
 import com.example.diamondstore.repository.DiamondRepository;
 import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.repository.PromotionRepository;
@@ -68,7 +65,7 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(int accountID, String deliveryAddress, String promotionCode, Integer pointsToRedeem, String phoneNumber) {
-        List<Cart> cartItems = cartRepository.findByAccountIDAndOrderIsNull(accountID);
+        List<Cart> cartItems = cartRepository.findByAccount_AccountID(accountID);
 
         if (cartItems.isEmpty()) {
             throw new IllegalArgumentException("Giỏ hàng rỗng");
@@ -90,30 +87,11 @@ public class OrderService {
         // Lưu Order trước
         order = orderRepository.save(order);
 
-        String diamondID = cartItems.get(0).getDiamondID();
-        if (diamondID != null) {
-            String certificateID = diamondRepository.findByDiamondID(diamondID).getCertificationID();
-            if (certificateID != null) {
-                Certificate certificate = certificateRepository.findByCertificateID(certificateID);
-                if (certificate != null) {
-                    order.setCertificateImage(certificate.getcertificateImage());
-                }
-            }
-
-            String warrantyID = diamondRepository.findByDiamondID(diamondID).getWarrantyID();
-            if (warrantyID != null) {
-                Warranty warranty = warrantyRepository.findByWarrantyID(warrantyID);
-                if (warranty != null) {
-                    order.setWarrantyImage(warranty.getwarrantyImage());
-                }
-            }
-        }
-
         BigDecimal totalOrder = BigDecimal.ZERO;
         for (Cart cart : cartItems) {
             totalOrder = totalOrder.add(cart.getGrossCartPrice());
-            cart.setOrder(order);  // Associate cart items with the order
-            cart.setCartStatus("Đang chờ thanh toán"); // New status to indicate pending payment
+            cart.setOrder(order);
+            cart.setCartStatus("Đang chờ thanh toán");
             cartRepository.save(cart);
         }
 
@@ -136,7 +114,7 @@ public class OrderService {
             accumulatePointsRepository.save(accumulatePoints);
         }
 
-        order.settotalOrder(totalOrder);
+        order.setTotalOrder(totalOrder);
 
         // Lưu Order một lần nữa để cập nhật totalOrder
         order = orderRepository.save(order);
@@ -186,7 +164,7 @@ public class OrderService {
         if (order == null) {
             throw new IllegalArgumentException("Không tìm thấy Order");
         }
-        return order.gettotalOrder();
+        return order.getTotalOrder();
     }
 
     @Transactional
@@ -200,8 +178,6 @@ public class OrderService {
 
             existingOrder.setDeliveryAddress(orderPutRequest.getDeliveryAddress());
             existingOrder.setOrderStatus(orderPutRequest.getOrderStatus());
-            existingOrder.setCertificateImage(orderPutRequest.getCertificateImage());
-            existingOrder.setWarrantyImage(orderPutRequest.getWarrantyImage());
 
             if (deliveryDate != null && deliveryDate.isAfter(today)) {
                 existingOrder.setDeliveryDate(deliveryDate);
@@ -211,7 +187,7 @@ public class OrderService {
 
             // Handle promotion code and totalOrder update
             String newPromotionCode = orderPutRequest.getPromotionCode();
-            BigDecimal totalOrder = existingOrder.gettotalOrder();
+            BigDecimal totalOrder = existingOrder.getTotalOrder();
 
             if (newPromotionCode != null && !newPromotionCode.isEmpty()) {
                 Promotion promotion = promotionRepository.findByPromotionCode(newPromotionCode);
@@ -222,7 +198,7 @@ public class OrderService {
                 }
             }
 
-            existingOrder.settotalOrder(totalOrder);
+            existingOrder.setTotalOrder(totalOrder);
             orderRepository.save(existingOrder);
             return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
         } catch (Exception e) {
@@ -247,7 +223,7 @@ public class OrderService {
         List<Order> paidOrders = orderRepository.findAllByOrderStatus("Đã thanh toán");
         BigDecimal total = BigDecimal.ZERO;
         for (Order order : paidOrders) {
-            total = total.add(order.gettotalOrder());
+            total = total.add(order.getTotalOrder());
         }
         return total;
     }
@@ -274,7 +250,7 @@ public class OrderService {
         List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
         BigDecimal total = BigDecimal.ZERO;
         for (Order order : orders) {
-            total = total.add(order.gettotalOrder());
+            total = total.add(order.getTotalOrder());
         }
 
         // tạo một đối tượng OrderSummary để lưu trữ kết quả
@@ -296,7 +272,7 @@ public class OrderService {
             List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
             BigDecimal total = BigDecimal.ZERO;
             for (Order order : orders) {
-                total = total.add(order.gettotalOrder());
+                total = total.add(order.getTotalOrder());
             }
             OrderSummaryDTO summary = new OrderSummaryDTO(date, total);
             summaries.add(summary);
@@ -315,7 +291,7 @@ public class OrderService {
             List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
             BigDecimal revenue = BigDecimal.ZERO;
             for (Order order : orders) {
-                revenue = revenue.add(order.gettotalOrder());
+                revenue = revenue.add(order.getTotalOrder());
             }
             OrderSummaryDTO summary = new OrderSummaryDTO(date, revenue);
             summaries.add(summary);
@@ -336,7 +312,7 @@ public class OrderService {
             List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
             BigDecimal revenue = BigDecimal.ZERO;
             for (Order order : orders) {
-                revenue = revenue.add(order.gettotalOrder());
+                revenue = revenue.add(order.getTotalOrder());
             }
             OrderSummaryDTO summary = new OrderSummaryDTO(endOfMonth, revenue);
             summaries.add(summary);
@@ -355,7 +331,7 @@ public class OrderService {
             List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
             BigDecimal revenue = BigDecimal.ZERO;
             for (Order order : orders) {
-                revenue = revenue.add(order.gettotalOrder());
+                revenue = revenue.add(order.getTotalOrder());
             }
             OrderSummaryDTO summary = new OrderSummaryDTO(endOfMonth, revenue);
             summaries.add(summary);

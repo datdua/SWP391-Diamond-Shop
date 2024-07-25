@@ -10,12 +10,13 @@ import FormControl from '@mui/material/FormControl';
 
 function UpdateDiamondPriceForm({ diamondPrice }) {
   const [updatedDiamondPrice, setUpdateDiamondPrice] = useState(diamondPrice);
+  const [message, setMessage] = useState("");
 
   const labels = {
     diamondEntryPrice: "Giá Kim Cương",
     clarity: "Độ trong",
     color: "Màu sắc",
-    caratSize: "Trọng lượng",
+    caratSize: "Kích thước",
   };
 
   const handleChange = (event) => {
@@ -28,16 +29,18 @@ function UpdateDiamondPriceForm({ diamondPrice }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await updateDiamondPrice(
-        diamondPrice.diamondPriceID,
-        updatedDiamondPrice
-      );
-      alert("Cập nhật thông tin Giá Kim Cương thành công");
+      const response = await updateDiamondPrice(diamondPrice.diamondPriceID, updatedDiamondPrice);
+      console.log(response);
+      setMessage(response.message || "Cập nhật giá kim cương thành công");
     } catch (error) {
-      console.error(error);
-      alert("Cập nhật thông tin Giá Kim Cương thất bại");
+      let errorMessage = "Cập nhật giá kim cương thất bại";
+      if (error.message) {
+        errorMessage = error.message;
+      }
+      setMessage(errorMessage);
     }
   };
+
 
   return (
     <div>
@@ -89,22 +92,17 @@ function UpdateDiamondPriceForm({ diamondPrice }) {
             ))}
           </Select>
         </FormControl>
-        <FormControl fullWidth>
-          <InputLabel id="caratSize-select-label">{labels.caratSize}</InputLabel>
-          <Select
-            labelId="caratSize-select-label"
-            id="caratSize-select"
-            value={updatedDiamondPrice.caratSize}
-            label={labels.caratSize}
-            name="caratSize"
-            onChange={handleChange}
-          >
-            {[3.6, 3.9, 4.1, 4.5].map((size) => (
-              <MenuItem key={size} value={size}>{size}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <TextField
+          id="outlined-basic"
+          label={labels.caratSize}
+          variant="outlined"
+          name="caratSize"
+          value={updatedDiamondPrice.caratSize}
+          onChange={handleChange}
+          type="text"
+        />
         <Button type="submit" variant="contained" color="success">Cập nhật</Button>
+        {message && <p style={{ color: '#F2BA59', fontWeight: 'bold' }}>{message}</p>}
       </Box>
     </div>
   );

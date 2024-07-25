@@ -36,7 +36,7 @@ public class JwtUtil {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
-    public Boolean isTokenExpired(String token) { // Change from private to public
+    public Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 

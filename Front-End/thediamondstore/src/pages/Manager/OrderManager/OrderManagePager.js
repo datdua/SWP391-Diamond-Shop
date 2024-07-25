@@ -8,12 +8,12 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
-import { deleteOrderByManager, getAllOrder } from "../../../api/OrderAPI";
+import { getAllOrder } from "../../../api/OrderAPI";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
 import UpdateOrderForm from "../../../components/OrderCRUD/OrderUpdate";
-import DeleteOrderForm from "../../../components/OrderCRUD/OrderDelete";
 import { Pagination, Tooltip } from "@mui/material";
+import { toast } from "react-toastify";
 import "../ProductManager.css";
 
 function OrderManagerPage() {
@@ -24,11 +24,17 @@ function OrderManagerPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
+  const userRole = localStorage.getItem("role");
   const size = 8;
 
   const startIndex = (currentPage - 1) * size;
   const endIndex = startIndex + size;
   const currentPageData = orderData.slice(startIndex, endIndex);
+
+
+  const showAlert = () => {
+    toast.warning("Rất tiếc, chức năng này chỉ dành cho quản lý và nhân viên bán hàng!")
+  }
 
   const handleClose = () => {
     setShowModal(false);
@@ -41,17 +47,12 @@ function OrderManagerPage() {
   };
 
   const handleShowUpdate = (order) => {
-    setSelectedOrder(order);
-    setIsUpdating(true);
-    setShowModal(true);
-  };
-
-  const handleDelete = async (orderID) => {
-    try {
-      await deleteOrderByManager(orderID);
-      setOrderData(orderData.filter((order) => order.orderID !== orderID));
-    } catch (error) {
-      console.error("Error deleting order:", error);
+    if (userRole !== "ROLE_SALE-STAFF" && userRole !== "ROLE_MANAGER") {
+      showAlert();
+    } else {
+      setSelectedOrder(order);
+      setIsUpdating(true);
+      setShowModal(true);
     }
   };
 
@@ -106,8 +107,6 @@ function OrderManagerPage() {
                       <th>Tổng Đơn</th>
                       <th>Địa Chỉ Giao Hàng</th>
                       <th>Số Điện Thoại</th>
-                      <th>Giấy Chứng Nhận</th>
-                      <th>Giấy Bảo Hành</th>
                       <th>Mã Khuyến Mãi</th>
                       <th>Thao Tác</th>
                     </tr>
@@ -127,20 +126,6 @@ function OrderManagerPage() {
                         </td>
                         <td>{order.deliveryAddress}</td>
                         <td>{order.phoneNumber}</td>
-                        <td>
-                          <img
-                            src={order.certificateImage}
-                            style={{ width: "50px", height: "50px", cursor: "pointer" }}
-                            onClick={() => handleShowImage(order.certificateImage)}
-                          />
-                        </td>
-                        <td>
-                          <img
-                            src={order.warrantyImage}
-                            style={{ width: "50px", height: "50px", cursor: "pointer" }}
-                            onClick={() => handleShowImage(order.warrantyImage)}
-                          />
-                        </td>
                         <td>{order.promotionCode}</td>
                         <td>
                           <Tooltip
@@ -182,7 +167,7 @@ function OrderManagerPage() {
           {isUpdating ? (
             <UpdateOrderForm order={selectedOrder} onClose={handleClose} />
           ) : (
-            <div>Add Order Form Here</div> // Placeholder for Add Order Form if needed
+            <div>Add Order Form Here</div>
           )}
         </Modal.Body>
       </Modal>
