@@ -10,5 +10,7 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Intege
 
     List<OrderDetail> findByOrder_OrderID(Integer orderID);
 
-    Object deleteByAccountID(Integer accountID);
+    List<OrderDetail> findByAccount_AccountID(Integer accountID);
+
+    void deleteByAccount_AccountID(Integer accountID);
 }

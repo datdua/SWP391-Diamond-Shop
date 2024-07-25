@@ -18,7 +18,7 @@ const DiamondPriceTable = () => {
             const caratSizeData = await getAllCaratSize();
             setClarityLevels(clarityData);
             setColours(colorData);
-            setCaratSizes(caratSizeData.map(size => size.toString())); // Assuming the API returns BigDecimal, convert to string if necessary
+            setCaratSizes(caratSizeData.map(size => size.toString())); 
         };
 
         fetchStaticData();
@@ -28,7 +28,7 @@ const DiamondPriceTable = () => {
         const fetchPrices = async () => {
             const prices = {};
             for (let size of caratSizes) {
-                const data = await getDiamondPriceByCaratSize(parseFloat(size)); // Convert back to number if necessary
+                const data = await getDiamondPriceByCaratSize(parseFloat(size)); 
                 prices[size] = data;
             }
             setDiamondPrices(prices);

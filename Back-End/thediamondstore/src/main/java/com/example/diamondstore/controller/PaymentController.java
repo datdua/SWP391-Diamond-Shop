@@ -27,8 +27,10 @@ import com.example.diamondstore.DTO.TransactionStatusDTO;
 import com.example.diamondstore.config.PaymentConfig;
 import com.example.diamondstore.model.AccumulatePoints;
 import com.example.diamondstore.model.Cart;
+import com.example.diamondstore.model.Certificate;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.model.OrderDetail;
+import com.example.diamondstore.model.Warranty;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.AccumulatePointsRepository;
 import com.example.diamondstore.repository.CartRepository;
@@ -70,7 +72,7 @@ public class PaymentController {
         String vnp_Command = "pay";
         String orderType = "other";
         Order order = orderRepository.findByOrderID(orderID);
-        BigDecimal totalAmount = order.gettotalOrder();
+        BigDecimal totalAmount = order.getTotalOrder();
         long amount = totalAmount.longValue() * 100;
         String bankCode = "NCB";
         String vnp_IpAddr = "127.0.0.1";
@@ -99,20 +101,20 @@ public class PaymentController {
         String vnp_ExpireDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
-        List fieldNames = new ArrayList(vnp_Params.keySet());
+        List<String> fieldNames = new ArrayList<>(vnp_Params.keySet());
         Collections.sort(fieldNames);
         StringBuilder hashData = new StringBuilder();
         StringBuilder query = new StringBuilder();
-        Iterator itr = fieldNames.iterator();
+        Iterator<String> itr = fieldNames.iterator();
         while (itr.hasNext()) {
-            String fieldName = (String) itr.next();
-            String fieldValue = (String) vnp_Params.get(fieldName);
+            String fieldName = itr.next();
+            String fieldValue = vnp_Params.get(fieldName);
             if ((fieldValue != null) && (fieldValue.length() > 0)) {
-                //Build hash data
+                // Build hash data
                 hashData.append(fieldName);
                 hashData.append('=');
                 hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
-                //Build query
+                // Build query
                 query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII.toString()));
                 query.append('=');
                 query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII.toString()));
@@ -141,8 +143,7 @@ public class PaymentController {
             @RequestParam(value = "vnp_BankCode") String bankCode,
             @RequestParam(value = "vnp_OrderInfo") Integer orderID,
             @RequestParam(value = "vnp_ResponseCode") String responseCode,
-            @RequestParam(value = "vnp_TransactionNo") Integer transactionNo
-    ) {
+            @RequestParam(value = "vnp_TransactionNo") Integer transactionNo) {
         Order order = orderRepository.findByOrderID(orderID);
         TransactionStatusDTO transactionStatusDTO = new TransactionStatusDTO();
 
@@ -158,7 +159,8 @@ public class PaymentController {
             orderRepository.save(order);
 
             Integer accountID = order.getAccount().getAccountID();
-            AccumulatePoints accumulatePoints = accumulatePointsRepository.findById(accountID).orElseThrow(() -> new IllegalArgumentException("Khách hàng không tồn tại"));
+            AccumulatePoints accumulatePoints = accumulatePointsRepository.findById(accountID)
+                    .orElseThrow(() -> new IllegalArgumentException("Khách hàng không tồn tại"));
             accumulatePoints.setPoint(accumulatePoints.getPoint() + 100);
             accumulatePointsRepository.save(accumulatePoints);
 
@@ -166,28 +168,31 @@ public class PaymentController {
             List<Cart> cartItems = cartRepository.findByOrder(order);
             for (Cart cart : cartItems) {
                 OrderDetail orderDetail = new OrderDetail();
-                if (cart.getDiamondID() != null) {
-                    orderDetail.setDiamondWarrantyImage(warrantyRepository.findByDiamondID(cart.getDiamondID()).getwarrantyImage());
-                    orderDetail.setDiamondCertificateImage(certificateRepository.findByDiamondID(cart.getDiamondID()).getcertificateImage());
+                if (cart.getDiamond() != null) {
+                    Warranty diamondWarranty = warrantyRepository.findByDiamondID(cart.getDiamond().getDiamondID());
+                    Certificate diamondCertificate = certificateRepository
+                            .findByDiamondID(cart.getDiamond().getDiamondID());
+                    orderDetail.setDiamondWarrantyImage(
+                            diamondWarranty != null ? diamondWarranty.getwarrantyImage() : null);
+                    orderDetail.setDiamondCertificateImage(
+                            diamondCertificate != null ? diamondCertificate.getcertificateImage() : null);
                 } else {
                     orderDetail.setDiamondWarrantyImage(null);
                     orderDetail.setDiamondCertificateImage(null);
                 }
-                if (cart.getJewelryID() != null) {
-                    orderDetail.setJewelryWarrantyImage(warrantyRepository.findByJewelryID(cart.getJewelryID()).getwarrantyImage());
+                if (cart.getJewelry() != null) {
+                    Warranty jewelryWarranty = warrantyRepository.findByJewelryID(cart.getJewelry().getJewelryID());
+                    orderDetail.setJewelryWarrantyImage(
+                            jewelryWarranty != null ? jewelryWarranty.getwarrantyImage() : null);
                 } else {
                     orderDetail.setJewelryWarrantyImage(null);
                 }
                 orderDetail.setOrder(order);
-                orderDetail.setAccountID(order.getAccount().getAccountID());
-                orderDetail.setDiamondID(cart.getDiamondID());
-                orderDetail.setJewelryID(cart.getJewelryID());
-                orderDetail.setDiamondName(cart.getDiamondName());
-                orderDetail.setJewelryName(cart.getJewelryName());
-                orderDetail.setDiamondImage(cart.getDiamondImage());
-                orderDetail.setJewelryImage(cart.getJewelryImage());
+                orderDetail.setAccount(cart.getAccount());
+                orderDetail.setDiamond(cart.getDiamond());
+                orderDetail.setJewelry(cart.getJewelry());
                 orderDetail.setQuantity(cart.getQuantity());
-                orderDetail.setSizeJewelry(cart.getsizeJewelry());
+                orderDetail.setSizeJewelry(cart.getSizeJewelry());
                 orderDetail.setPrice(cart.getPrice());
                 orderDetail.setGrossCartPrice(cart.getGrossCartPrice());
                 // sum total price

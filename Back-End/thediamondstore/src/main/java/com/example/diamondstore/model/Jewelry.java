@@ -33,11 +33,14 @@ public class Jewelry {
     @Column(name = "warrantyID", nullable=true)
     private String warrantyID;
 
+    @Column(name = "quantity")
+    private Integer quantity;
+
     public Jewelry() {
     }
 
     public Jewelry(String jewelryID, String gender, BigDecimal jewelryEntryPrice,
-            String jewelryImage, String jewelryName, BigDecimal grossJewelryPrice, String warrantyID) {
+            String jewelryImage, String jewelryName, BigDecimal grossJewelryPrice, String warrantyID, Integer quantity) {
         this.jewelryID = jewelryID;
         this.gender = gender;
         this.jewelryImage = jewelryImage;
@@ -45,6 +48,7 @@ public class Jewelry {
         this.jewelryName = jewelryName;
         this.grossJewelryPrice = grossJewelryPrice;
         this.warrantyID = warrantyID;
+        this.quantity = quantity;
     }
 
     public BigDecimal getGrossJewelryPrice() {
@@ -101,5 +105,13 @@ public class Jewelry {
 
     public void setWarrantyID(String warrantyID) {
         this.warrantyID = warrantyID;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }
