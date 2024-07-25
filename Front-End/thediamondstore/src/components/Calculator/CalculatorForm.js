@@ -10,7 +10,7 @@ function CalculatorForm() {
 
   const handleCalculate = () => {
     const priceUSD = relativePrice * 100 * caratSize;
-    const priceVND = priceUSD * 25000; 
+    const priceVND = priceUSD * 25335;
     setDiamondPriceUSD(priceUSD);
     setDiamondPriceVND(priceVND);
   };
@@ -34,7 +34,7 @@ function CalculatorForm() {
           />
         </Form.Group>
         <Form.Group style={{marginTop: '10px'}} controlId="caratSize">
-          <Form.Label>Kích cỡ</Form.Label>
+          <Form.Label>Trọng lượng</Form.Label>
           <Form.Control
             type="number"
             value={caratSize}

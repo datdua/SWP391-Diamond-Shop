@@ -50,7 +50,6 @@ export const createDiamondPrice = async (diamondPrice) => {
   }
 };
 
-
 export const updateDiamondPrice = async (diamondPriceID, diamondPrice) => {
   try {
     const token = localStorage.getItem('jwt');
