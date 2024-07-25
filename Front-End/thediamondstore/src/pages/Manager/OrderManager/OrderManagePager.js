@@ -8,7 +8,7 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
-import { getAllOrder } from "../../../api/OrderAPI";
+import { getAllOrder, getOrderDetailManager } from "../../../api/OrderAPI";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
 import UpdateOrderForm from "../../../components/OrderCRUD/OrderUpdate";
@@ -99,7 +99,9 @@ function OrderManagerPage() {
                 <Table striped bordered hover className="account-table">
                   <thead>
                     <tr>
+                      <th>STT</th>
                       <th>Mã Đơn Hàng</th>
+                      <th>Mã Giao Dịch</th>
                       <th>Mã Tài Khoản</th>
                       <th>Ngày Bắt Đầu Đơn Hàng</th>
                       <th>Tình Trạng Đơn Hàng</th>
@@ -114,7 +116,21 @@ function OrderManagerPage() {
                   <tbody>
                     {currentPageData.map((order, index) => (
                       <tr key={index}>
+                        <td>{ startIndex + index + 1}</td>
                         <td>{order.orderID}</td>
+                        <td>
+                          <a
+                            href={`https://sandbox.vnpayment.vn/merchantv2/Transaction/PaymentDetail/${order.transactionNo}.htm`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              color: "blue",
+                              textDecoration: "underline",
+                            }}
+                          >
+                            {order.transactionNo}
+                          </a>
+                        </td>
                         <td>{order.account.accountID}</td>
                         <td>{order.startorderDate}</td>
                         <td>{order.orderStatus}</td>

@@ -49,6 +49,15 @@ function UpdateJewelryForm({ jewelry }) {
           onChange={handleChange}
         />
       </Form.Group>
+      <Form.Group>
+        <Form.Label>Số lượng</Form.Label>
+        <Form.Control
+          type="number"
+          name="quantity"
+          value={updatedJewelry.quantity}
+          onChange={handleChange}
+        />
+      </Form.Group>
       <Button variant="primary" type="submit" style={{marginTop: '10px'}}>
         Cập nhật
       </Button>
