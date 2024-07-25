@@ -29,7 +29,7 @@ public class OrderDetailController {
     }
 
     // admin + manager
-    @GetMapping(value = "/admin/orderDetail-management/orderDetails/get-orderDetail/{orderID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/orderDetail-management/orderDetails/get-orderDetail/{orderID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrderDetailByOrderID(@PathVariable Integer orderID) {
         return ResponseEntity.ok(orderDetailService.getOrderDetailByOrderID(orderID));
     }
@@ -41,7 +41,7 @@ public class OrderDetailController {
     }
 
     // admin + manager
-    @GetMapping(value = "/admin/orderDetail-management/orderDetails/{orderDetailID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/orderDetail-management/orderDetails/{orderDetailID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrderDetail(@PathVariable Integer orderDetailID) {
         return ResponseEntity.ok(orderDetailService.getOrderDetail(orderDetailID));
     }

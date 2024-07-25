@@ -73,6 +73,7 @@ public class DiamondPriceService {
             diamond.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
             BigDecimal grossDiamondPrice = diamondPriceRequest.getDiamondEntryPrice().multiply(new BigDecimal("1.1"));
             diamond.setGrossDiamondPrice(grossDiamondPrice);
+            diamond.setDiamondPrice(existingDiamondPrice);
             diamondRepository.save(diamond);
         }
 
@@ -103,6 +104,7 @@ public class DiamondPriceService {
             diamond.setDiamondEntryPrice(diamondPriceRequest.getDiamondEntryPrice());
             BigDecimal grossDiamondPrice = diamondPriceRequest.getDiamondEntryPrice().multiply(new BigDecimal("1.1"));
             diamond.setGrossDiamondPrice(grossDiamondPrice);
+            diamond.setDiamondPrice(diamondPrice);
             diamondRepository.save(diamond);
         }
 

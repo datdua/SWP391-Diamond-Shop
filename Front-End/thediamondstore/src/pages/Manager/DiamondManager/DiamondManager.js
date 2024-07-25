@@ -278,6 +278,8 @@ const DiamondManagerPage = () => {
                       <th>Độ tinh khiết</th>
                       <th>Hình Dạng</th>
                       <th>Xuất Xứ</th>
+                      <th>Số Lượng</th>
+                      <th>Trạng Thái</th>
                       <th>Thao Tác</th>
                     </tr>
                   </thead>
@@ -351,6 +353,8 @@ const DiamondManagerPage = () => {
                           <td>{diamond.cut}</td>
                           <td>{diamond.clarity}</td>
                           <td>{diamond.shape}</td>
+                          <td>{diamond.quantity}</td>
+                          <td>{diamond.status}</td>
                           <td>{diamond.origin}</td>
                           <td>
                             <Tooltip
