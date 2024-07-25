@@ -1,29 +1,28 @@
 package com.example.diamondstore.repository;
 
-import java.util.List;
-
+import com.example.diamondstore.model.Cart;
+import com.example.diamondstore.model.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.diamondstore.model.Cart;
-import com.example.diamondstore.model.Order;
+import java.util.List;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Integer> {
 
     Cart findByCartID(Integer cartID);
 
-    List<Cart> findByAccountID(Integer accountID);
+    List<Cart> findByAccount_AccountIDAndOrderIsNull(Integer accountID);
 
-    List<Cart> findByAccountIDAndOrderIsNull(int accountID);
+    Cart findByAccount_AccountIDAndDiamond_DiamondID(Integer accountID, String diamondID);
 
-    Cart findByAccountIDAndDiamondID(Integer accountID, String diamondID);
-
-    Cart findByAccountIDAndJewelryID(Integer accountID, String jewelryID);
+    Cart findByAccount_AccountIDAndJewelry_JewelryID(Integer accountID, String jewelryID);
 
     List<Cart> findByOrder(Order order);
 
-    Object deleteByAccountID(Integer accountID);
+    void deleteByAccount_AccountID(Integer accountID);
 
     void deleteByOrder_OrderID(Integer orderID);
+
+    List<Cart> findByAccount_AccountID(Integer accountID);
 }
