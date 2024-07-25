@@ -6,7 +6,11 @@ import java.math.RoundingMode;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.FetchType;
+
 
 @Entity
 @Table(name = "Diamond")
@@ -58,10 +62,17 @@ public class Diamond {
     @Column(name = "quantity")
     private Integer quantity;
 
+    @Column(name = "status")
+    private String status;
+
+    @ManyToOne
+    @JoinColumn(name = "diamondPriceID", nullable = true)
+    private DiamondPrice diamondPrice;
+
     public Diamond() {
     }
 
-    public Diamond(String diamondID, String warrantyID, String certificationID, BigDecimal caratSize, BigDecimal diamondEntryPrice, BigDecimal weight, String color, String cut, String clarity, String diamondImage, String shape, String diamondName, String origin, BigDecimal grossDiamondPrice, Integer quantity) {
+    public Diamond(String diamondID, String warrantyID, String certificationID, BigDecimal caratSize, BigDecimal diamondEntryPrice, BigDecimal weight, String color, String cut, String clarity, String diamondImage, String shape, String diamondName, String origin, BigDecimal grossDiamondPrice, Integer quantity, String status, DiamondPrice diamondPrice) {
         this.diamondID = diamondID;
         this.warrantyID = warrantyID;
         this.certificationID = certificationID;
@@ -77,6 +88,8 @@ public class Diamond {
         this.origin = origin;
         this.grossDiamondPrice = grossDiamondPrice;
         this.quantity = quantity;
+        this.status = status;
+        this.diamondPrice = diamondPrice;
     }
 
     public BigDecimal getGrossDiamondPrice() {
@@ -197,5 +210,21 @@ public class Diamond {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public DiamondPrice getDiamondPrice() {
+        return diamondPrice;
+    }
+
+    public void setDiamondPrice(DiamondPrice diamondPrice) {
+        this.diamondPrice = diamondPrice;
     }
 }

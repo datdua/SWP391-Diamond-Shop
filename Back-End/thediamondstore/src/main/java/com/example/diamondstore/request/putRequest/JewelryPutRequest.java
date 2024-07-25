@@ -2,6 +2,8 @@ package com.example.diamondstore.request.putRequest;
 
 import java.math.BigDecimal;
 
+import javax.persistence.criteria.CriteriaBuilder.In;
+
 public class JewelryPutRequest {
 
     private String jewelryName;
@@ -9,16 +11,18 @@ public class JewelryPutRequest {
     private String jewelryImage;
     private BigDecimal jewelryEntryPrice;
     private String warrantyID;
+    private Integer quantity;
 
     public JewelryPutRequest() {
     }
 
-    public JewelryPutRequest(String jewelryName, String gender, String jewelryImage, BigDecimal jewelryEntryPrice, String warrantyID) {
+    public JewelryPutRequest(String jewelryName, String gender, String jewelryImage, BigDecimal jewelryEntryPrice, String warrantyID, Integer quantity) {
         this.jewelryName = jewelryName;
         this.gender = gender;
         this.jewelryImage = jewelryImage;
         this.jewelryEntryPrice = jewelryEntryPrice;
         this.warrantyID = warrantyID;
+        this.quantity = quantity;
     }
 
     public String getJewelryName() {
@@ -60,4 +64,13 @@ public class JewelryPutRequest {
     public void setWarrantyID(String warrantyID) {
         this.warrantyID = warrantyID;
     }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
 }

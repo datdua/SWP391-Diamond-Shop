@@ -36,11 +36,14 @@ public class Jewelry {
     @Column(name = "quantity")
     private Integer quantity;
 
+    @Column(name = "status")
+    private String status;
+
     public Jewelry() {
     }
 
     public Jewelry(String jewelryID, String gender, BigDecimal jewelryEntryPrice,
-            String jewelryImage, String jewelryName, BigDecimal grossJewelryPrice, String warrantyID, Integer quantity) {
+            String jewelryImage, String jewelryName, BigDecimal grossJewelryPrice, String warrantyID, Integer quantity, String status) {
         this.jewelryID = jewelryID;
         this.gender = gender;
         this.jewelryImage = jewelryImage;
@@ -49,6 +52,7 @@ public class Jewelry {
         this.grossJewelryPrice = grossJewelryPrice;
         this.warrantyID = warrantyID;
         this.quantity = quantity;
+        this.status = status;
     }
 
     public BigDecimal getGrossJewelryPrice() {
@@ -113,5 +117,13 @@ public class Jewelry {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
