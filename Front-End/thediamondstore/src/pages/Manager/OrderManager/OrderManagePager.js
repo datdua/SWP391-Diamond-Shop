@@ -31,6 +31,7 @@ function OrderManagerPage() {
   const endIndex = startIndex + size;
   const currentPageData = orderData.slice(startIndex, endIndex);
 
+
   const showAlert = () => {
     toast.warning("Rất tiếc, chức năng này chỉ dành cho quản lý và nhân viên bán hàng!")
   }
