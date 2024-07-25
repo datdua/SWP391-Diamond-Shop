@@ -55,10 +55,13 @@ public class Diamond {
     @Column(name = "origin")
     private String origin;
 
+    @Column(name = "quantity")
+    private Integer quantity;
+
     public Diamond() {
     }
 
-    public Diamond(String diamondID, String warrantyID, String certificationID, BigDecimal caratSize, BigDecimal diamondEntryPrice, BigDecimal weight, String color, String cut, String clarity, String diamondImage, String shape, String diamondName, String origin, BigDecimal grossDiamondPrice) {
+    public Diamond(String diamondID, String warrantyID, String certificationID, BigDecimal caratSize, BigDecimal diamondEntryPrice, BigDecimal weight, String color, String cut, String clarity, String diamondImage, String shape, String diamondName, String origin, BigDecimal grossDiamondPrice, Integer quantity) {
         this.diamondID = diamondID;
         this.warrantyID = warrantyID;
         this.certificationID = certificationID;
@@ -73,6 +76,7 @@ public class Diamond {
         this.diamondName = diamondName;
         this.origin = origin;
         this.grossDiamondPrice = grossDiamondPrice;
+        this.quantity = quantity;
     }
 
     public BigDecimal getGrossDiamondPrice() {
@@ -185,5 +189,13 @@ public class Diamond {
 
     public void setOrigin(String origin) {
         this.origin = origin;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }

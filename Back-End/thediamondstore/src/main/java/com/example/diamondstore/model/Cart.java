@@ -1,15 +1,7 @@
 package com.example.diamondstore.model;
 
 import java.math.BigDecimal;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "Cart")
@@ -19,14 +11,21 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer cartID;
 
-    @Column(name = "accountID", nullable = false)
-    private Integer accountID;
+    @ManyToOne
+    @JoinColumn(name = "accountID", nullable = false)
+    private Account account;
 
-    @Column(name = "diamondID", nullable = false)
-    private String diamondID;
+    @ManyToOne
+    @JoinColumn(name = "diamondID", nullable = true) 
+    private Diamond diamond;
 
-    @Column(name = "jewelryID", nullable = false)
-    private String jewelryID;
+    @ManyToOne
+    @JoinColumn(name = "jewelryID", nullable = true)
+    private Jewelry jewelry;
+
+    @ManyToOne
+    @JoinColumn(name = "orderID", nullable = true) 
+    private Order order;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
@@ -37,18 +36,6 @@ public class Cart {
     @Column(name = "sizeJewelry", nullable = false)
     private Integer sizeJewelry;
 
-    @Column(name = "diamondImage")
-    private String diamondImage;
-
-    @Column(name = "jewelryImage")
-    private String jewelryImage;
-
-    @Column(name = "diamondName")
-    private String diamondName;
-
-    @Column(name = "jewelryName")
-    private String jewelryName;
-
     @Column(name = "price", nullable = false, precision = 8, scale = 2)
     private BigDecimal price;
 
@@ -57,29 +44,19 @@ public class Cart {
 
     @Column(name = "cartStatus")
     private String cartStatus;
-
-    @ManyToOne
-    @JoinColumn(name = "orderID", nullable = true) // nullable = true nếu cart có thể không có order
-    private Order order;
-
     public Cart() {
     }
 
-    public Cart(Integer accountID, Integer cartID, String diamondID, String jewelryID, Order order, Integer quantity,
-            BigDecimal totalPrice, Integer sizeJewelry, String diamondImage, String jewelryImage, String diamondName,
-            String jewelryName, BigDecimal price, BigDecimal grossCartPrice, String cartStatus) {
-        this.accountID = accountID;
+    public Cart(Account account, Integer cartID, Diamond diamond, Jewelry jewelry, Order order, Integer quantity,
+            BigDecimal totalPrice, Integer sizeJewelry, BigDecimal price, BigDecimal grossCartPrice, String cartStatus) {
+        this.account = account;
         this.cartID = cartID;
-        this.diamondID = diamondID;
-        this.jewelryID = jewelryID;
+        this.diamond = diamond;
+        this.jewelry = jewelry;
         this.order = order;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
         this.sizeJewelry = sizeJewelry;
-        this.diamondImage = diamondImage;
-        this.jewelryImage = jewelryImage;
-        this.diamondName = diamondName;
-        this.jewelryName = jewelryName;
         this.price = price;
         this.grossCartPrice = grossCartPrice;
         this.cartStatus = cartStatus;
@@ -93,11 +70,11 @@ public class Cart {
         this.grossCartPrice = grossCartPrice;
     }
 
-    public Integer getsizeJewelry() {
+    public Integer getSizeJewelry() {
         return sizeJewelry;
     }
 
-    public void setsizeJewelry(Integer sizeJewelry) {
+    public void setSizeJewelry(Integer sizeJewelry) {
         this.sizeJewelry = sizeJewelry;
     }
 
@@ -109,28 +86,28 @@ public class Cart {
         this.cartID = cartID;
     }
 
-    public Integer getAccountID() {
-        return accountID;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setAccountID(Integer accountID) {
-        this.accountID = accountID;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
-    public String getDiamondID() {
-        return diamondID;
+    public Diamond getDiamond() {
+        return diamond;
     }
 
-    public void setDiamondID(String diamondID) {
-        this.diamondID = diamondID;
+    public void setDiamond(Diamond diamond) {
+        this.diamond = diamond;
     }
 
-    public String getJewelryID() {
-        return jewelryID;
+    public Jewelry getJewelry() {
+        return jewelry;
     }
 
-    public void setJewelryID(String jewelryID) {
-        this.jewelryID = jewelryID;
+    public void setJewelry(Jewelry jewelry) {
+        this.jewelry = jewelry;
     }
 
     public Integer getQuantity() {
@@ -155,38 +132,6 @@ public class Cart {
 
     public void setOrder(Order order) {
         this.order = order;
-    }
-
-    public String getDiamondImage() {
-        return diamondImage;
-    }
-
-    public void setDiamondImage(String diamondImage) {
-        this.diamondImage = diamondImage;
-    }
-
-    public String getJewelryImage() {
-        return jewelryImage;
-    }
-
-    public void setJewelryImage(String jewelryImage) {
-        this.jewelryImage = jewelryImage;
-    }
-
-    public String getDiamondName() {
-        return diamondName;
-    }
-
-    public void setDiamondName(String diamondName) {
-        this.diamondName = diamondName;
-    }
-
-    public String getJewelryName() {
-        return jewelryName;
-    }
-
-    public void setJewelryName(String jewelryName) {
-        this.jewelryName = jewelryName;
     }
 
     public BigDecimal getPrice() {

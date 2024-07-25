@@ -65,7 +65,7 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(int accountID, String deliveryAddress, String promotionCode, Integer pointsToRedeem, String phoneNumber) {
-        List<Cart> cartItems = cartRepository.findByAccountIDAndOrderIsNull(accountID);
+        List<Cart> cartItems = cartRepository.findByAccount_AccountID(accountID);
 
         if (cartItems.isEmpty()) {
             throw new IllegalArgumentException("Giỏ hàng rỗng");
@@ -90,8 +90,8 @@ public class OrderService {
         BigDecimal totalOrder = BigDecimal.ZERO;
         for (Cart cart : cartItems) {
             totalOrder = totalOrder.add(cart.getGrossCartPrice());
-            cart.setOrder(order);  // Associate cart items with the order
-            cart.setCartStatus("Đang chờ thanh toán"); // New status to indicate pending payment
+            cart.setOrder(order);
+            cart.setCartStatus("Đang chờ thanh toán");
             cartRepository.save(cart);
         }
 
@@ -114,7 +114,7 @@ public class OrderService {
             accumulatePointsRepository.save(accumulatePoints);
         }
 
-        order.settotalOrder(totalOrder);
+        order.setTotalOrder(totalOrder);
 
         // Lưu Order một lần nữa để cập nhật totalOrder
         order = orderRepository.save(order);
@@ -164,7 +164,7 @@ public class OrderService {
         if (order == null) {
             throw new IllegalArgumentException("Không tìm thấy Order");
         }
-        return order.gettotalOrder();
+        return order.getTotalOrder();
     }
 
     @Transactional
@@ -187,7 +187,7 @@ public class OrderService {
 
             // Handle promotion code and totalOrder update
             String newPromotionCode = orderPutRequest.getPromotionCode();
-            BigDecimal totalOrder = existingOrder.gettotalOrder();
+            BigDecimal totalOrder = existingOrder.getTotalOrder();
 
             if (newPromotionCode != null && !newPromotionCode.isEmpty()) {
                 Promotion promotion = promotionRepository.findByPromotionCode(newPromotionCode);
@@ -198,7 +198,7 @@ public class OrderService {
                 }
             }
 
-            existingOrder.settotalOrder(totalOrder);
+            existingOrder.setTotalOrder(totalOrder);
             orderRepository.save(existingOrder);
             return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật thành công"));
         } catch (Exception e) {
@@ -223,7 +223,7 @@ public class OrderService {
         List<Order> paidOrders = orderRepository.findAllByOrderStatus("Đã thanh toán");
         BigDecimal total = BigDecimal.ZERO;
         for (Order order : paidOrders) {
-            total = total.add(order.gettotalOrder());
+            total = total.add(order.getTotalOrder());
         }
         return total;
     }
@@ -250,7 +250,7 @@ public class OrderService {
         List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
         BigDecimal total = BigDecimal.ZERO;
         for (Order order : orders) {
-            total = total.add(order.gettotalOrder());
+            total = total.add(order.getTotalOrder());
         }
 
         // tạo một đối tượng OrderSummary để lưu trữ kết quả
@@ -272,7 +272,7 @@ public class OrderService {
             List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
             BigDecimal total = BigDecimal.ZERO;
             for (Order order : orders) {
-                total = total.add(order.gettotalOrder());
+                total = total.add(order.getTotalOrder());
             }
             OrderSummaryDTO summary = new OrderSummaryDTO(date, total);
             summaries.add(summary);
@@ -291,7 +291,7 @@ public class OrderService {
             List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
             BigDecimal revenue = BigDecimal.ZERO;
             for (Order order : orders) {
-                revenue = revenue.add(order.gettotalOrder());
+                revenue = revenue.add(order.getTotalOrder());
             }
             OrderSummaryDTO summary = new OrderSummaryDTO(date, revenue);
             summaries.add(summary);
@@ -312,7 +312,7 @@ public class OrderService {
             List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
             BigDecimal revenue = BigDecimal.ZERO;
             for (Order order : orders) {
-                revenue = revenue.add(order.gettotalOrder());
+                revenue = revenue.add(order.getTotalOrder());
             }
             OrderSummaryDTO summary = new OrderSummaryDTO(endOfMonth, revenue);
             summaries.add(summary);
@@ -331,7 +331,7 @@ public class OrderService {
             List<Order> orders = orderRepository.findAllByStartorderDateBetween(start, end);
             BigDecimal revenue = BigDecimal.ZERO;
             for (Order order : orders) {
-                revenue = revenue.add(order.gettotalOrder());
+                revenue = revenue.add(order.getTotalOrder());
             }
             OrderSummaryDTO summary = new OrderSummaryDTO(endOfMonth, revenue);
             summaries.add(summary);
