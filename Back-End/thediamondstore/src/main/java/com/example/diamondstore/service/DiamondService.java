@@ -2,11 +2,13 @@ package com.example.diamondstore.service;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +18,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.example.diamondstore.model.Certificate;
 import com.example.diamondstore.model.Diamond;
 import com.example.diamondstore.model.DiamondPrice;
 import com.example.diamondstore.repository.CertificateRepository;
@@ -59,8 +63,27 @@ public class DiamondService {
         return diamondRepository.findByDiamondID(diamondID);
     }
 
+    @PostConstruct
+    public void updateDiamondStatusesOnStartup() {
+        updateDiamondStatusesAuto();
+    }
+
+    @Scheduled(cron = "0 */30 * * * *")
+    public void updateDiamondStatusesAuto() {
+        List<Diamond> diamonds = diamondRepository.findAll();
+        LocalDateTime now = LocalDateTime.now();
+
+        for (Diamond diamond : diamonds) {
+            if (diamond.getQuantity() == 0) {
+                diamond.setStatus("Hết hàng");
+            } else {
+                diamond.setStatus("Còn hàng");
+            }
+            diamondRepository.save(diamond);
+        }
+    }
+
     public ResponseEntity<Map<String, String>> createDiamond(Diamond diamond) {
-        // Check if the diamond already exists by ID
         Diamond existingDiamondByID = diamondRepository.findByDiamondID(diamond.getDiamondID());
         if (existingDiamondByID != null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Kim cương đã tồn tại"));
@@ -82,6 +105,7 @@ public class DiamondService {
                 return ResponseEntity.ok(Collections.singletonMap("message", "Kim cương tạo thành công, nhưng chưa có giá. Vui lòng thêm giá cho kim cương này."));
             }
             diamond.setDiamondEntryPrice(diamondEntryPriceInput);
+            diamond.setDiamondPrice(null);
         } else {
             BigDecimal diamondEntryPriceDB = diamondPrice.getDiamondEntryPrice();
             System.out.println("diamondEntryPriceInput: " + diamondEntryPriceInput);
@@ -93,16 +117,25 @@ public class DiamondService {
             } else {
                 diamond.setDiamondEntryPrice(diamondEntryPriceDB);
             }
+            diamond.setDiamondPrice(diamondPrice);
         }
 
-        // Check if the certificate is already assigned
+        if(diamond.getQuantity() < 0) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số lượng không hợp lệ"));
+        }
+
         if (diamond.getCertificationID() != null && diamondRepository.existsByCertificationID(diamond.getCertificationID())) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Chứng chỉ đã được gán cho một kim cương khác"));
         }
 
-        // Check if the warranty is already assigned
         if (diamond.getWarrantyID() != null && diamondRepository.existsByWarrantyID(diamond.getWarrantyID())) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Bảo hành đã được gán cho một kim cương khác"));
+        }
+
+        if (diamond.getQuantity() != 0) {
+            diamond.setStatus("Còn hàng");
+        } else {
+            diamond.setStatus("Hết hàng");
         }
 
         // Calculate gross diamond price = diamond price * 1.1
@@ -113,6 +146,7 @@ public class DiamondService {
             diamond.setGrossDiamondPrice(null);
         }
 
+        updateDiamondStatusesAuto();
         diamondRepository.save(diamond);
 
         if (priceMismatch) {
@@ -137,6 +171,13 @@ public class DiamondService {
         existingDiamond.setColor(diamondPutRequest.getColor());
         existingDiamond.setCaratSize(diamondPutRequest.getCaratSize());
         existingDiamond.setClarity(diamondPutRequest.getClarity());
+        existingDiamond.setQuantity(diamondPutRequest.getQuantity());
+
+        if(existingDiamond.getQuantity() != 0) {
+            existingDiamond.setStatus("Còn hàng");
+        } else {
+            existingDiamond.setStatus("Hết hàng");
+        }
 
         // Calculate weight based on carat size
         BigDecimal sizeDividedBy = diamondPutRequest.getCaratSize().divide(new BigDecimal(6.5), MathContext.DECIMAL128);
@@ -150,9 +191,11 @@ public class DiamondService {
         // If no matching diamond price is found
         if (diamondPrice == null) {
             if (diamondEntryPriceInput == null) {
-                existingDiamond.setDiamondEntryPrice(null); // Set to null if no input price and no matching price
+                existingDiamond.setDiamondEntryPrice(null);
+                existingDiamond.setDiamondPrice(null);
             } else {
                 existingDiamond.setDiamondEntryPrice(diamondEntryPriceInput); // Use input price if provided
+                existingDiamond.setDiamondPrice(diamondPrice);
             }
         } else {
             BigDecimal diamondEntryPriceDB = diamondPrice.getDiamondEntryPrice();
@@ -172,6 +215,7 @@ public class DiamondService {
             existingDiamond.setGrossDiamondPrice(null); // Ensure gross price is null if entry price is null
         }
 
+        updateDiamondStatusesAuto();
         diamondRepository.save(existingDiamond);
 
         if (priceMismatch) {

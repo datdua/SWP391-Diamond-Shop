@@ -21,7 +21,7 @@ public class Warranty {
     private String diamondID;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "expirationDate", nullable = false)
+    @Column(name = "expirationDate", nullable = true)
     private LocalDateTime expirationDate;
 
     @Column(name = "warrantyImage")

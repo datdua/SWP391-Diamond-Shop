@@ -67,14 +67,27 @@ public class JewelryService {
             jewelry.setJewelryEntryPrice(BigDecimal.ZERO);
         }
 
+
         if (jewelry.getWarrantyID() != null && !jewelry.getWarrantyID().isEmpty()) {
             if (!warrantyService.validateWarrantyID(jewelry.getWarrantyID())) {
-                return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã bảo hành không hợp lệ"));
+                return ResponseEntity.badRequest()
+                        .body(Collections.singletonMap("message", "Mã bảo hành không hợp lệ"));
             }
 
             if (jewelryRepository.existsByWarrantyID(jewelry.getWarrantyID())) {
-                return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Bảo hành đã được gán cho một trang sức khác"));
+                return ResponseEntity.badRequest()
+                        .body(Collections.singletonMap("message", "Bảo hành đã được gán cho một trang sức khác"));
             }
+        }
+
+        if (jewelry.getQuantity() < 0) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số lượng không hợp lệ"));
+        }
+
+        if (jewelry.getQuantity() != 0) {
+            jewelry.setStatus("Còn hàng");
+        } else {
+            jewelry.setStatus("Hết hàng");
         }
 
         // Calculate gross jewelry price = jewelry price * 1.2 (tax: 10%, wage: 10%)
@@ -84,26 +97,40 @@ public class JewelryService {
         jewelryRepository.save(jewelry);
 
         if (jewelry.getJewelryEntryPrice().compareTo(BigDecimal.ZERO) == 0) {
-            return ResponseEntity.ok().body(Collections.singletonMap("message", "Tạo trang sức thành công, vui lòng tạo giá cho trang sức này"));
+            return ResponseEntity.ok().body(Collections.singletonMap("message",
+                    "Tạo trang sức thành công, vui lòng tạo giá cho trang sức này"));
         } else {
             return ResponseEntity.ok().body(Collections.singletonMap("message", "Tạo trang sức thành công"));
         }
     }
 
-    public Map<String, String> updateJewelry(String jewelryID, JewelryPutRequest jewelryPutRequest) {
-        // validate jewelryID
+    public ResponseEntity<Map<String, String>> updateJewelry(String jewelryID, JewelryPutRequest jewelryPutRequest) {
         if (!validateJewelryID(jewelryID)) {
-            return Collections.singletonMap("message", "Mã trang sức không hợp lệ");
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã trang sức không hợp lệ"));
         }
 
         Jewelry existingJewelry = jewelryRepository.findByJewelryID(jewelryID);
         if (existingJewelry == null) {
-            return Collections.singletonMap("message", "Trang sức không tồn tại");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("message", "Không tìm thấy trang sức"));
         }
+
+        if (jewelryPutRequest.getQuantity() < 0) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số lượng không hợp lệ"));
+        }
+
         existingJewelry.setJewelryName(jewelryPutRequest.getJewelryName());
         existingJewelry.setGender(jewelryPutRequest.getGender());
         existingJewelry.setjewelryImage(jewelryPutRequest.getJewelryImage());
         existingJewelry.setJewelryEntryPrice(jewelryPutRequest.getJewelryEntryPrice());
+        existingJewelry.setWarrantyID(jewelryPutRequest.getWarrantyID());
+        existingJewelry.setQuantity(jewelryPutRequest.getQuantity());
+
+        if (jewelryPutRequest.getQuantity() != 0) {
+            existingJewelry.setStatus("Còn hàng");
+        } else {
+            existingJewelry.setStatus("Hết hàng");
+        }
 
         // update gross jewelry price follow the formula: grossJewelryPrice = jewelryEntryPrice * 1.2
         if (jewelryPutRequest.getJewelryEntryPrice() != null) {
@@ -111,14 +138,15 @@ public class JewelryService {
             existingJewelry.setGrossJewelryPrice(grossJewelryPrice);
         }
         jewelryRepository.save(existingJewelry);
-        return Collections.singletonMap("message", "Cập nhật thành công");
+        return ResponseEntity.ok().body(Collections.singletonMap("message", "Cập nhật trang sức thành công"));
     }
 
     @Transactional
     public ResponseEntity<Map<String, String>> deleteJewelry(@RequestBody List<String> jewelryIDs) {
         // validate diamondIDs
         if (jewelryIDs.isEmpty()) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không có mã kim cương để xóa"));
+            return ResponseEntity.badRequest()
+                    .body(Collections.singletonMap("message", "Không có mã kim cương để xóa"));
         }
 
         // case diamondIDs have a diamondID that is not valid
@@ -139,11 +167,13 @@ public class JewelryService {
             jewelryRepository.deleteAllById(existingJewelryIDs);
             return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các giá vàng thành công"));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy giá vàng để xóa"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("message", "Không tìm thấy giá vàng để xóa"));
         }
     }
 
-    public List<Jewelry> searchJewelry(String jewelryName, Float minjewelryEntryPrice, Float maxjewelryEntryPrice, String gender) {
+    public List<Jewelry> searchJewelry(String jewelryName, Float minjewelryEntryPrice, Float maxjewelryEntryPrice,
+            String gender) {
         Specification<Jewelry> spec = Specification.where(null);
 
         if (jewelryName != null) {
