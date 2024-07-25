@@ -15,7 +15,7 @@ function PaymentConfirm() {
     const vnp_BankCode = queryParams.get('vnp_BankCode');
     let vnp_BankTranNo = queryParams.get('vnp_BankTranNo');
     if (vnp_BankTranNo) {
-        vnp_BankTranNo = vnp_BankTranNo.split('VNP')[1];
+        vnp_BankTranNo = vnp_BankTranNo.split('VNP')[1]; 
     }
     let vnp_OrderInfo = queryParams.get('vnp_OrderInfo');
     if (vnp_OrderInfo) {
