@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder.In;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -44,6 +45,9 @@ public class Order {
     @Column(name = "promotionCode")
     private String promotionCode; 
 
+    @Column(name = "accountPoint")
+    private Integer accountPoint;
+
     @Column(name = "transactionNo")
     private Integer transactionNo;
 
@@ -61,7 +65,7 @@ public class Order {
 
     public Order(Integer orderID, Account account, LocalDateTime startorderDate, String orderStatus,
             LocalDateTime deliveryDate, BigDecimal totalOrder, String deliveryAddress, String phoneNumber,
-            String promotionCode, Integer transactionNo, List<OrderDetail> orderDetails) {
+            String promotionCode, Integer transactionNo, List<OrderDetail> orderDetails, Integer accountPoint) {
         this.orderID = orderID;
         this.account = account;
         this.startorderDate = startorderDate;
@@ -73,6 +77,7 @@ public class Order {
         this.promotionCode = promotionCode;
         this.transactionNo = transactionNo;
         this.orderDetails = orderDetails;
+        this.accountPoint = accountPoint;
     }
 
     public Integer getOrderID() {
@@ -170,6 +175,13 @@ public class Order {
     public void setCartItems(List<Cart> cartItems) {
         this.cartItems = cartItems;
     }
+    
+    public Integer getAccountPoint() {
+        return accountPoint;
+    }
 
+    public void setAccountPoint(Integer accountPoint) {
+        this.accountPoint = accountPoint;
+    }
     
 }

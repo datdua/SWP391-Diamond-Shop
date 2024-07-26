@@ -32,6 +32,7 @@ import com.example.diamondstore.model.Cart;
 import com.example.diamondstore.model.Certificate;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.model.OrderDetail;
+import com.example.diamondstore.model.Promotion;
 import com.example.diamondstore.model.Warranty;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.AccumulatePointsRepository;
@@ -39,6 +40,7 @@ import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.CertificateRepository;
 import com.example.diamondstore.repository.OrderDetailRepository;
 import com.example.diamondstore.repository.OrderRepository;
+import com.example.diamondstore.repository.PromotionRepository;
 import com.example.diamondstore.repository.WarrantyRepository;
 
 @RestController
@@ -65,6 +67,9 @@ public class PaymentController {
 
     @Autowired
     private CertificateRepository certificateRepository;
+
+    @Autowired
+    private PromotionRepository promotionRepository;
 
     // customer
     @GetMapping(value = "/customer/payments/create-payment", produces = "application/json;charset=UTF-8")
@@ -140,7 +145,7 @@ public class PaymentController {
     }
 
     // customer
-@GetMapping(value = "/customer/payments/vnpay-return", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/customer/payments/vnpay-return", produces = "application/json;charset=UTF-8")
     public ResponseEntity<TransactionStatusDTO> vnpayReturn(
             @RequestParam(value = "vnp_BankCode") String bankCode,
             @RequestParam(value = "vnp_OrderInfo") Integer orderID,
@@ -168,6 +173,8 @@ public class PaymentController {
 
             LocalDateTime effectiveDate = LocalDateTime.now();
             LocalDateTime expirationDate = effectiveDate.plus(1, ChronoUnit.YEARS);
+
+            Promotion promotion = promotionRepository.findByPromotionCode(order.getPromotionCode());
 
             // save order detail
             List<Cart> cartItems = cartRepository.findByOrder(order);
@@ -210,9 +217,8 @@ public class PaymentController {
                 orderDetail.setSizeJewelry(cart.getSizeJewelry());
                 orderDetail.setPrice(cart.getPrice());
                 orderDetail.setGrossCartPrice(cart.getGrossCartPrice());
-                // sum total price
-                BigDecimal totalPrice = cart.getGrossCartPrice().multiply(BigDecimal.valueOf(cart.getQuantity()));
-                orderDetail.setTotalPrice(totalPrice);
+                orderDetail.setTotalPrice(cart.getGrossCartPrice().multiply(BigDecimal.valueOf(cart.getQuantity())));
+                orderDetail.setPromotion(promotion); // Set the promotion here
                 orderDetailRepository.save(orderDetail);
 
                 // delete cart
@@ -230,4 +236,5 @@ public class PaymentController {
 
         return ResponseEntity.status(HttpStatus.OK).body(transactionStatusDTO);
     }
+
 }

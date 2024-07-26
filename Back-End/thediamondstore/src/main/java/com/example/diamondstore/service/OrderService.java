@@ -87,6 +87,7 @@ public class OrderService {
         order.setAccount(account);
         order.setDeliveryAddress(deliveryAddress);
         order.setPhoneNumber(phoneNumber);
+        order.setAccountPoint(pointsToRedeem);
         order.setStartorderDate(LocalDateTime.now());
         order.setDeliveryDate(LocalDateTime.now().plusDays(7));
         order.setOrderStatus("Đang xử lý");
