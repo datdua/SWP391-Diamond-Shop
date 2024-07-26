@@ -126,7 +126,7 @@ function DiamondPage() {
             const { content, totalPages } = await searchDiamond(filtersToUse, 1, resultsPerPage);
             setDiamonds(content);
             setTotalPages(totalPages);
-            setFilterApplied(true); 
+            setFilterApplied(true);
         } catch (error) {
             setError(error.message);
         } finally {
@@ -440,7 +440,7 @@ function DiamondPage() {
                                                                         <ul className="tm-product-actions">
                                                                             {showNotification && <p>Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.</p>}
                                                                             <li><Link to={`/product-detail/diamond/${item.diamondID}`}><i className="ion-android-cart"></i> Thêm giỏ hàng</Link></li>
-                                                                            <li><button  aria-label="Product Quickview"><i className="ion-eye"></i></button></li>
+                                                                            <li><button aria-label="Product Quickview"><i className="ion-eye"></i></button></li>
                                                                             <li><a href="#"><i className="ion-heart"></i></a></li>
                                                                         </ul>
                                                                         <div className="tm-product-badges">
@@ -457,7 +457,17 @@ function DiamondPage() {
                                                                             <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                                                             <span><i className="ion-android-star-outline"></i></span>
                                                                         </div>
-                                                                        <span className="tm-product-price">{item.diamondEntryPrice ? item.diamondEntryPrice.toLocaleString() : 'N/A'} VND</span>
+                                                                        <div className="tm-product-price-quantity-row" style= {{
+                                                                            display: 'flex',
+                                                                            justifyContent: 'space-between',
+                                                                            alignItems: 'center',
+                                                                            
+                                                                        }}>
+                                                                            <span className="tm-product-price">
+                                                                                {item.diamondEntryPrice ? item.diamondEntryPrice.toLocaleString() : 'N/A'} VND
+                                                                            </span>
+                                                                            <span className="tm-product-quantity">Số lượng: {item.quantity}</span>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
