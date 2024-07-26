@@ -5,6 +5,8 @@ import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -138,7 +140,7 @@ public class PaymentController {
     }
 
     // customer
-    @GetMapping(value = "/customer/payments/vnpay-return", produces = "application/json;charset=UTF-8")
+@GetMapping(value = "/customer/payments/vnpay-return", produces = "application/json;charset=UTF-8")
     public ResponseEntity<TransactionStatusDTO> vnpayReturn(
             @RequestParam(value = "vnp_BankCode") String bankCode,
             @RequestParam(value = "vnp_OrderInfo") Integer orderID,
@@ -164,12 +166,20 @@ public class PaymentController {
             accumulatePoints.setPoint(accumulatePoints.getPoint() + 100);
             accumulatePointsRepository.save(accumulatePoints);
 
+            LocalDateTime effectiveDate = LocalDateTime.now();
+            LocalDateTime expirationDate = effectiveDate.plus(1, ChronoUnit.YEARS);
+
             // save order detail
             List<Cart> cartItems = cartRepository.findByOrder(order);
             for (Cart cart : cartItems) {
                 OrderDetail orderDetail = new OrderDetail();
                 if (cart.getDiamond() != null) {
                     Warranty diamondWarranty = warrantyRepository.findByDiamondID(cart.getDiamond().getDiamondID());
+                    if (diamondWarranty != null) {
+                        diamondWarranty.setEffectiveDate(effectiveDate);
+                        diamondWarranty.setExpirationDate(expirationDate);
+                        warrantyRepository.save(diamondWarranty);
+                    }
                     Certificate diamondCertificate = certificateRepository
                             .findByDiamondID(cart.getDiamond().getDiamondID());
                     orderDetail.setDiamondWarrantyImage(
@@ -182,6 +192,11 @@ public class PaymentController {
                 }
                 if (cart.getJewelry() != null) {
                     Warranty jewelryWarranty = warrantyRepository.findByJewelryID(cart.getJewelry().getJewelryID());
+                    if (jewelryWarranty != null) {
+                        jewelryWarranty.setEffectiveDate(effectiveDate);
+                        jewelryWarranty.setExpirationDate(expirationDate);
+                        warrantyRepository.save(jewelryWarranty);
+                    }
                     orderDetail.setJewelryWarrantyImage(
                             jewelryWarranty != null ? jewelryWarranty.getwarrantyImage() : null);
                 } else {
