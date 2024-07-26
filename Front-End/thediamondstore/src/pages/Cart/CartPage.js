@@ -94,23 +94,23 @@ function CartPage() {
                                         {cartItems.map((item, index) => (
                                             <tr key={`${item.cartID}-${index}`}>
                                                 <td>
-                                                    {item.diamondID && (
-                                                        <Link to={`/product-detail/diamond/${item.diamondID}`} className="tm-cart-productimage">
-                                                            <img src={item.diamondImage} alt="Diamond" />
+                                                    {item.diamond && (
+                                                        <Link to={`/product-detail/diamond/${item.diamond.diamondID}`} className="tm-cart-productimage">
+                                                            <img src={item.diamond.diamondImage} alt="Diamond" />
                                                         </Link>
                                                     )}
-                                                    {item.jewelryID && (
-                                                        <Link to={`/product-detail/jewelry/${item.jewelryID}`} className="tm-cart-productimage">
-                                                            <img src={item.jewelryImage} alt="Jewelry" />
+                                                    {item.jewelry && (
+                                                        <Link to={`/product-detail/jewelry/${item.jewelry.jewelryID}`} className="tm-cart-productimage">
+                                                            <img src={item.jewelry.jewelryImage} alt="Jewelry" />
                                                         </Link>
                                                     )}
                                                 </td>
                                                 <td>
-                                                    {item.diamondID && (
-                                                        <Link to={`/product-detail/diamond/${item.diamondID}`} className="tm-cart-productname">{item.diamondName}</Link>
+                                                    {item.diamond && (
+                                                        <Link to={`/product-detail/diamond/${item.diamond.diamondID}`} className="tm-cart-productname">{item.diamond.diamondName}</Link>
                                                     )}
-                                                    {item.jewelryID && (
-                                                        <Link to={`/product-detail/jewelry/${item.jewelryID}`} className="tm-cart-productname">{item.jewelryName}</Link>
+                                                    {item.jewelry && (
+                                                        <Link to={`/product-detail/jewelry/${item.jewelry.jewelryID}`} className="tm-cart-productname">{item.jewelry.jewelryName}</Link>
                                                     )}
                                                 </td>
                                                 <td className="tm-cart-price">{item.price ? item.price.toLocaleString() : 'N/A'} VND</td>

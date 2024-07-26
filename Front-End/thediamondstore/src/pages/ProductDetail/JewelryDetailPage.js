@@ -167,6 +167,10 @@ function JewelryDetailPage() {
                                   {jewelry.jewelryID}
                                 </div>
                                 <div className="tm-prodetails-singleinfo" style={{marginTop: '15px' }}>
+                                  <b>Giới tính: </b>
+                                  {jewelry.gender}
+                                </div>
+                                <div className="tm-prodetails-singleinfo" style={{marginTop: '15px' }}>
                                   <b>Chọn Kích Cỡ: </b>
                                   <select
                                     value={sizeJewelry}
@@ -187,10 +191,6 @@ function JewelryDetailPage() {
                                     style={{ marginLeft: "10px", background: "#f2ba59", borderRadius: "5px", textAlign: "center" }}
                                   >Cách đo ni
                                   </Button>
-                                </div>
-                                <div className="tm-prodetails-singleinfo">
-                                  <b>Giới tính: </b>
-                                  {jewelry.gender}
                                 </div>
                               </div>
                               <div className="tm-prodetails-quantitycart">
