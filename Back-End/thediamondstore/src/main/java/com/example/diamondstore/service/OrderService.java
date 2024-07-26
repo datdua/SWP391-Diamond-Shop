@@ -87,6 +87,7 @@ public class OrderService {
         order.setAccount(account);
         order.setDeliveryAddress(deliveryAddress);
         order.setPhoneNumber(phoneNumber);
+        order.setAccountPoint(pointsToRedeem);
         order.setStartorderDate(LocalDateTime.now());
         order.setDeliveryDate(LocalDateTime.now().plusDays(7));
         order.setOrderStatus("Đang xử lý");
@@ -147,7 +148,6 @@ public class OrderService {
         // Lưu Order một lần nữa để cập nhật totalOrder
         order = orderRepository.save(order);
 
-        // Schedule a task to check the order status after 1 minute
         scheduleOrderStatusCheck(order);
 
         return order;
@@ -159,24 +159,25 @@ public class OrderService {
             public void run() {
                 handleOrderTimeout(order);
             }
-        }, 150000); //  2.5 minutes
+        }, 150000); // 2.5 minutes
     }
 
     @Transactional
     private void handleOrderTimeout(Order order) {
-        if ("Đang xử lý".equals(order.getOrderStatus())) {
-            order.setOrderStatus("Thất bại");
-            orderRepository.save(order);
+        // Reload the order from the database to get the latest status
+        Order currentOrder = orderRepository.findById(order.getOrderID()).orElse(null);
+        if (currentOrder != null && currentOrder.getOrderStatus().equals("Đang xử lý")) {
+            currentOrder.setOrderStatus("Thất bại");
+            orderRepository.save(currentOrder);
 
-            for (Cart cart : order.getCartItems()) {
-                Diamond diamond = cart.getDiamond();
-                if (diamond != null) {
+            // Hoàn trả số lượng sản phẩm về hệ thống
+            for (Cart cart : currentOrder.getCartItems()) {
+                if (cart.getDiamond() != null) {
+                    Diamond diamond = cart.getDiamond();
                     diamond.setQuantity(diamond.getQuantity() + cart.getQuantity());
                     diamondRepository.save(diamond);
-                }
-
-                Jewelry jewelry = cart.getJewelry();
-                if (jewelry != null) {
+                } else if (cart.getJewelry() != null) {
+                    Jewelry jewelry = cart.getJewelry();
                     jewelry.setQuantity(jewelry.getQuantity() + cart.getQuantity());
                     jewelryRepository.save(jewelry);
                 }
@@ -188,7 +189,7 @@ public class OrderService {
         Order order = orderRepository.findById(orderID)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found"));
 
-        if (!order.getOrderStatus().equals("Đang xử lý")) {
+        if (!order.getOrderStatus().equals("Đang xử lý") && !order.getOrderStatus().equals("Thất bại")) {
             throw new IllegalStateException("Chỉ Order có Status 'Đang xử lý' mới được xóa");
         }
 
