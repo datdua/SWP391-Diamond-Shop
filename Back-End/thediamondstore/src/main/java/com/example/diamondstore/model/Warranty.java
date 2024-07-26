@@ -21,7 +21,11 @@ public class Warranty {
     private String diamondID;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "expirationDate", nullable = false)
+    @Column(name = "effectiveDate", nullable = true)
+    private LocalDateTime effectiveDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "expirationDate", nullable = true)
     private LocalDateTime expirationDate;
 
     @Column(name = "warrantyImage")
@@ -33,12 +37,14 @@ public class Warranty {
     @Column(name = "warrantyStatus")
     private String warrantyStatus;
 
+
     public Warranty() {
     }
 
-    public Warranty(String warrantyID, String diamondID, LocalDateTime expirationDate, String warrantyImage, String jewelryID, String warrantyStatus) {
+    public Warranty(String warrantyID, String diamondID, LocalDateTime effectiveDate, LocalDateTime expirationDate, String warrantyImage, String jewelryID, String warrantyStatus) {
         this.warrantyID = warrantyID;
         this.diamondID = diamondID;
+        this.effectiveDate = effectiveDate;
         this.expirationDate = expirationDate;
         this.warrantyImage = warrantyImage;
         this.jewelryID = jewelryID;
@@ -91,5 +97,13 @@ public class Warranty {
 
     public void setWarrantyStatus(String warrantyStatus) {
         this.warrantyStatus = warrantyStatus;
+    }
+
+    public LocalDateTime getEffectiveDate() {
+        return effectiveDate;
+    }
+
+    public void setEffectiveDate(LocalDateTime effectiveDate) {
+        this.effectiveDate = effectiveDate;
     }
 }

@@ -243,6 +243,8 @@ const JewelryManagerPage = () => {
                       <th>Bảo Hành</th>
                       <th>Giá Nhập Trang Sức</th>
                       <th>Giá Bán Trang Sức</th>
+                      <th>Số Lượng</th>
+                      <th>Trạng Thái</th>
                       <th>Thao Tác</th>
                     </tr>
                   </thead>
@@ -301,6 +303,8 @@ const JewelryManagerPage = () => {
                               " VNĐ"
                               : "Chưa có giá bán"}
                           </td>
+                          <td>{jewelry.quantity}</td>
+                          <td>{jewelry.status}</td>
                           <td>
                             <Tooltip
                               describeChild

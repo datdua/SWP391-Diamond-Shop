@@ -2,10 +2,12 @@ package com.example.diamondstore.service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.diamondstore.model.Cart;
@@ -36,13 +38,20 @@ public class CartService {
     }
 
     @Transactional
-    public void addItemToCart(Integer accountID, String diamondID, String jewelryID, Integer sizeJewelry, Integer quantity) {
+    public ResponseEntity<?> addItemToCart(Integer accountID, String diamondID, String jewelryID, Integer sizeJewelry, Integer quantity) {
+        if (quantity <= 0) {
+            return ResponseEntity.badRequest().body("Số lượng phải lớn hơn 0");
+        }
+
         Cart cart = new Cart();
         cart.setAccount(accountRepository.findById(accountID).orElse(null));
 
         if (diamondID != null) {
             Diamond diamond = diamondRepository.findById(diamondID).orElse(null);
             if (diamond != null) {
+                if (quantity > diamond.getQuantity()) {
+                    return ResponseEntity.badRequest().body("Số lượng kim cương không đủ");
+                }
                 cart.setDiamond(diamond);
             }
         }
@@ -50,28 +59,40 @@ public class CartService {
         if (jewelryID != null) {
             Jewelry jewelry = jewelryRepository.findById(jewelryID).orElse(null);
             if (jewelry != null) {
+                if (quantity > jewelry.getQuantity()) {
+                    return ResponseEntity.badRequest().body("Số lượng trang sức không đủ");
+                }
                 cart.setJewelry(jewelry);
                 cart.setSizeJewelry(sizeJewelry);
             }
         }
 
-        
         cart.setQuantity(quantity);
-
         calculateAndSetTotalPrice(cart);
         cartRepository.save(cart);
+        return ResponseEntity.ok("Sản phẩm đã được thêm vào giỏ hàng.");
     }
 
     @Transactional
-    public void updateCartItem(Integer cartID, Integer accountID, String diamondID, String jewelryID, Integer sizeJewelry, Integer quantity) {
+    public ResponseEntity<?> updateCartItem(Integer cartID, Integer accountID, String diamondID, String jewelryID,
+            Integer sizeJewelry, Integer quantity) {
         Cart cartItem = cartRepository.findById(cartID).orElse(null);
         if (cartItem != null) {
             cartItem.setAccount(accountRepository.findById(accountID).orElse(null));
 
+            if (quantity <= 0) {
+                return ResponseEntity.badRequest().body("Số lượng phải lớn hơn 0");
+            }
+
             if (diamondID != null) {
                 Diamond diamond = diamondRepository.findById(diamondID).orElse(null);
                 if (diamond != null) {
+                    if (quantity > diamond.getQuantity()) {
+                        return ResponseEntity.badRequest().body("Số lượng kim cương không đủ");
+                    }
                     cartItem.setDiamond(diamond);
+                } else {
+                    return ResponseEntity.badRequest().body("Kim cương không tồn tại");
                 }
             }
 
@@ -80,14 +101,17 @@ public class CartService {
                 if (jewelry != null) {
                     cartItem.setJewelry(jewelry);
                     cartItem.setSizeJewelry(sizeJewelry);
+                } else {
+                    return ResponseEntity.badRequest().body("Trang sức không tồn tại");
                 }
             }
 
             cartItem.setQuantity(quantity);
             calculateAndSetTotalPrice(cartItem);
             cartRepository.save(cartItem);
+            return ResponseEntity.ok(cartItem);
         } else {
-            throw new IllegalArgumentException("Không tìm thấy sản phẩm trong giỏ hàng.");
+            return ResponseEntity.badRequest().body("Giỏ hàng không tồn tại");
         }
     }
 

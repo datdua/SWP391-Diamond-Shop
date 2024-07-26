@@ -36,6 +36,10 @@ public class OrderDetail {
     @JoinColumn(name = "jewelryID", nullable = true)
     private Jewelry jewelry;
 
+    @ManyToOne
+    @JoinColumn(name = "promotionID", nullable = true)
+    private Promotion promotion; 
+
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
@@ -65,7 +69,7 @@ public class OrderDetail {
 
     public OrderDetail(Integer orderDetailID, Order order, Account account, Diamond diamond, Jewelry jewelry,
             Integer quantity, Integer sizeJewelry, BigDecimal price, BigDecimal grossCartPrice, BigDecimal totalPrice,
-            String diamondWarrantyImage, String diamondCertificateImage, String jewelryWarrantyImage) {
+            String diamondWarrantyImage, String diamondCertificateImage, String jewelryWarrantyImage, Promotion promotion) {
         this.orderDetailID = orderDetailID;
         this.order = order;
         this.account = account;
@@ -79,6 +83,7 @@ public class OrderDetail {
         this.diamondWarrantyImage = diamondWarrantyImage;
         this.diamondCertificateImage = diamondCertificateImage;
         this.jewelryWarrantyImage = jewelryWarrantyImage;
+        this.promotion = promotion;
     }
 
     public Integer getOrderDetailID() {
@@ -185,6 +190,13 @@ public class OrderDetail {
         this.jewelryWarrantyImage = jewelryWarrantyImage;
     }
 
+    public Promotion getPromotion() {
+        return promotion;
+    }
+
+    public void setPromotion(Promotion promotion) {
+        this.promotion = promotion;
+    }
     
 
 }

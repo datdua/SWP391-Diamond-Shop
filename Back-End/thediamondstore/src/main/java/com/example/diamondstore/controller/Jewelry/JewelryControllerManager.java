@@ -34,11 +34,7 @@ public class JewelryControllerManager {
 
     @PutMapping(value = "/update/{jewelryID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Map<String, String>> updateJewelryAdmin(@PathVariable String jewelryID, @RequestBody JewelryPutRequest jewelryPutRequest) {
-        Map<String, String> response = jewelryService.updateJewelry(jewelryID, jewelryPutRequest);
-        if ("Trang sức không tồn tại".equals(response.get("message"))) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(response);
+        return jewelryService.updateJewelry(jewelryID, jewelryPutRequest);
     }
 
     @DeleteMapping(value = "/delete", produces = "application/json;charset=UTF-8")

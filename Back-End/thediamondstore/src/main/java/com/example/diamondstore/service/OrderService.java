@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.transaction.Transactional;
 
@@ -24,6 +26,8 @@ import com.example.diamondstore.DTO.OrderSummaryDTO;
 import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.AccumulatePoints;
 import com.example.diamondstore.model.Cart;
+import com.example.diamondstore.model.Diamond;
+import com.example.diamondstore.model.Jewelry;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.model.Promotion;
 import com.example.diamondstore.repository.AccountRepository;
@@ -31,6 +35,7 @@ import com.example.diamondstore.repository.AccumulatePointsRepository;
 import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.CertificateRepository;
 import com.example.diamondstore.repository.DiamondRepository;
+import com.example.diamondstore.repository.JewelryRepository;
 import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.repository.PromotionRepository;
 import com.example.diamondstore.repository.WarrantyRepository;
@@ -63,8 +68,12 @@ public class OrderService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private JewelryRepository jewelryRepository;
+
     @Transactional
-    public Order createOrder(int accountID, String deliveryAddress, String promotionCode, Integer pointsToRedeem, String phoneNumber) {
+    public Order createOrder(int accountID, String deliveryAddress, String promotionCode, Integer pointsToRedeem,
+            String phoneNumber) {
         List<Cart> cartItems = cartRepository.findByAccount_AccountID(accountID);
 
         if (cartItems.isEmpty()) {
@@ -78,6 +87,7 @@ public class OrderService {
         order.setAccount(account);
         order.setDeliveryAddress(deliveryAddress);
         order.setPhoneNumber(phoneNumber);
+        order.setAccountPoint(pointsToRedeem);
         order.setStartorderDate(LocalDateTime.now());
         order.setDeliveryDate(LocalDateTime.now().plusDays(7));
         order.setOrderStatus("Đang xử lý");
@@ -89,6 +99,24 @@ public class OrderService {
 
         BigDecimal totalOrder = BigDecimal.ZERO;
         for (Cart cart : cartItems) {
+            Diamond diamond = cart.getDiamond();
+            if (diamond != null) {
+                if (cart.getQuantity() > diamond.getQuantity()) {
+                    throw new IllegalArgumentException("Số lượng kim cương không đủ");
+                }
+                diamond.setQuantity(diamond.getQuantity() - cart.getQuantity());
+                diamondRepository.save(diamond);
+            }
+
+            Jewelry jewelry = cart.getJewelry();
+            if (jewelry != null) {
+                if (cart.getQuantity() > jewelry.getQuantity()) {
+                    throw new IllegalArgumentException("Số lượng trang sức không đủ");
+                }
+                jewelry.setQuantity(jewelry.getQuantity() - cart.getQuantity());
+                jewelryRepository.save(jewelry);
+            }
+
             totalOrder = totalOrder.add(cart.getGrossCartPrice());
             cart.setOrder(order);
             cart.setCartStatus("Đang chờ thanh toán");
@@ -103,7 +131,8 @@ public class OrderService {
         }
 
         if (pointsToRedeem != null && pointsToRedeem > 0) {
-            AccumulatePoints accumulatePoints = accumulatePointsRepository.findById(accountID).orElseThrow(() -> new IllegalArgumentException("Khách hàng không tồn tại"));
+            AccumulatePoints accumulatePoints = accumulatePointsRepository.findById(accountID)
+                    .orElseThrow(() -> new IllegalArgumentException("Khách hàng không tồn tại"));
             int availablePoints = accumulatePoints.getPoint();
             if (pointsToRedeem > availablePoints) {
                 throw new IllegalArgumentException("Điểm không đủ");
@@ -118,14 +147,49 @@ public class OrderService {
 
         // Lưu Order một lần nữa để cập nhật totalOrder
         order = orderRepository.save(order);
+
+        scheduleOrderStatusCheck(order);
+
         return order;
+    }
+
+    private void scheduleOrderStatusCheck(Order order) {
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handleOrderTimeout(order);
+            }
+        }, 150000); // 2.5 minutes
+    }
+
+    @Transactional
+    private void handleOrderTimeout(Order order) {
+        // Reload the order from the database to get the latest status
+        Order currentOrder = orderRepository.findById(order.getOrderID()).orElse(null);
+        if (currentOrder != null && currentOrder.getOrderStatus().equals("Đang xử lý")) {
+            currentOrder.setOrderStatus("Thất bại");
+            orderRepository.save(currentOrder);
+
+            // Hoàn trả số lượng sản phẩm về hệ thống
+            for (Cart cart : currentOrder.getCartItems()) {
+                if (cart.getDiamond() != null) {
+                    Diamond diamond = cart.getDiamond();
+                    diamond.setQuantity(diamond.getQuantity() + cart.getQuantity());
+                    diamondRepository.save(diamond);
+                } else if (cart.getJewelry() != null) {
+                    Jewelry jewelry = cart.getJewelry();
+                    jewelry.setQuantity(jewelry.getQuantity() + cart.getQuantity());
+                    jewelryRepository.save(jewelry);
+                }
+            }
+        }
     }
 
     public void cancelOrder(int orderID) {
         Order order = orderRepository.findById(orderID)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found"));
 
-        if (!order.getOrderStatus().equals("Đang xử lý")) {
+        if (!order.getOrderStatus().equals("Đang xử lý") && !order.getOrderStatus().equals("Thất bại")) {
             throw new IllegalStateException("Chỉ Order có Status 'Đang xử lý' mới được xóa");
         }
 
@@ -181,7 +245,7 @@ public class OrderService {
 
             if (deliveryDate != null && deliveryDate.isAfter(today)) {
                 existingOrder.setDeliveryDate(deliveryDate);
-            }else {
+            } else {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ngày giao hàng không hợp lệ");
             }
 
@@ -280,7 +344,8 @@ public class OrderService {
         return summaries;
     }
 
-    // tính tổng totalOrder của tất cả Order từng ngày trong tháng (đã chọn) trong năm (đã chọn)
+    // tính tổng totalOrder của tất cả Order từng ngày trong tháng (đã chọn) trong
+    // năm (đã chọn)
     public List<OrderSummaryDTO> getRevenueDayInMonthInYear(int month, int year) {
         int dayOfMonth = LocalDate.of(year, month, 1).lengthOfMonth();
         List<OrderSummaryDTO> summaries = new ArrayList<>();
@@ -339,27 +404,28 @@ public class OrderService {
         return summaries;
     }
 
-    //last in first out order with accountID
+    // last in first out order with accountID
     public Integer LIFO(Integer accountID) {
         Optional<Account> accountOpt = accountRepository.findById(accountID);
-    
+
         if (accountOpt.isPresent()) {
             Account account = accountOpt.get();
             List<Order> orders = orderRepository.findByAccount(account);
-    
+
             if (orders.isEmpty()) {
                 return null; // or throw an exception if preferred
             }
-    
+
             // Sort orders by creation date or ID in descending order
-            orders.sort((o1, o2) -> o2.getStartorderDate().compareTo(o1.getStartorderDate())); // or o2.getId().compareTo(o1.getId())
-    
+            orders.sort((o1, o2) -> o2.getStartorderDate().compareTo(o1.getStartorderDate())); // or
+                                                                                               // o2.getId().compareTo(o1.getId())
+
             // Get the first order ID from the sorted list
             Integer max = orders.get(0).getOrderID();
-    
+
             return max;
         } else {
             return null;
         }
-    }   
+    }
 }

@@ -3,12 +3,16 @@ package com.example.diamondstore.model;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.List;
 
 @Entity
 @Table(name = "DiamondPrice")
@@ -95,4 +99,5 @@ public class DiamondPrice {
     public void setCaratSize(BigDecimal caratSize) {
         this.caratSize = caratSize;
     }
+
 }
