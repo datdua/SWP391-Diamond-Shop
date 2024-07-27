@@ -2,21 +2,44 @@ package com.example.diamondstore.model;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "Payment")
 public class Payment {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "paymentID")
     private Integer paymentID;
+
+    @Column(name = "orderID")
     private Integer orderID;
+
+    @Column(name = "paymentMethod")
     private String paymentMethod;
+
+    @Column(name = "paymentStatus")
     private String paymentStatus;
+
+    @Column(name = "transDate")
     private String transDate;
+
+    @Column(name = "bankCode")
     private String bankCode;
+
+    @Column(name = "transactionNo", nullable = true)
     private Integer transactionNo;
+
+    @Column(name = "responseCode")
     private String responseCode;
+
+    @Column(name = "amount", precision = 18, scale = 2)
     private BigDecimal amount;
 
     public Payment() {

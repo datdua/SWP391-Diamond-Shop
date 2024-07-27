@@ -18,6 +18,5 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
     List<Account> findByRole(String role);
 
     List<Account> findByRoleNot(String role);
-
 }
 

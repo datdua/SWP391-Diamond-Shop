@@ -239,14 +239,21 @@ public class PaymentService {
 
             // Save payment
             Payment payment = paymentRepository.findByOrderID(orderID);
-            payment.setPaymentStatus("Thất bại");
-            payment.setBankCode(bankCode);
-            payment.setTransactionNo(transactionNo);
-            payment.setResponseCode(responseCode);
-            paymentRepository.save(payment);
-
+            if (payment == null) {
+                transactionStatusDTO.setStatus("No");
+                transactionStatusDTO.setMessage("Chưa có thông tin thanh toán");
+                transactionStatusDTO.setData("");
+                return ResponseEntity.status(HttpStatus.OK).body(transactionStatusDTO);
+            } else {
+                payment.setPaymentStatus("Thanh toán thất bại");
+                payment.setBankCode(bankCode);
+                payment.setTransactionNo(transactionNo);
+                payment.setResponseCode(responseCode);
+                paymentRepository.save(payment); 
+            }
+            
             order.setOrderStatus("Thanh toán thất bại");
-            orderRepository.save(order);
+            orderRepository.save(order); 
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(transactionStatusDTO);

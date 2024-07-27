@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.transaction.Transactional;
 
@@ -148,42 +146,42 @@ public class OrderService {
         // Lưu Order một lần nữa để cập nhật totalOrder
         order = orderRepository.save(order);
 
-        scheduleOrderStatusCheck(order);
+        // scheduleOrderStatusCheck(order);
 
         return order;
     }
 
-    private void scheduleOrderStatusCheck(Order order) {
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                handleOrderTimeout(order);
-            }
-        }, 150000); // 2.5 minutes
-    }
+    // private void scheduleOrderStatusCheck(Order order) {
+    //     new Timer().schedule(new TimerTask() {
+    //         @Override
+    //         public void run() {
+    //             handleOrderTimeout(order);
+    //         }
+    //     }, 150000); // 2.5 minutes
+    // }
 
-    @Transactional
-    private void handleOrderTimeout(Order order) {
-        // Reload the order from the database to get the latest status
-        Order currentOrder = orderRepository.findById(order.getOrderID()).orElse(null);
-        if (currentOrder != null && currentOrder.getOrderStatus().equals("Đang xử lý")) {
-            currentOrder.setOrderStatus("Thất bại");
-            orderRepository.save(currentOrder);
+    // @Transactional
+    // private void handleOrderTimeout(Order order) {
+    //     // Reload the order from the database to get the latest status
+    //     Order currentOrder = orderRepository.findById(order.getOrderID()).orElse(null);
+    //     if (currentOrder != null && currentOrder.getOrderStatus().equals("Đang xử lý")) {
+    //         currentOrder.setOrderStatus("Thất bại");
+    //         orderRepository.save(currentOrder);
 
-            // Hoàn trả số lượng sản phẩm về hệ thống
-            for (Cart cart : currentOrder.getCartItems()) {
-                if (cart.getDiamond() != null) {
-                    Diamond diamond = cart.getDiamond();
-                    diamond.setQuantity(diamond.getQuantity() + cart.getQuantity());
-                    diamondRepository.save(diamond);
-                } else if (cart.getJewelry() != null) {
-                    Jewelry jewelry = cart.getJewelry();
-                    jewelry.setQuantity(jewelry.getQuantity() + cart.getQuantity());
-                    jewelryRepository.save(jewelry);
-                }
-            }
-        }
-    }
+    //         // Hoàn trả số lượng sản phẩm về hệ thống
+    //         for (Cart cart : currentOrder.getCartItems()) {
+    //             if (cart.getDiamond() != null) {
+    //                 Diamond diamond = cart.getDiamond();
+    //                 diamond.setQuantity(diamond.getQuantity() + cart.getQuantity());
+    //                 diamondRepository.save(diamond);
+    //             } else if (cart.getJewelry() != null) {
+    //                 Jewelry jewelry = cart.getJewelry();
+    //                 jewelry.setQuantity(jewelry.getQuantity() + cart.getQuantity());
+    //                 jewelryRepository.save(jewelry);
+    //             }
+    //         }
+    //     }
+    // }
 
     public void cancelOrder(int orderID) {
         Order order = orderRepository.findById(orderID)
