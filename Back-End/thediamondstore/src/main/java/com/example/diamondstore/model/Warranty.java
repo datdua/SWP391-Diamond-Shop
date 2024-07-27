@@ -1,13 +1,10 @@
 package com.example.diamondstore.model;
 
-import java.time.LocalDateTime;
+import javax.persistence.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.List;
 
 @Entity
 @Table(name = "Warranty")
@@ -20,35 +17,24 @@ public class Warranty {
     @Column(name = "diamondID", nullable = true)
     private String diamondID;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "effectiveDate", nullable = true)
-    private LocalDateTime effectiveDate;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "expirationDate", nullable = true)
-    private LocalDateTime expirationDate;
-
     @Column(name = "warrantyImage")
     private String warrantyImage;
 
     @Column(name = "jewelryID", nullable = true)
     private String jewelryID;
 
-    @Column(name = "warrantyStatus")
-    private String warrantyStatus;
-
+    @OneToMany(mappedBy = "warranty", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<WarrantyHistory> warrantyHistories;
 
     public Warranty() {
     }
 
-    public Warranty(String warrantyID, String diamondID, LocalDateTime effectiveDate, LocalDateTime expirationDate, String warrantyImage, String jewelryID, String warrantyStatus) {
+    public Warranty(String warrantyID, String diamondID, String warrantyImage, String jewelryID) {
         this.warrantyID = warrantyID;
         this.diamondID = diamondID;
-        this.effectiveDate = effectiveDate;
-        this.expirationDate = expirationDate;
         this.warrantyImage = warrantyImage;
         this.jewelryID = jewelryID;
-        this.warrantyStatus = warrantyStatus;
     }
 
     public String getWarrantyID() {
@@ -67,19 +53,11 @@ public class Warranty {
         this.diamondID = diamondID;
     }
 
-    public LocalDateTime getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(LocalDateTime expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
-    public String getwarrantyImage() {
+    public String getWarrantyImage() {
         return warrantyImage;
     }
 
-    public void setwarrantyImage(String warrantyImage) {
+    public void setWarrantyImage(String warrantyImage) {
         this.warrantyImage = warrantyImage;
     }
 
@@ -91,19 +69,11 @@ public class Warranty {
         this.jewelryID = jewelryID;
     }
 
-    public String getWarrantyStatus() {
-        return warrantyStatus;
+    public List<WarrantyHistory> getWarrantyHistories() {
+        return warrantyHistories;
     }
 
-    public void setWarrantyStatus(String warrantyStatus) {
-        this.warrantyStatus = warrantyStatus;
-    }
-
-    public LocalDateTime getEffectiveDate() {
-        return effectiveDate;
-    }
-
-    public void setEffectiveDate(LocalDateTime effectiveDate) {
-        this.effectiveDate = effectiveDate;
+    public void setWarrantyHistories(List<WarrantyHistory> warrantyHistories) {
+        this.warrantyHistories = warrantyHistories;
     }
 }
