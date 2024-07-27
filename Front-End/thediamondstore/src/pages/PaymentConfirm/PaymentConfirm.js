@@ -15,7 +15,7 @@ function PaymentConfirm() {
     const vnp_BankCode = queryParams.get('vnp_BankCode');
     let vnp_BankTranNo = queryParams.get('vnp_BankTranNo');
     if (vnp_BankTranNo) {
-        vnp_BankTranNo = vnp_BankTranNo.split('VNP')[1];
+        vnp_BankTranNo = vnp_BankTranNo.split('VNP')[1]; 
     }
     let vnp_OrderInfo = queryParams.get('vnp_OrderInfo');
     if (vnp_OrderInfo) {
@@ -24,7 +24,7 @@ function PaymentConfirm() {
     const vnp_ResponseCode = queryParams.get('vnp_ResponseCode');
 
     // Your base API URL
-    let apiUrl = "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/customer/payments/vnpay-return";
+    let apiUrl = "http://localhost:8080/api/customer/payments/vnpay-return";
 
     // Append the query parameters to the API URL
     apiUrl += `?vnp_BankCode=${encodeURIComponent(vnp_BankCode)}&vnp_OrderInfo=${encodeURIComponent(vnp_OrderInfo)}&vnp_ResponseCode=${encodeURIComponent(vnp_ResponseCode)}&vnp_TransactionNo=${encodeURIComponent(vnp_BankTranNo)}`;

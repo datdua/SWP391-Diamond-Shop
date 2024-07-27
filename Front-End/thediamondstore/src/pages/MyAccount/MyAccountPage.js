@@ -103,7 +103,7 @@ function MyAccountPage() {
     };
 
     return (
-      orderStatus !== "Đã thanh toán" && (
+      orderStatus === "Đang xử lý" && (
         <button onClick={handlePayment} className="tm-button tm-button-small" style={{backgroundColor:'#005aaa'}}>
           <AccountBalanceIcon/>
         </button>

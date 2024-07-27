@@ -1,5 +1,7 @@
 package com.example.diamondstore.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,19 +31,19 @@ public class OrderDetailController {
     }
 
     // admin + manager
-    @GetMapping(value = "/admin/orderDetail-management/orderDetails/get-orderDetail/{orderID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/orderDetail-management/orderDetails/get-orderDetail/{orderID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrderDetailByOrderID(@PathVariable Integer orderID) {
         return ResponseEntity.ok(orderDetailService.getOrderDetailByOrderID(orderID));
     }
 
     // customer
     @GetMapping(value = "/customer/orderDetails/get-orderDetail/{orderID}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> getOrderDetailByOrderIDCustomer(@PathVariable Integer  orderID) {
+    public ResponseEntity<?> getOrderDetailByOrderIDCustomer(@PathVariable Integer orderID) {
         return ResponseEntity.ok(orderDetailService.getOrderDetailByOrderID(orderID));
     }
 
     // admin + manager
-    @GetMapping(value = "/admin/orderDetail-management/orderDetails/{orderDetailID}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/orderDetail-management/orderDetails/{orderDetailID}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<?> getOrderDetail(@PathVariable Integer orderDetailID) {
         return ResponseEntity.ok(orderDetailService.getOrderDetail(orderDetailID));
     }

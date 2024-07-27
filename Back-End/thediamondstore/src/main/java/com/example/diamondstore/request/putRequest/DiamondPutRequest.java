@@ -2,6 +2,7 @@ package com.example.diamondstore.request.putRequest;
 
 import java.math.BigDecimal;
 
+
 public class DiamondPutRequest {
 
     private String warrantyID;
@@ -16,11 +17,14 @@ public class DiamondPutRequest {
     private String shape;
     private String diamondName;
     private String origin;
+    private Integer quantity;
 
     public DiamondPutRequest() {
     }
 
-    public DiamondPutRequest(BigDecimal caratSize, BigDecimal weight, String certificationID, String clarity, String color, String cut, String diamondImage, String diamondName, BigDecimal diamondEntryPrice, String origin, String shape, String warrantyID) {
+    public DiamondPutRequest(BigDecimal caratSize, BigDecimal weight, String certificationID, String clarity,
+            String color, String cut, String diamondImage, String diamondName, BigDecimal diamondEntryPrice,
+            String origin, String shape, String warrantyID, Integer quantity) {
         this.caratSize = caratSize;
         this.weight = weight;
         this.certificationID = certificationID;
@@ -33,6 +37,7 @@ public class DiamondPutRequest {
         this.origin = origin;
         this.shape = shape;
         this.warrantyID = warrantyID;
+        this.quantity = quantity;
     }
 
     public String getWarrantyID() {
@@ -129,5 +134,13 @@ public class DiamondPutRequest {
 
     public void setOrigin(String origin) {
         this.origin = origin;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }

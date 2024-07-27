@@ -60,6 +60,7 @@ function ProductPage() {
               imageUrl: item.jewelryImage || item.diamondImage,
               price: item.jewelryEntryPrice || item.diamondEntryPrice,
               type: item.jewelryID ? "jewelry" : "diamond",
+              quantity: item.quantity, // Add this line
             }));
 
             setProducts(combinedProducts);
@@ -69,16 +70,17 @@ function ProductPage() {
         } else {
           // Fetch products based on search term
           data = await searchProductionByName(searchTerm, currentPage, itemsPerPage);
-          console.log("Search results:", data); // Debug log
+          console.log("Search results:", data);
 
           if (data) {
-            const searchResults = [         
+            const searchResults = [
               ...(data.diamonds || []).map((item) => ({
                 id: item.diamondID,
                 name: item.diamondName,
                 imageUrl: item.diamondImage,
                 price: item.diamondEntryPrice,
                 type: "diamond",
+                quantity: item.quantity,
               })),
               ...(data.jewelry || []).map((item) => ({
                 id: item.jewelryID,
@@ -86,6 +88,7 @@ function ProductPage() {
                 imageUrl: item.jewelryImage,
                 price: item.jewelryEntryPrice,
                 type: "jewelry",
+                quantity: item.quantity,
               }))
             ];
             setSearchResults(searchResults);
@@ -105,7 +108,6 @@ function ProductPage() {
         setLoading(false);
       }
     };
-
     fetchProducts();
   }, [currentPage, searchTerm]);
 
@@ -145,7 +147,7 @@ function ProductPage() {
                 <div className="col-lg-9 col-12">
                   <form action="#" className="tm-shop-header">
                     <p className="tm-shop-countview">
-                      Hiển thị sản phẩm {((currentPage - 1) * itemsPerPage*2) + 1} đến {Math.min(currentPage  * itemsPerPage * 2, totalItems)} trong {totalItems} sản phẩm
+                      Hiển thị sản phẩm {((currentPage - 1) * itemsPerPage * 2) + 1} đến {Math.min(currentPage * itemsPerPage * 2, totalItems)} trong {totalItems} sản phẩm
                     </p>
                   </form>
                   <div className="tm-shop-products">
@@ -185,21 +187,28 @@ function ProductPage() {
                                     {item.name}
                                   </Link>
                                 </h6>
-                                <div className="tm-ratingbox">
+                                <div className="tm-rating">
                                   <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                   <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                   <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                   <span className="is-active"><i className="ion-android-star-outline"></i></span>
                                   <span><i className="ion-android-star-outline"></i></span>
                                 </div>
-                                <span className="tm-product-price">{item.price ? item.price.toLocaleString() : 'N/A'} VND</span>
+                                <div className="tm-product-price-quantity-row" style={{
+                                  display: 'flex',
+                                  justifyContent: 'space-between',
+                                  alignItems: 'center',
+
+                                }}>
+                                  <span className="tm-product-price">{item.price ? item.price.toLocaleString() : 'N/A'} VND</span>
+                                  <span className="tm-product-quantity">Số lượng: {item.quantity}</span>
+                                </div>
                               </div>
                             </div>
                           </div>
                         ))
                       )}
                     </div>
-                    {/* Pagination */}
                     <div className="tm-pagination mt-50">
                       <Pagination
                         count={totalPages}

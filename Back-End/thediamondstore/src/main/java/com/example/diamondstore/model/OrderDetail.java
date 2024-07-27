@@ -11,6 +11,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "OrderDetail")
 public class OrderDetail {
@@ -22,6 +26,7 @@ public class OrderDetail {
 
     @ManyToOne
     @JoinColumn(name = "orderID", nullable = false)
+    @JsonBackReference
     private Order order;
 
     @ManyToOne
@@ -35,6 +40,10 @@ public class OrderDetail {
     @ManyToOne
     @JoinColumn(name = "jewelryID", nullable = true)
     private Jewelry jewelry;
+
+    @ManyToOne
+    @JoinColumn(name = "promotionID", nullable = true)
+    private Promotion promotion;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
@@ -51,21 +60,20 @@ public class OrderDetail {
     @Column(name = "totalPrice", nullable = false)
     private BigDecimal totalPrice;
 
-    @Column(name = "diamondWarrantyImage", nullable = true)
-    private String diamondWarrantyImage;
+    @ManyToOne
+    @JoinColumn(name = "warrantyID", nullable = true)
+    @JsonManagedReference
+    private Warranty warranty;
 
     @Column(name = "diamondCertificateImage", nullable = true)
     private String diamondCertificateImage;
-
-    @Column(name = "jewelryWarrantyImage", nullable = true)
-    private String jewelryWarrantyImage;
 
     public OrderDetail() {
     }
 
     public OrderDetail(Integer orderDetailID, Order order, Account account, Diamond diamond, Jewelry jewelry,
             Integer quantity, Integer sizeJewelry, BigDecimal price, BigDecimal grossCartPrice, BigDecimal totalPrice,
-            String diamondWarrantyImage, String diamondCertificateImage, String jewelryWarrantyImage) {
+            String diamondCertificateImage, Promotion promotion, Warranty warranty) {
         this.orderDetailID = orderDetailID;
         this.order = order;
         this.account = account;
@@ -76,9 +84,9 @@ public class OrderDetail {
         this.price = price;
         this.grossCartPrice = grossCartPrice;
         this.totalPrice = totalPrice;
-        this.diamondWarrantyImage = diamondWarrantyImage;
         this.diamondCertificateImage = diamondCertificateImage;
-        this.jewelryWarrantyImage = jewelryWarrantyImage;
+        this.promotion = promotion;
+        this.warranty = warranty;
     }
 
     public Integer getOrderDetailID() {
@@ -161,14 +169,6 @@ public class OrderDetail {
         this.totalPrice = totalPrice;
     }
 
-    public String getDiamondWarrantyImage() {
-        return diamondWarrantyImage;
-    }
-
-    public void setDiamondWarrantyImage(String diamondWarrantyImage) {
-        this.diamondWarrantyImage = diamondWarrantyImage;
-    }
-
     public String getDiamondCertificateImage() {
         return diamondCertificateImage;
     }
@@ -177,14 +177,20 @@ public class OrderDetail {
         this.diamondCertificateImage = diamondCertificateImage;
     }
 
-    public String getJewelryWarrantyImage() {
-        return jewelryWarrantyImage;
+    public Promotion getPromotion() {
+        return promotion;
     }
 
-    public void setJewelryWarrantyImage(String jewelryWarrantyImage) {
-        this.jewelryWarrantyImage = jewelryWarrantyImage;
+    public void setPromotion(Promotion promotion) {
+        this.promotion = promotion;
     }
 
-    
+    public Warranty getWarranty() {
+        return warranty;
+    }
+
+    public void setWarranty(Warranty warranty) {
+        this.warranty = warranty;
+    }
 
 }
