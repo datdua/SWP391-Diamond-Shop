@@ -28,6 +28,7 @@ import com.example.diamondstore.model.AccumulatePoints;
 import com.example.diamondstore.model.Cart;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.model.OrderDetail;
+import com.example.diamondstore.model.Payment;
 import com.example.diamondstore.model.Promotion;
 import com.example.diamondstore.model.Warranty;
 import com.example.diamondstore.model.WarrantyHistory;
@@ -35,6 +36,7 @@ import com.example.diamondstore.repository.AccumulatePointsRepository;
 import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.OrderDetailRepository;
 import com.example.diamondstore.repository.OrderRepository;
+import com.example.diamondstore.repository.PaymentRepository;
 import com.example.diamondstore.repository.PromotionRepository;
 import com.example.diamondstore.repository.WarrantyHistoryRepository;
 import com.example.diamondstore.repository.WarrantyRepository;
@@ -62,6 +64,9 @@ public class PaymentService {
 
     @Autowired
     private CartRepository cartRepository;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     public ResponseEntity<?> createPayment(Integer orderID) throws UnsupportedEncodingException {
         String vnp_Version = "2.1.0";
@@ -125,6 +130,16 @@ public class PaymentService {
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = PaymentConfig.vnp_PayUrl + "?" + queryUrl;
 
+        // Save payment
+        Payment payment = new Payment();
+        payment.setOrderID(orderID);
+        payment.setPaymentMethod("VNPay");
+        payment.setPaymentStatus("Chờ thanh toán");
+        payment.setTransDate(vnp_CreateDate);
+        payment.setBankCode(bankCode);
+        payment.setAmount(totalAmount);
+        paymentRepository.save(payment);
+
         PaymentResDTO paymentResDTO = new PaymentResDTO();
         paymentResDTO.setStatus("Ok");
         paymentResDTO.setMessage("Success");
@@ -142,6 +157,14 @@ public class PaymentService {
             transactionStatusDTO.setStatus("Ok");
             transactionStatusDTO.setMessage("Thanh toán thành công");
             transactionStatusDTO.setData("");
+
+            // Save payment
+            Payment payment = paymentRepository.findByOrderID(orderID);
+            payment.setPaymentStatus("Đã thanh toán");
+            payment.setBankCode(bankCode);
+            payment.setTransactionNo(transactionNo);
+            payment.setResponseCode(responseCode);
+            paymentRepository.save(payment);
 
             // Update order status
             order.setOrderStatus("Đã thanh toán");
@@ -213,6 +236,14 @@ public class PaymentService {
             transactionStatusDTO.setStatus("No");
             transactionStatusDTO.setMessage("Thanh toán thất bại");
             transactionStatusDTO.setData("");
+
+            // Save payment
+            Payment payment = paymentRepository.findByOrderID(orderID);
+            payment.setPaymentStatus("Thất bại");
+            payment.setBankCode(bankCode);
+            payment.setTransactionNo(transactionNo);
+            payment.setResponseCode(responseCode);
+            paymentRepository.save(payment);
 
             order.setOrderStatus("Thanh toán thất bại");
             orderRepository.save(order);
