@@ -8,6 +8,7 @@ import javax.persistence.criteria.CriteriaBuilder.In;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "Orders")
@@ -52,6 +53,7 @@ public class Order {
     private Integer transactionNo;
 
     @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
 

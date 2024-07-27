@@ -34,6 +34,7 @@ import com.example.diamondstore.model.Order;
 import com.example.diamondstore.model.OrderDetail;
 import com.example.diamondstore.model.Promotion;
 import com.example.diamondstore.model.Warranty;
+import com.example.diamondstore.model.WarrantyHistory;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.AccumulatePointsRepository;
 import com.example.diamondstore.repository.CartRepository;
@@ -42,6 +43,7 @@ import com.example.diamondstore.repository.OrderDetailRepository;
 import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.repository.PromotionRepository;
 import com.example.diamondstore.repository.WarrantyRepository;
+import com.example.diamondstore.repository.WarrantyHistoryRepository;
 
 @RestController
 @RequestMapping("/api")
@@ -70,6 +72,9 @@ public class PaymentController {
 
     @Autowired
     private PromotionRepository promotionRepository;
+
+    @Autowired
+    private WarrantyHistoryRepository warrantyHistoryRepository;
 
     // customer
     @GetMapping(value = "/customer/payments/create-payment", produces = "application/json;charset=UTF-8")
@@ -180,35 +185,6 @@ public class PaymentController {
             List<Cart> cartItems = cartRepository.findByOrder(order);
             for (Cart cart : cartItems) {
                 OrderDetail orderDetail = new OrderDetail();
-                if (cart.getDiamond() != null) {
-                    Warranty diamondWarranty = warrantyRepository.findByDiamondID(cart.getDiamond().getDiamondID());
-                    if (diamondWarranty != null) {
-                        diamondWarranty.setEffectiveDate(effectiveDate);
-                        diamondWarranty.setExpirationDate(expirationDate);
-                        warrantyRepository.save(diamondWarranty);
-                    }
-                    Certificate diamondCertificate = certificateRepository
-                            .findByDiamondID(cart.getDiamond().getDiamondID());
-                    orderDetail.setDiamondWarrantyImage(
-                            diamondWarranty != null ? diamondWarranty.getwarrantyImage() : null);
-                    orderDetail.setDiamondCertificateImage(
-                            diamondCertificate != null ? diamondCertificate.getcertificateImage() : null);
-                } else {
-                    orderDetail.setDiamondWarrantyImage(null);
-                    orderDetail.setDiamondCertificateImage(null);
-                }
-                if (cart.getJewelry() != null) {
-                    Warranty jewelryWarranty = warrantyRepository.findByJewelryID(cart.getJewelry().getJewelryID());
-                    if (jewelryWarranty != null) {
-                        jewelryWarranty.setEffectiveDate(effectiveDate);
-                        jewelryWarranty.setExpirationDate(expirationDate);
-                        warrantyRepository.save(jewelryWarranty);
-                    }
-                    orderDetail.setJewelryWarrantyImage(
-                            jewelryWarranty != null ? jewelryWarranty.getwarrantyImage() : null);
-                } else {
-                    orderDetail.setJewelryWarrantyImage(null);
-                }
                 orderDetail.setOrder(order);
                 orderDetail.setAccount(cart.getAccount());
                 orderDetail.setDiamond(cart.getDiamond());
@@ -218,7 +194,36 @@ public class PaymentController {
                 orderDetail.setPrice(cart.getPrice());
                 orderDetail.setGrossCartPrice(cart.getGrossCartPrice());
                 orderDetail.setTotalPrice(cart.getGrossCartPrice().multiply(BigDecimal.valueOf(cart.getQuantity())));
-                orderDetail.setPromotion(promotion); // Set the promotion here
+                orderDetail.setPromotion(promotion);
+
+                // Xử lý warranty cho diamond
+                if (cart.getDiamond() != null) {
+                    Warranty diamondWarranty = warrantyRepository.findByDiamondID(cart.getDiamond().getDiamondID());
+                    if (diamondWarranty != null) {
+                        orderDetail.setWarranty(diamondWarranty);
+                        WarrantyHistory warrantyHistory = new WarrantyHistory();
+                        warrantyHistory.setWarranty(diamondWarranty);
+                        warrantyHistory.setEffectiveDate(effectiveDate);
+                        warrantyHistory.setExpirationDate(expirationDate);
+                        warrantyHistory.setWarrantyStatus("Đã kích hoạt");
+                        warrantyHistoryRepository.save(warrantyHistory);
+                    }
+                }
+
+                // Xử lý warranty cho jewelry
+                if (cart.getJewelry() != null) {
+                    Warranty jewelryWarranty = warrantyRepository.findByJewelryID(cart.getJewelry().getJewelryID());
+                    if (jewelryWarranty != null) {
+                        orderDetail.setWarranty(jewelryWarranty);
+                        WarrantyHistory warrantyHistory = new WarrantyHistory();
+                        warrantyHistory.setWarranty(jewelryWarranty);
+                        warrantyHistory.setEffectiveDate(effectiveDate);
+                        warrantyHistory.setExpirationDate(expirationDate);
+                        warrantyHistory.setWarrantyStatus("Đã kích hoạt");
+                        warrantyHistoryRepository.save(warrantyHistory);
+                    }
+                }
+
                 orderDetailRepository.save(orderDetail);
 
                 // delete cart

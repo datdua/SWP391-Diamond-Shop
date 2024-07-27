@@ -110,10 +110,4 @@ public class WarrantyController {
         return ResponseEntity.ok(warrantyService.getWarrantiesByJewelryIDIsNull());
     }
 
-    // admin + manager
-    @PostMapping(value = "/manager/warranty-management/warranties/update-status", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> updateWarrantyStatusesAuto() {
-        warrantyService.updateWarrantyStatusesAuto();
-        return ResponseEntity.ok(Collections.singletonMap("message", "Trạng thái giấy bảo hành đã được cập nhật"));
-    }
 }

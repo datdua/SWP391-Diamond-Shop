@@ -52,35 +52,6 @@ public class WarrantyService {
         return warrantyRepository.findAll(pageable);
     }
 
-    @PostConstruct
-    public void updateWarrantyStatusesOnStartup() {
-        updateWarrantyStatusesAuto();
-    }
-
-    @Scheduled(cron = "0 0 * * * *")
-    public void updateWarrantyStatusesAuto() {
-        List<Warranty> warrantys = warrantyRepository.findAll();
-        LocalDateTime now = LocalDateTime.now();
-
-        for (Warranty warranty : warrantys) {
-            if (warranty.getExpirationDate().isBefore(now)) {
-                warranty.setWarrantyStatus("Hết Hạn");
-            } else {
-                warranty.setWarrantyStatus("Còn Hạn");
-            }
-            warrantyRepository.save(warranty);
-        }
-    }
-
-    private void updateWarrantyStatus(Warranty warranty) {
-        LocalDateTime now = LocalDateTime.now();
-        if (warranty.getExpirationDate().isBefore(now)) {
-            warranty.setWarrantyStatus("Hết Hạn");
-        } else {
-            warranty.setWarrantyStatus("Còn Hạn");
-        }
-    }
-
     public ResponseEntity<Map<String, String>> createWarranty(Warranty warranty) {
         if (!validateWarrantyID(warranty.getWarrantyID())) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã bảo hành không hợp lệ"));
@@ -106,7 +77,6 @@ public class WarrantyService {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Chỉ có thể có một trong hai ID cho kim cương hoặc trang sức"));
         }
 
-    updateWarrantyStatus(warranty); 
     warrantyRepository.save(warranty);
 
     Diamond diamond = diamondRepository.findByDiamondID(warranty.getDiamondID());
@@ -135,9 +105,7 @@ public class WarrantyService {
             return ResponseEntity.notFound().build();
         }
         existingWarranty.setDiamondID(warrantyPutRequest.getDiamondID());
-        existingWarranty.setExpirationDate(warrantyPutRequest.getExpirationDate());
-        existingWarranty.setwarrantyImage(warrantyPutRequest.getWarrantyImage());
-        updateWarrantyStatus(existingWarranty);
+        existingWarranty.setWarrantyImage(warrantyPutRequest.getWarrantyImage());
         warrantyRepository.save(existingWarranty);
         return ResponseEntity.ok(Collections.singletonMap("message", "Giấy bảo hành đã được cập nhật thành công"));
     }
@@ -188,7 +156,7 @@ public class WarrantyService {
         if (warranty == null) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "ID không tồn tại"));
         }
-        return ResponseEntity.ok(Collections.singletonMap("warrantyImage", warranty.getwarrantyImage()));
+        return ResponseEntity.ok(Collections.singletonMap("warrantyImage", warranty.getWarrantyImage()));
     }
 
     public List<Warranty> getWarrantiesByDiamondIDIsNull() {
