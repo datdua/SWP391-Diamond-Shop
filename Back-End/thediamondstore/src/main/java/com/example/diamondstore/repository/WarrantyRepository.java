@@ -23,5 +23,4 @@ public interface WarrantyRepository extends JpaRepository<Warranty, String> {
     Warranty findByDiamondID(String diamondID);
     
     Warranty findByJewelryID(String jewelryID);
-   
 }
