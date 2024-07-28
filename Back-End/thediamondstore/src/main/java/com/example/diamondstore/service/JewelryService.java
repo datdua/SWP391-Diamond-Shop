@@ -49,7 +49,7 @@ public class JewelryService {
         updateJewelryStatusesAuto();
     }
 
-    @Scheduled(cron = "0 */30 * * * *")
+    @Scheduled(cron = "*/6 * * * * *")
     public void updateJewelryStatusesAuto() {
         List<Jewelry> jewelries = jewelryRepository.findAll();
         LocalDateTime now = LocalDateTime.now();

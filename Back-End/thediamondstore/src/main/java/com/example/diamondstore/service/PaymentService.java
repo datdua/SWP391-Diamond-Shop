@@ -153,7 +153,8 @@ public class PaymentService {
         return ResponseEntity.status(HttpStatus.OK).body(paymentResDTO);
     }
 
-    public ResponseEntity<TransactionStatusDTO> handlePaymentReturn(String bankCode, Integer orderID, String responseCode, Integer transactionNo) {
+    public ResponseEntity<TransactionStatusDTO> handlePaymentReturn(String bankCode, Integer orderID,
+            String responseCode, Integer transactionNo) {
         Order order = orderRepository.findByOrderID(orderID);
         TransactionStatusDTO transactionStatusDTO = new TransactionStatusDTO();
 
@@ -202,18 +203,22 @@ public class PaymentService {
                 orderDetail.setGrossCartPrice(cart.getGrossCartPrice());
                 orderDetail.setTotalPrice(cart.getGrossCartPrice().multiply(BigDecimal.valueOf(cart.getQuantity())));
                 orderDetail.setPromotion(promotion);
+                orderDetailRepository.save(orderDetail);
 
                 // handle warranty of diamond
                 if (cart.getDiamond() != null) {
                     Warranty diamondWarranty = warrantyRepository.findByDiamondID(cart.getDiamond().getDiamondID());
-                    Certificate diamondCertificate = certificateRepository.findByDiamondID(cart.getDiamond().getDiamondID());
-                    if(diamondCertificate != null) {
-                        orderDetail.setDiamondCertificateImage(diamondCertificate != null ? diamondCertificate.getcertificateImage() : null);
+                    Certificate diamondCertificate = certificateRepository
+                            .findByDiamondID(cart.getDiamond().getDiamondID());
+                    if (diamondCertificate != null) {
+                        orderDetail.setDiamondCertificateImage(
+                                diamondCertificate != null ? diamondCertificate.getcertificateImage() : null);
                     }
                     if (diamondWarranty != null) {
                         orderDetail.setWarranty(diamondWarranty);
                         WarrantyHistory warrantyHistory = new WarrantyHistory();
                         warrantyHistory.setWarranty(diamondWarranty);
+                        warrantyHistory.setOrderDetail(orderDetail);
                         warrantyHistory.setEffectiveDate(effectiveDate);
                         warrantyHistory.setExpirationDate(expirationDate);
                         warrantyHistory.setWarrantyStatus("Đã kích hoạt");
@@ -228,6 +233,7 @@ public class PaymentService {
                         orderDetail.setWarranty(jewelryWarranty);
                         WarrantyHistory warrantyHistory = new WarrantyHistory();
                         warrantyHistory.setWarranty(jewelryWarranty);
+                        warrantyHistory.setOrderDetail(orderDetail);
                         warrantyHistory.setEffectiveDate(effectiveDate);
                         warrantyHistory.setExpirationDate(expirationDate);
                         warrantyHistory.setWarrantyStatus("Đã kích hoạt");
@@ -258,11 +264,11 @@ public class PaymentService {
                 payment.setBankCode(bankCode);
                 payment.setTransactionNo(transactionNo);
                 payment.setResponseCode(responseCode);
-                paymentRepository.save(payment); 
+                paymentRepository.save(payment);
             }
-            
+
             order.setOrderStatus("Thanh toán thất bại");
-            orderRepository.save(order); 
+            orderRepository.save(order);
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(transactionStatusDTO);
