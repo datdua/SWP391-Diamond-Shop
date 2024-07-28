@@ -3,6 +3,8 @@ package com.example.diamondstore.model;
 import java.math.BigDecimal;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "Cart")
 public class Cart {
@@ -16,7 +18,7 @@ public class Cart {
     private Account account;
 
     @ManyToOne
-    @JoinColumn(name = "diamondID", nullable = true) 
+    @JoinColumn(name = "diamondID", nullable = true)
     private Diamond diamond;
 
     @ManyToOne
@@ -24,7 +26,8 @@ public class Cart {
     private Jewelry jewelry;
 
     @ManyToOne
-    @JoinColumn(name = "orderID", nullable = true) 
+    @JoinColumn(name = "orderID", nullable = true)
+    @JsonBackReference
     private Order order;
 
     @Column(name = "quantity", nullable = false)
@@ -44,11 +47,13 @@ public class Cart {
 
     @Column(name = "cartStatus")
     private String cartStatus;
+
     public Cart() {
     }
 
     public Cart(Account account, Integer cartID, Diamond diamond, Jewelry jewelry, Order order, Integer quantity,
-            BigDecimal totalPrice, Integer sizeJewelry, BigDecimal price, BigDecimal grossCartPrice, String cartStatus) {
+            BigDecimal totalPrice, Integer sizeJewelry, BigDecimal price, BigDecimal grossCartPrice,
+            String cartStatus) {
         this.account = account;
         this.cartID = cartID;
         this.diamond = diamond;

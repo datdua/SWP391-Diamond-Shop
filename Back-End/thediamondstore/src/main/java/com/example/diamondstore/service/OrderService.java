@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -72,12 +73,12 @@ public class OrderService {
     private JewelryRepository jewelryRepository;
 
     @Transactional
-    public Order createOrder(int accountID, String deliveryAddress, String promotionCode, Integer pointsToRedeem,
+    public ResponseEntity<?> createOrder(int accountID, String deliveryAddress, String promotionCode, Integer pointsToRedeem,
             String phoneNumber) {
         List<Cart> cartItems = cartRepository.findByAccount_AccountID(accountID);
 
         if (cartItems.isEmpty()) {
-            throw new IllegalArgumentException("Giỏ hàng rỗng");
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Giỏ hàng trống"));
         }
 
         Account account = accountRepository.findById(accountID)
@@ -102,7 +103,7 @@ public class OrderService {
             Diamond diamond = cart.getDiamond();
             if (diamond != null) {
                 if (cart.getQuantity() > diamond.getQuantity()) {
-                    throw new IllegalArgumentException("Số lượng kim cương không đủ");
+                    return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số lượng kim cương không đủ"));
                 }
                 diamond.setQuantity(diamond.getQuantity() - cart.getQuantity());
                 diamondRepository.save(diamond);
@@ -111,7 +112,7 @@ public class OrderService {
             Jewelry jewelry = cart.getJewelry();
             if (jewelry != null) {
                 if (cart.getQuantity() > jewelry.getQuantity()) {
-                    throw new IllegalArgumentException("Số lượng trang sức không đủ");
+                    return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số lượng trang sức không đủ"));
                 }
                 jewelry.setQuantity(jewelry.getQuantity() - cart.getQuantity());
                 jewelryRepository.save(jewelry);
@@ -132,10 +133,10 @@ public class OrderService {
 
         if (pointsToRedeem != null && pointsToRedeem > 0) {
             AccumulatePoints accumulatePoints = accumulatePointsRepository.findById(accountID)
-                    .orElseThrow(() -> new IllegalArgumentException("Khách hàng không tồn tại"));
+                    .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy điểm tích lũy"));
             int availablePoints = accumulatePoints.getPoint();
             if (pointsToRedeem > availablePoints) {
-                throw new IllegalArgumentException("Điểm không đủ");
+                return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Điểm tích lũy không đủ"));
             }
             BigDecimal discount = BigDecimal.valueOf(pointsToRedeem / 100.0);
             totalOrder = totalOrder.subtract(discount.multiply(BigDecimal.valueOf(1000000)));
@@ -148,41 +149,36 @@ public class OrderService {
         // Lưu Order một lần nữa để cập nhật totalOrder
         order = orderRepository.save(order);
 
-        scheduleOrderStatusCheck(order);
-
-        return order;
-    }
-
-    private void scheduleOrderStatusCheck(Order order) {
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                handleOrderTimeout(order);
-            }
-        }, 150000); // 2.5 minutes
+        return ResponseEntity.ok(Collections.singletonMap("message", "Tạo đơn hàng thành công"));
     }
 
     @Transactional
-    private void handleOrderTimeout(Order order) {
-        // Reload the order from the database to get the latest status
-        Order currentOrder = orderRepository.findById(order.getOrderID()).orElse(null);
-        if (currentOrder != null && currentOrder.getOrderStatus().equals("Đang xử lý")) {
-            currentOrder.setOrderStatus("Thất bại");
-            orderRepository.save(currentOrder);
+    @Scheduled(fixedRate = 120000 ) // Run every 2 minute 
+    public void handleOrderTimeout() {
+        List<Order> orders = orderRepository.findByOrderStatus("Đang xử lý");
+        for (Order currentOrder : orders) {
+            if (isOrderTimedOut(currentOrder)) {
+                currentOrder.setOrderStatus("Thất bại");
+                orderRepository.save(currentOrder);
 
-            // Hoàn trả số lượng sản phẩm về hệ thống
-            for (Cart cart : currentOrder.getCartItems()) {
-                if (cart.getDiamond() != null) {
-                    Diamond diamond = cart.getDiamond();
-                    diamond.setQuantity(diamond.getQuantity() + cart.getQuantity());
-                    diamondRepository.save(diamond);
-                } else if (cart.getJewelry() != null) {
-                    Jewelry jewelry = cart.getJewelry();
-                    jewelry.setQuantity(jewelry.getQuantity() + cart.getQuantity());
-                    jewelryRepository.save(jewelry);
+                for (Cart cart : currentOrder.getCartItems()) {
+                    if (cart.getDiamond() != null) {
+                        Diamond diamond = cart.getDiamond();
+                        diamond.setQuantity(diamond.getQuantity() + cart.getQuantity());
+                        diamondRepository.save(diamond);
+                    } else if (cart.getJewelry() != null) {
+                        Jewelry jewelry = cart.getJewelry();
+                        jewelry.setQuantity(jewelry.getQuantity() + cart.getQuantity());
+                        jewelryRepository.save(jewelry);
+                    }
                 }
             }
         }
+    }
+
+    // Check if that Order is time out 2p30s
+    private boolean isOrderTimedOut(Order order) {
+        return order.getStartorderDate().isBefore(LocalDateTime.now().minusMinutes(2).minusSeconds(30));
     }
 
     public void cancelOrder(int orderID) {
@@ -199,7 +195,6 @@ public class OrderService {
             cartRepository.delete(cart);
         }
 
-        // Now delete the Order
         orderRepository.delete(order);
     }
 

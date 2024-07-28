@@ -37,30 +37,24 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Map<String, String>> addItemToCart(
+    public ResponseEntity<?> addItemToCart(
             @RequestParam(required = false) Integer accountID,
             @RequestParam(required = false) String diamondID,
             @RequestParam(required = false) String jewelryID,
             @RequestParam(required = false) Integer sizeJewelry,
             @RequestParam Integer quantity) {
-        cartService.addItemToCart(accountID, diamondID, jewelryID, sizeJewelry, quantity);
-        // Check jewelryID and sizeJewelry
-        if (sizeJewelry == null && jewelryID != null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Vui lòng nhập size"));
-        }
-        return ResponseEntity.ok(Collections.singletonMap("message", "Thêm vào giỏ hàng thành công"));
+        return cartService.addItemToCart(accountID, diamondID, jewelryID, sizeJewelry, quantity);
     }
 
     @PutMapping("/update/{cartID}")
-    public ResponseEntity<Map<String, String>> updateCartItem(
+    public ResponseEntity<?> updateCartItem(
             @PathVariable Integer cartID,
             @RequestParam Integer accountID,
             @RequestParam(required = false) String diamondID,
             @RequestParam(required = false) String jewelryID,
             @RequestParam(required = false) Integer sizeJewelry,
             @RequestParam Integer quantity) {
-        cartService.updateCartItem(cartID, accountID, diamondID, jewelryID, sizeJewelry, quantity);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Cập nhật giỏ hàng thành công"));
+        return cartService.updateCartItem(cartID, accountID, diamondID, jewelryID, sizeJewelry, quantity);
     }
 
     @DeleteMapping(value = "/delete/{cartID}")
