@@ -1,6 +1,7 @@
 package com.example.diamondstore.service;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +39,8 @@ public class CartService {
     }
 
     @Transactional
-    public ResponseEntity<?> addItemToCart(Integer accountID, String diamondID, String jewelryID, Integer sizeJewelry, Integer quantity) {
+    public ResponseEntity<?> addItemToCart(Integer accountID, String diamondID, String jewelryID, Integer sizeJewelry,
+            Integer quantity) {
         if (quantity <= 0) {
             return ResponseEntity.badRequest().body("Số lượng phải lớn hơn 0");
         }
@@ -50,7 +52,7 @@ public class CartService {
             Diamond diamond = diamondRepository.findById(diamondID).orElse(null);
             if (diamond != null) {
                 if (quantity > diamond.getQuantity()) {
-                    return ResponseEntity.badRequest().body("Số lượng kim cương không đủ");
+                    return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số lượng kim cương không đủ"));
                 }
                 cart.setDiamond(diamond);
             }
@@ -60,17 +62,21 @@ public class CartService {
             Jewelry jewelry = jewelryRepository.findById(jewelryID).orElse(null);
             if (jewelry != null) {
                 if (quantity > jewelry.getQuantity()) {
-                    return ResponseEntity.badRequest().body("Số lượng trang sức không đủ");
+                    return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số lượng trang sức không đủ"));
                 }
                 cart.setJewelry(jewelry);
                 cart.setSizeJewelry(sizeJewelry);
             }
         }
 
+        if (sizeJewelry == null && jewelryID != null) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Vui lòng nhập size"));
+        }
+
         cart.setQuantity(quantity);
         calculateAndSetTotalPrice(cart);
         cartRepository.save(cart);
-        return ResponseEntity.ok("Sản phẩm đã được thêm vào giỏ hàng.");
+        return ResponseEntity.ok(Collections.singletonMap("message", "Thêm vào giỏ hàng thành công"));
     }
 
     @Transactional

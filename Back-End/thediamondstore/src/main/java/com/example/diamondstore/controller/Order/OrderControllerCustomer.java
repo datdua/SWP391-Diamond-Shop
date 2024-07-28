@@ -50,15 +50,15 @@ public class OrderControllerCustomer {
     }
 
     @PostMapping(value = "/add", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<Map<String, String>> createOrderCustomer(
+    public ResponseEntity<?> createOrderCustomer(
             @RequestParam Integer accountID,
             @RequestParam String deliveryAddress,
             @RequestParam(required = false) String promotionCode,
             @RequestParam(required = false) Integer pointsToRedeem,
             @RequestParam String phoneNumber) {
 
-        Order order = orderService.createOrder(accountID, deliveryAddress, promotionCode, pointsToRedeem, phoneNumber);
-        return ResponseEntity.ok(Collections.singletonMap("message", "Tạo đơn hàng thành công"));
+        return orderService.createOrder(accountID, deliveryAddress, promotionCode, pointsToRedeem, phoneNumber);
+
     }
 
     @DeleteMapping(value = "/cancel/{orderID}", produces = "application/json;charset=UTF-8")

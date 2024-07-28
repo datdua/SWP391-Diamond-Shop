@@ -57,10 +57,9 @@ public class Order {
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<OrderDetail> orderDetails;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Cart> cartItems;
-
 
     public Order() {
     }
