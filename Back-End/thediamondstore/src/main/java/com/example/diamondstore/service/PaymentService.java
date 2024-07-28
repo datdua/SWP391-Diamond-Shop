@@ -26,6 +26,7 @@ import com.example.diamondstore.DTO.TransactionStatusDTO;
 import com.example.diamondstore.config.PaymentConfig;
 import com.example.diamondstore.model.AccumulatePoints;
 import com.example.diamondstore.model.Cart;
+import com.example.diamondstore.model.Certificate;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.model.OrderDetail;
 import com.example.diamondstore.model.Payment;
@@ -34,6 +35,7 @@ import com.example.diamondstore.model.Warranty;
 import com.example.diamondstore.model.WarrantyHistory;
 import com.example.diamondstore.repository.AccumulatePointsRepository;
 import com.example.diamondstore.repository.CartRepository;
+import com.example.diamondstore.repository.CertificateRepository;
 import com.example.diamondstore.repository.OrderDetailRepository;
 import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.repository.PaymentRepository;
@@ -67,6 +69,9 @@ public class PaymentService {
 
     @Autowired
     private PaymentRepository paymentRepository;
+
+    @Autowired
+    private CertificateRepository certificateRepository;
 
     public ResponseEntity<?> createPayment(Integer orderID) throws UnsupportedEncodingException {
         String vnp_Version = "2.1.0";
@@ -201,6 +206,10 @@ public class PaymentService {
                 // handle warranty of diamond
                 if (cart.getDiamond() != null) {
                     Warranty diamondWarranty = warrantyRepository.findByDiamondID(cart.getDiamond().getDiamondID());
+                    Certificate diamondCertificate = certificateRepository.findByDiamondID(cart.getDiamond().getDiamondID());
+                    if(diamondCertificate != null) {
+                        orderDetail.setDiamondCertificateImage(diamondCertificate != null ? diamondCertificate.getcertificateImage() : null);
+                    }
                     if (diamondWarranty != null) {
                         orderDetail.setWarranty(diamondWarranty);
                         WarrantyHistory warrantyHistory = new WarrantyHistory();
