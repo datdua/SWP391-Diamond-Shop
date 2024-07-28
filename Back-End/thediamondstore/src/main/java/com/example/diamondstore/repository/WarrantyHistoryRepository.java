@@ -8,4 +8,7 @@ import com.example.diamondstore.model.WarrantyHistory;
 
 public interface WarrantyHistoryRepository  extends JpaRepository<WarrantyHistory, Integer> {
     
+    WarrantyHistory findByWarrantyHistoryID(Integer warrantyHistoryID);
+
+    
 }

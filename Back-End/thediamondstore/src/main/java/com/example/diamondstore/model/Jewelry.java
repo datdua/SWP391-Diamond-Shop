@@ -24,10 +24,10 @@ public class Jewelry {
     @Column(name = "jewelryImage")
     private String jewelryImage;
 
-    @Column(name = "jewelryEntryPrice", precision = 16, scale = 2, nullable = true)
+    @Column(name = "jewelryEntryPrice", precision = 18, scale = 0, nullable = true)
     private BigDecimal jewelryEntryPrice;
 
-    @Column(name = "grossJewelryPrice", precision = 16, scale = 2, nullable = true)
+    @Column(name = "grossJewelryPrice", precision = 18, scale = 0, nullable = true)
     private BigDecimal grossJewelryPrice;
 
     @Column(name = "warrantyID", nullable=true)

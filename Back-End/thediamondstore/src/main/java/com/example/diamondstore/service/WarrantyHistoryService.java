@@ -39,4 +39,12 @@ public class WarrantyHistoryService {
         }
     }
 
+    public List<WarrantyHistory> getAllWarrantyHistories() {
+        return warrantyHistoryRepository.findAll();
+    }
+
+    public WarrantyHistory getWarrantyHistoryById(Integer warrantyHistoryID) {
+        return warrantyHistoryRepository.findByWarrantyHistoryID(warrantyHistoryID);
+    }
+
 }

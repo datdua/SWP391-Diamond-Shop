@@ -2,6 +2,7 @@ package com.example.diamondstore.model;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class Warranty {
     private String jewelryID;
 
     @OneToMany(mappedBy = "warranty", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonIgnore
     private List<WarrantyHistory> warrantyHistories;
 
     public Warranty() {

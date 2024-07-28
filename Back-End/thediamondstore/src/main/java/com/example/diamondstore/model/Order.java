@@ -35,8 +35,11 @@ public class Order {
     @Column(name = "deliveryDate", nullable = false)
     private LocalDateTime deliveryDate;
 
-    @Column(name = "totalOrder", precision = 18, scale = 2)
+    @Column(name = "totalOrder", precision = 18, scale = 0)
     private BigDecimal totalOrder;
+
+    @Column(name = "subtotalOrder", precision = 18, scale = 0)
+    private BigDecimal subtotalOrder;
 
     @Column(name = "deliveryAddress")
     private String deliveryAddress;
@@ -64,22 +67,29 @@ public class Order {
     public Order() {
     }
 
+    
+
     public Order(Integer orderID, Account account, LocalDateTime startorderDate, String orderStatus,
-            LocalDateTime deliveryDate, BigDecimal totalOrder, String deliveryAddress, String phoneNumber,
-            String promotionCode, Integer transactionNo, List<OrderDetail> orderDetails, Integer accountPoint) {
+            LocalDateTime deliveryDate, BigDecimal totalOrder, BigDecimal subtotalOrder, String deliveryAddress,
+            String phoneNumber, String promotionCode, Integer accountPoint, Integer transactionNo,
+            List<OrderDetail> orderDetails, List<Cart> cartItems) {
         this.orderID = orderID;
         this.account = account;
         this.startorderDate = startorderDate;
         this.orderStatus = orderStatus;
         this.deliveryDate = deliveryDate;
         this.totalOrder = totalOrder;
+        this.subtotalOrder = subtotalOrder;
         this.deliveryAddress = deliveryAddress;
         this.phoneNumber = phoneNumber;
         this.promotionCode = promotionCode;
+        this.accountPoint = accountPoint;
         this.transactionNo = transactionNo;
         this.orderDetails = orderDetails;
-        this.accountPoint = accountPoint;
+        this.cartItems = cartItems;
     }
+
+
 
     public Integer getOrderID() {
         return orderID;
@@ -183,6 +193,14 @@ public class Order {
 
     public void setAccountPoint(Integer accountPoint) {
         this.accountPoint = accountPoint;
+    }
+
+    public BigDecimal getSubtotalOrder() {
+        return subtotalOrder;
+    }
+
+    public void setSubtotalOrder(BigDecimal subtotalOrder) {
+        this.subtotalOrder = subtotalOrder;
     }
 
 }
