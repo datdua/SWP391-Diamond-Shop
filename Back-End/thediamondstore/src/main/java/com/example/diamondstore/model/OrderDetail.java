@@ -26,7 +26,7 @@ public class OrderDetail {
 
     @ManyToOne
     @JoinColumn(name = "orderID", nullable = false)
-    @JsonBackReference
+    @JsonManagedReference
     private Order order;
 
     @ManyToOne

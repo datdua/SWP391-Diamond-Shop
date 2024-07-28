@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder.In;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -44,7 +45,7 @@ public class Order {
     private String phoneNumber;
 
     @Column(name = "promotionCode")
-    private String promotionCode; 
+    private String promotionCode;
 
     @Column(name = "accountPoint")
     private Integer accountPoint;
@@ -52,9 +53,8 @@ public class Order {
     @Column(name = "transactionNo")
     private Integer transactionNo;
 
-    @JsonIgnore
-    @JsonManagedReference
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<OrderDetail> orderDetails;
 
     @JsonManagedReference
@@ -176,7 +176,7 @@ public class Order {
     public void setCartItems(List<Cart> cartItems) {
         this.cartItems = cartItems;
     }
-    
+
     public Integer getAccountPoint() {
         return accountPoint;
     }
@@ -184,5 +184,5 @@ public class Order {
     public void setAccountPoint(Integer accountPoint) {
         this.accountPoint = accountPoint;
     }
-    
+
 }
