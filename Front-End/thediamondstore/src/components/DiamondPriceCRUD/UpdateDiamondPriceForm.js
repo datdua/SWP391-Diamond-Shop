@@ -41,7 +41,6 @@ function UpdateDiamondPriceForm({ diamondPrice }) {
     }
   };
 
-
   return (
     <div>
       <Box

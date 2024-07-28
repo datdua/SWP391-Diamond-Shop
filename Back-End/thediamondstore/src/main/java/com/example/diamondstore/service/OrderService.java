@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.transaction.Transactional;
 
@@ -145,8 +143,6 @@ public class OrderService {
         }
 
         order.setTotalOrder(totalOrder);
-
-        // Lưu Order một lần nữa để cập nhật totalOrder
         order = orderRepository.save(order);
 
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo đơn hàng thành công"));
