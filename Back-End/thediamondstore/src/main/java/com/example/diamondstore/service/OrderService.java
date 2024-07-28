@@ -71,7 +71,8 @@ public class OrderService {
     private JewelryRepository jewelryRepository;
 
     @Transactional
-    public ResponseEntity<?> createOrder(int accountID, String deliveryAddress, String promotionCode, Integer pointsToRedeem,
+    public ResponseEntity<?> createOrder(int accountID, String deliveryAddress, String promotionCode,
+            Integer pointsToRedeem,
             String phoneNumber) {
         List<Cart> cartItems = cartRepository.findByAccount_AccountID(accountID);
 
@@ -101,7 +102,8 @@ public class OrderService {
             Diamond diamond = cart.getDiamond();
             if (diamond != null) {
                 if (cart.getQuantity() > diamond.getQuantity()) {
-                    return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số lượng kim cương không đủ"));
+                    return ResponseEntity.badRequest()
+                            .body(Collections.singletonMap("message", "Số lượng kim cương không đủ"));
                 }
                 diamond.setQuantity(diamond.getQuantity() - cart.getQuantity());
                 diamondRepository.save(diamond);
@@ -110,7 +112,8 @@ public class OrderService {
             Jewelry jewelry = cart.getJewelry();
             if (jewelry != null) {
                 if (cart.getQuantity() > jewelry.getQuantity()) {
-                    return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số lượng trang sức không đủ"));
+                    return ResponseEntity.badRequest()
+                            .body(Collections.singletonMap("message", "Số lượng trang sức không đủ"));
                 }
                 jewelry.setQuantity(jewelry.getQuantity() - cart.getQuantity());
                 jewelryRepository.save(jewelry);
@@ -149,12 +152,12 @@ public class OrderService {
     }
 
     @Transactional
-    @Scheduled(fixedRate = 120000 ) // Run every 2 minute 
+    @Scheduled(fixedRate = 30000) // Run every 30 seconds
     public void handleOrderTimeout() {
         List<Order> orders = orderRepository.findByOrderStatus("Đang xử lý");
         for (Order currentOrder : orders) {
             if (isOrderTimedOut(currentOrder)) {
-                currentOrder.setOrderStatus("Thất bại");
+                currentOrder.setOrderStatus("Đặt hàng thất bại");
                 orderRepository.save(currentOrder);
 
                 for (Cart cart : currentOrder.getCartItems()) {

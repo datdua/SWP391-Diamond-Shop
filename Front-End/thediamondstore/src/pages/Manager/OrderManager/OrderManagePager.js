@@ -83,14 +83,34 @@ function OrderManagerPage() {
         <Col md={12}>
           <Card>
             <Card.Header>
-              <Card.Title as="h4">
-                Danh Sách Đơn Hàng
+              <Card.Title
+                as="h4"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  paddingTop: "10px",
+                }}
+              >
+                <div>
+                  Giao Dịch
+                  <Button
+                    variant="link"
+                    style={{ textDecoration: "none" }}
+                    onClick={refreshTable}
+                  >
+                    <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> Tải Lại
+                  </Button>
+                </div>
                 <Button
-                  variant="link"
-                  style={{ textDecoration: "none" }}
-                  onClick={refreshTable}
+                  variant="primary"
+                  onClick={() =>
+                    window.open(
+                      "https://sandbox.vnpayment.vn/merchantv2/Users/Login.htm",
+                      "_blank"
+                    )
+                  }
                 >
-                  <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> Tải Lại
+                  Quản lí giao dịch VNPay
                 </Button>
               </Card.Title>
             </Card.Header>
@@ -119,17 +139,21 @@ function OrderManagerPage() {
                         <td>{ startIndex + index + 1}</td>
                         <td>{order.orderID}</td>
                         <td>
-                          <a
-                            href={`https://sandbox.vnpayment.vn/merchantv2/Transaction/PaymentDetail/${order.transactionNo}.htm`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{
-                              color: "blue",
-                              textDecoration: "underline",
-                            }}
-                          >
-                            {order.transactionNo}
-                          </a>
+                          {order.transactionNo ? (
+                            <a
+                              href={`https://sandbox.vnpayment.vn/merchantv2/Transaction/PaymentDetail/${order.transactionNo}.htm`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                color: "blue",
+                                textDecoration: "underline",
+                              }}
+                            >
+                              {order.transactionNo}
+                            </a>
+                          ) : (
+                            "Đơn hàng chưa thanh toán"
+                          )}
                         </td>
                         <td>{order.account.accountID}</td>
                         <td>{order.startorderDate}</td>

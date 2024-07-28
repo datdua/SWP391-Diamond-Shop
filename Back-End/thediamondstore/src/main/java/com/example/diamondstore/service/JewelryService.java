@@ -1,11 +1,13 @@
 package com.example.diamondstore.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +17,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.example.diamondstore.model.Diamond;
 import com.example.diamondstore.model.Jewelry;
 import com.example.diamondstore.repository.GoldPriceRepository;
 import com.example.diamondstore.repository.JewelryRepository;
@@ -39,6 +43,25 @@ public class JewelryService {
 
     @Autowired
     private WarrantyService warrantyService;
+
+    @PostConstruct
+    public void updateJewelryStatusesOnStartup() {
+        updateJewelryStatusesAuto();
+    }
+
+    @Scheduled(cron = "0 */30 * * * *")
+    public void updateJewelryStatusesAuto() {
+        List<Jewelry> jewelries = jewelryRepository.findAll();
+        LocalDateTime now = LocalDateTime.now();
+
+        for (Jewelry jewelry : jewelries) {
+            if (jewelry.getQuantity() == 0) {
+                jewelry.setStatus("Hết hàng");
+            } else {
+                jewelry.setStatus("Còn hàng");
+            }
+        }
+    }
 
     public List<Jewelry> getAllJewelry() {
         return jewelryRepository.findAll();
@@ -94,6 +117,7 @@ public class JewelryService {
         BigDecimal grossJewelryPrice = jewelry.getJewelryEntryPrice().multiply(new BigDecimal(1.2));
         jewelry.setGrossJewelryPrice(grossJewelryPrice);
 
+        updateJewelryStatusesAuto();
         jewelryRepository.save(jewelry);
 
         if (jewelry.getJewelryEntryPrice().compareTo(BigDecimal.ZERO) == 0) {
@@ -137,6 +161,7 @@ public class JewelryService {
             BigDecimal grossJewelryPrice = jewelryPutRequest.getJewelryEntryPrice().multiply(new BigDecimal(1.2));
             existingJewelry.setGrossJewelryPrice(grossJewelryPrice);
         }
+        updateJewelryStatusesAuto();
         jewelryRepository.save(existingJewelry);
         return ResponseEntity.ok().body(Collections.singletonMap("message", "Cập nhật trang sức thành công"));
     }
