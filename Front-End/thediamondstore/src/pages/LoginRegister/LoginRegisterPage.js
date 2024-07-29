@@ -29,7 +29,7 @@ function LoginRegisterPage() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/auth/login",
+        "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/auth/login",
         {
           email: loginEmail,
           password: loginPassword,
@@ -97,7 +97,7 @@ function LoginRegisterPage() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/auth/register",
+        "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/auth/register",
         {
           accountName: registerName,
           email: registerEmail,
@@ -128,7 +128,7 @@ function LoginRegisterPage() {
 
   const handleRegenerateOTP = async () => {
     try {
-      await regenerateOTP(registerEmail); 
+      await regenerateOTP(registerEmail);
       toast.success('Mã OTP đã được tạo lại');
     } catch (error) {
       toast.error('Mã OTP tạo lại thất bại');
@@ -137,7 +137,7 @@ function LoginRegisterPage() {
 
   const handleRegenerateButtonClick = () => {
     setCountdown(300);
-    handleRegenerateOTP(); 
+    handleRegenerateOTP();
   };
 
   useEffect(() => {

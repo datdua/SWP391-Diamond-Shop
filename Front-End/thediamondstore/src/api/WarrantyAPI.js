@@ -3,7 +3,7 @@ import axios from "axios";
 export const getAllWarranties = async () => {
   try {
     const token = localStorage.getItem("jwt");
-    const response = await axios.get("http://localhost:8080/api/warranty-management/warranties/get-all",
+    const response = await axios.get("https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/warranty-management/warranties/get-all",
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -19,7 +19,7 @@ export const getWarrantyById = async (warrantyID) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `http://localhost:8080/api/manager/warranty-management/warranties/${warrantyID}`,
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/manager/warranty-management/warranties/${warrantyID}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -35,7 +35,7 @@ export const createWarranty = async (warranty) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.post(
-      "http://localhost:8080/api/manager/warranty-management/warranties/add",
+      "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/manager/warranty-management/warranties/add",
       warranty,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -52,7 +52,7 @@ export const updateWarranty = async (warrantyID, warranty) => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.put(
-      `http://localhost:8080/api/manager/warranty-management/warranties/update/${warrantyID}`,
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/manager/warranty-management/warranties/update/${warrantyID}`,
       warranty,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -69,10 +69,10 @@ export async function deleteWarranty(warrantyIDs) {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.delete(
-      `http://localhost:8080/api/manager/warranty-management/warranties/delete`,
-      { 
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/manager/warranty-management/warranties/delete`,
+      {
         headers: { Authorization: `Bearer ${token}` },
-        data: warrantyIDs 
+        data: warrantyIDs
       },
     );
     return response.data;
@@ -85,7 +85,7 @@ export async function deleteWarranty(warrantyIDs) {
 export const getWarrantyByPage = async (page, size) => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/warranty-management/warranties/get-paging?page=${page}&size=${size}`
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/warranty-management/warranties/get-paging?page=${page}&size=${size}`
     );
     return response.data;
   } catch (error) {
@@ -98,7 +98,7 @@ export const getWarrantyDiamondIDIsNull = async () => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `http://localhost:8080/api/warranty-management/warranties/get-jewelry-warranty`,
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/warranty-management/warranties/get-jewelry-warranty`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -114,7 +114,7 @@ export const getWarrantyJewelryIDIsNull = async () => {
   try {
     const token = localStorage.getItem("jwt");
     const response = await axios.get(
-      `http://localhost:8080/api/warranty-management/warranties/get-diamond-warranty`,
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/warranty-management/warranties/get-diamond-warranty`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }

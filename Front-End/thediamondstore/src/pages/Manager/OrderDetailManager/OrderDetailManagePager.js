@@ -9,10 +9,11 @@ import {
   Col,
   Badge,
 } from "react-bootstrap";
-import { getAllOrder, getOrderDetailManager } from "../../../api/OrderAPI";
+import { getAllOrder, getOrderDetailManager, fetchOrderDetailManager } from "../../../api/OrderAPI";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
 import SearchIcon from '@mui/icons-material/Search';
+import OrderSidebar from "../../../components/OrderSidebar/OrderSidebar";
 import UpdateOrderForm from "../../../components/OrderCRUD/OrderUpdate";
 import { Pagination, Tooltip } from "@mui/material";
 import { toast } from "react-toastify";
@@ -26,6 +27,7 @@ function OrderManagerPage() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [showImageModal, setShowImageModal] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const userRole = localStorage.getItem("role");
@@ -37,6 +39,22 @@ function OrderManagerPage() {
 
   const showAlert = () => {
     toast.warning("Rất tiếc, chức năng này chỉ dành cho quản lý và nhân viên bán hàng!");
+  };
+
+
+  const handleViewOrder = async (orderID) => {
+    try {
+      const orderDetails = await fetchOrderDetailManager(orderID);
+      setSelectedOrder(orderDetails);
+      setShowSidebar(true);
+    } catch (error) {
+      console.error('Failed to fetch order details:', error);
+    }
+  };
+
+  const handleCloseSidebar = () => {
+    setShowSidebar(false);
+    setSelectedOrder(null);
   };
 
   const handleStatusOrder = (orderStatus) => {
@@ -189,7 +207,20 @@ function OrderManagerPage() {
                   <tbody>
                     {currentPageData.map((order, index) => (
                       <tr key={index}>
-                        <td>{order.orderID}</td>
+                        <td>
+                          <button
+                            onClick={() => handleViewOrder(order.orderID)}
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              color: 'blue',
+                              textDecoration: 'underline',
+                              cursor: 'pointer',
+                            }}
+                          >
+                            {order.orderID}
+                          </button>
+                        </td>
                         <td>
                           {order.transactionNo ? (
                             <a
@@ -235,6 +266,14 @@ function OrderManagerPage() {
                     ))}
                   </tbody>
                 </Table>
+                {selectedOrder && (
+                  <OrderSidebar
+                    name="Order Details"
+                    order={selectedOrder}
+                    show={showSidebar}
+                    onHide={handleCloseSidebar}
+                  />
+                )}
               </div>
             </Card.Body>
             <Card.Footer>

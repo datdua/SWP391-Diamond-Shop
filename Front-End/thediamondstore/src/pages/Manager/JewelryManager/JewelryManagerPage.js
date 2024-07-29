@@ -7,6 +7,7 @@ import {
   Table,
   Row,
   Col,
+  Badge,
 } from "react-bootstrap";
 import { getAllJewelry, deleteJewelry, getWarrantityImage } from "../../../api/JewelryAPI.js";
 import AddJewelryForm from "../../../components/JewelryCRUD/AddJewelryForm.js";
@@ -58,6 +59,22 @@ const JewelryManagerPage = () => {
 
     fetchData();
   }, []);
+
+  const handleStatus = (Status) => {
+    if (Status === "Còn hàng") {
+      return (
+        <h6 style={{ marginTop: '10px' }}>
+          <Badge pill bg="success">Còn hàng</Badge>
+        </h6>
+      );
+    } else if (Status === "Hết hàng") {
+      return (
+        <h6 style={{ marginTop: '10px' }}>
+          <Badge pill bg="danger" text="dark">Hết hàng</Badge>
+        </h6>
+      );
+    }
+  };
 
   const handleClose = () => {
     setShowModal(false);
@@ -220,7 +237,7 @@ const JewelryManagerPage = () => {
             </Card.Header>
             <Card.Body>
               <div className="table-responsive">
-                <Table striped bordered hover className="account-table">
+                <Table hover className="account-table">
                   <thead>
                     <tr>
                       <th>
@@ -304,7 +321,7 @@ const JewelryManagerPage = () => {
                               : "Chưa có giá bán"}
                           </td>
                           <td>{jewelry.quantity}</td>
-                          <td>{jewelry.status}</td>
+                          <td>{handleStatus(jewelry.status)}</td>
                           <td>
                             <Tooltip
                               describeChild
