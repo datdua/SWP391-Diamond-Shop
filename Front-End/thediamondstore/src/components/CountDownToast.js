@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const CountdownToast = ({ closeToast }) => {
-    const [timeLeft, setTimeLeft] = useState(90000); // 2 minutes 30 seconds
+    const [timeLeft, setTimeLeft] = useState(90000); // 1 minutes 30 seconds
 
     useEffect(() => {
         const timer = setInterval(() => {

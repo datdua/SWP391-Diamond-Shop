@@ -13,7 +13,6 @@ export async function getAllProduct() {
         );
         console.log('Response:', response); 
         if (typeof response.data === 'object' && response.data.jewelry && response.data.diamonds) {
-            // Combine the two arrays into one
             return [...response.data.jewelry, ...response.data.diamonds];
         } else {
             throw new Error('Unexpected response format');

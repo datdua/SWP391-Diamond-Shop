@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import { deleteJewelry } from '../../api/jewelryCrud'; // Adjust this import to your file structure
+import { deleteJewelry } from '../../api/jewelryCrud';
 
 function DeleteJewelryButton({ jewelryID, onDelete }) {
   const handleDelete = async () => {

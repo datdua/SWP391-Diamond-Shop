@@ -180,7 +180,7 @@ function AccountManager() {
                     <tr>
                       <th>
                         <FormControlLabel
-                          className="checkbox-align" // Thêm class để áp dụng CSS
+                          className="checkbox-align"
                           control={
                             <Checkbox
                               color="primary"

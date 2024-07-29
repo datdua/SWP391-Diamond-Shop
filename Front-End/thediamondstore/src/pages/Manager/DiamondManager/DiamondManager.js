@@ -28,7 +28,7 @@ import { toast } from "react-toastify";
 
 const DiamondManagerPage = () => {
   const [diamondData, setDiamondData] = useState([]);
-  const [loading, setLoading] = useState(true); // State to manage loading status
+  const [loading, setLoading] = useState(true); 
   const [showModal, setShowModal] = useState(false);
   const [selectedDiamond, setSelectedDiamond] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);

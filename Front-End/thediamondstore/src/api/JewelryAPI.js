@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// Jewelry API functions
 export async function getAllJewelry() {
   const response = await axios.get(
     "http://localhost:8080/api/guest/jewelries/get-all"
@@ -32,8 +31,8 @@ export async function getWarrantityImage(warrantyID) {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-    console.log("API Response:", response.data); // Debug line
-    return response.data.warrantyImage; // Correctly extract the warrantityImage URL
+    console.log("API Response:", response.data); 
+    return response.data.warrantyImage; 
   } catch (error) {
     throw new Error("Failed to fetch diamond warranty image");
   }
