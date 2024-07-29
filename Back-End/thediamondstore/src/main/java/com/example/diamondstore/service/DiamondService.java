@@ -68,7 +68,7 @@ public class DiamondService {
         updateDiamondStatusesAuto();
     }
 
-    @Scheduled(cron = "0 */30 * * * *")
+    @Scheduled(cron = "*/6 * * * * *")
     public void updateDiamondStatusesAuto() {
         List<Diamond> diamonds = diamondRepository.findAll();
         LocalDateTime now = LocalDateTime.now();

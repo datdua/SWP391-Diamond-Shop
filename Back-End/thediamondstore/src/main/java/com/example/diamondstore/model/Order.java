@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder.In;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -34,8 +35,11 @@ public class Order {
     @Column(name = "deliveryDate", nullable = false)
     private LocalDateTime deliveryDate;
 
-    @Column(name = "totalOrder", precision = 18, scale = 2)
+    @Column(name = "totalOrder", precision = 18, scale = 0)
     private BigDecimal totalOrder;
+
+    @Column(name = "subtotalOrder", precision = 18, scale = 0)
+    private BigDecimal subtotalOrder;
 
     @Column(name = "deliveryAddress")
     private String deliveryAddress;
@@ -44,7 +48,7 @@ public class Order {
     private String phoneNumber;
 
     @Column(name = "promotionCode")
-    private String promotionCode; 
+    private String promotionCode;
 
     @Column(name = "accountPoint")
     private Integer accountPoint;
@@ -52,9 +56,8 @@ public class Order {
     @Column(name = "transactionNo")
     private Integer transactionNo;
 
-    @JsonIgnore
-    @JsonManagedReference
     @OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<OrderDetail> orderDetails;
 
     @JsonManagedReference
@@ -64,22 +67,29 @@ public class Order {
     public Order() {
     }
 
+    
+
     public Order(Integer orderID, Account account, LocalDateTime startorderDate, String orderStatus,
-            LocalDateTime deliveryDate, BigDecimal totalOrder, String deliveryAddress, String phoneNumber,
-            String promotionCode, Integer transactionNo, List<OrderDetail> orderDetails, Integer accountPoint) {
+            LocalDateTime deliveryDate, BigDecimal totalOrder, BigDecimal subtotalOrder, String deliveryAddress,
+            String phoneNumber, String promotionCode, Integer accountPoint, Integer transactionNo,
+            List<OrderDetail> orderDetails, List<Cart> cartItems) {
         this.orderID = orderID;
         this.account = account;
         this.startorderDate = startorderDate;
         this.orderStatus = orderStatus;
         this.deliveryDate = deliveryDate;
         this.totalOrder = totalOrder;
+        this.subtotalOrder = subtotalOrder;
         this.deliveryAddress = deliveryAddress;
         this.phoneNumber = phoneNumber;
         this.promotionCode = promotionCode;
+        this.accountPoint = accountPoint;
         this.transactionNo = transactionNo;
         this.orderDetails = orderDetails;
-        this.accountPoint = accountPoint;
+        this.cartItems = cartItems;
     }
+
+
 
     public Integer getOrderID() {
         return orderID;
@@ -176,7 +186,7 @@ public class Order {
     public void setCartItems(List<Cart> cartItems) {
         this.cartItems = cartItems;
     }
-    
+
     public Integer getAccountPoint() {
         return accountPoint;
     }
@@ -184,5 +194,13 @@ public class Order {
     public void setAccountPoint(Integer accountPoint) {
         this.accountPoint = accountPoint;
     }
-    
+
+    public BigDecimal getSubtotalOrder() {
+        return subtotalOrder;
+    }
+
+    public void setSubtotalOrder(BigDecimal subtotalOrder) {
+        this.subtotalOrder = subtotalOrder;
+    }
+
 }

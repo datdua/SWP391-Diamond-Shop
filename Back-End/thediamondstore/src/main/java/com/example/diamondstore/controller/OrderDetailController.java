@@ -53,4 +53,9 @@ public class OrderDetailController {
     public ResponseEntity<?> getOrderDetailCustomer(@PathVariable Integer orderDetailID) {
         return ResponseEntity.ok(orderDetailService.getOrderDetail(orderDetailID));
     }
+
+    @GetMapping(value = "/orderDetail-management/orderDetails/warrantyHistories/{orderDetailID}", produces = "application/json;charset=UTF-8")
+    public ResponseEntity<?> getWarrantyHistoriesByOrderDetailID(@PathVariable Integer orderDetailID) {
+        return ResponseEntity.ok(orderDetailService.getWarrantyHistoriesByOrderDetailID(orderDetailID));
+    }
 }

@@ -34,7 +34,7 @@ public class SecurityConfig {
             "/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html",
             "/api/test/**", "/authenticate" };
 
-    private static final String[] GUEST_URL = { "/api/guest/**", "/api/auth/**" };
+    private static final String[] GUEST_URL = { "/api/guest/**", "/api/auth/**", "/api/accounts/**" };
 
     private static final String[] ADMIN_URL = { "/api/admin/**" };
 
@@ -52,7 +52,7 @@ public class SecurityConfig {
 
     private static final String[] ADMIN_MANAGER_SALE_STAFF_URL = { "/api/accounts/get/**", "/api/accounts/**", "/api/order-management/**",
             "/api/order-management/orders/get-all", "/api/order-management/orders/get-order-have-transaction-no",
-            "/api/promotion-management/**", "/api/accounts/update/**", "/api/order-management/orders/update/**", "/api/orderDetail-management/orderDetails/**" };
+            "/api/promotion-management/**", "/api/accounts/update/**", "/api/order-management/orders/update/**", "/api/orderDetail-management/orderDetails/**", "/api/warranty-history-management/**" };
 
     @Autowired
     private final AccountService UserService;

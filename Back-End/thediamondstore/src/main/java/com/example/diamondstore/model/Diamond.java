@@ -29,10 +29,10 @@ public class Diamond {
     @Column(name = "caratSize", precision = 16, scale = 2)
     private BigDecimal caratSize;
 
-    @Column(name = "diamondEntryPrice", precision = 16, scale = 2, nullable = true)
+    @Column(name = "diamondEntryPrice", precision = 18, scale = 0, nullable = true)
     private BigDecimal diamondEntryPrice;
 
-    @Column(name = "grossDiamondPrice", precision = 16, scale = 2, nullable = true)
+    @Column(name = "grossDiamondPrice", precision = 18, scale = 0, nullable = true)
     private BigDecimal grossDiamondPrice;
 
     @Column(name = "weight", precision = 16, scale = 2, nullable = true)

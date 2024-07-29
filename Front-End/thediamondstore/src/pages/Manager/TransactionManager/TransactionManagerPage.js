@@ -8,13 +8,15 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
-import { getOrdersHaveTransactionNo } from "../../../api/OrderAPI";
+import { getAllOrder, getOrderDetailManager } from "../../../api/OrderAPI";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import EditIcon from "@mui/icons-material/Edit";
 import UpdateOrderForm from "../../../components/OrderCRUD/OrderUpdate";
 import { Pagination, Tooltip } from "@mui/material";
+import { toast } from "react-toastify";
 import "../ProductManager.css";
 
-function TransactionManagerPage() {
+function OrderManagerPage() {
   const [orderData, setOrderData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -22,24 +24,44 @@ function TransactionManagerPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
+  const userRole = localStorage.getItem("role");
   const size = 8;
 
   const startIndex = (currentPage - 1) * size;
   const endIndex = startIndex + size;
   const currentPageData = orderData.slice(startIndex, endIndex);
 
+
+  const showAlert = () => {
+    toast.warning("Rất tiếc, chức năng này chỉ dành cho quản lý và nhân viên bán hàng!")
+  }
+
   const handleClose = () => {
     setShowModal(false);
     setIsUpdating(false);
   };
 
+  const handleCloseImageModal = () => {
+    setShowImageModal(false);
+    setSelectedImage("");
+  };
+
+  const handleShowUpdate = (order) => {
+    if (userRole !== "ROLE_SALE-STAFF" && userRole !== "ROLE_MANAGER") {
+      showAlert();
+    } else {
+      setSelectedOrder(order);
+      setIsUpdating(true);
+      setShowModal(true);
+    }
+  };
 
   const handleChangePage = (event, newPage) => {
     setCurrentPage(newPage);
   };
 
   const refreshTable = () => {
-    getOrdersHaveTransactionNo().then((data) => {
+    getAllOrder().then((data) => {
       setOrderData(data);
     });
   };
@@ -49,13 +71,8 @@ function TransactionManagerPage() {
     setShowImageModal(true);
   };
 
-  const handleCloseImageModal = () => {
-    setShowImageModal(false);
-    setSelectedImage("");
-  };
-
   useEffect(() => {
-    getOrdersHaveTransactionNo()
+    getAllOrder()
       .then((data) => setOrderData(data))
       .catch((error) => console.error("Failed to fetch order data:", error));
   }, []);
@@ -102,37 +119,43 @@ function TransactionManagerPage() {
                 <Table striped bordered hover className="account-table">
                   <thead>
                     <tr>
-                      <th>#</th>
-                      <th>Mã Giao Dịch</th>
+                      <th>STT</th>
                       <th>Mã Đơn Hàng</th>
+                      <th>Mã Giao Dịch</th>
                       <th>Mã Tài Khoản</th>
                       <th>Ngày Bắt Đầu Đơn Hàng</th>
                       <th>Tình Trạng Đơn Hàng</th>
                       <th>Ngày Giao Hàng</th>
-                      <th>Tổng Đơn</th>
+                      <th>Tổng giá đơn hàng</th>
+                      <th>Tổng giá gốc</th>
                       <th>Địa Chỉ Giao Hàng</th>
                       <th>Số Điện Thoại</th>
                       <th>Mã Khuyến Mãi</th>
+                      <th>Thao Tác</th>
                     </tr>
                   </thead>
                   <tbody>
                     {currentPageData.map((order, index) => (
                       <tr key={index}>
                         <td>{startIndex + index + 1}</td>
-                        <td>
-                          <a
-                            href={`https://sandbox.vnpayment.vn/merchantv2/Transaction/PaymentDetail/${order.transactionNo}.htm`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{
-                              color: "blue",
-                              textDecoration: "underline",
-                            }}
-                          >
-                            {order.transactionNo}
-                          </a>
-                        </td>
                         <td>{order.orderID}</td>
+                        <td>
+                          {order.transactionNo ? (
+                            <a
+                              href={`https://sandbox.vnpayment.vn/merchantv2/Transaction/PaymentDetail/${order.transactionNo}.htm`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                color: "blue",
+                                textDecoration: "underline",
+                              }}
+                            >
+                              {order.transactionNo}
+                            </a>
+                          ) : (
+                            "Đơn hàng chưa thanh toán"
+                          )}
+                        </td>
                         <td>{order.account.accountID}</td>
                         <td>{order.startorderDate}</td>
                         <td>{order.orderStatus}</td>
@@ -142,9 +165,25 @@ function TransactionManagerPage() {
                             ? order.totalOrder.toLocaleString() + " VNĐ"
                             : "N/A"}
                         </td>
+                        <td>{order.subtotalOrder}</td>
                         <td>{order.deliveryAddress}</td>
                         <td>{order.phoneNumber}</td>
                         <td>{order.promotionCode}</td>
+                        <td>
+                          <Tooltip
+                            describeChild
+                            title="Cập nhật thông tin"
+                            arrow
+                            placement="top"
+                          >
+                            <Button
+                              variant="link"
+                              onClick={() => handleShowUpdate(order)}
+                            >
+                              <EditIcon />
+                            </Button>
+                          </Tooltip>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -190,4 +229,4 @@ function TransactionManagerPage() {
   );
 }
 
-export default TransactionManagerPage;
+export default OrderManagerPage;

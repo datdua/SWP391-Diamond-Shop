@@ -26,7 +26,7 @@ public class DiamondPrice {
     @Column(name = "weight", precision = 16, scale = 2, nullable = true)
     private BigDecimal weight;
 
-    @Column(name = "diamondEntryPrice", precision = 16, scale = 2, nullable = true)
+    @Column(name = "diamondEntryPrice", precision = 16, scale = 0, nullable = true)
     private BigDecimal diamondEntryPrice;
 
     @Column(name = "clarity")

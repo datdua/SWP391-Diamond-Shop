@@ -71,7 +71,8 @@ public class OrderService {
     private JewelryRepository jewelryRepository;
 
     @Transactional
-    public ResponseEntity<?> createOrder(int accountID, String deliveryAddress, String promotionCode, Integer pointsToRedeem,
+    public ResponseEntity<?> createOrder(int accountID, String deliveryAddress, String promotionCode,
+            Integer pointsToRedeem,
             String phoneNumber) {
         List<Cart> cartItems = cartRepository.findByAccount_AccountID(accountID);
 
@@ -97,11 +98,13 @@ public class OrderService {
         order = orderRepository.save(order);
 
         BigDecimal totalOrder = BigDecimal.ZERO;
+        BigDecimal subtotalOrder = BigDecimal.ZERO;
         for (Cart cart : cartItems) {
             Diamond diamond = cart.getDiamond();
             if (diamond != null) {
                 if (cart.getQuantity() > diamond.getQuantity()) {
-                    return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số lượng kim cương không đủ"));
+                    return ResponseEntity.badRequest()
+                            .body(Collections.singletonMap("message", "Số lượng kim cương không đủ"));
                 }
                 diamond.setQuantity(diamond.getQuantity() - cart.getQuantity());
                 diamondRepository.save(diamond);
@@ -110,13 +113,16 @@ public class OrderService {
             Jewelry jewelry = cart.getJewelry();
             if (jewelry != null) {
                 if (cart.getQuantity() > jewelry.getQuantity()) {
-                    return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số lượng trang sức không đủ"));
+                    return ResponseEntity.badRequest()
+                            .body(Collections.singletonMap("message", "Số lượng trang sức không đủ"));
                 }
                 jewelry.setQuantity(jewelry.getQuantity() - cart.getQuantity());
                 jewelryRepository.save(jewelry);
             }
 
             totalOrder = totalOrder.add(cart.getGrossCartPrice());
+            subtotalOrder = subtotalOrder.add(cart.getGrossCartPrice());
+            order.setSubtotalOrder(subtotalOrder);
             cart.setOrder(order);
             cart.setCartStatus("Đang chờ thanh toán");
             cartRepository.save(cart);
@@ -149,12 +155,12 @@ public class OrderService {
     }
 
     @Transactional
-    @Scheduled(fixedRate = 120000 ) // Run every 2 minute 
+    @Scheduled(fixedRate = 5000) // Run every 30 seconds
     public void handleOrderTimeout() {
         List<Order> orders = orderRepository.findByOrderStatus("Đang xử lý");
         for (Order currentOrder : orders) {
             if (isOrderTimedOut(currentOrder)) {
-                currentOrder.setOrderStatus("Thất bại");
+                currentOrder.setOrderStatus("Đặt hàng thất bại");
                 orderRepository.save(currentOrder);
 
                 for (Cart cart : currentOrder.getCartItems()) {
@@ -172,16 +178,16 @@ public class OrderService {
         }
     }
 
-    // Check if that Order is time out 2p30s
+    // Check if that Order is time out 1p
     private boolean isOrderTimedOut(Order order) {
-        return order.getStartorderDate().isBefore(LocalDateTime.now().minusMinutes(2).minusSeconds(30));
+        return order.getStartorderDate().isBefore(LocalDateTime.now().minusMinutes(1).minusSeconds(30));
     }
 
     public void cancelOrder(int orderID) {
         Order order = orderRepository.findById(orderID)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found"));
 
-        if (!order.getOrderStatus().equals("Đang xử lý") && !order.getOrderStatus().equals("Thất bại")) {
+        if (!order.getOrderStatus().equals("Đang xử lý") && !order.getOrderStatus().equals("Đặt hàng thất bại")) {
             throw new IllegalStateException("Chỉ Order có Status 'Đang xử lý' mới được xóa");
         }
 

@@ -1,14 +1,18 @@
 package com.example.diamondstore.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -26,7 +30,7 @@ public class OrderDetail {
 
     @ManyToOne
     @JoinColumn(name = "orderID", nullable = false)
-    @JsonBackReference
+    @JsonManagedReference
     private Order order;
 
     @ManyToOne
@@ -64,6 +68,10 @@ public class OrderDetail {
     @JoinColumn(name = "warrantyID", nullable = true)
     @JsonManagedReference
     private Warranty warranty;
+
+    @OneToMany(mappedBy = "orderDetail", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<WarrantyHistory> warrantyHistories;
 
     @Column(name = "diamondCertificateImage", nullable = true)
     private String diamondCertificateImage;
@@ -193,4 +201,11 @@ public class OrderDetail {
         this.warranty = warranty;
     }
 
+    public List<WarrantyHistory> getWarrantyHistories() {
+        return warrantyHistories;
+    }
+
+    public void setWarrantyHistories(List<WarrantyHistory> warrantyHistories) {
+        this.warrantyHistories = warrantyHistories;
+    }
 }

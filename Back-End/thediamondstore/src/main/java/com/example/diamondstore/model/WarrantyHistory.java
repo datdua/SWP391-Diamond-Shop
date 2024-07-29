@@ -24,7 +24,7 @@ public class WarrantyHistory {
     private Integer warrantyHistoryID;
 
     @ManyToOne
-    @JoinColumn(name = "warrantyID", nullable = false)
+    @JoinColumn(name = "warrantyID", nullable = true)
     @JsonBackReference
     private Warranty warranty;
 
@@ -36,18 +36,23 @@ public class WarrantyHistory {
     @Column(name = "expirationDate", nullable = false)
     private LocalDateTime expirationDate;
 
+    @ManyToOne
+    @JoinColumn(name = "orderDetailID", nullable = false)
+    @JsonBackReference
+    private OrderDetail orderDetail;
+
     @Column(name = "warrantyStatus")
     private String warrantyStatus;
 
     public WarrantyHistory() {
     }
 
-    public WarrantyHistory(Integer warrantyHistoryID, Warranty warranty, LocalDateTime effectiveDate,
-            LocalDateTime expirationDate, String warrantyStatus) {
+    public WarrantyHistory(Integer warrantyHistoryID, Warranty warranty, LocalDateTime effectiveDate, LocalDateTime expirationDate, OrderDetail orderDetail, String warrantyStatus) {
         this.warrantyHistoryID = warrantyHistoryID;
         this.warranty = warranty;
         this.effectiveDate = effectiveDate;
         this.expirationDate = expirationDate;
+        this.orderDetail = orderDetail;
         this.warrantyStatus = warrantyStatus;
     }
 
@@ -91,5 +96,12 @@ public class WarrantyHistory {
         this.warrantyStatus = warrantyStatus;
     }
     
+    public OrderDetail getOrderDetail() {
+        return orderDetail;
+    }
+
+    public void setOrderDetail(OrderDetail orderDetail) {
+        this.orderDetail = orderDetail;
+    }
     
 }
