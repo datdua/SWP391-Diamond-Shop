@@ -12,6 +12,7 @@ import {
 import { getAllOrder, getOrderDetailManager } from "../../../api/OrderAPI";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
+import SearchIcon from '@mui/icons-material/Search';
 import UpdateOrderForm from "../../../components/OrderCRUD/OrderUpdate";
 import { Pagination, Tooltip } from "@mui/material";
 import { toast } from "react-toastify";
@@ -19,18 +20,20 @@ import "../ProductManager.css";
 
 function OrderManagerPage() {
   const [orderData, setOrderData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const userRole = localStorage.getItem("role");
   const size = 9;
 
   const startIndex = (currentPage - 1) * size;
   const endIndex = startIndex + size;
-  const currentPageData = orderData.slice(startIndex, endIndex);
+  const currentPageData = filteredData.slice(startIndex, endIndex);
 
   const showAlert = () => {
     toast.warning("Rất tiếc, chức năng này chỉ dành cho quản lý và nhân viên bán hàng!");
@@ -39,19 +42,19 @@ function OrderManagerPage() {
   const handleStatusOrder = (orderStatus) => {
     if (orderStatus === "Đã thanh toán") {
       return (
-        <h6 style={{marginTop:'10px'}}>
+        <h6 style={{ marginTop: '10px' }}>
           <Badge pill bg="success">Đã thanh toán</Badge>
         </h6>
       );
     } else if (orderStatus === "Đang xử lý") {
       return (
-        <h6 style={{marginTop:'10px'}}>
+        <h6 style={{ marginTop: '10px' }}>
           <Badge pill bg="warning" text="dark">Đang xử lý</Badge>
         </h6>
       );
     } else {
       return (
-        <h6 style={{marginTop:'10px'}}>
+        <h6 style={{ marginTop: '10px' }}>
           <Badge pill bg="danger">Thanh toán thất bại</Badge>
         </h6>
       );
@@ -85,6 +88,7 @@ function OrderManagerPage() {
   const refreshTable = () => {
     getAllOrder().then((data) => {
       setOrderData(data);
+      setFilteredData(data);
     });
   };
 
@@ -93,9 +97,26 @@ function OrderManagerPage() {
     setShowImageModal(true);
   };
 
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    const filtered = orderData.filter((order) => {
+      const orderIDSearch = String(order.orderID).toLowerCase();
+      const accountNameSearch = String(order.account.accountName).toLowerCase();
+      const transactionNoSearch = String(order.transactionNo).toLowerCase();
+  
+      return orderIDSearch.includes(query) || accountNameSearch.includes(query) || transactionNoSearch.includes(query);
+    });
+  
+    setFilteredData(filtered);
+  };
+
   useEffect(() => {
     getAllOrder()
-      .then((data) => setOrderData(data))
+      .then((data) => {
+        setOrderData(data);
+        setFilteredData(data);
+      })
       .catch((error) => console.error("Failed to fetch order data:", error));
   }, []);
 
@@ -117,12 +138,26 @@ function OrderManagerPage() {
                   Quản Lý Đơn Hàng
                   <Button
                     variant="link"
-                    style={{ textDecoration: "none", color: "#000000", border: "2px solid #F9B115", marginLeft: "10px"}}
+                    style={{ textDecoration: "none", color: "#000000", border: "2px solid #F9B115", marginLeft: "10px" }}
                     onClick={refreshTable}
                   >
                     <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> Tải Lại
                   </Button>
                 </div>
+
+                <div className="input-box" style={{ display: "flex", alignItems: "center" }}>
+                  <SearchIcon style={{ marginRight: "8px" }} />
+                  <input
+                    type="search"
+                    name="search-form"
+                    id="search-form"
+                    className="search-input"
+                    style={{ margin: "0 5px 5px 0", width: "370px", height: "50px" }}
+                    onChange={handleSearch}
+                    placeholder="Tìm kiếm theo mã đơn hàng, tên khách hàng"
+                  />
+                </div>
+
                 <Button
                   variant="warning"
                   onClick={() =>
@@ -153,7 +188,7 @@ function OrderManagerPage() {
                   </thead>
                   <tbody>
                     {currentPageData.map((order, index) => (
-                      <tr>
+                      <tr key={index}>
                         <td>{order.orderID}</td>
                         <td>
                           {order.transactionNo ? (
@@ -204,7 +239,7 @@ function OrderManagerPage() {
             </Card.Body>
             <Card.Footer>
               <Pagination
-                count={Math.ceil(orderData.length / size)}
+                count={Math.ceil(filteredData.length / size)}
                 page={currentPage}
                 onChange={handleChangePage}
               />
