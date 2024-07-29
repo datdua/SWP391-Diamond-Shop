@@ -14,7 +14,7 @@ import { getAllAccount } from "../api/accountCrud";
 import AddAccountForm from "../components/AccountCRUD/AddAccountForm.js";
 import UpdateAccountForm from "../components/AccountCRUD/UpdateAccountForm";
 import DeleteAccountForm from "../components/AccountCRUD/DeleteAccountForm";
-import "../assets/css/AccountManager.css"; // Import file CSS mới
+import "../assets/css/AccountManager.css";
 import { FiRefreshCw } from "react-icons/fi";
 
 function AccountManager() {

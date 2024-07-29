@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createAccount } from '../../api/accountCrud'; // Adjust this import to your file structure
+import { createAccount } from '../../api/accountCrud';
 
 function AddAccountForm() {
     const [account, setAccount] = useState({
@@ -10,7 +10,7 @@ function AddAccountForm() {
         role: '',
     });
     
-    const [message, setMessage] = useState(''); // New state variable for the message
+    const [message, setMessage] = useState('');
     
     const handleChange = (event) => {
         setAccount({ ...account, [event.target.name]: event.target.value });
@@ -21,10 +21,10 @@ function AddAccountForm() {
         try {
         const response = await createAccount(account);
         console.log(response);
-        setMessage('Tạo mới tài khoản thành công'); // Set the message on success
+        setMessage('Tạo mới tài khoản thành công');
         } catch (error) {
         console.error(error);
-        setMessage('Tạo mới tài khoản thất bại'); // Set the message on failure
+        setMessage('Tạo mới tài khoản thất bại');
         }
     };
     

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createDiamond } from '../../api/diamondCrud'; // Adjust this import to your file structure
+import { createDiamond } from '../../api/diamondCrud'; 
 
 function AddDiamondForm() {
   const [diamond, setdiamond] = useState({
@@ -18,7 +18,7 @@ function AddDiamondForm() {
     origin: '',
   });
 
-  const [message, setMessage] = useState(''); // New state variable for the message
+  const [message, setMessage] = useState(''); 
 
   const handleChange = (event) => {
     setdiamond({ ...diamond, [event.target.name]: event.target.value });
@@ -29,10 +29,10 @@ function AddDiamondForm() {
     try {
       const response = await createDiamond(diamond);
       console.log(response);
-      setMessage('Tạo mới Kim Cương thành công'); // Set the message on success
+      setMessage('Tạo mới Kim Cương thành công'); 
     } catch (error) {
       console.error(error);
-      setMessage('Tạo mới Kim Cương thất bại'); // Set the message on failure
+      setMessage('Tạo mới Kim Cương thất bại'); 
     }
   };
 

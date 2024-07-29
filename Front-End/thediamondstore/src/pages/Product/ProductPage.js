@@ -46,9 +46,8 @@ function ProductPage() {
         let data;
 
         if (searchTerm.trim() === '') {
-          // Fetch all products if no search term
           data = await getProductPage(currentPage, itemsPerPage);
-          console.log("Fetched data:", data); // Debug log
+          console.log("Fetched data:", data);
 
           if (data) {
             const combinedProducts = [
@@ -60,7 +59,7 @@ function ProductPage() {
               imageUrl: item.jewelryImage || item.diamondImage,
               price: item.jewelryEntryPrice || item.diamondEntryPrice,
               type: item.jewelryID ? "jewelry" : "diamond",
-              quantity: item.quantity, // Add this line
+              quantity: item.quantity, 
             }));
 
             setProducts(combinedProducts);
@@ -68,7 +67,6 @@ function ProductPage() {
             setTotalPages(Math.ceil((data.diamondsTotalElements + data.jewelryTotalElements) / itemsPerPage));
           }
         } else {
-          // Fetch products based on search term
           data = await searchProductionByName(searchTerm, currentPage, itemsPerPage);
           console.log("Search results:", data);
 

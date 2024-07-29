@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import { deleteDiamond } from '../../api/diamondCrud'; // Adjust this import to your file structure
+import { deleteDiamond } from '../../api/diamondCrud'; 
 
 function DeleteDiamondButton({ diamondID, onDelete }) {
   const handleDelete = async () => {

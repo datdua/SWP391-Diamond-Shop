@@ -82,8 +82,6 @@ function DiamondPage() {
         try {
             if (filterApplied) {
                 const filtersToUse = {};
-
-                // Only include non-empty and non-'Tất cả' filters
                 Object.entries(filters).forEach(([key, value]) => {
                     if (value !== '' && value !== 'Tất cả') {
                         filtersToUse[key] = value;
