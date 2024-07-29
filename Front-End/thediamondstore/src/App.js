@@ -109,7 +109,6 @@ function App() {
             <Route path="order-detail-manager" element={<OrderDetailManagerPage />} />
             <Route path="jewelry/price/gold-price-manager" element={<GoldPriceManager />} />
             <Route path="diamond/price/diamond-price-manager" element={<DiamondPriceManager />} />
-            <Route path="transaction-manager" element={<TransactionManagerPage />} />
             <Route path="diamond/certificate-manager" element={<CertificateManagerPage />} />
           </Route>
 
@@ -126,14 +125,12 @@ function App() {
             <Route path="order-detail-manager" element={<OrderDetailManagerPage />} />
             <Route path="jewelry/price/gold-price-manager" element={<GoldPriceManager />} />
             <Route path="diamond/price/diamond-price-manager" element={<DiamondPriceManager />} />
-            <Route path="transaction-manager" element={<TransactionManagerPage />} />
             <Route path="diamond/certificate-manager" element={<CertificateManagerPage />} />
           </Route>
 
           {/* Sale Staff Routes */}
           <Route path="/sale-staff/*" element={<SideBarSaleStaff />}>
             <Route path="profile" element={<ProfilePage />} />
-            <Route path="transaction-manager" element={<TransactionManagerPage />} />
             <Route path="promotion-manager" element={<PromotionManagerPage />} />
             <Route path="order-detail-manager" element={<OrderDetailManagerPage />} />
           </Route>

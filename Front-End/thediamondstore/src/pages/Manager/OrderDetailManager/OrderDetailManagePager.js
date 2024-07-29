@@ -7,31 +7,59 @@ import {
   Table,
   Row,
   Col,
+  Badge,
 } from "react-bootstrap";
-import { getAllOrderDetail, getOrderDetailById } from "../../../api/OrderDetailAPI";
+import { getAllOrder, getOrderDetailManager } from "../../../api/OrderAPI";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import EditIcon from "@mui/icons-material/Edit";
+import SearchIcon from '@mui/icons-material/Search';
+import UpdateOrderForm from "../../../components/OrderCRUD/OrderUpdate";
 import { Pagination, Tooltip } from "@mui/material";
 import { toast } from "react-toastify";
+import "../ProductManager.css";
 
-function OrderDetailManagerPage() {
-  const [orderDetailData, setOrderDetailData] = useState([]);
+function OrderManagerPage() {
+  const [orderData, setOrderData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [selectedOrderDetail, setSelectedOrderDetail] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const userRole = localStorage.getItem("role");
-  const size = 8;
+  const size = 9;
 
   const startIndex = (currentPage - 1) * size;
   const endIndex = startIndex + size;
-  const currentPageData = orderDetailData.slice(startIndex, endIndex);
+  const currentPageData = filteredData.slice(startIndex, endIndex);
 
   const showAlert = () => {
-    toast.warning("Rất tiếc, chức năng này chỉ dành cho quản lý và nhân viên bán hàng!")
-  }
+    toast.warning("Rất tiếc, chức năng này chỉ dành cho quản lý và nhân viên bán hàng!");
+  };
+
+  const handleStatusOrder = (orderStatus) => {
+    if (orderStatus === "Đã thanh toán") {
+      return (
+        <h6 style={{ marginTop: '10px' }}>
+          <Badge pill bg="success">Đã thanh toán</Badge>
+        </h6>
+      );
+    } else if (orderStatus === "Đang xử lý") {
+      return (
+        <h6 style={{ marginTop: '10px' }}>
+          <Badge pill bg="warning" text="dark">Đang xử lý</Badge>
+        </h6>
+      );
+    } else {
+      return (
+        <h6 style={{ marginTop: '10px' }}>
+          <Badge pill bg="danger">Thanh toán thất bại</Badge>
+        </h6>
+      );
+    }
+  };
 
   const handleClose = () => {
     setShowModal(false);
@@ -43,11 +71,11 @@ function OrderDetailManagerPage() {
     setSelectedImage("");
   };
 
-  const handleShowUpdate = (orderDetail) => {
+  const handleShowUpdate = (order) => {
     if (userRole !== "ROLE_SALE-STAFF" && userRole !== "ROLE_MANAGER") {
       showAlert();
     } else {
-      setSelectedOrderDetail(orderDetail);
+      setSelectedOrder(order);
       setIsUpdating(true);
       setShowModal(true);
     }
@@ -58,8 +86,9 @@ function OrderDetailManagerPage() {
   };
 
   const refreshTable = () => {
-    getAllOrderDetail().then((data) => {
-      setOrderDetailData(data);
+    getAllOrder().then((data) => {
+      setOrderData(data);
+      setFilteredData(data);
     });
   };
 
@@ -68,10 +97,27 @@ function OrderDetailManagerPage() {
     setShowImageModal(true);
   };
 
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+    const filtered = orderData.filter((order) => {
+      const orderIDSearch = String(order.orderID).toLowerCase();
+      const accountNameSearch = String(order.account.accountName).toLowerCase();
+      const transactionNoSearch = String(order.transactionNo).toLowerCase();
+  
+      return orderIDSearch.includes(query) || accountNameSearch.includes(query) || transactionNoSearch.includes(query);
+    });
+  
+    setFilteredData(filtered);
+  };
+
   useEffect(() => {
-    getAllOrderDetail()
-      .then((data) => setOrderDetailData(data))
-      .catch((error) => console.error("Failed to fetch order detail data:", error));
+    getAllOrder()
+      .then((data) => {
+        setOrderData(data);
+        setFilteredData(data);
+      })
+      .catch((error) => console.error("Failed to fetch order data:", error));
   }, []);
 
   return (
@@ -89,53 +135,102 @@ function OrderDetailManagerPage() {
                 }}
               >
                 <div>
-                  Chi Tiết Đơn Hàng
+                  Quản Lý Đơn Hàng
                   <Button
                     variant="link"
-                    style={{ textDecoration: "none" }}
+                    style={{ textDecoration: "none", color: "#000000", border: "2px solid #F9B115", marginLeft: "10px" }}
                     onClick={refreshTable}
                   >
                     <RefreshIcon style={{ margin: "0 5px 5px 0" }} /> Tải Lại
                   </Button>
                 </div>
+
+                <div className="input-box" style={{ display: "flex", alignItems: "center" }}>
+                  <SearchIcon style={{ marginRight: "8px" }} />
+                  <input
+                    type="search"
+                    name="search-form"
+                    id="search-form"
+                    className="search-input"
+                    style={{ margin: "0 5px 5px 0", width: "370px", height: "50px" }}
+                    onChange={handleSearch}
+                    placeholder="Tìm kiếm theo mã đơn hàng, tên khách hàng"
+                  />
+                </div>
+
+                <Button
+                  variant="warning"
+                  onClick={() =>
+                    window.open(
+                      "https://sandbox.vnpayment.vn/merchantv2/Users/Login.htm",
+                      "_blank"
+                    )
+                  }
+                >
+                  Quản lý giao dịch VNPay
+                </Button>
               </Card.Title>
             </Card.Header>
             <Card.Body>
               <div className="table-responsive">
-                <Table striped bordered hover className="account-table">
+                <Table hover className="account-table">
                   <thead>
                     <tr>
-                      <th>STT</th>
-                      <th>Mã Chi Tiết Đơn Hàng</th>
-                      <th>Mã Đơn Hàng</th>
-                      <th>Mã Tài Khoản</th>
-                      <th>Mã Kim Cương</th>
-                      <th>Mã Trang Sức</th>
-                      <th>Số Lượng</th>
-                      <th>Kích Thước Trang Sức</th>
-                      <th>Giá</th>
-                      <th>Tổng Giá Giỏ Hàng</th>
-                      <th>Tổng Giá</th>
-                      <th>Mã Bảo Hành</th>
-                      <th>Mã Khuyến Mãi</th>
+                      <th>Mã đơn hàng</th>
+                      <th>Mã giao dịch</th>
+                      <th>Ngày tạo đơn</th>
+                      <th>Tên khách hàng</th>
+                      <th>Trạng thái đơn hàng</th>
+                      <th>Ngày giao hàng</th>
+                      <th>Tổng tiền</th>
+                      <th>Thao tác</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {currentPageData.map((orderDetail, index) => (
+                    {currentPageData.map((order, index) => (
                       <tr key={index}>
-                        <td>{startIndex + index + 1}</td>
-                        <td>{orderDetail.orderDetailID}</td>
-                        <td>{orderDetail.order.orderID}</td>
-                        <td>{orderDetail.account.accountID}</td>
-                        <td>{orderDetail.diamond ? orderDetail.diamond.diamondID : "Không có kim cương"}</td>
-                        <td>{orderDetail.jewelry ? orderDetail.jewelry.jewelryID : "Không có trang sức"}</td>
-                        <td>{orderDetail.quantity}</td>
-                        <td>{orderDetail.sizeJewelry}</td>
-                        <td>{orderDetail.price ? orderDetail.price.toLocaleString() + " VNĐ" : "N/A"}</td>
-                        <td>{orderDetail.grossCartPrice ? orderDetail.grossCartPrice.toLocaleString() + " VNĐ" : "N/A"}</td>
-                        <td>{orderDetail.totalPrice ? orderDetail.totalPrice.toLocaleString() + " VNĐ" : "N/A"}</td>
-                        <td>{orderDetail.warranty ? orderDetail.warranty.warrantyID : "Chưa có giấy bảo hành"}</td>
-                        <td>{orderDetail.promotion ? orderDetail.promotion.promotionCode : "Không có mã giảm giá"}</td>
+                        <td>{order.orderID}</td>
+                        <td>
+                          {order.transactionNo ? (
+                            <a
+                              href={`https://sandbox.vnpayment.vn/merchantv2/Transaction/PaymentDetail/${order.transactionNo}.htm`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{
+                                color: "blue",
+                                textDecoration: "underline",
+                              }}
+                            >
+                              {order.transactionNo}
+                            </a>
+                          ) : (
+                            "------"
+                          )}
+                        </td>
+                        <td>{order.startorderDate}</td>
+                        <td>{order.account.accountName}</td>
+                        <td>{handleStatusOrder(order.orderStatus)}</td>
+                        <td>{order.deliveryDate}</td>
+                        <td>
+                          {order.totalOrder
+                            ? order.totalOrder.toLocaleString() + " VNĐ"
+                            : "------"}
+                        </td>
+                        <td>
+                          <Tooltip
+                            describeChild
+                            title="Cập nhật thông tin"
+                            arrow
+                            placement="top"
+                          >
+                            <Button
+                              variant="link"
+                              onClick={() => handleShowUpdate(order)}
+                            >
+                              <EditIcon />
+                            </Button>
+                          </Tooltip>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -144,7 +239,7 @@ function OrderDetailManagerPage() {
             </Card.Body>
             <Card.Footer>
               <Pagination
-                count={Math.ceil(orderDetailData.length / size)}
+                count={Math.ceil(filteredData.length / size)}
                 page={currentPage}
                 onChange={handleChangePage}
               />
@@ -155,13 +250,13 @@ function OrderDetailManagerPage() {
 
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>{isUpdating ? "Cập Nhật Chi Tiết Đơn Hàng" : "Thêm Chi Tiết Đơn Hàng"}</Modal.Title>
+          <Modal.Title>{isUpdating ? "Cập Nhật Đơn Hàng" : "Thêm Đơn Hàng"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {isUpdating ? (
-            <div>Update OrderDetail Form Here</div>
+            <UpdateOrderForm order={selectedOrder} onClose={handleClose} />
           ) : (
-            <div>Add OrderDetail Form Here</div>
+            <div>Add Order Form Here</div>
           )}
         </Modal.Body>
       </Modal>
@@ -181,4 +276,4 @@ function OrderDetailManagerPage() {
   );
 }
 
-export default OrderDetailManagerPage;
+export default OrderManagerPage;
