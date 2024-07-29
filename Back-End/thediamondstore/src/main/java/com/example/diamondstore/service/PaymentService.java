@@ -27,6 +27,8 @@ import com.example.diamondstore.config.PaymentConfig;
 import com.example.diamondstore.model.AccumulatePoints;
 import com.example.diamondstore.model.Cart;
 import com.example.diamondstore.model.Certificate;
+import com.example.diamondstore.model.Diamond;
+import com.example.diamondstore.model.Jewelry;
 import com.example.diamondstore.model.Order;
 import com.example.diamondstore.model.OrderDetail;
 import com.example.diamondstore.model.Payment;
@@ -36,6 +38,8 @@ import com.example.diamondstore.model.WarrantyHistory;
 import com.example.diamondstore.repository.AccumulatePointsRepository;
 import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.CertificateRepository;
+import com.example.diamondstore.repository.DiamondRepository;
+import com.example.diamondstore.repository.JewelryRepository;
 import com.example.diamondstore.repository.OrderDetailRepository;
 import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.repository.PaymentRepository;
@@ -72,6 +76,12 @@ public class PaymentService {
 
     @Autowired
     private CertificateRepository certificateRepository;
+
+    @Autowired
+    private DiamondRepository diamondRepository;
+
+    @Autowired
+    private JewelryRepository jewelryRepository;
 
     public ResponseEntity<?> createPayment(Integer orderID) throws UnsupportedEncodingException {
         String vnp_Version = "2.1.0";
@@ -269,6 +279,19 @@ public class PaymentService {
 
             order.setOrderStatus("Thanh toán thất bại");
             orderRepository.save(order);
+
+            List<Cart> cartItems = cartRepository.findByOrder(order);
+            for (Cart cart : cartItems) {
+                if (cart.getDiamond() != null) {
+                    Diamond diamond = cart.getDiamond();
+                    diamond.setQuantity(diamond.getQuantity() + cart.getQuantity());
+                    diamondRepository.save(diamond);
+                } else if (cart.getJewelry() != null) {
+                    Jewelry jewelry = cart.getJewelry();
+                    jewelry.setQuantity(jewelry.getQuantity() + cart.getQuantity());
+                    jewelryRepository.save(jewelry);
+                }
+            }
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(transactionStatusDTO);
