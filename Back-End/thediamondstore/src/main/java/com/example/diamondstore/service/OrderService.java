@@ -187,7 +187,7 @@ public class OrderService {
         Order order = orderRepository.findById(orderID)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found"));
 
-        if (!order.getOrderStatus().equals("Đang xử lý") && !order.getOrderStatus().equals("Thất bại")) {
+        if (!order.getOrderStatus().equals("Đang xử lý") && !order.getOrderStatus().equals("Đặt hàng thất bại")) {
             throw new IllegalStateException("Chỉ Order có Status 'Đang xử lý' mới được xóa");
         }
 

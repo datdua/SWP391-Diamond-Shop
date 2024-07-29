@@ -34,7 +34,7 @@ public class SecurityConfig {
             "/configuration/security", "/swagger-ui/**", "/webjars/**", "/swagger-ui.html",
             "/api/test/**", "/authenticate" };
 
-    private static final String[] GUEST_URL = { "/api/guest/**", "/api/auth/**" };
+    private static final String[] GUEST_URL = { "/api/guest/**", "/api/auth/**", "/api/accounts/**" };
 
     private static final String[] ADMIN_URL = { "/api/admin/**" };
 
