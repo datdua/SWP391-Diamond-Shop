@@ -201,7 +201,7 @@ public class PaymentService {
                 orderDetail.setSizeJewelry(cart.getSizeJewelry());
                 orderDetail.setPrice(cart.getPrice());
                 orderDetail.setGrossCartPrice(cart.getGrossCartPrice());
-                orderDetail.setTotalPrice(cart.getTotalPrice());
+                orderDetail.setTotalPrice(cart.getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())));
                 orderDetail.setPromotion(promotion);
                 orderDetailRepository.save(orderDetail);
 

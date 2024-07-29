@@ -150,7 +150,7 @@ public class CartService {
         totalPrice = price.multiply(BigDecimal.valueOf(cart.getQuantity()));
 
         BigDecimal grossCartPrice;
-        if (cart.getDiamond() != null && cart.getJewelry() != null) {
+        if (cart.getDiamond() != null || cart.getJewelry() != null) {
             grossCartPrice = totalPrice.multiply(BigDecimal.valueOf(1.2));
         } else {
             grossCartPrice = totalPrice.multiply(BigDecimal.valueOf(1.1));
