@@ -191,8 +191,19 @@ public class OrderService {
             throw new IllegalStateException("Chỉ Order có Status 'Đang xử lý' mới được xóa");
         }
 
-        // Delete the Cart items associated with the Order
         List<Cart> carts = order.getCartItems();
+        for (Cart cart : carts) {
+            if (cart.getDiamond() != null) {
+                Diamond diamond = cart.getDiamond();
+                diamond.setQuantity(diamond.getQuantity() + cart.getQuantity());
+                diamondRepository.save(diamond);
+            } else if (cart.getJewelry() != null) {
+                Jewelry jewelry = cart.getJewelry();
+                jewelry.setQuantity(jewelry.getQuantity() + cart.getQuantity());
+                jewelryRepository.save(jewelry);
+            }
+        }
+
         for (Cart cart : carts) {
             cartRepository.delete(cart);
         }
