@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { updateJewelry } from '../../api/jewelryCrud.js'; // Adjust this import to your file structure
+import { updateJewelry } from '../../api/jewelryCrud.js';
 
 function UpdateJewelryForm({ jewelry }) {
   const [updatedJewelry, setUpdatedJewelry] = useState(jewelry);

@@ -174,7 +174,7 @@ function JewelryDetailPage() {
                                 </Badge>
                                 )}
                               </div>
-                              <span className="tm-prodetails-singleinfo">Sản phẩm còn lại: {jewelry.quantity}</span>
+                              <span className="tm-prodetails-singleinfo" style={{marginTop:'8px', marginBottom:'8px'}}>Sản phẩm còn lại: {jewelry.quantity}</span>
                               <hr/>
                               <div className="tm-prodetails-infos">
                                 <div className="tm-prodetails-singleinfo" style={{marginTop: '15px' }}>

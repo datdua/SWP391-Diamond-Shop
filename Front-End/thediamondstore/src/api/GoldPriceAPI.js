@@ -4,7 +4,7 @@ export const getAllGoldPrice = async () => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.get(
-      "http://localhost:8080/api/gold-prices/get-all",
+      "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/gold-prices/get-all",
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -18,7 +18,7 @@ export const getAllGoldPrice = async () => {
 export const getGoldPriceById = async (goldPriceID) => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/gold-prices/get-by-id/${goldPriceID}`
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/gold-prices/get-by-id/${goldPriceID}`
     );
     return response.data;
   } catch (error) {
@@ -30,7 +30,7 @@ export const createGoldPrice = async (goldPrice) => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.post(
-      "http://localhost:8080/api/manager/gold-price-management/gold-prices/add",
+      "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/manager/gold-price-management/gold-prices/add",
       goldPrice,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -46,7 +46,7 @@ export const updateGoldPrice = async (goldPriceID, goldPrice) => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.put(
-      `http://localhost:8080/api/manager/gold-price-management/gold-prices/update/${goldPriceID}`,
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/manager/gold-price-management/gold-prices/update/${goldPriceID}`,
       goldPrice,
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -62,10 +62,11 @@ export const deleteGoldPrice = async (goldPriceIDs) => {
   try {
     const token = localStorage.getItem('jwt');
     const response = await axios.delete(
-      `http://localhost:8080/api/manager/gold-price-management/gold-prices/delete`
-      , { 
+      `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/manager/gold-price-management/gold-prices/delete`
+      , {
         headers: { Authorization: `Bearer ${token}` },
-        data: goldPriceIDs }
+        data: goldPriceIDs
+      }
     );
     return response.data;
   } catch (error) {

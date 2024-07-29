@@ -116,7 +116,7 @@ function CheckoutPage() {
             const orderData = await createOrder(accountId, deliveryAddress, phoneNumber, usePoints ? totalAccumulatedPoints : 0, promotionCode);
 
             toast(<CountdownToast />, {
-                autoClose: 150000,
+                autoClose: 90000,
                 closeButton: false,
                 style: {
                     backgroundColor: 'white',

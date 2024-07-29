@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { updateDiamond } from '../../api/diamondCrud.js'; // Adjust this import to your file structure
+import { updateDiamond } from '../../api/diamondCrud.js'; 
 
 function UpdateDiamondForm({ diamond }) {
   const [updatedDiamond, setUpdatedDiamond] = useState(diamond);

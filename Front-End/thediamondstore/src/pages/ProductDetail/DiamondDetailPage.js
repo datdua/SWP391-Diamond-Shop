@@ -137,7 +137,7 @@ function DiamondDetailPage() {
                                   </Badge>
                                 )}
                               </div>
-                              <span className="tm-prodetails-singleinfo">Sản phẩm còn lại: {diamond.quantity}</span>
+                              <span className="tm-prodetails-singleinfo" style={{marginTop:'8px', marginBottom:'8px'}}>Sản phẩm còn lại: {diamond.quantity}</span>
                               <hr />
                               <div className="tm-prodetails-infos" >
                                 <div className="tm-prodetails-singleinfo" style={{ marginTop: '20px' }}>
@@ -180,7 +180,7 @@ function DiamondDetailPage() {
                                     type="text"
                                     value={`${quantity} / ${maxQuantity}`}
                                     readOnly
-                                    style={{ maxWidth: "70px", textAlign: "center" }}
+                                    style={{ maxWidth: "70px", textAlign: "center",fontSize:'15px'  }}
                                   />
                                   <button className="increase-button" onClick={increaseQuantity}>+</button>
                                   <Button

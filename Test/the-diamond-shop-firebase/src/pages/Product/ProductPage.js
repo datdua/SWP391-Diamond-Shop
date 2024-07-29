@@ -45,7 +45,7 @@ function ProductPage() {
       // If a product name is provided in the search query, fetch only the products with that name
       axios
         .get(
-          `http://localhost:8080//api/jewelry/searchName?name=${encodeURIComponent(
+          `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io//api/jewelry/searchName?name=${encodeURIComponent(
             productName
           )}`
         )
@@ -61,7 +61,7 @@ function ProductPage() {
       // Fetch all products if no specific product name is provided in the search query
       axios
         .get(
-          "http://localhost:8080/api/jewelry"
+          "https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/jewelry"
         )
         .then((response) => {
           setJewelry(response.data);
@@ -97,7 +97,7 @@ function ProductPage() {
     // Call API with filtered price range
     axios
       .get(
-        `http://localhost:8080//api/jewelry/search/filter?maxjewelryEntryPrice=${maxPrice}&minjewelryEntryPrice=${minPrice}`
+        `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io//api/jewelry/search/filter?maxjewelryEntryPrice=${maxPrice}&minjewelryEntryPrice=${minPrice}`
       )
       .then((response) => {
         setJewelry(response.data);
@@ -130,7 +130,7 @@ function ProductPage() {
     setLoading(true); // Set loading state while fetching data
     axios
       .get(
-        `http://localhost:8080/api/jewelry/search/filter?gender=${gender}`
+        `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/jewelry/search/filter?gender=${gender}`
       )
       .then((response) => {
         setJewelry(response.data);
@@ -146,7 +146,7 @@ function ProductPage() {
       setLoading(true);
       axios
         .get(
-          `http://localhost:8080/api/jewelry/search/filter?size=${size}`
+          `https://diamondstore.lemonhill-6b585cc3.eastasia.azurecontainerapps.io/api/jewelry/search/filter?size=${size}`
         )
         .then((response) => {
           setJewelry(response.data);

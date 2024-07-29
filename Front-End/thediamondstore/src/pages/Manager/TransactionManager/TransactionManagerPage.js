@@ -7,6 +7,7 @@ import {
   Table,
   Row,
   Col,
+  Badge,
 } from "react-bootstrap";
 import { getAllOrder, getOrderDetailManager } from "../../../api/OrderAPI";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -25,16 +26,37 @@ function OrderManagerPage() {
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
   const userRole = localStorage.getItem("role");
-  const size = 8;
+  const size = 9;
 
   const startIndex = (currentPage - 1) * size;
   const endIndex = startIndex + size;
   const currentPageData = orderData.slice(startIndex, endIndex);
 
-
   const showAlert = () => {
-    toast.warning("Rất tiếc, chức năng này chỉ dành cho quản lý và nhân viên bán hàng!")
-  }
+    toast.warning("Rất tiếc, chức năng này chỉ dành cho quản lý và nhân viên bán hàng!");
+  };
+
+  const handleStatusOrder = (orderStatus) => {
+    if (orderStatus === "Đã thanh toán") {
+      return (
+        <h6 style={{marginTop:'10px'}}>
+          <Badge pill bg="success">Đã thanh toán</Badge>
+        </h6>
+      );
+    } else if (orderStatus === "Đang xử lý") {
+      return (
+        <h6 style={{marginTop:'10px'}}>
+          <Badge pill bg="warning" text="dark">Đang xử lý</Badge>
+        </h6>
+      );
+    } else {
+      return (
+        <h6 style={{marginTop:'10px'}}>
+          <Badge pill bg="danger">Thanh toán thất bại</Badge>
+        </h6>
+      );
+    }
+  };
 
   const handleClose = () => {
     setShowModal(false);
@@ -92,7 +114,7 @@ function OrderManagerPage() {
                 }}
               >
                 <div>
-                  Giao Dịch
+                  Đơn Hàng
                   <Button
                     variant="link"
                     style={{ textDecoration: "none" }}
@@ -116,28 +138,22 @@ function OrderManagerPage() {
             </Card.Header>
             <Card.Body>
               <div className="table-responsive">
-                <Table striped bordered hover className="account-table">
+                <Table hover className="account-table">
                   <thead>
                     <tr>
-                      <th>STT</th>
-                      <th>Mã Đơn Hàng</th>
-                      <th>Mã Giao Dịch</th>
-                      <th>Mã Tài Khoản</th>
-                      <th>Ngày Bắt Đầu Đơn Hàng</th>
-                      <th>Tình Trạng Đơn Hàng</th>
-                      <th>Ngày Giao Hàng</th>
-                      <th>Tổng giá đơn hàng</th>
-                      <th>Tổng giá gốc</th>
-                      <th>Địa Chỉ Giao Hàng</th>
-                      <th>Số Điện Thoại</th>
-                      <th>Mã Khuyến Mãi</th>
-                      <th>Thao Tác</th>
+                      <th>Mã đơn hàng</th>
+                      <th>Mã giao dịch</th>
+                      <th>Ngày tạo đơn</th>
+                      <th>Tên khách hàng</th>
+                      <th>Trạng thái đơn hàng</th>
+                      <th>Ngày giao hàng</th>
+                      <th>Tổng tiền</th>
+                      <th>Thao tác</th>
                     </tr>
                   </thead>
                   <tbody>
                     {currentPageData.map((order, index) => (
-                      <tr key={index}>
-                        <td>{startIndex + index + 1}</td>
+                      <tr>
                         <td>{order.orderID}</td>
                         <td>
                           {order.transactionNo ? (
@@ -153,22 +169,18 @@ function OrderManagerPage() {
                               {order.transactionNo}
                             </a>
                           ) : (
-                            "Đơn hàng chưa thanh toán"
+                            "------"
                           )}
                         </td>
-                        <td>{order.account.accountID}</td>
                         <td>{order.startorderDate}</td>
-                        <td>{order.orderStatus}</td>
+                        <td>{order.account.accountName}</td>
+                        <td>{handleStatusOrder(order.orderStatus)}</td>
                         <td>{order.deliveryDate}</td>
                         <td>
                           {order.totalOrder
                             ? order.totalOrder.toLocaleString() + " VNĐ"
-                            : "N/A"}
+                            : "------"}
                         </td>
-                        <td>{order.subtotalOrder}</td>
-                        <td>{order.deliveryAddress}</td>
-                        <td>{order.phoneNumber}</td>
-                        <td>{order.promotionCode}</td>
                         <td>
                           <Tooltip
                             describeChild

@@ -24,7 +24,7 @@ import {
   getCertificateImage,
   getWarrantityImage,
 } from "../api/diamondCrud.js";
-import "../assets/css/TableList.css"; // Import file CSS mới
+import "../assets/css/TableList.css";
 import { FiRefreshCw } from "react-icons/fi";
 
 function TableList() {
