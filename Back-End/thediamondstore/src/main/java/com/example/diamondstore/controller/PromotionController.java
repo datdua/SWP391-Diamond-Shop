@@ -58,7 +58,7 @@ public class PromotionController {
     }
 
     // manager
-    @GetMapping(value = "/manager/promotion-management/promotions/{promotionCode}", produces = "application/json;charset=UTF-8")
+    @GetMapping(value = "/manager/promotion-management/promotions/get-by-promotion-code/{promotionCode}", produces = "application/json;charset=UTF-8")
     public ResponseEntity<Promotion> getPromotionByCodeManager(@PathVariable String promotionCode) {
         Promotion promotion = promotionService.getPromotionByCode(promotionCode);
         if (promotion == null) {

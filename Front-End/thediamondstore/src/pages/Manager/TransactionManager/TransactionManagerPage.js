@@ -126,7 +126,8 @@ function OrderManagerPage() {
                       <th>Ngày Bắt Đầu Đơn Hàng</th>
                       <th>Tình Trạng Đơn Hàng</th>
                       <th>Ngày Giao Hàng</th>
-                      <th>Tổng Đơn</th>
+                      <th>Tổng giá đơn hàng</th>
+                      <th>Tổng giá gốc</th>
                       <th>Địa Chỉ Giao Hàng</th>
                       <th>Số Điện Thoại</th>
                       <th>Mã Khuyến Mãi</th>
@@ -164,6 +165,7 @@ function OrderManagerPage() {
                             ? order.totalOrder.toLocaleString() + " VNĐ"
                             : "N/A"}
                         </td>
+                        <td>{order.subtotalOrder}</td>
                         <td>{order.deliveryAddress}</td>
                         <td>{order.phoneNumber}</td>
                         <td>{order.promotionCode}</td>

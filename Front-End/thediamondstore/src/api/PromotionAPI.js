@@ -75,3 +75,19 @@ export const deletePromotion = async (promotionIDs) => {
     throw error;
   }
 };
+
+export const getPromotionByCode = async (promotionCode) => {
+  try {
+    const token = localStorage.getItem('jwt');
+    const response = await axios.get(
+      `http://localhost:8080/api/manager/promotion-management/promotions/get-by-promotion-code/${promotionCode}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching promotion by code:", error);
+    throw error;
+  }
+};
