@@ -1,6 +1,9 @@
 package com.example.diamondstore.repository;
 
+import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.Cart;
+import com.example.diamondstore.model.Diamond;
+import com.example.diamondstore.model.Jewelry;
 import com.example.diamondstore.model.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -25,4 +28,7 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
     void deleteByOrder_OrderID(Integer orderID);
 
     List<Cart> findByAccount_AccountID(Integer accountID);
+
+    Cart findByAccountAndDiamond(Account account, Diamond diamond);
+    Cart findByAccountAndJewelryAndSizeJewelry(Account account, Jewelry jewelry, Integer sizeJewelry);
 }
