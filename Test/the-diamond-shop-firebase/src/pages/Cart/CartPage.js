@@ -17,31 +17,8 @@ function CartPage() {
     };
     return (
         <div>
-
-            {/* <!-- Preloader --> 
-            <div className="tm-preloader">
-                <div className="container">
-                    <div className="row justify-content-center">
-                        <div className="col-lg-6">
-                            <div className="tm-preloader-logo">
-                                <img src="assets/images/logo.png" alt="logo" />
-                            </div>
-                            <span className="tm-preloader-progress"></span>
-                        </div>
-                    </div>
-                </div>
-                <button className="tm-button tm-button-small">Cancel Preloader</button>
-            </div>
-            /* <!--// Preloader -->
-
-    <!-- Wrapper --> */}
             <div id="wrapper" className="wrapper">
-
-                {/* <!-- Header --> */}
                 <Header />
-                {/* <!--// Header --> *
-
-                <!-- Breadcrumb Area --> */}
                 <div className="tm-breadcrumb-area tm-padding-section bg-grey" style={{ backgroundImage: `url(assets/images/breadcrumb-bg.jpg)` }}>
                     <div className="container">
                         <div className="tm-breadcrumb">

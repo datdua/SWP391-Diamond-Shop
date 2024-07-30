@@ -108,7 +108,7 @@ function JewelryDetailPage() {
         navigate("/cart/" + accountID);
       } catch (error) {
         console.error("Failed to add item to cart:", error.message);
-        toast.error("Thêm vào giỏ hàng không thành công: " + error.message);
+        toast.error("Thêm vào giỏ hàng không thành công");
       }
     }
   };
