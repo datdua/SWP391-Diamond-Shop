@@ -94,8 +94,6 @@ public class OrderService {
 
         accountRepository.save(account);
 
-        // Lưu Order trước
-        order = orderRepository.save(order);
 
         BigDecimal totalOrder = BigDecimal.ZERO;
         BigDecimal subtotalOrder = BigDecimal.ZERO;
@@ -120,6 +118,8 @@ public class OrderService {
                 jewelryRepository.save(jewelry);
             }
 
+            // Lưu Order trước
+            order = orderRepository.save(order);
             totalOrder = totalOrder.add(cart.getGrossCartPrice());
             subtotalOrder = subtotalOrder.add(cart.getGrossCartPrice());
             order.setSubtotalOrder(subtotalOrder);

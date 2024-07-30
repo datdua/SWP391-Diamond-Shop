@@ -30,5 +30,10 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
     List<Cart> findByAccount_AccountID(Integer accountID);
 
     Cart findByAccountAndDiamond(Account account, Diamond diamond);
+
     Cart findByAccountAndJewelryAndSizeJewelry(Account account, Jewelry jewelry, Integer sizeJewelry);
+
+    void deleteByDiamond_DiamondID(String diamondID);
+
+    void deleteByJewelry_JewelryID(String jewelryID);
 }

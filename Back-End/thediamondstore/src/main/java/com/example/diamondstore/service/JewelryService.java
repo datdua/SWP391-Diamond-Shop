@@ -23,8 +23,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.diamondstore.model.Diamond;
 import com.example.diamondstore.model.Jewelry;
+import com.example.diamondstore.model.Order;
+import com.example.diamondstore.model.OrderDetail;
+import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.GoldPriceRepository;
 import com.example.diamondstore.repository.JewelryRepository;
+import com.example.diamondstore.repository.OrderDetailRepository;
+import com.example.diamondstore.repository.WarrantyHistoryRepository;
 import com.example.diamondstore.repository.WarrantyRepository;
 import com.example.diamondstore.request.putRequest.JewelryPutRequest;
 import com.example.diamondstore.specification.JewelrySpecification;
@@ -44,24 +49,14 @@ public class JewelryService {
     @Autowired
     private WarrantyService warrantyService;
 
-    @PostConstruct
-    public void updateJewelryStatusesOnStartup() {
-        updateJewelryStatusesAuto();
-    }
+    @Autowired
+    private OrderDetailRepository orderDetailRepository;
 
-    @Scheduled(cron = "*/6 * * * * *")
-    public void updateJewelryStatusesAuto() {
-        List<Jewelry> jewelries = jewelryRepository.findAll();
-        LocalDateTime now = LocalDateTime.now();
+    @Autowired
+    private CartRepository cartRepository;
 
-        for (Jewelry jewelry : jewelries) {
-            if (jewelry.getQuantity() == 0) {
-                jewelry.setStatus("Hết hàng");
-            } else {
-                jewelry.setStatus("Còn hàng");
-            }
-        }
-    }
+    @Autowired
+    private WarrantyHistoryRepository warrantyHistoryRepository;
 
     public List<Jewelry> getAllJewelry() {
         return jewelryRepository.findAll();
@@ -75,6 +70,26 @@ public class JewelryService {
         Pageable pageable = PageRequest.of(page - 1, size);
         return jewelryRepository.findAll(pageable);
     }
+
+    // @PostConstruct
+    // public void updateJewelryStatusesOnStartup() {
+    //     updateJewelryStatusesAuto();
+    // }
+
+    // @Scheduled(cron = "*/5 * * * * *")
+    // public void updateJewelryStatusesAuto() {
+    //     List<Jewelry> jewelries = jewelryRepository.findAll();
+    //     LocalDateTime now = LocalDateTime.now();
+
+    //     for (Jewelry jewelry : jewelries) {
+    //         if (jewelry.getQuantity() == 0) {
+    //             jewelry.setStatus("Hết hàng");
+    //         } else {
+    //             jewelry.setStatus("Còn hàng");
+    //         }
+    //         jewelryRepository.save(jewelry);
+    //     }
+    // }
 
     public ResponseEntity<Map<String, String>> createJewelry(Jewelry jewelry) {
         if (!validateJewelryID(jewelry.getJewelryID())) {
@@ -117,7 +132,7 @@ public class JewelryService {
         BigDecimal grossJewelryPrice = jewelry.getJewelryEntryPrice().multiply(new BigDecimal(1.2));
         jewelry.setGrossJewelryPrice(grossJewelryPrice);
 
-        updateJewelryStatusesAuto();
+        //updateJewelryStatusesAuto();
         jewelryRepository.save(jewelry);
 
         if (jewelry.getJewelryEntryPrice().compareTo(BigDecimal.ZERO) == 0) {
@@ -161,7 +176,7 @@ public class JewelryService {
             BigDecimal grossJewelryPrice = jewelryPutRequest.getJewelryEntryPrice().multiply(new BigDecimal(1.2));
             existingJewelry.setGrossJewelryPrice(grossJewelryPrice);
         }
-        updateJewelryStatusesAuto();
+
         jewelryRepository.save(existingJewelry);
         return ResponseEntity.ok().body(Collections.singletonMap("message", "Cập nhật trang sức thành công"));
     }
@@ -179,15 +194,38 @@ public class JewelryService {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã kim cương không hợp lệ"));
         }
 
-        // Filter out non-existing diamonds
         List<String> existingJewelryIDs = jewelryIDs.stream()
                 .filter(jewelryID -> jewelryRepository.existsById(jewelryID))
                 .collect(Collectors.toList());
 
-        // Delete diamonds
         if (!existingJewelryIDs.isEmpty()) {
-            existingJewelryIDs.forEach(jewelryID -> warrantyRepository.deleteByJewelryID(jewelryID));
-            existingJewelryIDs.forEach(jewelryID -> goldPriceRepository.deleteByJewelryID(jewelryID));
+            for (String jewelryID : existingJewelryIDs) {
+                List<String> warrantyIDs = warrantyRepository.findAllByJewelryID(jewelryID)
+                        .stream()
+                        .map(warranty -> warranty.getWarrantyID())
+                        .collect(Collectors.toList());
+            
+            //set null order detail
+            List<OrderDetail> orderDetailsToUpdate = orderDetailRepository.findAllByWarranty_WarrantyIDIn(warrantyIDs);
+            for (OrderDetail orderDetail : orderDetailsToUpdate) {
+                orderDetail.setWarranty(null);
+                orderDetail.setJewelry(null); 
+            }
+            orderDetailRepository.saveAll(orderDetailsToUpdate);
+
+            //delete warranty history
+            warrantyHistoryRepository.deleteByWarranty_WarrantyIDIn(warrantyIDs);
+
+            //delete warranty
+            warrantyRepository.deleteByJewelryID(jewelryID);
+
+            //delete cart
+            cartRepository.deleteByJewelry_JewelryID(jewelryID);
+
+            //delete gold price
+            goldPriceRepository.deleteByJewelryID(jewelryID);
+
+            }
 
             jewelryRepository.deleteAllById(existingJewelryIDs);
             return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các giá vàng thành công"));
