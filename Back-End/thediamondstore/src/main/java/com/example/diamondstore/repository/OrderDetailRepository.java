@@ -13,4 +13,8 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Intege
     List<OrderDetail> findByAccount_AccountID(Integer accountID);
 
     void deleteByAccount_AccountID(Integer accountID);
+
+    void deleteByWarranty_WarrantyIDIn(List<String> warrantyIDs);
+
+    List<OrderDetail> findAllByWarranty_WarrantyIDIn(List<String> warrantyIDs);
 }

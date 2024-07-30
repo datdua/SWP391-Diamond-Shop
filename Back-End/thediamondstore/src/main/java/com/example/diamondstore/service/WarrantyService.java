@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.diamondstore.model.Diamond;
 import com.example.diamondstore.model.Jewelry;
+import com.example.diamondstore.model.OrderDetail;
 import com.example.diamondstore.model.Warranty;
 import com.example.diamondstore.repository.DiamondRepository;
 import com.example.diamondstore.repository.JewelryRepository;
+import com.example.diamondstore.repository.OrderDetailRepository;
 import com.example.diamondstore.repository.WarrantyRepository;
 import com.example.diamondstore.request.putRequest.WarrantyPutRequest;
 
@@ -38,6 +40,9 @@ public class WarrantyService {
 
     @Autowired
     private JewelryRepository jewelryRepository;
+
+    @Autowired
+    private OrderDetailRepository orderDetailRepository;
 
     public List<Warranty> getAllWarranties() {
         return warrantyRepository.findAll();
@@ -70,34 +75,38 @@ public class WarrantyService {
         }
 
         if (warranty.getDiamondID() == null && warranty.getJewelryID() == null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Cần cung cấp ít nhất một ID cho kim cương hoặc trang sức"));
+            return ResponseEntity.badRequest().body(
+                    Collections.singletonMap("message", "Cần cung cấp ít nhất một ID cho kim cương hoặc trang sức"));
         }
 
         if (warranty.getDiamondID() != null && warranty.getJewelryID() != null) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Chỉ có thể có một trong hai ID cho kim cương hoặc trang sức"));
+            return ResponseEntity.badRequest().body(
+                    Collections.singletonMap("message", "Chỉ có thể có một trong hai ID cho kim cương hoặc trang sức"));
         }
 
-    warrantyRepository.save(warranty);
+        warrantyRepository.save(warranty);
 
-    Diamond diamond = diamondRepository.findByDiamondID(warranty.getDiamondID());
-    Jewelry jewelry = jewelryRepository.findByJewelryID(warranty.getJewelryID());
+        Diamond diamond = diamondRepository.findByDiamondID(warranty.getDiamondID());
+        Jewelry jewelry = jewelryRepository.findByJewelryID(warranty.getJewelryID());
 
-    if (diamond != null) {
-        diamond.setWarrantyID(warranty.getWarrantyID());
-        diamondRepository.save(diamond);
-    } else if (jewelry != null) {
-        jewelry.setWarrantyID(warranty.getWarrantyID());
-        jewelryRepository.save(jewelry);
-    } else {
-        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "ID không tồn tại"));
+        if (diamond != null) {
+            diamond.setWarrantyID(warranty.getWarrantyID());
+            diamondRepository.save(diamond);
+        } else if (jewelry != null) {
+            jewelry.setWarrantyID(warranty.getWarrantyID());
+            jewelryRepository.save(jewelry);
+        } else {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "ID không tồn tại"));
+        }
+
+        return ResponseEntity.ok(Collections.singletonMap("message", "Giấy bảo hành đã được tạo thành công"));
     }
 
-    return ResponseEntity.ok(Collections.singletonMap("message", "Giấy bảo hành đã được tạo thành công"));
-    }
-
-    public ResponseEntity<Map<String, String>> updateWarranty(String warrantyID, WarrantyPutRequest warrantyPutRequest) {
+    public ResponseEntity<Map<String, String>> updateWarranty(String warrantyID,
+            WarrantyPutRequest warrantyPutRequest) {
         if (!validateWarrantyID(warrantyID)) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã giấy bảo hành không hợp lệ"));
+            return ResponseEntity.badRequest()
+                    .body(Collections.singletonMap("message", "Mã giấy bảo hành không hợp lệ"));
         }
 
         Warranty existingWarranty = warrantyRepository.findByWarrantyID(warrantyID);
@@ -113,12 +122,14 @@ public class WarrantyService {
     @Transactional
     public ResponseEntity<Map<String, String>> deleteWarranty(@RequestBody List<String> warrantyIDs) {
         if (warrantyIDs.isEmpty()) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không có mã giấy bảo hành để xóa"));
+            return ResponseEntity.badRequest()
+                    .body(Collections.singletonMap("message", "Không có mã giấy bảo hành để xóa"));
         }
 
         for (String warrantyID : warrantyIDs) {
             if (!validateWarrantyID(warrantyID)) {
-                return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Mã giấy bảo hành không hợp lệ"));
+                return ResponseEntity.badRequest()
+                        .body(Collections.singletonMap("message", "Mã giấy bảo hành không hợp lệ"));
             }
         }
 
@@ -127,20 +138,30 @@ public class WarrantyService {
                 .collect(Collectors.toList());
 
         if (existingWarrantyIDs.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy giá vàng để xóa"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("message", "Không tìm thấy giấy bảo hành để xóa"));
         }
 
+        // remove warranty in diamond
         List<Diamond> diamondsToUpdate = diamondRepository.findAllByWarrantyIDIn(existingWarrantyIDs);
         for (Diamond diamond : diamondsToUpdate) {
             diamond.setWarrantyID(null);
         }
         diamondRepository.saveAll(diamondsToUpdate);
 
+        // remove warranty in jewelry
         List<Jewelry> jewelryToUpdate = jewelryRepository.findAllByWarrantyIDIn(existingWarrantyIDs);
         for (Jewelry jewelry : jewelryToUpdate) {
             jewelry.setWarrantyID(null);
         }
         jewelryRepository.saveAll(jewelryToUpdate);
+
+        // remove warranty in order detail
+        List<OrderDetail> orderDetailsToUpdate = orderDetailRepository.findAllByWarranty_WarrantyIDIn(existingWarrantyIDs);
+        for (OrderDetail orderDetail : orderDetailsToUpdate) {
+            orderDetail.setWarranty(null);
+        }
+        orderDetailRepository.saveAll(orderDetailsToUpdate);
 
         warrantyRepository.deleteAllById(existingWarrantyIDs);
 

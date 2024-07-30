@@ -1,9 +1,11 @@
 package com.example.diamondstore.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.example.diamondstore.model.Jewelry;
 import com.example.diamondstore.model.Warranty;
 
 public interface WarrantyRepository extends JpaRepository<Warranty, String> {
@@ -23,4 +25,9 @@ public interface WarrantyRepository extends JpaRepository<Warranty, String> {
     Warranty findByDiamondID(String diamondID);
     
     Warranty findByJewelryID(String jewelryID);
+
+    List<Warranty> findAllByDiamondID(String diamondID);
+
+    List<Warranty> findAllByJewelryID(String jewelryID);
+
 }
