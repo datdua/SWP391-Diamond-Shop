@@ -22,5 +22,4 @@ public interface JewelryRepository extends JpaRepository<Jewelry, String>, JpaSp
 
     List<Jewelry> findAllByWarrantyIDIn(List<String> warrantyIDs);
 
-    List<Jewelry> findAllByGoldPriceIDs(List<Integer> existingGoldPriceIDs);
 }

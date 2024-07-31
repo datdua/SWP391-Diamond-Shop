@@ -20,7 +20,7 @@ import com.example.diamondstore.request.GoldPriceRequest;
 
 @Service
 public class GoldPriceService {
-
+    
     @Autowired
     private final GoldPriceRepository goldPriceRepository;
 
@@ -48,13 +48,17 @@ public class GoldPriceService {
 
         // Delete diamonds
         if (!existingGoldPriceIDs.isEmpty()) {
-            goldPriceRepository.deleteAllById(existingGoldPriceIDs);
-            List<Jewelry> jewelriesToUpdate = jewelryRepository.findAllByGoldPriceIDs(existingGoldPriceIDs);
-            for (Jewelry jewelry : jewelriesToUpdate) {
-                jewelry.setJewelryEntryPrice(BigDecimal.ZERO);
-                jewelry.setGrossJewelryPrice(BigDecimal.ZERO);
-                jewelryRepository.save(jewelry);
+            List<GoldPrice> goldPricesToDelete = goldPriceRepository.findAllById(existingGoldPriceIDs);
+            for (GoldPrice goldPrice : goldPricesToDelete) {
+                String jewelryID = goldPrice.getJewelryID();
+                Jewelry jewelry = jewelryRepository.findById(jewelryID).orElse(null);
+                if (jewelry != null) {
+                    jewelry.setJewelryEntryPrice(BigDecimal.ZERO);
+                    jewelry.setGrossJewelryPrice(BigDecimal.ZERO);
+                    jewelryRepository.save(jewelry);
+                }
             }
+            goldPriceRepository.deleteAllById(existingGoldPriceIDs);
             return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các giá vàng thành công"));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -65,20 +69,18 @@ public class GoldPriceService {
     public ResponseEntity<?> addGoldPrice(GoldPriceRequest goldPriceRequest) {
         Jewelry jewelry = jewelryRepository.findById(goldPriceRequest.getJewelryID()).orElse(null);
         if (jewelry == null) {
-            return ResponseEntity.badRequest()
-                    .body(Collections.singletonMap("message", "Không tìm thấy trang sức với ID này"));
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Không tìm thấy trang sức với ID này"));
         }
 
         GoldPrice existingGoldPrice = goldPriceRepository.findByJewelryID(goldPriceRequest.getJewelryID());
         if (existingGoldPrice != null) {
-            return ResponseEntity.badRequest()
-                    .body(Collections.singletonMap("message", "Giá vàng cho trang sức này đã tồn tại"));
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Giá vàng cho trang sức này đã tồn tại"));
         }
         GoldPrice goldPrice = new GoldPrice();
         goldPrice.setGoldPrice(goldPriceRequest.getGoldPrice());
         goldPrice.setJewelryID(goldPriceRequest.getJewelryID());
         goldPrice.setGoldAge(goldPriceRequest.getGoldAge());
-
+        
         goldPriceRepository.save(goldPrice);
 
         updateJewelryPrices(goldPrice, jewelry);
@@ -99,7 +101,7 @@ public class GoldPriceService {
         existingGoldPrice.setGoldPrice(goldPriceRequest.getGoldPrice());
         existingGoldPrice.setGoldAge(goldPriceRequest.getGoldAge());
         existingGoldPrice.setJewelryID(goldPriceRequest.getJewelryID());
-
+        
         goldPriceRepository.save(existingGoldPrice);
 
         Jewelry jewelry = jewelryRepository.findById(goldPriceRequest.getJewelryID()).orElse(null);
@@ -113,8 +115,7 @@ public class GoldPriceService {
     private void updateJewelryPrices(GoldPrice goldPrice, Jewelry jewelry) {
         jewelry.setJewelryEntryPrice(goldPrice.getGoldPrice());
 
-        // Assume grossJewelryPrice is calculated based on some logic involving
-        // goldPrice
+        // Assume grossJewelryPrice is calculated based on some logic involving goldPrice
         BigDecimal grossJewelryPrice = goldPrice.getGoldPrice().multiply(new BigDecimal("1.2")); // Example logic
         jewelry.setGrossJewelryPrice(grossJewelryPrice);
 
