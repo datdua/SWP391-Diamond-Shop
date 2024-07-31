@@ -139,11 +139,18 @@ function CartPage() {
                                                             min="6"
                                                             max="20"
                                                             value={item.sizeJewelry || ""}
-                                                            onChange={(e) => handleUpdateCartItem(item.cartID, item.quantity, parseInt(e.target.value, 10), item.diamond?.diamondID, item.jewelry?.jewelryID)}
+                                                            onChange={(e) => {
+                                                                const value = parseInt(e.target.value, 10);
+                                                                if (value >= 6 && value <= 20) {
+                                                                    handleUpdateCartItem(item.cartID, item.quantity, value, item.diamond?.diamondID, item.jewelry?.jewelryID);
+                                                                } else{
+                                                                    toast.error('Kích thước không phù hợp')
+                                                                }
+                                                            }}
                                                             className="w-12 text-center"
                                                             style={{ textAlign: 'center' }}
                                                             disabled={!isEditing || !!item.diamond?.diamondID}
-                                                        />
+                                                            />
                                                     </div>
                                                 </td>
                                                 <td>
