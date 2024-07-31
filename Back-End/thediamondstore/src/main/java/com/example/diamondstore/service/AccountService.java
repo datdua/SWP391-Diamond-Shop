@@ -170,6 +170,7 @@ public class AccountService implements UserDetailsService {
         String role = accountRequest.getRole();
         String phoneNumber = accountRequest.getPhoneNumber();
         String email = accountRequest.getEmail();
+        String addressAccount = accountRequest.getAddressAccount();
 
         Optional<Account> existingAccount = accountRepository.findByEmail(email);
         if (existingAccount.isPresent()) {
@@ -183,6 +184,7 @@ public class AccountService implements UserDetailsService {
         account.setRole(role);
         account.setPhoneNumber(phoneNumber);
         account.setEmail(email);
+        account.setAddressAccount(addressAccount);
         account.setActive(true);
 
         accountRepository.save(account);
@@ -195,11 +197,11 @@ public class AccountService implements UserDetailsService {
         String phoneNumber = accountRequest.getPhoneNumber();
         String email = accountRequest.getEmail();
 
-        if (!email.matches("^[a-zA-Z0-9._%+-]+@gmail.com$")) {
+        if (!email.matches("^[a-zA-Z0-9._%+-]+@gmail.com$") && !email.matches("^[a-zA-Z0-9._%+-]+@fpt.edu.vn$")) {
             throw new RuntimeException("Email không hợp lệ");
         }
 
-        if (!phoneNumber.matches("^(090|093|089|096|097|098)[0-9]{7}$")) {
+        if (!phoneNumber.matches("^(091|090|093|089|096|097|098)[0-9]{7}$")) {
             throw new RuntimeException("Số điện thoại không hợp lệ");
         }
 

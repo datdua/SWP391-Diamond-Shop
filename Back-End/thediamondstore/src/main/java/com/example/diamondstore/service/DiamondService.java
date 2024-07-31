@@ -82,7 +82,7 @@ public class DiamondService {
         LocalDateTime now = LocalDateTime.now();
 
         for (Diamond diamond : diamonds) {
-            if (diamond.getWarrantyID() == null || diamond.getCertificationID() == null || diamond.getDiamondEntryPrice() == null) {
+            if (diamond.getWarrantyID() == null || diamond.getCertificationID() == null || diamond.getDiamondEntryPrice().compareTo(BigDecimal.ZERO) == 0) {
                 diamond.setStatus("Tạm ngưng bán");
             } else if (diamond.getQuantity() == 0) {
                 diamond.setStatus("Hết hàng");
@@ -146,7 +146,7 @@ public class DiamondService {
                     .body(Collections.singletonMap("message", "Bảo hành đã được gán cho một kim cương khác"));
         }
 
-        if (diamond.getWarrantyID() == null || diamond.getCertificationID() == null) {
+        if (diamond.getWarrantyID() == null || diamond.getCertificationID() == null || diamond.getDiamondEntryPrice().compareTo(BigDecimal.ZERO) == 0) {
             diamond.setStatus("Tạm ngưng bán");
         } else if (diamond.getQuantity() == 0) {
             diamond.setStatus("Hết hàng");
@@ -189,7 +189,7 @@ public class DiamondService {
         existingDiamond.setClarity(diamondPutRequest.getClarity());
         existingDiamond.setQuantity(diamondPutRequest.getQuantity());
 
-        if(diamondPutRequest.getWarrantyID() == null || diamondPutRequest.getCertificationID() == null) {
+        if(diamondPutRequest.getWarrantyID() == null || diamondPutRequest.getCertificationID() == null || diamondPutRequest.getDiamondEntryPrice().compareTo(BigDecimal.ZERO) == 0) {
             existingDiamond.setStatus("Tạm ngưng bán");
         } else if (diamondPutRequest.getQuantity() == 0) {
             existingDiamond.setStatus("Hết hàng");
