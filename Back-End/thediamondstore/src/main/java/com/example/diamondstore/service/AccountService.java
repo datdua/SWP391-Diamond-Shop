@@ -28,7 +28,6 @@ import org.springframework.util.StringUtils;
 import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.AccumulatePoints;
 import com.example.diamondstore.model.Order;
-import com.example.diamondstore.model.OrderDetail;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.AccumulatePointsRepository;
 import com.example.diamondstore.repository.CartRepository;
@@ -171,6 +170,7 @@ public class AccountService implements UserDetailsService {
         String role = accountRequest.getRole();
         String phoneNumber = accountRequest.getPhoneNumber();
         String email = accountRequest.getEmail();
+        String addressAccount = accountRequest.getAddressAccount();
 
         Optional<Account> existingAccount = accountRepository.findByEmail(email);
         if (existingAccount.isPresent()) {
@@ -184,6 +184,7 @@ public class AccountService implements UserDetailsService {
         account.setRole(role);
         account.setPhoneNumber(phoneNumber);
         account.setEmail(email);
+        account.setAddressAccount(addressAccount);
         account.setActive(true);
 
         accountRepository.save(account);
@@ -196,11 +197,11 @@ public class AccountService implements UserDetailsService {
         String phoneNumber = accountRequest.getPhoneNumber();
         String email = accountRequest.getEmail();
 
-        if (!email.matches("^[a-zA-Z0-9._%+-]+@gmail.com$")) {
+        if (!email.matches("^[a-zA-Z0-9._%+-]+@gmail.com$") && !email.matches("^[a-zA-Z0-9._%+-]+@fpt.edu.vn$")) {
             throw new RuntimeException("Email không hợp lệ");
         }
 
-        if (!phoneNumber.matches("^(090|093|089|096|097|098)[0-9]{7}$")) {
+        if (!phoneNumber.matches("^(091|090|093|089|096|097|098)[0-9]{7}$")) {
             throw new RuntimeException("Số điện thoại không hợp lệ");
         }
 
@@ -253,6 +254,7 @@ public class AccountService implements UserDetailsService {
         existingAccountIDs.forEach(accountID -> {
         Account account = accountRepository.findById(accountID).orElseThrow();
         List<Order> orders = orderRepository.findByAccount_AccountID(accountID);
+        cartRepository.deleteByAccount_AccountID(accountID);
         orders.forEach((var order) -> {
             cartRepository.deleteByOrder_OrderID(order.getOrderID());
             orderRepository.delete(order);
@@ -262,7 +264,6 @@ public class AccountService implements UserDetailsService {
         accumulatePointsRepository.deleteByAccountID(accountID);
         accountRepository.delete(account);
     });
-
         return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
     }
 

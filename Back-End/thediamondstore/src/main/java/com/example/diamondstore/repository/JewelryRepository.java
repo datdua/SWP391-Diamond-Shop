@@ -21,4 +21,5 @@ public interface JewelryRepository extends JpaRepository<Jewelry, String>, JpaSp
     boolean existsByWarrantyID(String warrantyID);
 
     List<Jewelry> findAllByWarrantyIDIn(List<String> warrantyIDs);
+
 }
