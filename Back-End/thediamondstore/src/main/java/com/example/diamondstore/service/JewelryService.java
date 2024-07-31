@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.diamondstore.model.Jewelry;
-import com.example.diamondstore.model.OrderDetail;
 import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.GoldPriceRepository;
 import com.example.diamondstore.repository.JewelryRepository;
@@ -80,9 +79,9 @@ public class JewelryService {
         LocalDateTime now = LocalDateTime.now();
 
         for (Jewelry jewelry : jewelries) {
-            if(jewelry.getWarrantyID() == null){
+            if (jewelry.getWarrantyID() == null || jewelry.getJewelryEntryPrice().compareTo(BigDecimal.ZERO) == 0) {
                 jewelry.setStatus("Tạm ngưng bán");
-            }else if (jewelry.getQuantity() == 0) {
+            } else if (jewelry.getQuantity() == 0) {
                 jewelry.setStatus("Hết hàng");
             } else {
                 jewelry.setStatus("Còn hàng");
@@ -105,7 +104,6 @@ public class JewelryService {
             jewelry.setJewelryEntryPrice(BigDecimal.ZERO);
         }
 
-
         if (jewelry.getWarrantyID() != null && !jewelry.getWarrantyID().isEmpty()) {
             if (!warrantyService.validateWarrantyID(jewelry.getWarrantyID())) {
                 return ResponseEntity.badRequest()
@@ -122,7 +120,7 @@ public class JewelryService {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số lượng không hợp lệ"));
         }
 
-        if (jewelry.getWarrantyID() == null) {
+        if (jewelry.getWarrantyID() == null || jewelry.getJewelryEntryPrice().compareTo(BigDecimal.ZERO) == 0) {
             jewelry.setStatus("Tạm ngưng bán");
         } else if (jewelry.getQuantity() == 0) {
             jewelry.setStatus("Hết hàng");
@@ -134,7 +132,6 @@ public class JewelryService {
         BigDecimal grossJewelryPrice = jewelry.getJewelryEntryPrice().multiply(new BigDecimal(1.2));
         jewelry.setGrossJewelryPrice(grossJewelryPrice);
 
-        //updateJewelryStatusesAuto();
         jewelryRepository.save(jewelry);
 
         if (jewelry.getJewelryEntryPrice().compareTo(BigDecimal.ZERO) == 0) {
@@ -157,7 +154,7 @@ public class JewelryService {
         }
 
         if (jewelryPutRequest.getQuantity() < 0) {
-        return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số lượng không hợp lệ"));
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số lượng không hợp lệ"));
         }
 
         existingJewelry.setJewelryName(jewelryPutRequest.getJewelryName());
@@ -167,7 +164,7 @@ public class JewelryService {
         existingJewelry.setWarrantyID(jewelryPutRequest.getWarrantyID());
         existingJewelry.setQuantity(jewelryPutRequest.getQuantity());
 
-        if (jewelryPutRequest.getWarrantyID() == null) {
+        if (jewelryPutRequest.getWarrantyID() == null || jewelryPutRequest.getJewelryEntryPrice().compareTo(BigDecimal.ZERO) == 0) {
             existingJewelry.setStatus("Tạm ngưng bán");
         } else if (jewelryPutRequest.getQuantity() == 0) {
             existingJewelry.setStatus("Hết hàng");
@@ -208,21 +205,21 @@ public class JewelryService {
                         .stream()
                         .map(warranty -> warranty.getWarrantyID())
                         .collect(Collectors.toList());
-            
-            //delete order detail
-            orderDetailRepository.deleteByWarranty_WarrantyIDIn(warrantyIDs);
 
-            //delete warranty history
-            warrantyHistoryRepository.deleteByWarranty_WarrantyIDIn(warrantyIDs);
+                // delete order detail
+                orderDetailRepository.deleteByWarranty_WarrantyIDIn(warrantyIDs);
 
-            //delete warranty
-            warrantyRepository.deleteByJewelryID(jewelryID);
+                // delete warranty history
+                warrantyHistoryRepository.deleteByWarranty_WarrantyIDIn(warrantyIDs);
 
-            //delete cart
-            cartRepository.deleteByJewelry_JewelryID(jewelryID);
+                // delete warranty
+                warrantyRepository.deleteByJewelryID(jewelryID);
 
-            //delete gold price
-            goldPriceRepository.deleteByJewelryID(jewelryID);
+                // delete cart
+                cartRepository.deleteByJewelry_JewelryID(jewelryID);
+
+                // delete gold price
+                goldPriceRepository.deleteByJewelryID(jewelryID);
 
             }
 

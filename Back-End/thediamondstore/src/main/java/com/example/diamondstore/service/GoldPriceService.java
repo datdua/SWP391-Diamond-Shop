@@ -48,10 +48,21 @@ public class GoldPriceService {
 
         // Delete diamonds
         if (!existingGoldPriceIDs.isEmpty()) {
+            List<GoldPrice> goldPricesToDelete = goldPriceRepository.findAllById(existingGoldPriceIDs);
+            for (GoldPrice goldPrice : goldPricesToDelete) {
+                String jewelryID = goldPrice.getJewelryID();
+                Jewelry jewelry = jewelryRepository.findById(jewelryID).orElse(null);
+                if (jewelry != null) {
+                    jewelry.setJewelryEntryPrice(BigDecimal.ZERO);
+                    jewelry.setGrossJewelryPrice(BigDecimal.ZERO);
+                    jewelryRepository.save(jewelry);
+                }
+            }
             goldPriceRepository.deleteAllById(existingGoldPriceIDs);
             return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các giá vàng thành công"));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy giá vàng để xóa"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("message", "Không tìm thấy giá vàng để xóa"));
         }
     }
 
