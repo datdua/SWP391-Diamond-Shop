@@ -38,7 +38,8 @@ public class ProductionService {
         return response;
     }
 
-    public Map<String, Object> searchAndFilterProductionPaged(String name, Float minPrice, Float maxPrice, int page, int size) {
+    public Map<String, Object> searchAndFilterProductionPaged(String name, Float minPrice, Float maxPrice, int page,
+            int size) {
         Pageable pageable = PageRequest.of(page - 1, size);
 
         // Build specifications for diamonds
