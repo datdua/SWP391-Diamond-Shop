@@ -28,9 +28,11 @@ import org.springframework.util.StringUtils;
 import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.AccumulatePoints;
 import com.example.diamondstore.model.Order;
+import com.example.diamondstore.model.OrderDetail;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.AccumulatePointsRepository;
 import com.example.diamondstore.repository.CartRepository;
+import com.example.diamondstore.repository.OrderDetailRepository;
 import com.example.diamondstore.repository.OrderRepository;
 import com.example.diamondstore.request.AccountRequest;
 import com.example.diamondstore.request.RegisterRequest;
@@ -54,6 +56,9 @@ public class AccountService implements UserDetailsService {
 
     @Autowired
     private CartRepository cartRepository;
+
+    @Autowired
+    private OrderDetailRepository orderDetailRepository;
 
     @Autowired
     private OtpUtil otpUtil;
@@ -251,6 +256,8 @@ public class AccountService implements UserDetailsService {
         orders.forEach((var order) -> {
             cartRepository.deleteByOrder_OrderID(order.getOrderID());
             orderRepository.delete(order);
+            orderDetailRepository.deleteByOrder_OrderID(order.getOrderID());
+            
         });
         accumulatePointsRepository.deleteByAccountID(accountID);
         accountRepository.delete(account);

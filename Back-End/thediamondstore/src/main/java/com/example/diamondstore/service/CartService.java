@@ -57,6 +57,11 @@ public class CartService {
 
         if (diamondID != null) {
             Diamond diamond = diamondRepository.findById(diamondID).orElse(null);
+
+            if(diamond!= null && diamond.getStatus().equals("Tạm ngưng bán")) {
+                return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Sản phẩm đã tạm ngưng bán"));
+            }
+
             if (diamond != null) {
                 existingCart = cartRepository.findByAccountAndDiamond(account, diamond);
                 if (existingCart != null) {
@@ -71,6 +76,9 @@ public class CartService {
 
         if (jewelryID != null) {
             Jewelry jewelry = jewelryRepository.findById(jewelryID).orElse(null);
+            if(jewelry!= null && jewelry.getStatus().equals("Tạm ngưng bán")) {
+                return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Sản phẩm đã tạm ngưng bán"));
+            }
             if (jewelry != null) {
                 existingCart = cartRepository.findByAccountAndJewelryAndSizeJewelry(account, jewelry, sizeJewelry);
                 if (existingCart != null) {
