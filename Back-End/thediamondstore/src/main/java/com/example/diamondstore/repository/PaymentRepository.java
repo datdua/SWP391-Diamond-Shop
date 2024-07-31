@@ -8,5 +8,7 @@ import com.example.diamondstore.model.Payment;
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, Integer> {
 
-    Payment findByOrderID(Integer orderID);  
+    Payment findByOrderID(Integer orderID);
+
+    void deleteByOrderID(Integer orderID);  
 }

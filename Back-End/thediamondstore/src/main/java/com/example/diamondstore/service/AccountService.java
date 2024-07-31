@@ -33,6 +33,7 @@ import com.example.diamondstore.repository.AccumulatePointsRepository;
 import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.OrderDetailRepository;
 import com.example.diamondstore.repository.OrderRepository;
+import com.example.diamondstore.repository.PaymentRepository;
 import com.example.diamondstore.request.AccountRequest;
 import com.example.diamondstore.request.RegisterRequest;
 import com.example.diamondstore.utils.EmailUtil;
@@ -60,6 +61,9 @@ public class AccountService implements UserDetailsService {
     private OrderDetailRepository orderDetailRepository;
 
     @Autowired
+    private PaymentRepository paymentRepository;
+
+    @Autowired
     private OtpUtil otpUtil;
 
     @Autowired
@@ -67,6 +71,7 @@ public class AccountService implements UserDetailsService {
 
     @Autowired
     private JwtUtil jwtUtil;
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -256,10 +261,10 @@ public class AccountService implements UserDetailsService {
         List<Order> orders = orderRepository.findByAccount_AccountID(accountID);
         cartRepository.deleteByAccount_AccountID(accountID);
         orders.forEach((var order) -> {
+            paymentRepository.deleteByOrderID(order.getOrderID());
             cartRepository.deleteByOrder_OrderID(order.getOrderID());
             orderRepository.delete(order);
             orderDetailRepository.deleteByOrder_OrderID(order.getOrderID());
-            
         });
         accumulatePointsRepository.deleteByAccountID(accountID);
         accountRepository.delete(account);

@@ -94,7 +94,6 @@ public class OrderService {
 
         accountRepository.save(account);
 
-
         BigDecimal totalOrder = BigDecimal.ZERO;
         BigDecimal subtotalOrder = BigDecimal.ZERO;
         for (Cart cart : cartItems) {
@@ -155,12 +154,13 @@ public class OrderService {
     }
 
     @Transactional
-    @Scheduled(fixedRate = 5000) // Run every 30 seconds
+    @Scheduled(fixedRate = 5000) // Run every 5s
     public void handleOrderTimeout() {
         List<Order> orders = orderRepository.findByOrderStatus("Đang xử lý");
         for (Order currentOrder : orders) {
             if (isOrderTimedOut(currentOrder)) {
                 currentOrder.setOrderStatus("Đặt hàng thất bại");
+                currentOrder.setDeliveryDate(null);
                 orderRepository.save(currentOrder);
 
                 for (Cart cart : currentOrder.getCartItems()) {
@@ -178,9 +178,11 @@ public class OrderService {
         }
     }
 
-    // Check if that Order is time out 1p
+    // Check if that Order is time out 1p30
     private boolean isOrderTimedOut(Order order) {
-        return order.getStartorderDate().isBefore(LocalDateTime.now().minusMinutes(1).minusSeconds(30));
+        LocalDateTime orderCreationTime = order.getStartorderDate();
+        LocalDateTime timeoutTime = orderCreationTime.plusMinutes(1).plusSeconds(30);
+        return LocalDateTime.now().isAfter(timeoutTime);
     }
 
     public void cancelOrder(int orderID) {
@@ -213,7 +215,7 @@ public class OrderService {
 
     public Order getOrder(int orderID) {
         Order order = orderRepository.findByOrderID(orderID);
-        order.getCartItems().size(); // This will fetch the cartItems from the database
+        order.getCartItems().size();
         return order;
     }
 
@@ -257,7 +259,6 @@ public class OrderService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ngày giao hàng không hợp lệ");
             }
 
-            // Handle promotion code and totalOrder update
             String newPromotionCode = orderPutRequest.getPromotionCode();
             BigDecimal totalOrder = existingOrder.getTotalOrder();
 

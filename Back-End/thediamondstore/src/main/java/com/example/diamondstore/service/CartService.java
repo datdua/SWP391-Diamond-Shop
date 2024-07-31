@@ -159,6 +159,7 @@ public class CartService {
                 // Tính tổng số lượng trang sức trong giỏ hàng
                 int totalQuantityInCart = cartRepository.findByAccountAndJewelry(account, jewelry)
                         .stream()
+                        .filter(cart -> !cart.getCartID().equals(cartID))
                         .mapToInt(Cart::getQuantity)
                         .sum();
 

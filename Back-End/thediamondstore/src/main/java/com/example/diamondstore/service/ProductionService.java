@@ -101,7 +101,6 @@ public class ProductionService {
         return totalDiamonds + totalJewelry;
     }
 
-    // lấy tổng số lượng diamond và jewelry
     public Map<String, Object> getTotalProductionCount() {
         long totalDiamonds = diamondRepository.count();
         long totalJewelry = jewelryRepository.count();

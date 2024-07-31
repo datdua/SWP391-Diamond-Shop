@@ -53,7 +53,7 @@ public class PromotionService {
         newPromotion.setEndDate(promotionRequest.getEndDate());
         newPromotion.setDiscountAmount(promotionRequest.getDiscountAmount());
         newPromotion.setDescription(promotionRequest.getDescription());
-        updatePromotionStatus(newPromotion); // Cập nhật trạng thái trước khi lưu
+        updatePromotionStatus(newPromotion); 
         promotionRepository.save(newPromotion);
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công"));
     }
@@ -93,7 +93,7 @@ public class PromotionService {
         updatePromotionStatusesAuto();
     }
 
-    @Scheduled(cron = "0 0 * * * *") // Chạy mỗi giờ
+    @Scheduled(cron = "0 0 * * * *")
     public void updatePromotionStatusesAuto() {
         List<Promotion> promotions = promotionRepository.findAll();
         LocalDateTime now = LocalDateTime.now();
