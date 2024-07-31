@@ -277,9 +277,6 @@ public class PaymentService {
                 paymentRepository.save(payment);
             }
 
-            order.setOrderStatus("Thanh toán thất bại");
-            orderRepository.save(order);
-
             List<Cart> cartItems = cartRepository.findByOrder(order);
             for (Cart cart : cartItems) {
                 if (cart.getDiamond() != null) {
@@ -292,6 +289,10 @@ public class PaymentService {
                     jewelryRepository.save(jewelry);
                 }
             }
+
+            order.setDeliveryDate(null);
+            order.setOrderStatus("Thanh toán thất bại");
+            orderRepository.save(order);
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(transactionStatusDTO);

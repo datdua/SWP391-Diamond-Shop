@@ -25,9 +25,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.example.diamondstore.model.Certificate;
 import com.example.diamondstore.model.Diamond;
 import com.example.diamondstore.model.DiamondPrice;
+import com.example.diamondstore.model.OrderDetail;
+import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.CertificateRepository;
 import com.example.diamondstore.repository.DiamondPriceRepository;
 import com.example.diamondstore.repository.DiamondRepository;
+import com.example.diamondstore.repository.OrderDetailRepository;
+import com.example.diamondstore.repository.WarrantyHistoryRepository;
 import com.example.diamondstore.repository.WarrantyRepository;
 import com.example.diamondstore.request.putRequest.DiamondPutRequest;
 import com.example.diamondstore.specification.DiamondSpecification;
@@ -48,7 +52,13 @@ public class DiamondService {
     private DiamondPriceRepository diamondPriceRepository;
 
     @Autowired
-    private CertificateService certificateService;
+    private WarrantyHistoryRepository warrantyHistoryRepository;
+
+    @Autowired
+    private OrderDetailRepository orderDetailRepository;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     public List<Diamond> getAllDiamondsGrossPriceIsNull() {
         List<Diamond> diamonds = diamondRepository.findAllByGrossDiamondPriceNotNull();
@@ -65,16 +75,18 @@ public class DiamondService {
 
     @PostConstruct
     public void updateDiamondStatusesOnStartup() {
-        updateDiamondStatusesAuto();
+    updateDiamondStatusesAuto();
     }
 
-    @Scheduled(cron = "*/6 * * * * *")
+    @Scheduled(cron = "*/5 * * * * *")
     public void updateDiamondStatusesAuto() {
         List<Diamond> diamonds = diamondRepository.findAll();
         LocalDateTime now = LocalDateTime.now();
 
         for (Diamond diamond : diamonds) {
-            if (diamond.getQuantity() == 0) {
+            if (diamond.getWarrantyID() == null || diamond.getCertificationID() == null) {
+                diamond.setStatus("Tạm ngưng bán");
+            } else if (diamond.getQuantity() == 0) {
                 diamond.setStatus("Hết hàng");
             } else {
                 diamond.setStatus("Còn hàng");
@@ -102,7 +114,8 @@ public class DiamondService {
             if (diamondEntryPriceInput == null) {
                 diamond.setDiamondEntryPrice(BigDecimal.ZERO);
                 diamondRepository.save(diamond);
-                return ResponseEntity.ok(Collections.singletonMap("message", "Kim cương tạo thành công, nhưng chưa có giá. Vui lòng thêm giá cho kim cương này."));
+                return ResponseEntity.ok(Collections.singletonMap("message",
+                        "Kim cương tạo thành công, nhưng chưa có giá. Vui lòng thêm giá cho kim cương này."));
             }
             diamond.setDiamondEntryPrice(diamondEntryPriceInput);
             diamond.setDiamondPrice(null);
@@ -120,22 +133,27 @@ public class DiamondService {
             diamond.setDiamondPrice(diamondPrice);
         }
 
-        if(diamond.getQuantity() < 0) {
+        if (diamond.getQuantity() < 0) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số lượng không hợp lệ"));
         }
 
-        if (diamond.getCertificationID() != null && diamondRepository.existsByCertificationID(diamond.getCertificationID())) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Chứng chỉ đã được gán cho một kim cương khác"));
+        if (diamond.getCertificationID() != null
+                && diamondRepository.existsByCertificationID(diamond.getCertificationID())) {
+            return ResponseEntity.badRequest()
+                    .body(Collections.singletonMap("message", "Chứng chỉ đã được gán cho một kim cương khác"));
         }
 
         if (diamond.getWarrantyID() != null && diamondRepository.existsByWarrantyID(diamond.getWarrantyID())) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Bảo hành đã được gán cho một kim cương khác"));
+            return ResponseEntity.badRequest()
+                    .body(Collections.singletonMap("message", "Bảo hành đã được gán cho một kim cương khác"));
         }
 
-        if (diamond.getQuantity() != 0) {
-            diamond.setStatus("Còn hàng");
-        } else {
+        if (diamond.getWarrantyID() == null || diamond.getCertificationID() == null) {
+            diamond.setStatus("Tạm ngưng bán");
+        } else if (diamond.getQuantity() == 0) {
             diamond.setStatus("Hết hàng");
+        } else {
+            diamond.setStatus("Còn hàng");
         }
 
         // Calculate gross diamond price = diamond price * 1.1
@@ -146,11 +164,11 @@ public class DiamondService {
             diamond.setGrossDiamondPrice(null);
         }
 
-        updateDiamondStatusesAuto();
         diamondRepository.save(diamond);
 
         if (priceMismatch) {
-            return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công nhưng có sự chênh lệch giá giữa giá nhập và giá trong bảng. Giá không được lưu"));
+            return ResponseEntity.ok(Collections.singletonMap("message",
+                    "Tạo thành công nhưng có sự chênh lệch giá giữa giá nhập và giá trong bảng. Giá không được lưu"));
         }
         return ResponseEntity.ok(Collections.singletonMap("message", "Tạo thành công"));
     }
@@ -173,12 +191,13 @@ public class DiamondService {
         existingDiamond.setClarity(diamondPutRequest.getClarity());
         existingDiamond.setQuantity(diamondPutRequest.getQuantity());
 
-        if(existingDiamond.getQuantity() != 0) {
-            existingDiamond.setStatus("Còn hàng");
-        } else {
+        if(diamondPutRequest.getWarrantyID() == null || diamondPutRequest.getCertificationID() == null) {
+            existingDiamond.setStatus("Tạm ngưng bán");
+        } else if (diamondPutRequest.getQuantity() == 0) {
             existingDiamond.setStatus("Hết hàng");
+        } else {
+            existingDiamond.setStatus("Còn hàng");
         }
-
         // Calculate weight based on carat size
         BigDecimal sizeDividedBy = diamondPutRequest.getCaratSize().divide(new BigDecimal(6.5), MathContext.DECIMAL128);
         existingDiamond.setWeight(sizeDividedBy.pow(2));
@@ -194,12 +213,12 @@ public class DiamondService {
                 existingDiamond.setDiamondEntryPrice(null);
                 existingDiamond.setDiamondPrice(null);
             } else {
-                existingDiamond.setDiamondEntryPrice(diamondEntryPriceInput); // Use input price if provided
+                existingDiamond.setDiamondEntryPrice(diamondEntryPriceInput);
                 existingDiamond.setDiamondPrice(diamondPrice);
             }
         } else {
             BigDecimal diamondEntryPriceDB = diamondPrice.getDiamondEntryPrice();
-            existingDiamond.setDiamondEntryPrice(diamondEntryPriceDB); // Always use DB price if a match is found
+            existingDiamond.setDiamondEntryPrice(diamondEntryPriceDB);
 
             // Check for price mismatch only if input price is provided
             if (diamondEntryPriceInput != null && diamondEntryPriceInput.compareTo(diamondEntryPriceDB) != 0) {
@@ -212,14 +231,14 @@ public class DiamondService {
             BigDecimal grossDiamondPrice = existingDiamond.getDiamondEntryPrice().multiply(new BigDecimal(1.1));
             existingDiamond.setGrossDiamondPrice(grossDiamondPrice);
         } else {
-            existingDiamond.setGrossDiamondPrice(null); // Ensure gross price is null if entry price is null
+            existingDiamond.setGrossDiamondPrice(null);
         }
 
-        updateDiamondStatusesAuto();
         diamondRepository.save(existingDiamond);
 
         if (priceMismatch) {
-            return Collections.singletonMap("message", "Cập nhật thành công nhưng có sự chênh lệch giá giữa giá nhập và giá trong bảng. Giá không được lưu");
+            return Collections.singletonMap("message",
+                    "Cập nhật thành công nhưng có sự chênh lệch giá giữa giá nhập và giá trong bảng. Giá không được lưu");
         }
 
         return Collections.singletonMap("message", "Cập nhật thành công");
@@ -233,16 +252,35 @@ public class DiamondService {
                 .collect(Collectors.toList());
 
         if (!existingDiamondIDs.isEmpty()) {
-            // Delete related certificates first
-            existingDiamondIDs.forEach(diamondID -> certificateRepository.deleteByDiamondID(diamondID));
-            existingDiamondIDs.forEach(diamondID -> warrantyRepository.deleteByDiamondID(diamondID));
+            for (String diamondID : existingDiamondIDs) {
+                // Find warranties related to diamond
+                List<String> warrantyIDs = warrantyRepository.findAllByDiamondID(diamondID)
+                        .stream()
+                        .map(warranty -> warranty.getWarrantyID())
+                        .collect(Collectors.toList());
 
-            // Delete diamonds
+                //delete order details
+                orderDetailRepository.deleteByWarranty_WarrantyIDIn(warrantyIDs);
+
+                // delete warranty histories
+                warrantyHistoryRepository.deleteByWarranty_WarrantyIDIn(warrantyIDs);
+
+                // delete certificates
+                certificateRepository.deleteByDiamondID(diamondID);
+
+                // delete warranty
+                warrantyRepository.deleteByDiamondID(diamondID);
+
+                /// delete cart
+                cartRepository.deleteByDiamond_DiamondID(diamondID);
+            }
+
             diamondRepository.deleteAllById(existingDiamondIDs);
 
             return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các viên kim cương thành công"));
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.singletonMap("message", "Không tìm thấy viên kim cương để xóa"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("message", "Không tìm thấy viên kim cương để xóa"));
         }
     }
 

@@ -53,29 +53,44 @@ public class CartService {
         }
 
         Cart existingCart = null;
+        Integer existingQuantity = 0;
 
         if (diamondID != null) {
             Diamond diamond = diamondRepository.findById(diamondID).orElse(null);
+
+            if(diamond!= null && diamond.getStatus().equals("Tạm ngưng bán")) {
+                return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Sản phẩm đã tạm ngưng bán"));
+            }
+
             if (diamond != null) {
-                if (quantity > diamond.getQuantity()) {
+                existingCart = cartRepository.findByAccountAndDiamond(account, diamond);
+                if (existingCart != null) {
+                    existingQuantity = existingCart.getQuantity();
+                }
+                if (quantity + existingQuantity > diamond.getQuantity()) {
                     return ResponseEntity.badRequest()
                             .body(Collections.singletonMap("message", "Số lượng kim cương không đủ"));
                 }
-                existingCart = cartRepository.findByAccountAndDiamond(account, diamond);
             }
         }
 
         if (jewelryID != null) {
             Jewelry jewelry = jewelryRepository.findById(jewelryID).orElse(null);
+            if(jewelry!= null && jewelry.getStatus().equals("Tạm ngưng bán")) {
+                return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Sản phẩm đã tạm ngưng bán"));
+            }
             if (jewelry != null) {
-                if (quantity > jewelry.getQuantity()) {
+                existingCart = cartRepository.findByAccountAndJewelryAndSizeJewelry(account, jewelry, sizeJewelry);
+                if (existingCart != null) {
+                    existingQuantity = existingCart.getQuantity();
+                }
+                if (quantity + existingQuantity > jewelry.getQuantity()) {
                     return ResponseEntity.badRequest()
                             .body(Collections.singletonMap("message", "Số lượng trang sức không đủ"));
                 }
                 if (sizeJewelry == null) {
                     return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Vui lòng nhập size"));
                 }
-                existingCart = cartRepository.findByAccountAndJewelryAndSizeJewelry(account, jewelry, sizeJewelry);
             }
         }
 
