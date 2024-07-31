@@ -73,25 +73,27 @@ public class DiamondService {
         return diamondRepository.findByDiamondID(diamondID);
     }
 
-    // @PostConstruct
-    // public void updateDiamondStatusesOnStartup() {
-    // updateDiamondStatusesAuto();
-    // }
+    @PostConstruct
+    public void updateDiamondStatusesOnStartup() {
+    updateDiamondStatusesAuto();
+    }
 
-    // @Scheduled(cron = "*/5 * * * * *")
-    // public void updateDiamondStatusesAuto() {
-    // List<Diamond> diamonds = diamondRepository.findAll();
-    // LocalDateTime now = LocalDateTime.now();
+    @Scheduled(cron = "*/5 * * * * *")
+    public void updateDiamondStatusesAuto() {
+        List<Diamond> diamonds = diamondRepository.findAll();
+        LocalDateTime now = LocalDateTime.now();
 
-    // for (Diamond diamond : diamonds) {
-    // if (diamond.getQuantity() == 0) {
-    // diamond.setStatus("Hết hàng");
-    // } else {
-    // diamond.setStatus("Còn hàng");
-    // }
-    // diamondRepository.save(diamond);
-    // }
-    // }
+        for (Diamond diamond : diamonds) {
+            if (diamond.getWarrantyID() == null || diamond.getCertificationID() == null) {
+                diamond.setStatus("Tạm ngưng bán");
+            } else if (diamond.getQuantity() == 0) {
+                diamond.setStatus("Hết hàng");
+            } else {
+                diamond.setStatus("Còn hàng");
+            }
+            diamondRepository.save(diamond);
+        }
+    }
 
     public ResponseEntity<Map<String, String>> createDiamond(Diamond diamond) {
         Diamond existingDiamondByID = diamondRepository.findByDiamondID(diamond.getDiamondID());
@@ -146,10 +148,12 @@ public class DiamondService {
                     .body(Collections.singletonMap("message", "Bảo hành đã được gán cho một kim cương khác"));
         }
 
-        if (diamond.getQuantity() != 0) {
-            diamond.setStatus("Còn hàng");
-        } else {
+        if (diamond.getWarrantyID() == null || diamond.getCertificationID() == null) {
+            diamond.setStatus("Tạm ngưng bán");
+        } else if (diamond.getQuantity() == 0) {
             diamond.setStatus("Hết hàng");
+        } else {
+            diamond.setStatus("Còn hàng");
         }
 
         // Calculate gross diamond price = diamond price * 1.1
@@ -160,7 +164,6 @@ public class DiamondService {
             diamond.setGrossDiamondPrice(null);
         }
 
-        // updateDiamondStatusesAuto();
         diamondRepository.save(diamond);
 
         if (priceMismatch) {
@@ -188,12 +191,13 @@ public class DiamondService {
         existingDiamond.setClarity(diamondPutRequest.getClarity());
         existingDiamond.setQuantity(diamondPutRequest.getQuantity());
 
-        if (existingDiamond.getQuantity() != 0) {
-            existingDiamond.setStatus("Còn hàng");
-        } else {
+        if(diamondPutRequest.getWarrantyID() == null || diamondPutRequest.getCertificationID() == null) {
+            existingDiamond.setStatus("Tạm ngưng bán");
+        } else if (diamondPutRequest.getQuantity() == 0) {
             existingDiamond.setStatus("Hết hàng");
+        } else {
+            existingDiamond.setStatus("Còn hàng");
         }
-
         // Calculate weight based on carat size
         BigDecimal sizeDividedBy = diamondPutRequest.getCaratSize().divide(new BigDecimal(6.5), MathContext.DECIMAL128);
         existingDiamond.setWeight(sizeDividedBy.pow(2));
@@ -255,14 +259,8 @@ public class DiamondService {
                         .map(warranty -> warranty.getWarrantyID())
                         .collect(Collectors.toList());
 
-                //set null order details
-                List<OrderDetail> orderDetailsToUpdate = orderDetailRepository
-                        .findAllByWarranty_WarrantyIDIn(warrantyIDs);
-                for (OrderDetail orderDetail : orderDetailsToUpdate) {
-                    orderDetail.setWarranty(null);
-                    orderDetail.setDiamond(null);
-                }
-                orderDetailRepository.saveAll(orderDetailsToUpdate);
+                //delete order details
+                orderDetailRepository.deleteByWarranty_WarrantyIDIn(warrantyIDs);
 
                 // delete warranty histories
                 warrantyHistoryRepository.deleteByWarranty_WarrantyIDIn(warrantyIDs);
@@ -270,7 +268,7 @@ public class DiamondService {
                 // delete certificates
                 certificateRepository.deleteByDiamondID(diamondID);
 
-                // delete warranties
+                // delete warranty
                 warrantyRepository.deleteByDiamondID(diamondID);
 
                 /// delete cart

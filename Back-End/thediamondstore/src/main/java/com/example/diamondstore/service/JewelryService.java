@@ -21,9 +21,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.example.diamondstore.model.Diamond;
 import com.example.diamondstore.model.Jewelry;
-import com.example.diamondstore.model.Order;
 import com.example.diamondstore.model.OrderDetail;
 import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.GoldPriceRepository;
@@ -71,25 +69,27 @@ public class JewelryService {
         return jewelryRepository.findAll(pageable);
     }
 
-    // @PostConstruct
-    // public void updateJewelryStatusesOnStartup() {
-    //     updateJewelryStatusesAuto();
-    // }
+    @PostConstruct
+    public void updateJewelryStatusesOnStartup() {
+        updateJewelryStatusesAuto();
+    }
 
-    // @Scheduled(cron = "*/5 * * * * *")
-    // public void updateJewelryStatusesAuto() {
-    //     List<Jewelry> jewelries = jewelryRepository.findAll();
-    //     LocalDateTime now = LocalDateTime.now();
+    @Scheduled(cron = "*/5 * * * * *")
+    public void updateJewelryStatusesAuto() {
+        List<Jewelry> jewelries = jewelryRepository.findAll();
+        LocalDateTime now = LocalDateTime.now();
 
-    //     for (Jewelry jewelry : jewelries) {
-    //         if (jewelry.getQuantity() == 0) {
-    //             jewelry.setStatus("Hết hàng");
-    //         } else {
-    //             jewelry.setStatus("Còn hàng");
-    //         }
-    //         jewelryRepository.save(jewelry);
-    //     }
-    // }
+        for (Jewelry jewelry : jewelries) {
+            if(jewelry.getWarrantyID() == null){
+                jewelry.setStatus("Tạm ngưng bán");
+            }else if (jewelry.getQuantity() == 0) {
+                jewelry.setStatus("Hết hàng");
+            } else {
+                jewelry.setStatus("Còn hàng");
+            }
+            jewelryRepository.save(jewelry);
+        }
+    }
 
     public ResponseEntity<Map<String, String>> createJewelry(Jewelry jewelry) {
         if (!validateJewelryID(jewelry.getJewelryID())) {
@@ -122,10 +122,12 @@ public class JewelryService {
             return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Số lượng không hợp lệ"));
         }
 
-        if (jewelry.getQuantity() != 0) {
-            jewelry.setStatus("Còn hàng");
-        } else {
+        if (jewelry.getWarrantyID() == null) {
+            jewelry.setStatus("Tạm ngưng bán");
+        } else if (jewelry.getQuantity() == 0) {
             jewelry.setStatus("Hết hàng");
+        } else {
+            jewelry.setStatus("Còn hàng");
         }
 
         // Calculate gross jewelry price = jewelry price * 1.2 (tax: 10%, wage: 10%)
@@ -165,13 +167,15 @@ public class JewelryService {
         existingJewelry.setWarrantyID(jewelryPutRequest.getWarrantyID());
         existingJewelry.setQuantity(jewelryPutRequest.getQuantity());
 
-        if (jewelryPutRequest.getQuantity() != 0) {
-            existingJewelry.setStatus("Còn hàng");
-        } else {
+        if (jewelryPutRequest.getWarrantyID() == null) {
+            existingJewelry.setStatus("Tạm ngưng bán");
+        } else if (jewelryPutRequest.getQuantity() == 0) {
             existingJewelry.setStatus("Hết hàng");
+        } else {
+            existingJewelry.setStatus("Còn hàng");
         }
 
-        // update gross jewelry price follow the formula: grossJewelryPrice = jewelryEntryPrice * 1.2
+        // update gross jewelry price : grossJewelryPrice = jewelryEntryPrice * 1.2
         if (jewelryPutRequest.getJewelryEntryPrice() != null) {
             BigDecimal grossJewelryPrice = jewelryPutRequest.getJewelryEntryPrice().multiply(new BigDecimal(1.2));
             existingJewelry.setGrossJewelryPrice(grossJewelryPrice);
@@ -205,13 +209,8 @@ public class JewelryService {
                         .map(warranty -> warranty.getWarrantyID())
                         .collect(Collectors.toList());
             
-            //set null order detail
-            List<OrderDetail> orderDetailsToUpdate = orderDetailRepository.findAllByWarranty_WarrantyIDIn(warrantyIDs);
-            for (OrderDetail orderDetail : orderDetailsToUpdate) {
-                orderDetail.setWarranty(null);
-                orderDetail.setJewelry(null); 
-            }
-            orderDetailRepository.saveAll(orderDetailsToUpdate);
+            //delete order detail
+            orderDetailRepository.deleteByWarranty_WarrantyIDIn(warrantyIDs);
 
             //delete warranty history
             warrantyHistoryRepository.deleteByWarranty_WarrantyIDIn(warrantyIDs);
