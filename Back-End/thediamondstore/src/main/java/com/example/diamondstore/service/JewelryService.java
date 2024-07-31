@@ -80,7 +80,7 @@ public class JewelryService {
         LocalDateTime now = LocalDateTime.now();
 
         for (Jewelry jewelry : jewelries) {
-            if(jewelry.getWarrantyID() == null){
+            if(jewelry.getWarrantyID() == null || jewelry.getJewelryEntryPrice() == null) {
                 jewelry.setStatus("Tạm ngưng bán");
             }else if (jewelry.getQuantity() == 0) {
                 jewelry.setStatus("Hết hàng");

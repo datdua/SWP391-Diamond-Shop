@@ -22,10 +22,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.example.diamondstore.model.Certificate;
 import com.example.diamondstore.model.Diamond;
 import com.example.diamondstore.model.DiamondPrice;
-import com.example.diamondstore.model.OrderDetail;
 import com.example.diamondstore.repository.CartRepository;
 import com.example.diamondstore.repository.CertificateRepository;
 import com.example.diamondstore.repository.DiamondPriceRepository;
@@ -84,7 +82,7 @@ public class DiamondService {
         LocalDateTime now = LocalDateTime.now();
 
         for (Diamond diamond : diamonds) {
-            if (diamond.getWarrantyID() == null || diamond.getCertificationID() == null) {
+            if (diamond.getWarrantyID() == null || diamond.getCertificationID() == null || diamond.getDiamondEntryPrice() == null) {
                 diamond.setStatus("Tạm ngưng bán");
             } else if (diamond.getQuantity() == 0) {
                 diamond.setStatus("Hết hàng");

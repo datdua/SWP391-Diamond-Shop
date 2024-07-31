@@ -28,7 +28,6 @@ import org.springframework.util.StringUtils;
 import com.example.diamondstore.model.Account;
 import com.example.diamondstore.model.AccumulatePoints;
 import com.example.diamondstore.model.Order;
-import com.example.diamondstore.model.OrderDetail;
 import com.example.diamondstore.repository.AccountRepository;
 import com.example.diamondstore.repository.AccumulatePointsRepository;
 import com.example.diamondstore.repository.CartRepository;
@@ -253,6 +252,7 @@ public class AccountService implements UserDetailsService {
         existingAccountIDs.forEach(accountID -> {
         Account account = accountRepository.findById(accountID).orElseThrow();
         List<Order> orders = orderRepository.findByAccount_AccountID(accountID);
+        cartRepository.deleteByAccount_AccountID(accountID);
         orders.forEach((var order) -> {
             cartRepository.deleteByOrder_OrderID(order.getOrderID());
             orderRepository.delete(order);
@@ -262,7 +262,6 @@ public class AccountService implements UserDetailsService {
         accumulatePointsRepository.deleteByAccountID(accountID);
         accountRepository.delete(account);
     });
-
         return ResponseEntity.ok().body(Collections.singletonMap("message", "Xóa các tài khoản thành công"));
     }
 
